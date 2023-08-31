@@ -1,0 +1,10 @@
+.product-section-container{
+    .product-section-btns{
+        margin: 10px 0;
+        .sub-categories-btn{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+    }
+}
