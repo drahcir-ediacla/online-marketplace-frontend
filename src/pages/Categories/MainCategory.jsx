@@ -3,7 +3,7 @@ import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
-import popularItemsData from '../../data/popularItemsData'
+import newMobileElectronicsData from '../../data/newMobileElectronicsData.json'
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
 import RecommendedItems from '../../components/RecommendedItems'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
@@ -24,49 +24,48 @@ const MainCategory = () => {
         <div className="row1">
             <ul className='breadcrumb'>
                 <li><Link to='/'>Home</Link></li>
-                <li><Link to='#'>Main Category</Link></li>
-                <li>Sub Category</li>
+                <li>Mobiles & Electronics</li>
             </ul>
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
         <div className="row3 sub-categories-container">
-            <div className="sub-category-thumbnail">
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory1} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Iphone & Smartphones</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory2} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Computers, Tablets & Network Hardware</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory3} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Cameras</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory4} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">TV, Video & Home Audio</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory5} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Headphones</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory6} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Vehicle Electronics</div>
-            </div>
-            <div className="sub-category-thumbnail">
+            </Link>
+            <Link to='/SubCategory' className="sub-category-thumbnail">
                 <img src={SubCategory7} alt="" className="sub-category-img" />
                 <div className="sub-category-thumbnail-name">Surveillance & Smart Home Devices</div>
-            </div>
+            </Link>
         </div>
         <div className="row4 main-category-newly-listed">
             <div className="main-category-newly-listed-row1">
                 <div className='product-section-title'>
                     <h3>Newly Listed  Mobiles & Electronics</h3>
                 </div>
-                <BtnSeeMore label="See More Shoes >>" />
+                <BtnSeeMore label="See More >>" />
             </div>
-            <ProductCarousel product={popularItemsData} />
+            <ProductCarousel product={newMobileElectronicsData} />
         </div>
         <div className="row5 main-category-center-ads">Your Ads Here</div>
         <div className="row6 main-category-newly-listed">
@@ -76,7 +75,7 @@ const MainCategory = () => {
                 </div>
                 <BtnSeeMore label="See More Shoes >>" />
             </div>
-            <ProductCarousel product={popularItemsData} />
+            <ProductCarousel product={newMobileElectronicsData} />
         </div>
         <RecommendedItems />
       </div>

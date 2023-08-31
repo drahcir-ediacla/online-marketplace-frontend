@@ -1,0 +1,167 @@
+[
+    {
+        "id":1,
+        "image": "images/product-6.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":2,
+        "image": "images/product-9.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":3,
+        "image": "images/product-7.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":4,
+        "image": "images/product-10.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":5,
+        "image": "images/product-8.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":6,
+        "image": "images/product-6.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":7,
+        "image": "images/product-9.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":8,
+        "image": "images/product-7.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":9,
+        "image": "images/product-10.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":10,
+        "image": "images/product-8.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":11,
+        "image": "images/product-6.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":12,
+        "image": "images/product-9.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":13,
+        "image": "images/product-7.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":14,
+        "image": "images/product-10.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    },
+    {
+        "id":15,
+        "image": "images/product-8.png",
+        "name": "2022 Nike Air Jordan 2 Retro OG Chicago DX2454-106 GS Men's Size",
+        "location": "Pasig, Metro Manila",
+        "time": "about an hour ago",
+        "condition": "New",
+        "price": "₱235.00",
+        "wishlist": "10",
+        "path": "/BuyerProductDetails"
+    }
+]

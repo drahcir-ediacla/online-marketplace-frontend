@@ -42,7 +42,7 @@ return (
     <Carousel responsive={responsive} draggable={true} >
         {product.map((product, index) => (
         <Link to={product.path} key={index} className="thumbnail-container">
-            <div className='image-holder'><img src={product.image} alt={`Product ${index}`} /></div>
+            <div className='image-holder'><img src={product.image} alt={`Product ${index}`} className='carousel-prod-img' /></div>
             <div className='product-info'>
                 <p>{product.name}</p>
                 <small>{product.location}</small>

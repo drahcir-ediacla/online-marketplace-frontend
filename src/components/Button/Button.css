@@ -118,3 +118,35 @@
   width: 20px;
   fill: var(--gray-500);
 }
+
+
+/* FILTERBY BUTTON */
+.custom-filterby-button{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px;
+    height: 40px;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-500);
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.custom-filterby-button:hover{
+  background-color: var(--light-gray);
+}
+
+.custom-filterby-button .svg-style{
+  width: 20px;
+  fill: var(--gray-500);
+}
+
+.filterby-arrow-down::after{
+  content: "\f078";
+  font-family: FontAwesome;
+  color: var(--gray-500);
+  text-align: right;
+}

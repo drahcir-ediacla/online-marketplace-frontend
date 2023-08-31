@@ -1,4 +1,9 @@
 .product-section-container{
+    .product-section-title{
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: 400;
+        font-size: 28px;
+    }
     .product-section-btns{
         display: flex;
         flex-wrap: wrap;

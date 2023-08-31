@@ -166,6 +166,11 @@
                         .col-left, .col-right{
                             width: auto;
                         }
+                        .col-left{
+                            .customer-pic{
+                                width: 60px;
+                            }
+                        }
                         .col-right{
                             a{
                                 font-weight: 500;

@@ -1,0 +1,8 @@
+.prod-filter-container{
+    display: flex;
+    justify-content: space-between;
+    .group-filterby{
+        display: flex;
+        gap: 20px;
+    }
+}

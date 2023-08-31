@@ -14,12 +14,12 @@ const NavMenu = () => {
                         <Link to="/MainCategory" className='parent-menu'>Men’s Fashion</Link>
                         <div className="drop-menu">
                             <ul>
-                                <li><Link to="#">Clothing</Link></li>
-                                <li><Link to="#">Shoes</Link></li>
-                                <li><Link to="#">Watches & Accessories</Link></li>
-                                <li><Link to="#">Tops & Sets</Link></li>
-                                <li><Link to="#">Bottoms</Link></li>
-                                <li><Link to="#">Bags</Link></li>
+                                <li><Link to="/SubCategory">Clothing</Link></li>
+                                <li><Link to="/SubCategory">Shoes</Link></li>
+                                <li><Link to="/SubCategory">Watches & Accessories</Link></li>
+                                <li><Link to="/SubCategory">Tops & Sets</Link></li>
+                                <li><Link to="/SubCategory">Bottoms</Link></li>
+                                <li><Link to="/SubCategory">Bags</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -29,12 +29,12 @@ const NavMenu = () => {
                         <Link to="/MainCategory" className='parent-menu'>Women's Fashion</Link>
                         <div className="drop-menu">
                             <ul>
-                                <li><Link to="#">Clothing</Link></li>
-                                <li><Link to="#">Shoes</Link></li>
-                                <li><Link to="#">Watches & Accessories</Link></li>
-                                <li><Link to="#">Tops & Sets</Link></li>
-                                <li><Link to="#">Bottoms</Link></li>
-                                <li><Link to="#">Bags</Link></li>
+                                <li><Link to="/SubCategory">Clothing</Link></li>
+                                <li><Link to="/SubCategory">Shoes</Link></li>
+                                <li><Link to="/SubCategory">Watches & Accessories</Link></li>
+                                <li><Link to="/SubCategory">Tops & Sets</Link></li>
+                                <li><Link to="/SubCategory">Bottoms</Link></li>
+                                <li><Link to="/SubCategory">Bags</Link></li>
                             </ul>
                         </div>
                     </div>
