@@ -1,0 +1,16 @@
+.prod-img-gallery{
+    display: flex;
+    gap: 8px;
+    .group-prod-img-thumb{
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        .prod-img-thumb{
+            width: 65px;
+            cursor: pointer;
+        }
+    }
+    .selected-prod-img{
+        width: 444px;
+    }
+}

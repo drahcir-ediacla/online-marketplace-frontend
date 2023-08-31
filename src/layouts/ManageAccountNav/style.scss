@@ -1,0 +1,25 @@
+.manage-account-nav-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 315px;
+    background: white;
+    padding: 30px 50px;
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
+    a{
+        color: var(--gray-500);
+    }
+    .active{
+        color: var(--red-400);
+        background: none;
+    }
+    .nav-title{
+        font-size: 18px;
+        font-weight: 500;
+    }
+    .row1, .row2{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}

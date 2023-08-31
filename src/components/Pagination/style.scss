@@ -1,0 +1,23 @@
+.pagination {
+    display: flex;
+    .page-item{
+        .page-link{
+            font-size: 15px;
+            color: var(--gray-500);
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid var(--gray-200);
+            margin: 0 4px;
+        }
+        .page-link.active{
+            background-color: var(--green-400);
+            color: white;
+            border: 1px solid var(--green-400);
+        }
+        .page-link:hover:not(.active){
+            background-color: #ddd;
+        }
+    }
+  }

@@ -1,0 +1,204 @@
+
+    .thumbnail-container:hover{
+        color: var(--gray-500);
+        box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
+    }
+    .thumbnail-container{
+        width: 240px;
+        background: white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        text-decoration: none;
+        color: var(--gray-500);
+        p{
+            margin-bottom: 0;
+        }
+        .image-holder{
+            margin: 0;
+            .product-img{
+                border-radius: 5px 5px 0 0;
+                width: 240px;
+                height: 200px;
+            }
+        }
+        .product-info{
+            padding: 10px 10px;
+            margin: 0;
+            small{
+                font-style: italic;
+            }
+            .date-post{
+                display: flex;
+                align-items: center;
+                .small-clock{
+                    width: 12px;
+                    fill: var(--gray-500);
+                    margin-right: 5px;
+                }
+                small{
+                    font-style: normal;
+                }    
+            }
+        }
+        .prod-condition-price{
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 10px 10px 10px;
+            margin: 0;
+            .col-price{
+                display: flex;
+                flex-direction: column;
+                .price{
+                        color: black;
+                        margin-bottom: 0;
+                        font-size: 20px;
+                }
+            }
+            .col-wishlist{
+                display: flex;
+                align-items: flex-end;
+                .heart-icon{
+                    margin-left: 5px;
+                    width: 15px;
+                    fill: var(--gray-500);
+                }
+            }
+        }
+    }
+
+// PROFILE INFO CARD STYLE
+
+.profile-info-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 315px;
+    padding: 30px 20px;
+    background: white;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 150px;
+    .profile-pic{
+        width: 160px;
+    }
+    .profile-name{
+        font-size: 24px;
+    }
+    .seller-rating{
+        display: flex;
+        gap: 3px;
+        align-items: center;
+    }
+    .joined-date-loc{
+        font-size: 12px;
+        font-style: italic;
+    }
+    .profile-social-media{
+        height: 43px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        .fb-icon{
+            width: 9px;
+            fill: var(--fb-blue);
+        }
+        .google-icon{
+            width: 14px;
+            fill: var(--google-red);
+        }
+    }
+    .follow{
+        display: flex;
+        gap: 30px;
+        .follow-counter{
+            text-align: center;
+            p{
+                margin-bottom: 8px;
+            }
+            span{
+                font-size: 20px;
+                color: var(--green-600);
+                text-align: center;
+            }
+        }
+    }
+}
+
+
+// LISTING CARD STYLE
+
+.prod-listing-thumb:hover{
+    color: var(--gray-500);
+    box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
+}
+.prod-listing-thumb{
+    width: 230px;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: var(--gray-500);
+    p{
+        margin-bottom: 0;
+    }
+    .image-holder{
+        margin: 0;
+        .product-img{
+            border-radius: 5px 5px 0 0;
+            width: 230px;
+            height: 200px;
+        }
+    }
+    .product-info{
+        padding: 10px 10px;
+        margin: 0;
+        small{
+            font-style: italic;
+        }
+        .date-post{
+            display: flex;
+            align-items: center;
+            .small-clock{
+                width: 12px;
+                fill: var(--gray-500);
+                margin-right: 5px;
+            }
+            small{
+                font-style: normal;
+            }    
+        }
+    }
+    .prod-condition-price{
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 10px 10px 10px;
+        margin: 0;
+        .col-price{
+            display: flex;
+            flex-direction: column;
+            .price{
+                    color: black;
+                    margin-bottom: 0;
+                    font-size: 20px;
+            }
+        }
+        .col-wishlist{
+            display: flex;
+            align-items: flex-end;
+            .heart-icon{
+                margin-left: 5px;
+                width: 15px;
+                fill: var(--gray-500);
+            }
+        }
+    }
+    .promote-btn-box{
+        padding: 0 10px;
+        .promote-btn{
+            width: 100%;
+            margin-bottom: 10px;            
+        }
+    }
+}

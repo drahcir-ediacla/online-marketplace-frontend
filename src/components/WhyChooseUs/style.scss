@@ -1,0 +1,28 @@
+.why-choose-us-box{
+    background: var(--green-100);
+    padding: 50px 0;
+    font-family: kanit, sans-serif;
+    margin-top: 100px;
+    .container{
+        display: block;
+        text-align: center;
+        h1{
+            font-size: 45px;
+            margin-bottom: 60px;
+        }
+        .row1{
+            display: flex;
+            justify-content: space-between;
+                .why-choose-us-card{
+                    text-decoration: none;
+                    color: var(--green-500);
+                    display: block;
+                    text-align: center;
+                    width: 240px;
+                    img{
+                        margin-bottom: 13px;
+                    }
+                }
+        }
+    }
+}

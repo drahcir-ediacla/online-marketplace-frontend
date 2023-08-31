@@ -1,0 +1,40 @@
+/* CustomSelect.css */
+.custom-select {
+    position: relative;
+    width: 200px;
+    cursor: pointer;
+  }
+  
+  .selected-option {
+    background-color: DodgerBlue;
+    color: white;
+    padding: 8px;
+  }
+  
+  .options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: DodgerBlue;
+  }
+  
+  .open .options {
+    display: block;
+  }
+  
+  .option {
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .selected {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  

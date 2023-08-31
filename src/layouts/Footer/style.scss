@@ -1,0 +1,37 @@
+footer{
+    background: var(--green-600);
+    padding-top: 35px;
+    color: white;
+    font-size: 14px;
+    ul{
+        padding-left: 0;
+        li{
+            margin-bottom: 5px;
+        }
+    }
+    h5{
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+    .container{
+        display: block;
+        .row1{
+            display: flex;
+            gap: 100px;
+            .col1{
+                width: 345px;
+                img{
+                    width: 188px;
+                }
+                p{
+                    margin: 16px 0;
+                }
+            }
+        }
+    }
+    .copyright{
+        text-align: center;
+        border-top: 1px solid white;
+        padding: 10px 0;
+    }
+}

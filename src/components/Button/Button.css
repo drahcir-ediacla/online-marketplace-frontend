@@ -1,0 +1,120 @@
+/* SUB CATEGORY BUTTON */
+.custom-button {
+    padding: 5px 20px;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-500);
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* CATEGORY BUTTON */
+  .category-button{
+    padding: 5px 20px;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-500);
+    border-radius: 50px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .active, .category-button:hover {
+    background: var(--green-400);
+    color: white;
+    border-color: var(--green-400);
+  }
+  
+
+  /* SEE MORE BUTTON */
+.seemore-button{
+    border: none;
+    color: var(--green-400);
+    padding: 5px 0px;
+    background: none;
+    outline: none;
+}
+
+.seemore-button:hover{
+    border: none;
+    background: none;
+    color: var(--green-400);
+    text-decoration: underline;
+}
+
+/* LOGIN FORM BUTTON */
+.custom-login-button{
+    width: 360px;
+    height: 47px;
+    border-radius: 5px;
+    color: white;
+    background: var(--green-400);
+    border: none;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    outline: none;
+}
+
+.svg-class{
+  fill: white;
+  width: auto;
+}
+
+/* CLEAR BUTTON */
+.clear-button{
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: 1px solid var(--gray-300);
+  background: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gray-500);
+  outline: none;
+}
+
+.clear-button:hover{
+  background: var(--light-gray);
+}
+
+/* GREEN BUTTON */
+.green-button{
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: 1px solid var(--green-400);
+  background: var(--green-400);
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  float: right;
+  outline: none;
+}
+
+.green-button:hover{
+  background: #008774;
+}
+
+/* FILTERS BUTTON */
+.custom-filter-button{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  background-color: white;
+  outline: none;
+}
+
+.custom-filter-button:hover{
+  background-color: var(--light-gray);
+}
+
+.custom-filter-button .svg-style{
+  width: 20px;
+  fill: var(--gray-500);
+}
