@@ -169,7 +169,9 @@
         padding: 30px 20px 0px 20px;
         border: 1px solid var(--gray-200);
         .sub-category-newly-listed-row1{
-            margin: 10px 0;
+            h3{
+                margin: 0;
+            }
         }
         .sub-category-newly-listed-row2{
             margin: 20px 0;

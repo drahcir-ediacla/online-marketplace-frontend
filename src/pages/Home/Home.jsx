@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import HeroBanner from '../../components/Hero'
 import Header from '../../layouts/Header'
 import GainGreenBanner from '../../components/GainGreenBanner'
@@ -9,10 +9,6 @@ import WhyChooseUs from '../../components/WhyChooseUs'
 import Footer from '../../layouts/Footer'
 
 function Home() {
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   return (
     <>
