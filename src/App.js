@@ -14,6 +14,7 @@ import MyProfile from './pages/Profile/MyProfile'
 import BuyerProductDetails from './pages/ProducDetails/BuyerProductDetails'
 import MainCategory from './pages/Categories/MainCategory'
 import SubCategory from './pages/Categories/SubCategory'
+import Wishlist from './pages/Wishlist'
 import ScrollToTop from './utils/ScrollToTop'
 
 
@@ -37,6 +38,7 @@ function App() {
             <Route path='/BuyerProductDetails' element={<BuyerProductDetails />} />
             <Route path='/MainCategory' element={<MainCategory />} />
             <Route path='/SubCategory' element={<SubCategory />} />
+            <Route path='/Wishlist' element={<Wishlist />} />
           </Routes>
       </Router>
     </>

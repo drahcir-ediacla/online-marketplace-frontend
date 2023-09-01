@@ -36,7 +36,7 @@ function Header() {
                 <div className='nav-tools'>
                   <div className='message-icon'><MessageIcon /></div>
                   <div className='bell-icon'><BellIcon /></div>
-                  <div className='heart-icon'><HeartIcon /></div>
+                  <Link to='/Wishlist' className='heart-icon'><HeartIcon /></Link>
                 </div>
                 <span>Sell</span>
                 <div className='my-account'>
