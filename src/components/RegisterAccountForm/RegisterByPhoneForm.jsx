@@ -27,8 +27,7 @@ const RegisterByPhoneForm = () => {
         <div className='row3'>
           <div className='col1 input-container'>
             <div className='row1'><b>Password</b></div>
-            <div className='row2'><input type="text" placeholder='At least 6 characters' /></div>
-            <div className='row3'><small>Password must be at least 6 characters</small></div>
+            <div className='row2'><input type="text" placeholder='Enter your password' /></div>
           </div>
           <div className='col2 input-container'>
             <div className='row1'><b>Confirm Password</b></div>

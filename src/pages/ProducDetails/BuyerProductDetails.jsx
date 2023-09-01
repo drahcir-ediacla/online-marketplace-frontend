@@ -143,6 +143,9 @@ const BuyerProductDetails = () => {
                             <div className='input-make-offer-container'><span className='php-symbol'>₱</span><Input type='number' className='input-make-offer' /><BtnGreen label="Make Offer" className='make-offer-btn' /></div>
                         </div>
                     </div>
+                    <div className="prod-details-ads">
+                        YOUR ADS HERE
+                    </div>
                 </div>
             </div>
         </div>

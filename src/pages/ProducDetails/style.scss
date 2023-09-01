@@ -146,6 +146,9 @@
             }
             .col-right{
                 width: 383px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 .prod-details-inquiry-form{
                     display: flex;
                     flex-direction: column;
@@ -234,6 +237,19 @@
                        }
                        
                     }
+                }
+                .prod-details-ads{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: red;
+                    font-size: 49px;
+                    text-orientation: upright;
+                    writing-mode: vertical-lr;
+                    width: 80%;
+                    height: 910px;
+                    margin: 20px 0 40px 0;
+                    border: 2px dashed var(--gray-400);
                 }
             }
         }

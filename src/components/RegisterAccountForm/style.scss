@@ -7,6 +7,25 @@
     background: white;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
     padding: 38px 42px;
+    .hide {
+        display: none;
+    }
+    
+    .valid {
+        color: limegreen;
+        margin-left: 0.25rem;
+    }
+    
+    .invalid {
+        color: red;
+        margin-left: 0.25rem;
+    }
+    label{
+        font-weight: 700;
+    }
+    .offscreen{
+        position: absolute;
+    }
     input{
         border: 1px solid var(--gray-300);
         border-radius: 3px;
@@ -31,6 +50,17 @@
     .row2{
         display: flex;
         justify-content: space-between;
+        .instructions{
+            color: red;
+            margin-bottom: 0;
+            position: absolute;
+            font-size: 13px;
+        }
+        .offscreen{
+            color: red;
+            position: absolute;
+            left: -9999px;
+        }
         .input-container{
             display: flex;
             flex-direction: column;
@@ -46,6 +76,17 @@
             }
             .row2{
                 position: relative;
+                display: block;
+                // .instructions{
+                //     color: red;
+                //     margin-bottom: 0;
+                //     position: absolute;
+                // }
+                // .offscreen{
+                //     color: red;
+                //     position: absolute;
+                //     left: -9999px;
+                // }
                 .phone-number{
                     padding: 0 15px 0 65px;
                 }
@@ -84,19 +125,50 @@
         .col1{
             .row1{
                 font-size: 13px;
+                display: block;
+            }
+            .row2{
+                display: block;
+                // .instructions{
+                //     color: red;
+                //     margin-bottom: 0;
+                //     position: absolute;
+                // }
+                // .offscreen{
+                //     color: red;
+                //     position: absolute;
+                //     left: -9999px;
+                // }
             }
         }
         .col2{
             .row1{
                 font-size: 13px;
             }
+            .row2{
+                display: block;
+                // .instructions{
+                //     color: red;
+                //     margin-bottom: 0;
+                //     position: absolute;
+                // }
+                // .offscreen{
+                //     color: red;
+                //     position: absolute;
+                //     left: -9999px;
+                // }
+            }
         }
     }
     .row4{
         display: flex;
         justify-content: center;
+        margin-top: 20px;
         .reset-pswrd-btn{
         background-color: var(--green-400);
+        }
+        .reset-pswrd-btn:disabled{
+            background-color: var(--gray-300);
         }
     }
     .row5{
