@@ -46,7 +46,7 @@ function Header() {
                   <ul>
                     <li><Link to='/EditProfile'>Manage Account</Link></li>
                     <li><Link to='/MyProfile'>My Profile</Link></li>
-                    <li>Settings</li>
+                    <li><Link to='/DeactivateAccount'>Settings</Link></li>
                     <li>Help & Support</li>
                     <li><Link to='/LoginEmail'>Logout</Link></li>
                   </ul>

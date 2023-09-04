@@ -1,0 +1,88 @@
+// DEACTIVATE ACCOUNT STYLE
+
+.deactivate-accnt-body{
+    margin-bottom: 150px;
+    .container{
+        display: block;
+        h3{
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .box{
+            display: flex;
+            gap: 20px;
+            .col-right{
+                .accnt-deactivation-content{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    width: 985px;
+                    background: white;
+                    padding: 30px 30px;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+                    margin-bottom: 150px;
+                    span{
+                        font-weight: 500;
+                    }
+                    .row1{
+                        display: flex;
+                        justify-content: space-between;
+                        .accnt-deactivation-info{
+                            list-style: disc;
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// SET PASSWORD STYLE
+
+.set-password-body{
+    margin-bottom: 150px;
+    .container{
+        display: block;
+        h3{
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .box{
+            display: flex;
+            gap: 20px;
+            .col-right{
+                
+                .set-password-form{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    width: 985px;
+                    background: white;
+                    padding: 30px 30px;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+                    margin-bottom: 150px;
+                    span{
+                        font-weight: 500;
+                    }
+                    hr{
+                        margin: 0;
+                    }
+                    .asterisk{
+                        color: red;
+                    }
+                    .form-field{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        .password-input-field{
+                            width: 557px;
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}

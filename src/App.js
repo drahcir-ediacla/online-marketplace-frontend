@@ -14,6 +14,8 @@ import MyProfile from './pages/Profile/MyProfile'
 import BuyerProductDetails from './pages/ProducDetails/BuyerProductDetails'
 import MainCategory from './pages/Categories/MainCategory'
 import SubCategory from './pages/Categories/SubCategory'
+import DeactivateAccount from './pages/Settings/DeactivateAccount'
+import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import ScrollToTop from './utils/ScrollToTop'
 
@@ -39,6 +41,8 @@ function App() {
             <Route path='/MainCategory' element={<MainCategory />} />
             <Route path='/SubCategory' element={<SubCategory />} />
             <Route path='/Wishlist' element={<Wishlist />} />
+            <Route path='/DeactivateAccount' element={<DeactivateAccount />} />
+            <Route path='/SetPassword' element={<SetPassword />} />
           </Routes>
       </Router>
     </>

@@ -28,7 +28,7 @@ const EditProfile = () => {
         <div className="container">
             <h3>Manage Account</h3>
             <div className="box">
-                <div className="col-left"><ManageAccountNav /></div>
+                <div className="col-left"><ManageAccountNav className='active' /></div>
                 <div className="col-right">
                   <form className="edit-profile-form">
                     <div className='row1'>

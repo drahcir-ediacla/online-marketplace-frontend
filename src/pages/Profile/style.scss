@@ -11,6 +11,10 @@
         .box{
             display: flex;
             gap: 20px;
+            .active{
+                color: var(--red-400);
+                background: none;
+            }
             .col-right{
                 .edit-profile-form{
                     display: flex;
