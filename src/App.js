@@ -27,7 +27,7 @@ function App() {
       <Router>
         <ScrollToTop />
           <Routes>
-            <Route index element={<Home />} />
+            <Route path="/" index element={<Home />} />
             <Route path='/LoginEmail' element={<LoginEmail />} />
             <Route path='/LoginPhone' element={<LoginPhone />} />
             <Route path='/LoginSMS' element={<LoginSMS />} />
