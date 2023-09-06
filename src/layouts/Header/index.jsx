@@ -38,7 +38,7 @@ function Header() {
                   <div className='bell-icon'><BellIcon /></div>
                   <Link to='/Wishlist' className='heart-icon'><HeartIcon /></Link>
                 </div>
-                <span>Sell</span>
+                <span><Link to='/AddListing' className='sell-btn'>Sell</Link></span>
                 <div className='my-account'>
                   <span>My Account</span>
                   <div className='my-account-dropdown'>

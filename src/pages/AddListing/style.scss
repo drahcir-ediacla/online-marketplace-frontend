@@ -1,0 +1,131 @@
+.add-listing-body{
+    margin-bottom: 150px;
+    .container{
+        display: block;
+        h3{
+            font-weight: 500;
+            margin: 20px 0;
+        }
+        .box{
+            .col-left{
+                .add-media-container{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 16px;
+                    width: 538px;
+                    background: white;
+                    padding: 30px 20px;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+                    .add-image-box{
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                        gap: 10px;
+                        width: 498px;
+                        border: 1px dotted var(--gray-500);
+                        color: var(--green-400);
+                        padding: 30px 0;
+                        .addlisting-upload-img{
+                            width: 36px;
+                            fill: var(--green-400);
+                        }
+                    }
+                    .atleast-one-photo{
+                        color: #910000;
+                    }
+                    .add-video-container{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        width: 100%;
+                        .title-video{
+                            font-weight: 500;
+                        }
+
+                        .upload-vid-options{
+                            display: flex;
+                            gap: 35px;
+                            .radio-container{
+                                display: block;
+                                position: relative;
+                                padding-left: 20px;
+                                cursor: pointer;
+                                -webkit-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                                /* Hide the browser's default radio button */
+                                input{
+                                    position: absolute;
+                                    opacity: 0;
+                                    cursor: pointer;
+                                }
+                                /* Create a custom radio button */
+                                .checkmark {
+                                    position: absolute;
+                                    top: 3px;
+                                    left: 0;
+                                    height: 15px;
+                                    width: 15px;
+                                    border-radius: 50%;
+                                }
+                                /* When the radio button is checked, add a blue background */
+                                input:checked ~ .checkmark {
+                                    background-color: var(--green-400);
+                                    border: none;
+                                }
+                                /* Create the indicator (the dot/circle - hidden when not checked) */
+                                .checkmark:after {
+                                    content: "";
+                                    position: absolute;
+                                    display: none;
+                                }
+                                /* Show the indicator (dot/circle) when checked */
+                                input:checked ~ .checkmark:after {
+                                    display: block;
+                                }
+                                /* Style the indicator (dot/circle) */
+                                .checkmark:after {
+                                    top: 5px;
+                                    left: 5px;
+                                    width: 5px;
+                                    height: 5px;
+                                    border-radius: 50%;
+                                    background: white;
+                                }
+                            }
+                            
+                        }
+                        .upload-video-content{
+                            display: flex;
+                            justify-content: space-between;
+                            .upload-video-box{
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                text-align: center;
+                                gap: 10px;
+                                width: 127px;
+                                border: 1px dotted var(--gray-500);
+                                color: var(--green-400);
+                                padding: 25px 0px;
+                                .addlisting-upload-vid{
+                                    width: 36px;
+                                    fill: var(--green-400);
+                                }
+                            }
+                            ul{
+                                li{
+                                    font-size: 12px;
+                                    list-style: disc;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

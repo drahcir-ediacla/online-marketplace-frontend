@@ -17,6 +17,7 @@ import SubCategory from './pages/Categories/SubCategory'
 import DeactivateAccount from './pages/Settings/DeactivateAccount'
 import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
+import AddListing from './pages/AddListing/AddListing'
 import ScrollToTop from './utils/ScrollToTop'
 
 
@@ -43,6 +44,7 @@ function App() {
             <Route path='/Wishlist' element={<Wishlist />} />
             <Route path='/DeactivateAccount' element={<DeactivateAccount />} />
             <Route path='/SetPassword' element={<SetPassword />} />
+            <Route path='/AddListing' element={<AddListing />} />
           </Routes>
       </Router>
     </>

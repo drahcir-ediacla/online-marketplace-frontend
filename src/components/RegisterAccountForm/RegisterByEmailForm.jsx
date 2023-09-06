@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import axios from 'axios'
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Link} from 'react-router-dom'
@@ -13,6 +14,26 @@ const PWD_REGEX = /^.{8,24}$/;
 const REGISTER_URL = '/register';
 
 const RegisterByEmailForm = () => {
+
+    const [formData, setFormData] = useState({
+      email: '',
+      password: '',
+    });
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post('http://localhost:8081/register', formData);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    } 
 
     const emailRef = useRef();
     const errRef = useRef();
@@ -59,7 +80,7 @@ const RegisterByEmailForm = () => {
 
   return (
     <>
-      <form className='register-form'>
+      <form className='register-form' onSubmit={handleSubmit}>
         <div className='row1'>
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
           <div className='col2'><h4>Create an account</h4></div>
@@ -79,9 +100,13 @@ const RegisterByEmailForm = () => {
               <input 
                 type="text"
                 id="emailAddress"
+                name="email"
                 ref={emailRef}
                 autoComplete="off"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  handleChange(e); // Assuming handleChange is another function you want to call
+                }}
                 value={email}
                 required
                 aria-invalid={validEmail ? "false" : "true"}
@@ -113,7 +138,11 @@ const RegisterByEmailForm = () => {
               <input 
                 type="password"
                 id="password"
-                onChange={(e) => setPwd(e.target.value)}
+                name="password"
+                onChange={(e) => {
+                  setPwd(e.target.value);
+                  handleChange(e); // Assuming handleChange is another function you want to call
+                }}
                 value={pwd}
                 required
                 aria-invalid={validPwd ? "false" : "true"}
@@ -156,7 +185,7 @@ const RegisterByEmailForm = () => {
             </div>
           </div>
         </div>
-        <div className='row4'><LoginBtn label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch ? true : false} /></div>
+        <div className='row4'><LoginBtn onClick={handleSubmit} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch ? true : false} /></div>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' /></div>
         <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' /></div>
