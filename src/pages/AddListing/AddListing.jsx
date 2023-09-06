@@ -4,6 +4,7 @@ import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg';
 import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-icon.svg';
+import Input from '../../components/FormField/Input';
 
 const AddListing = () => {
   const [activeRadio, setActiveRadio] = useState(0);
@@ -75,7 +76,7 @@ const AddListing = () => {
                     </div>
                   </div>
                   <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>
-                    Youtube Link Content Here
+                    <Input placeholder='Paste your Youtube URL link here' className='input-youtube-link' />
                   </div>
                 </div>
               </div>
