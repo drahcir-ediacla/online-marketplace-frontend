@@ -15,52 +15,7 @@ const REGISTER_URL = '/api/register';
 
 const RegisterByEmailForm = () => {
 
-    const [formData, setFormData] = useState({
-      email: '',
-      password: '',
-    });
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      // if button enabled with JS hack
-      const v1 = EMAIL_REGEX.test(email);
-      const v2 = PWD_REGEX.test(pwd);
-      if (!v1 || !v2) {
-          setErrMsg("Invalid Entry");
-          return;
-      }
-      console.log(email, pwd);  
-      setSuccess(true);
-
-      try {
-        const response = await axios.post(REGISTER_URL, formData);
-        console.log(response?.data);
-        console.log(response?.accessToken);
-        console.log(JSON.stringify(response))
-        setSuccess(true);
-        //clear state and controlled inputs
-        //need value attrib on inputs for this
-        setEmail('');
-        setPwd('');
-        setMatchPwd('');
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-      } else if (err.response?.status === 409) {
-          setErrMsg('Username Taken');
-      } else {
-          setErrMsg('Registration Failed')
-      }
-      
-      }
-    } 
-
+    
     const emailRef = useRef();
     const errRef = useRef();
 
@@ -103,18 +58,57 @@ const RegisterByEmailForm = () => {
       setErrMsg('');
     }, [email, pwd, matchPwd])
 
-    
+    const [formData, setFormData] = useState({
+      email: '',
+      password: '',
+    });
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      // if button enabled with JS hack
+      const v1 = EMAIL_REGEX.test(email);
+      const v2 = PWD_REGEX.test(pwd);
+      if (!v1 || !v2) {
+          setErrMsg("Invalid Entry");
+          return;
+      }
+      console.log(email, pwd);  
+      setSuccess(true);
+
+      try {
+      const response = await axios.post(REGISTER_URL, formData);
+
+      if (response.status === 400) {
+        // User registration was successful
+        // Redirect to a success page or perform other actions
+        setErrMsg('Email already exists.');
+      } else if (response.status === 201) {
+        // Email already exists, update the error message
+        setErrMsg('Successfully Registered.');
+      } 
+      else {
+        // Handle other error cases here (e.g., server error)
+        console.error('Registration error:', response.statusText);
+        // Update the error message for other error cases
+        setErrMsg('An error occurred during registration'); // Check if this line is executed
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      // Update the error message
+      setErrMsg('An error occurred during registration');
+    }
+    } 
 
   return (
     <>
-    {success ? (
-      <section>
-        <h1>Success!</h1>
-        <p>
-          <a href="#">Sign In</a>
-        </p>
-      </section>
-      ) : (
+    
       <form className='register-form' onSubmit={handleSubmit}>
         <div className='row1'>
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
@@ -227,7 +221,7 @@ const RegisterByEmailForm = () => {
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>
-      )}
+      
     </>
   )
 }
