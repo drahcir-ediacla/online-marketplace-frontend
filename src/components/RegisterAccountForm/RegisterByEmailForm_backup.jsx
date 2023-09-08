@@ -11,7 +11,7 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
-const REGISTER_URL = '/api/register';
+const REGISTER_URL = '/register';
 
 const RegisterByEmailForm = () => {
 
@@ -27,37 +27,11 @@ const RegisterByEmailForm = () => {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-
-      // if button enabled with JS hack
-      const v1 = EMAIL_REGEX.test(email);
-      const v2 = PWD_REGEX.test(pwd);
-      if (!v1 || !v2) {
-          setErrMsg("Invalid Entry");
-          return;
-      }
-      console.log(email, pwd);  
-      setSuccess(true);
-
       try {
-        const response = await axios.post(REGISTER_URL, formData);
-        console.log(response?.data);
-        console.log(response?.accessToken);
-        console.log(JSON.stringify(response))
-        setSuccess(true);
-        //clear state and controlled inputs
-        //need value attrib on inputs for this
-        setEmail('');
-        setPwd('');
-        setMatchPwd('');
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-      } else if (err.response?.status === 409) {
-          setErrMsg('Username Taken');
-      } else {
-          setErrMsg('Registration Failed')
-      }
-      
+        const response = await axios.post('http://localhost:8081/register', formData);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
       }
     } 
 
@@ -103,18 +77,9 @@ const RegisterByEmailForm = () => {
       setErrMsg('');
     }, [email, pwd, matchPwd])
 
-    
 
   return (
     <>
-    {success ? (
-      <section>
-        <h1>Success!</h1>
-        <p>
-          <a href="#">Sign In</a>
-        </p>
-      </section>
-      ) : (
       <form className='register-form' onSubmit={handleSubmit}>
         <div className='row1'>
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
@@ -227,7 +192,6 @@ const RegisterByEmailForm = () => {
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>
-      )}
     </>
   )
 }

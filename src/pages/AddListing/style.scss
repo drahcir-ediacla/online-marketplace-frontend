@@ -24,7 +24,7 @@
                         text-align: center;
                         gap: 10px;
                         width: 498px;
-                        border: 1px dotted var(--gray-500);
+                        border: 1px dashed var(--gray-500);
                         color: var(--green-400);
                         padding: 30px 0;
                         .addlisting-upload-img{
@@ -74,7 +74,7 @@
                                 /* When the radio button is checked, add a blue background */
                                 input:checked ~ .checkmark {
                                     background-color: var(--green-400);
-                                    border: none;
+                                    border: var(--green-400);
                                 }
                                 /* Create the indicator (the dot/circle - hidden when not checked) */
                                 .checkmark:after {
@@ -108,7 +108,7 @@
                                 text-align: center;
                                 gap: 10px;
                                 width: 127px;
-                                border: 1px dotted var(--gray-500);
+                                border: 1px dashed var(--gray-500);
                                 color: var(--green-400);
                                 padding: 25px 0px;
                                 .addlisting-upload-vid{
