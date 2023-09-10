@@ -106,6 +106,10 @@
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
   }
+
+  .errmsg{
+    color: red;
+  }
   
   .fa-star, .fa-star-half-stroke{
     color: #FFD800;

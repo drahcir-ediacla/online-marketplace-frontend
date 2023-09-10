@@ -71,50 +71,71 @@ const RegisterByEmailForm = () => {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-
+    
       // if button enabled with JS hack
       const v1 = EMAIL_REGEX.test(email);
       const v2 = PWD_REGEX.test(pwd);
       if (!v1 || !v2) {
-          setErrMsg("Invalid Entry");
-          return;
+        setErrMsg("Invalid Entry");
+        return;
       }
-      console.log(email, pwd);  
-      setSuccess(true);
-
+    
       try {
-      const response = await axios.post(REGISTER_URL, formData);
-
-      if (response.status === 400) {
-        // User registration was successful
-        // Redirect to a success page or perform other actions
-        setErrMsg('Email already exists.');
-      } else if (response.status === 201) {
-        // Email already exists, update the error message
-        setErrMsg('Successfully Registered.');
-      } 
-      else {
-        // Handle other error cases here (e.g., server error)
-        console.error('Registration error:', response.statusText);
-        // Update the error message for other error cases
-        setErrMsg('An error occurred during registration'); // Check if this line is executed
+        const response = await axios.post(REGISTER_URL, formData);
+    
+        if (response.status === 201) {
+          // User registration was successful
+          setSuccess(true);
+          // Clear state and controlled inputs
+          // Need value attrib on inputs for this
+          setEmail('');
+          setPwd('');
+          setMatchPwd('');
+        // } else if (response.status === 400) {
+        //   // Email already exists, update the error message
+        //   setSuccess(false);
+        //   setErrMsg('Email already exists.');
+        // } else {
+        //   // Handle other error cases here (e.g., server error)
+        //   console.error('Registration error:', response.statusText);
+        //   // Update the error message for other error cases
+        //   setSuccess(false);
+        //   setErrMsg('An error occurred during registration');
+        }
+      } catch (err) {
+        if (err.response?.status === 400) {
+          // Email already exists, update the error message
+          setSuccess(false);
+          setErrMsg('Email already exists.');
+        }
+        else{ console.error('Error:', err);
+        // Update the error message for network or unexpected errors
+        setSuccess(false);
+        setErrMsg('An error occurred during registration');
       }
-    } catch (err) {
-      console.error('Error:', err);
-      // Update the error message
-      setErrMsg('An error occurred during registration');
-    }
-    } 
+      }
+      if (errRef.current) {
+        errRef.current.focus();
+      }
+    };
+    
 
   return (
     <>
-    
+    {success ? (
+                <section>
+                    <h1>Success!</h1>
+                    <p>
+                        <Link to="/LoginEmail">Sign In</Link>
+                    </p>
+                </section>
+            ) : (
       <form className='register-form' onSubmit={handleSubmit}>
         <div className='row1'>
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
           <div className='col2'><h4>Create an account</h4></div>
         </div>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
         <div className='row2'>
           <div className='col1 input-container'>
             <div className='row1'>
@@ -221,7 +242,7 @@ const RegisterByEmailForm = () => {
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>
-      
+      )}
     </>
   )
 }
