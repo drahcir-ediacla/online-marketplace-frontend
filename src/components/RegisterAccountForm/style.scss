@@ -115,11 +115,14 @@
                     top: 2px;
                     right: 0px;
                     border: none;
-                    font-weight: 400;
-                    color: var(--bs-link-color);
+                    font-weight: 500;
+                    color: var(--green-400);
                 }
                 .send-code:hover{
                     background: none;
+                }
+                .send-code:disabled{
+                    color: var(--gray-300);
                 }
             }
             

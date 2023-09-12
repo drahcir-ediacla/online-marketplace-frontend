@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axiosInstance";
+import { axiosInstance } from "./axiosinstance";
 
 // register user
 export const RegisterUser = async (payload) => {

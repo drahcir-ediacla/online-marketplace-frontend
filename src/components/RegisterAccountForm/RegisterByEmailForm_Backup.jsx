@@ -74,12 +74,12 @@ const RegisterByEmailForm = () => {
       e.preventDefault();
     
       // if button enabled with JS hack
-      const isEmailValid  = EMAIL_REGEX.test(email);
-      const isPasswordValid = PWD_REGEX.test(pwd);
-      if (!isEmailValid  || !isPasswordValid) {
-        setErrMsg("Invalid Entry");
-        return;
-      }
+      // const isEmailValid  = EMAIL_REGEX.test(email);
+      // const isPasswordValid = PWD_REGEX.test(pwd);
+      // if (!isEmailValid  || !isPasswordValid) {
+      //   setErrMsg("Invalid Entry");
+      //   return;
+      // }
     
       try {
         const response = await axios.post(REGISTER_URL, formData);
