@@ -13,6 +13,7 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
 const REGISTER_URL = '/api/register';
+const google = window.google
 
 const RegisterByEmailForm = () => {
 
@@ -68,6 +69,26 @@ const RegisterByEmailForm = () => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
+
+
+    // SIGN IN WITH GOOGLE
+
+    function handleCallbackResponse(response) {
+      console.log("Encoded JWT ID token: " + response.credential)
+  }
+      useEffect(() => {
+        // global google
+        google.accounts.id.initialize({
+            client_id: "615142868408-d3siclmigeg8occia3c5r84momk6l0r5.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        })
+
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            {theme: "outline", size: "Wide"}
+        )
+}, []);
+
 
 
     const handleSubmit = async (e) => {
@@ -255,7 +276,7 @@ const RegisterByEmailForm = () => {
         <div className='row4'><LoginBtn onClick={(e) => {e.preventDefault(); handleSubmit(e);}} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' /></div>
-        <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' /></div>
+        <div className='row7'><div id='signInDiv'></div></div>
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>
