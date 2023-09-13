@@ -8,6 +8,27 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 
 
 const LoginSmsForm = () => {
+
+  const openPopup = (url, width, height) => {
+    const left = window.innerWidth / 2 - width / 2 + window.screenX;
+    const top = window.innerHeight / 2 - height / 2 + window.screenY;
+  
+    window.open(
+      url,
+      "_blank",
+      `width=${width}, height=${height}, top=${top}, left=${left}`
+    );
+  };
+  
+  const google = () => {
+    openPopup("http://localhost:8081/auth/google", 600, 400);
+  };
+  
+  const facebook = () => {
+    openPopup("http://localhost:8081/auth/facebook", 600, 400);
+  };
+  
+
   return (
     <>
       <form className='login-form'>
@@ -26,8 +47,8 @@ const LoginSmsForm = () => {
         </div>
         <div className='row4'><LoginBtn label="Continue" className='continue-btn' /></div>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
-        <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' /></div>
-        <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' /></div>
+        <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
+        <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' onClick={google} /></div>
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
       </form>
     </>

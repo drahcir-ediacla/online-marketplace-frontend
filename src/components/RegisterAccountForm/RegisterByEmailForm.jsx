@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
+import axiosInstance from '../../apicalls/axiosinstance';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Link} from 'react-router-dom'
@@ -13,7 +14,6 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
 const REGISTER_URL = '/api/register';
-const google = window.google
 
 const RegisterByEmailForm = () => {
 
@@ -71,23 +71,8 @@ const RegisterByEmailForm = () => {
     };
 
 
-    // SIGN IN WITH GOOGLE
 
-    function handleCallbackResponse(response) {
-      console.log("Encoded JWT ID token: " + response.credential)
-  }
-      useEffect(() => {
-        // global google
-        google.accounts.id.initialize({
-            client_id: "615142868408-d3siclmigeg8occia3c5r84momk6l0r5.apps.googleusercontent.com",
-            callback: handleCallbackResponse
-        })
 
-        google.accounts.id.renderButton(
-            document.getElementById("signInDiv"),
-            {theme: "outline", size: "Wide"}
-        )
-}, []);
 
 
 
@@ -95,15 +80,15 @@ const RegisterByEmailForm = () => {
       e.preventDefault();
     
       // if button enabled with JS hack
-      // const isEmailValid  = EMAIL_REGEX.test(email);
-      // const isPasswordValid = PWD_REGEX.test(pwd);
-      // if (!isEmailValid  || !isPasswordValid) {
-      //   setErrMsg("Invalid Entry");
-      //   return;
-      // }
+      const isEmailValid  = EMAIL_REGEX.test(email);
+      const isPasswordValid = PWD_REGEX.test(pwd);
+      if (!isEmailValid  || !isPasswordValid) {
+        setErrMsg("Invalid Entry");
+        return;
+      }
     
       try {
-        const response = await axios.post(REGISTER_URL, formData);
+        const response = await axiosInstance.post(REGISTER_URL, formData);
     
         if (response.status === 201) {
           // User registration was successful
@@ -131,32 +116,27 @@ const RegisterByEmailForm = () => {
       }
     };
 
-   
+    const openPopup = (url, width, height) => {
+      const left = window.innerWidth / 2 - width / 2 + window.screenX;
+      const top = window.innerHeight / 2 - height / 2 + window.screenY;
     
-       // OTP Verification
-      const [otp, setOTP] = useState('');
-      const [message, setMessage] = useState('');
+      window.open(
+        url,
+        "_blank",
+        `width=${width}, height=${height}, top=${top}, left=${left}`
+      );
+    };
     
-      const handleSendOTP = async () => {
-        try {
-          // Send a POST request to your backend to send OTP to the email
-          const response = await axios.post('/api/send-otp', { email });
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    const google = () => {
+      openPopup("http://localhost:8081/auth/google", 600, 400);
+    };
     
-      const handleVerifyOTP = async () => {
-        try {
-          // Send a POST request to your backend to verify the OTP
-          const response = await axios.post('/api/verify-otp', { email, otp });
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    const facebook = () => {
+      openPopup("http://localhost:8081/auth/facebook", 600, 400);
+    };
     
+    
+
 
   return (
     <>
@@ -173,7 +153,7 @@ const RegisterByEmailForm = () => {
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
           <div className='col2'><h4>Create an account</h4></div>
         </div>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}{message}</p>
+        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
         <div className='row2'>
           <div className='col1 input-container'>
             <div className='row1'>
@@ -211,7 +191,7 @@ const RegisterByEmailForm = () => {
           </div>
           <div className='col2 input-container'>
             <div className='row1'><b>Verification Code</b></div>
-            <div className='row2'><input type="text" placeholder='Enter the verification code' value={otp} onChange={(e) => setOTP(e.target.value)} /><BtnClear label='Send Code' className='send-code' disabled /></div>
+            <div className='row2'><input type="text" placeholder='Enter the verification code' /><BtnClear label='Send Code' className='send-code' disabled /></div>
           </div>
         </div>
         <div className='row3'>
@@ -273,10 +253,10 @@ const RegisterByEmailForm = () => {
             </div>
           </div>
         </div>
-        <div className='row4'><LoginBtn onClick={(e) => {e.preventDefault(); handleSubmit(e);}} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
+        <div className='row4'><LoginBtn onClick={handleSubmit} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
-        <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' /></div>
-        <div className='row7'><div id='signInDiv'></div></div>
+        <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
+        <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' onClick={google} /></div>
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>

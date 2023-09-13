@@ -8,11 +8,11 @@ import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import LoginBtn from '../../components/Button/LoginBtn'
 import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
-import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
 const REGISTER_URL = '/api/register';
+const google = window.google
 
 const RegisterByEmailForm = () => {
 
@@ -70,16 +70,38 @@ const RegisterByEmailForm = () => {
     };
 
 
+    // SIGN IN WITH GOOGLE
+
+    function handleCallbackResponse(response) {
+      console.log("Encoded JWT ID token: " + response.credential)
+  }
+      useEffect(() => {
+        // global google
+        google.accounts.id.initialize({
+            client_id: "615142868408-d3siclmigeg8occia3c5r84momk6l0r5.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        })
+
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            {theme: "outline", size: "Wide"}
+        )
+}, []);
+
+
+
+
+
     const handleSubmit = async (e) => {
       e.preventDefault();
     
       // if button enabled with JS hack
-      // const isEmailValid  = EMAIL_REGEX.test(email);
-      // const isPasswordValid = PWD_REGEX.test(pwd);
-      // if (!isEmailValid  || !isPasswordValid) {
-      //   setErrMsg("Invalid Entry");
-      //   return;
-      // }
+      const isEmailValid  = EMAIL_REGEX.test(email);
+      const isPasswordValid = PWD_REGEX.test(pwd);
+      if (!isEmailValid  || !isPasswordValid) {
+        setErrMsg("Invalid Entry");
+        return;
+      }
     
       try {
         const response = await axios.post(REGISTER_URL, formData);
@@ -97,7 +119,7 @@ const RegisterByEmailForm = () => {
         if (err.response?.status === 400) {
           // Email already exists, update the error message
           setSuccess(false);
-          setErrMsg('Email already exists.');
+          setErrMsg('Account already exists for this email.');
         }
         else{ console.error('Error:', err);
         // Update the error message for network or unexpected errors
@@ -110,32 +132,10 @@ const RegisterByEmailForm = () => {
       }
     };
 
-   
     
-       // OTP Verification
-      const [otp, setOTP] = useState('');
-      const [message, setMessage] = useState('');
     
-      const handleSendOTP = async () => {
-        try {
-          // Send a POST request to your backend to send OTP to the email
-          const response = await axios.post('/api/send-otp', { email });
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error(error);
-        }
-      };
     
-      const handleVerifyOTP = async () => {
-        try {
-          // Send a POST request to your backend to verify the OTP
-          const response = await axios.post('/api/verify-otp', { email, otp });
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-    
+
 
   return (
     <>
@@ -152,7 +152,7 @@ const RegisterByEmailForm = () => {
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
           <div className='col2'><h4>Create an account</h4></div>
         </div>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}{message}</p>
+        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
         <div className='row2'>
           <div className='col1 input-container'>
             <div className='row1'>
@@ -190,7 +190,7 @@ const RegisterByEmailForm = () => {
           </div>
           <div className='col2 input-container'>
             <div className='row1'><b>Verification Code</b></div>
-            <div className='row2'><input type="text" placeholder='Enter the verification code' value={otp} onChange={(e) => setOTP(e.target.value)} /><BtnClear label='Send Code' className='send-code' onClick={handleSendOTP} disabled={!validEmail} /></div>
+            <div className='row2'><input type="text" placeholder='Enter the verification code' /><BtnClear label='Send Code' className='send-code' disabled /></div>
           </div>
         </div>
         <div className='row3'>
@@ -252,10 +252,10 @@ const RegisterByEmailForm = () => {
             </div>
           </div>
         </div>
-        <div className='row4'><LoginBtn onClick={(e) => {e.preventDefault(); handleSubmit(e); handleVerifyOTP();}} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
+        <div className='row4'><LoginBtn onClick={handleSubmit} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' /></div>
-        <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' /></div>
+        <div className='row7'><div id='signInDiv'></div></div>
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
       </form>
