@@ -20,11 +20,11 @@ const RegisterByPhoneForm = () => {
   };
   
   const google = () => {
-    openPopup("https://yogeek-server.onrender.com/auth/google", 600, 400);
+    openPopup("http://localhost:8081/auth/google", 600, 400);
   };
   
   const facebook = () => {
-    openPopup("https://yogeek-server.onrender.com/auth/facebook", 600, 400);
+    openPopup("http://localhost:8081/auth/facebook", 600, 400);
   };
   
   return (

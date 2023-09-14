@@ -115,6 +115,8 @@ const RegisterByEmailForm = () => {
       }
     };
 
+
+     //SOCIAL LOGIN POPUP WINDOW
     const openPopup = (url, width, height) => {
       const left = window.innerWidth / 2 - width / 2 + window.screenX;
       const top = window.innerHeight / 2 - height / 2 + window.screenY;
@@ -127,11 +129,11 @@ const RegisterByEmailForm = () => {
     };
     
     const google = () => {
-      openPopup("https://yogeek-server.onrender.com/auth/google", 600, 400);
+      openPopup("http://localhost:8081/auth/google", 600, 400);
     };
     
     const facebook = () => {
-      openPopup("https://yogeek-server.onrender.com/auth/facebook", 600, 400);
+      openPopup("http://localhost:8081/auth/facebook", 600, 400);
     };
     
     
