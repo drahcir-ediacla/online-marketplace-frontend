@@ -61,7 +61,7 @@ const LoginEmailForm = () => {
   };
   
   const facebook = () => {
-    openPopup("https://yogeek.onrender.com/auth/facebook", 600, 400);
+    openPopup("https://yogeek-server.onrender.com/auth/facebook/callback", 600, 400);
   };
 
   return (
