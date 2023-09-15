@@ -20,7 +20,7 @@ const RegisterByPhoneForm = () => {
   };
   
   const google = () => {
-    openPopup("http://localhost:8081/auth/google", 600, 400);
+    openPopup("https://yogeek-server.onrender.com/auth/google", 600, 400);
   };
   
   const facebook = () => {
