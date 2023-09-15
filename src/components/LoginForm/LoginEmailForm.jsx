@@ -57,7 +57,7 @@ const LoginEmailForm = () => {
   };
   
   const google = () => {
-    openPopup("https://yogeek.onrender.com/auth/google", 600, 400);
+    openPopup("https://yogeek-server.onrender.com/auth/google", 600, 400);
   };
   
   const facebook = () => {
