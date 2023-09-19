@@ -44,24 +44,17 @@ const LoginEmailForm = () => {
     }
   };
 
-  //SOCIAL LOGIN POPUP WINDOW
-  const openPopup = (url, width, height) => {
-    const left = window.innerWidth / 2 - width / 2 + window.screenX;
-    const top = window.innerHeight / 2 - height / 2 + window.screenY;
-  
-    window.open(
-      url,
-      "_blank",
-      `width=${width}, height=${height}, top=${top}, left=${left}`
-    );
+  //SOCIAL LOGIN REDIRECT PAGE
+  const redirectToUrl = (url) => {
+    window.location.href = url;
   };
   
   const google = () => {
-    openPopup("https://yogeek-server.onrender.com/auth/google", 600, 400);
+    redirectToUrl("https://yogeek-server.onrender.com/auth/google");
   };
   
   const facebook = () => {
-    openPopup("https://yogeek-server.onrender.com/auth/facebook/callback", 600, 400);
+    redirectToUrl("https://yogeek-server.onrender.com/auth/facebook/callback");
   };
 
   return (
