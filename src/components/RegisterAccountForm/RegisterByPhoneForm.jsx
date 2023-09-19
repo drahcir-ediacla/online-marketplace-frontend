@@ -18,7 +18,7 @@ const RegisterByPhoneForm = () => {
   };
   
   const facebook = () => {
-    redirectToUrl("https://yogeek-server.onrender.com/facebook/callback");
+    redirectToUrl("https://yogeek-server.onrender.com/auth/facebook/callback");
   };
   
   return (

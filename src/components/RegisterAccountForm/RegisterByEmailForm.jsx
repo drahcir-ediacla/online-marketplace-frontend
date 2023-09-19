@@ -116,18 +116,18 @@ const RegisterByEmailForm = () => {
     };
 
 
-    //SOCIAL LOGIN REDIRECT PAGE
-    const redirectToUrl = (url) => {
-      window.location.href = url;
-    };
-    
-    const google = () => {
-      redirectToUrl("https://yogeek-server.onrender.com/auth/google");
-    };
-    
-    const facebook = () => {
-      redirectToUrl("https://yogeek-server.onrender.com/facebook/callback");
-    };
+  //SOCIAL LOGIN REDIRECT PAGE
+  const redirectToUrl = (url) => {
+    window.location.href = url;
+  };
+  
+  const google = () => {
+    redirectToUrl("https://yogeek-server.onrender.com/auth/google");
+  };
+  
+  const facebook = () => {
+    redirectToUrl("https://yogeek-server.onrender.com/auth/facebook/callback");
+  };
     
     
 
