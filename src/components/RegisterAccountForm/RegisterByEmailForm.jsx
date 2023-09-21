@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import axiosInstance from "../../apicalls/axiosinstance";
+import axios from "../../apicalls/axios";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Link} from 'react-router-dom'
@@ -87,7 +87,7 @@ const RegisterByEmailForm = () => {
       }
     
       try {
-        const response = await axiosInstance.post(REGISTER_URL, formData);
+        const response = await axios.post(REGISTER_URL, formData);
     
         if (response.status === 201) {
           // User registration was successful
