@@ -23,6 +23,7 @@ const RegisterByPhoneForm = () => {
   
   return (
     <>
+    <div className='register-form-container'>
       <form className='register-form'>
         <div className='row1'>
           <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
@@ -49,12 +50,13 @@ const RegisterByPhoneForm = () => {
           </div>
         </div>
         <div className='row4'><LoginBtn label="Continue" className='reset-pswrd-btn' /></div>
+      </form>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
         <div className='row7'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' onClick={google} /></div>
         <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
         <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
-      </form>
+    </div>
     </>
   )
 }
