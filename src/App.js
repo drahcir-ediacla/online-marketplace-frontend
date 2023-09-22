@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../src/assets/styles/global.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import LoginEmail from './pages/Auth/Login/LoginEmail'
 import LoginPhone from './pages/Auth/Login/LoginPhone'
@@ -22,6 +22,33 @@ import ScrollToTop from './utils/ScrollToTop'
 
 
 function App() {
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = () => {
+      fetch("http://localhost:8081/auth/login/success", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          throw new Error("authentication has been failed!");
+        })
+        .then((resObject) => {
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
   
   return (
     <>
@@ -29,13 +56,13 @@ function App() {
         <ScrollToTop />
           <Routes>
             <Route path="/" index element={<Home />} />
-            <Route path='/LoginEmail' element={<LoginEmail />} />
-            <Route path='/LoginPhone' element={<LoginPhone />} />
-            <Route path='/LoginSMS' element={<LoginSMS />} />
-            <Route path='/ResetByEmail' element={<ResetByEmail />} />
-            <Route path='/ResetByPhone' element={<ResetByPhone />} />
-            <Route path='/RegisterByEmail' element={<RegisterByEmail />} />
-            <Route path='/RegisterByPhone' element={<RegisterByPhone />} />
+            <Route path='/LoginEmail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
+            <Route path='/LoginPhone' element={user ? <Navigate to="/" /> : <LoginPhone />} />
+            <Route path='/LoginSMS' element={user ? <Navigate to="/" /> : <LoginSMS />} />
+            <Route path='/ResetByEmail' element={user ? <Navigate to="/" /> : <ResetByEmail />} />
+            <Route path='/ResetByPhone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
+            <Route path='/RegisterByEmail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
+            <Route path='/RegisterByPhone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
             <Route path='/EditProfile' element={<EditProfile />} />
             <Route path='/MyProfile' element={<MyProfile />} />
             <Route path='/BuyerProductDetails' element={<BuyerProductDetails />} />

@@ -6,7 +6,7 @@ import {ReactComponent as GridIcon} from '../../assets/images/grid-icon.svg';
 import {ReactComponent as MagnifyingGlass} from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 
-const SlidingSideNav = () => {
+const SlidingSideNav = ({ user }) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -32,22 +32,42 @@ const SlidingSideNav = () => {
           </div>
           <div className='col-right'>
             <div className='row1'>
-              <div className="avatar-icon"><img src={AvatarIcon} alt="" /></div>
-              <Link to='/LoginEmail'><h4>Hello, sign in</h4></Link>
+              {user ? (
+                <div>
+                  {user.photos && user.photos.length > 0 ? (
+                    <div className="avatar-icon">
+                      <img src={user.photos[0].value} alt="" />
+                    </div>
+                  ) : (
+                    <div className="avatar-icon">
+                      <img src={AvatarIcon} alt="" />
+                    </div>
+                  )}
+                  <Link to='#'>{user.displayName}</Link>
+                </div>
+              ) : (
+                <div>
+                  <div className="avatar-icon">
+                    <img src={AvatarIcon} alt="" />
+                  </div>
+                  <Link to='/LoginEmail'><h4>Hello, sign in</h4></Link>
+                </div>
+              )}
             </div>
             <div className='row2'>
               <div>
                 <h5>All Categories</h5>
                 <div className='search-container'>
-                      <input type="text" placeholder='Search Categories' />
-                      <button><div className='magnifying-glass'><MagnifyingGlass /></div></button>
+                  <input type="text" placeholder='Search Categories' />
+                  <button><div className='magnifying-glass'><MagnifyingGlass /></div></button>
                 </div>
-              </div>  
+              </div>
             </div>
             <div className='row3'>
               <NavCategories />
             </div>
           </div>
+
         </nav>  
       </div>
     </>

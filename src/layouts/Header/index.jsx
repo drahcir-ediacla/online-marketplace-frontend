@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import '../Header/style.scss';
 import {ReactComponent as MessageIcon} from '../../assets/images/message-regular.svg';
@@ -11,11 +11,39 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 
-function Header({ user }) {
+function Header() {
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = () => {
+      fetch("http://localhost:8081/auth/login/success", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          throw new Error("authentication has been failed!");
+        })
+        .then((resObject) => {
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
 
   const logout = () => {
     window.open("http://localhost:8081/auth/logout", "_self");
   };
+  
 
   return (
     <>
@@ -88,7 +116,7 @@ function Header({ user }) {
         </div>
         <div className='row3'>
           <div className='container'>
-            <NavMenu />
+            <NavMenu user={user} />
           </div>
         </div>
       </header>
