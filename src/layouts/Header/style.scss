@@ -72,6 +72,15 @@ header{
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                .login-register{
+                    display: flex;
+                    justify-content: flex-end;
+                    width: 100%;
+                    gap: 30px;
+                    a {
+                        color: white;
+                    }
+                }
                 .sell-btn{
                     color: white;
                 }

@@ -11,7 +11,12 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 
-function Header() {
+function Header({ user }) {
+
+  const logout = () => {
+    window.open("http://localhost:8081/auth/logout", "_self");
+  };
+
   return (
     <>
       <header>
@@ -32,27 +37,37 @@ function Header() {
                   </div>
                 </div>
               </div>
+              
               <div className='col-right'>
-                <div className='nav-tools'>
-                  <div className='message-icon'><MessageIcon /></div>
-                  <div className='bell-icon'><BellIcon /></div>
-                  <Link to='/Wishlist' className='heart-icon'><HeartIcon /></Link>
-                </div>
-                <span><Link to='/AddListing' className='sell-btn'>Sell</Link></span>
-                <div className='my-account'>
-                  <span>My Account</span>
-                  <div className='my-account-dropdown'>
-                  <div className='triangle-icon'><TriangleIcon /></div>
-                  <ul>
-                    <li><Link to='/EditProfile'>Manage Account</Link></li>
-                    <li><Link to='/MyProfile'>My Profile</Link></li>
-                    <li><Link to='/DeactivateAccount'>Settings</Link></li>
-                    <li>Help & Support</li>
-                    <li><Link to='/LoginEmail'>Logout</Link></li>
-                  </ul>
-                </div>
-                </div>
-                
+                {user ? ( 
+                <>
+                  <div className='nav-tools'>
+                    <div className='message-icon'><MessageIcon /></div>
+                    <div className='bell-icon'><BellIcon /></div>
+                    <Link to='/Wishlist' className='heart-icon'><HeartIcon /></Link>
+                  </div>
+                  <span><Link to='/AddListing' className='sell-btn'>Sell</Link></span>
+                  <div className='my-account'>
+                    <span>My Account</span>
+                    <div className='my-account-dropdown'>
+                    <div className='triangle-icon'><TriangleIcon /></div>
+                    <ul>
+                      <li><Link to='/EditProfile'>Manage Account</Link></li>
+                      <li><Link to='/MyProfile'>My Profile</Link></li>
+                      <li><Link to='/DeactivateAccount'>Settings</Link></li>
+                      <li>Help & Support</li>
+                      <li><Link onClick={logout}>Logout</Link></li>
+                    </ul>
+                    </div>
+                  </div>
+                </>
+                ) : (
+                  <div className='login-register'>
+                    <Link to='/LoginEmail'>SELL</Link>
+                    <Link to='/LoginEmail'>LOGIN</Link>
+                    <Link to='/RegisterByEmail'>REGISTER</Link>
+                  </div>
+                )}
               </div>
             </div>
         </div>
