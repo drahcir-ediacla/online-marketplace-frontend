@@ -50,11 +50,11 @@ const LoginEmailForm = () => {
   };
   
   const google = () => {
-    redirectToUrl("http://localhost:8081/auth/google");
+    redirectToUrl("https://yogeek-server.onrender.com/auth/google");
   };
   
   const facebook = () => {
-    redirectToUrl("http://localhost:8081/auth/facebook/callback");
+    redirectToUrl("https://yogeek-server.onrender.com/auth/facebook/callback");
   };
 
   return (
