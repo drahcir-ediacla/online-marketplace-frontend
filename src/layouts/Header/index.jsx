@@ -17,7 +17,7 @@ function Header() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("https://yogeek-server.onrender.com/auth/login/success", {
+      fetch("http://localhost:8081/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -40,10 +40,19 @@ function Header() {
     getUser();
   }, []);
 
-  const logout = () => {
-    window.open("https://yogeek-server.onrender.com/auth/logout", "_self");
-  };
+  // const logout = () => {
+  //   window.open("http://localhost:8081/auth/logout", "_self");
+  // };
   
+  const logout = () => {
+    const localBaseUrl = process.env.REACT_APP_BASE_URL;
+    const logoutPath = '/auth/logout';
+  
+    // Combine the base URL and the logout path
+    const logoutUrl = `${localBaseUrl}${logoutPath}`;
+    
+    window.open(logoutUrl, '_self');
+  };
 
   return (
     <>
