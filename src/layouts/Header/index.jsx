@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import axios from "../../apicalls/axios";
 import {Link} from 'react-router-dom';
 import '../Header/style.scss';
 import {ReactComponent as MessageIcon} from '../../assets/images/message-regular.svg';
@@ -12,58 +11,67 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 
-const GET_USER_LOGIN = '/auth/login/success';
+// const GET_USER_LOGIN = '/auth/login/success';
 
 function Header() {
 
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   const getUser = () => {
-  //     fetch("https://yogeek-server.onrender.com/auth/login/success", {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Credentials": true,
-  //       },
-  //     })
-  //       .then((response) => {
-  //         if (response.status === 200) return response.json();
-  //         throw new Error("authentication has been failed!");
-  //       })
-  //       .then((resObject) => {
-  //         setUser(resObject.user);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-  //   getUser();
-  // }, []);
-
   useEffect(() => {
     const getUser = () => {
-      axios.get(GET_USER_LOGIN, {
-        withCredentials: true, // Include credentials (cookies) in the request
+      fetch("https://yogeek-server.onrender.com/auth/login/success", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
       })
-      .then((response) => {
-        if (response.status === 200) return response.data; // Use response.data to access JSON data
-        throw new Error("Authentication has failed!");
-      })
-      .then((resObject) => {
-        setUser(resObject.user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          throw new Error("authentication has been failed!");
+        })
+        .then((resObject) => {
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     getUser();
   }, []);
 
+  // useEffect(() => {
+  //   const getUser = () => {
+  //     axios.get(GET_USER_LOGIN, {
+  //       withCredentials: true, // Include credentials (cookies) in the request
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Credentials": true,
+  //         "Access-Control-Allow-Origin": true,
+  //         "Access-Control-Allow-Methods": true,
+  //         "Access-Control-Allow-Headers": true,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response.status === 200) return response.data; // Use response.data to access JSON data
+  //       throw new Error("Authentication has failed!");
+  //     })
+  //     .then((resObject) => {
+  //       console.log("User data:", resObject.user);
+  //       setUser(resObject.user);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   };
+  //   getUser();
+  // }, []);
+
   const logout = () => {
-    window.open("https://yogeek-server.onrender.com/auth/logout", "_self");
+    window.open("http://localhost:8081/auth/logout", "_self");
   };
   
   // const logout = () => {
@@ -75,6 +83,7 @@ function Header() {
     
   //   window.open(logoutUrl, '_self');
   // };
+  
 
   return (
     <>
