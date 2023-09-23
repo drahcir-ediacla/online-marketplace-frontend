@@ -17,7 +17,7 @@ function Header() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:8081/auth/login/success", {
+      fetch("https://yogeek-server.onrender.com/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {
