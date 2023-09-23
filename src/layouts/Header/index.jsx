@@ -40,19 +40,19 @@ function Header() {
     getUser();
   }, []);
 
-  // const logout = () => {
-  //   window.open("http://localhost:8081/auth/logout", "_self");
-  // };
-  
   const logout = () => {
-    const localBaseUrl = process.env.REACT_APP_BASE_URL;
-    const logoutPath = '/auth/logout';
-  
-    // Combine the base URL and the logout path
-    const logoutUrl = `${localBaseUrl}${logoutPath}`;
-    
-    window.open(logoutUrl, '_self');
+    window.open("https://yogeek-server.onrender.com/auth/logout", "_self");
   };
+  
+  // const logout = () => {
+  //   const localBaseUrl = process.env.REACT_APP_BASE_URL;
+  //   const logoutPath = '/auth/logout';
+  
+  //   // Combine the base URL and the logout path
+  //   const logoutUrl = `${localBaseUrl}${logoutPath}`;
+    
+  //   window.open(logoutUrl, '_self');
+  // };
 
   return (
     <>
