@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "../../apicalls/axios";
 import {Link} from 'react-router-dom';
 import '../Header/style.scss';
 import {ReactComponent as MessageIcon} from '../../assets/images/message-regular.svg';
@@ -11,31 +12,52 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 
+const GET_USER_LOGIN = '/auth/login/success';
+
 function Header() {
 
   const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   const getUser = () => {
+  //     fetch("https://yogeek-server.onrender.com/auth/login/success", {
+  //       method: "GET",
+  //       credentials: "include",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Credentials": true,
+  //       },
+  //     })
+  //       .then((response) => {
+  //         if (response.status === 200) return response.json();
+  //         throw new Error("authentication has been failed!");
+  //       })
+  //       .then((resObject) => {
+  //         setUser(resObject.user);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   };
+  //   getUser();
+  // }, []);
+
   useEffect(() => {
     const getUser = () => {
-      fetch("https://yogeek-server.onrender.com/auth/login/success", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
+      axios.get(GET_USER_LOGIN, {
+        withCredentials: true, // Include credentials (cookies) in the request
       })
-        .then((response) => {
-          if (response.status === 200) return response.json();
-          throw new Error("authentication has been failed!");
-        })
-        .then((resObject) => {
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      .then((response) => {
+        if (response.status === 200) return response.data; // Use response.data to access JSON data
+        throw new Error("Authentication has failed!");
+      })
+      .then((resObject) => {
+        setUser(resObject.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     };
     getUser();
   }, []);
