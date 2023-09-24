@@ -19,13 +19,16 @@ function Header() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:8081/auth/login/success", {
+      fetch("https://yogeek-server.onrender.com/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Credentials": true,
+          "Access-Control-Allow-Origin": true,
+          "Access-Control-Allow-Methods": true,
+          "Access-Control-Allow-Headers": true,
         },
       })
         .then((response) => {
@@ -71,7 +74,7 @@ function Header() {
   // }, []);
 
   const logout = () => {
-    window.open("http://localhost:8081/auth/logout", "_self");
+    window.open("https://yogeek-server.onrender.com/auth/logout", "_self");
   };
   
   // const logout = () => {
