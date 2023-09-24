@@ -26,9 +26,6 @@ function Header() {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Credentials": true,
-          "Access-Control-Allow-Origin": true,
-          "Access-Control-Allow-Methods": true,
-          "Access-Control-Allow-Headers": true,
         },
       })
         .then((response) => {
