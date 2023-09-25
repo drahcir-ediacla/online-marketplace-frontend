@@ -80,14 +80,14 @@ const NavMenu = ({user}) => {
                                         <img src={AvatarIcon} alt="" />
                                     </div>
                                     )}
-                                    <Link to='#'><h4>{user.display_name}</h4></Link>
+                                    <Link to='#'><h5>{user.display_name}</h5></Link>
                                 </div>
                                 ) : (
                                 <div>
                                     <div className="avatar-icon">
                                     <img src={AvatarIcon} alt="" />
                                     </div>
-                                    <Link to='/LoginEmail'><h4>Hello, sign in</h4></Link>
+                                    <Link to='/LoginEmail'><h5>Hello, sign in</h5></Link>
                                 </div>
                                 )}
                             </div>

@@ -11,6 +11,8 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 
+// const GET_USER_LOGIN = '/auth/login/success';
+
 function Header() {
 
   const [user, setUser] = useState(null);
@@ -40,9 +42,47 @@ function Header() {
     getUser();
   }, []);
 
+  // useEffect(() => {
+  //   const getUser = () => {
+  //     axios.get(GET_USER_LOGIN, {
+  //       withCredentials: true, // Include credentials (cookies) in the request
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Credentials": true,
+  //         "Access-Control-Allow-Origin": true,
+  //         "Access-Control-Allow-Methods": true,
+  //         "Access-Control-Allow-Headers": true,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (response.status === 200) return response.data; // Use response.data to access JSON data
+  //       throw new Error("Authentication has failed!");
+  //     })
+  //     .then((resObject) => {
+  //       console.log("User data:", resObject.user);
+  //       setUser(resObject.user);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   };
+  //   getUser();
+  // }, []);
+
   const logout = () => {
     window.open("http://localhost:8081/auth/logout", "_self");
   };
+  
+  // const logout = () => {
+  //   const localBaseUrl = process.env.REACT_APP_BASE_URL;
+  //   const logoutPath = '/auth/logout';
+  
+  //   // Combine the base URL and the logout path
+  //   const logoutUrl = `${localBaseUrl}${logoutPath}`;
+    
+  //   window.open(logoutUrl, '_self');
+  // };
   
 
   return (

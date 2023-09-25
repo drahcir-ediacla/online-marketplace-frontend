@@ -20,6 +20,7 @@ import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
 import ScrollToTop from './utils/ScrollToTop'
 
+// const GET_USER_LOGIN = '/auth/login/success';
 
 function App() {
 
