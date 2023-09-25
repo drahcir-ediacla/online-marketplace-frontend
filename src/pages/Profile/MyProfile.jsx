@@ -44,7 +44,7 @@ const MyProfile = () => {
         <div className="container">
             <div className="row1">
                 <h3>My Profile</h3>
-                <BtnClear label="Edit Profile" className='edit-profile-btn' />
+                <BtnClear to="/EditProfile" label="Edit Profile" className='edit-profile-btn' />
             </div>
             <div className="row2 cover-photo">COVER PHOTO</div>
             <div className="row3 box-body">

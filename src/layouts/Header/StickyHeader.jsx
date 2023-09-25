@@ -20,7 +20,7 @@ const StickyHeader = () => {
 
     useEffect(() => {
         const getUser = () => {
-            fetch("http://localhost:8081/auth/login/success", {
+            fetch("https://yogeek-server.onrender.com/auth/login/success", {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -130,7 +130,7 @@ const StickyHeader = () => {
                                 </div>
                             </div>
                             <div>
-                                <BtnGreen label="Sell" className="sticky-header-sell-btn" />
+                                <BtnGreen to="/AddListing" label="Sell" className="sticky-header-sell-btn" />
                             </div>
                         </div>
                     </div>

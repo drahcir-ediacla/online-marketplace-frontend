@@ -73,10 +73,12 @@
   font-weight: 500;
   color: var(--gray-500);
   outline: none;
+  text-align: center;
 }
 
 .clear-button:hover{
   background: var(--light-gray);
+  color: var(--gray-500);
 }
 
 /* GREEN BUTTON */
@@ -90,10 +92,12 @@
   color: white;
   float: right;
   outline: none;
+  text-align: center;
 }
 
 .green-button:hover{
   background: #008774;
+  color: white;
 }
 
 /* FILTERS BUTTON */
