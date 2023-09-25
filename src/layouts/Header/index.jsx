@@ -10,6 +10,7 @@ import Logo from '../../assets/images/Yogeek-logo.png';
 import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
+import StickyHeader from './StickyHeader';
 
 // const GET_USER_LOGIN = '/auth/login/success';
 
@@ -84,10 +85,35 @@ function Header() {
   //   window.open(logoutUrl, '_self');
   // };
   
+  useEffect(() => {
+    const collapsibleElements = document.getElementsByClassName("collapsible");
 
+    const handleCollapsibleClick = function () {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+      
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    };
+
+    for (let i = 0; i < collapsibleElements.length; i++) {
+      collapsibleElements[i].addEventListener("click", handleCollapsibleClick);
+    }
+
+    return () => {
+      // Clean up event listeners when the component unmounts
+      for (let i = 0; i < collapsibleElements.length; i++) {
+        collapsibleElements[i].removeEventListener("click", handleCollapsibleClick);
+      }
+    };
+  }, []);
   return (
     <>
       <header>
+        <div><StickyHeader /></div>
         <div className='row1'>
             <div className='container'>
               <div className='col-left'>

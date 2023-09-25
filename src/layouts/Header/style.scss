@@ -633,3 +633,178 @@ header{
         }
     }
 }
+
+
+//STICKY HEADER
+#sticky-header{
+    width: 100%;
+    height: 70px;
+    
+    ul{
+        padding: 0;
+    }
+    .container{
+        .sticky-navbar{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 70px;
+            .col1{
+                .logo{
+                    width: 188px;
+                }
+            }
+            .col2{
+                .search-container{
+                    display: flex;
+                    gap: 2px;
+                    input{
+                        outline: none;
+                        height: 42px;
+                        padding-left: 32px;
+                    }
+                    .search-box{
+                        input{
+                        width: 500px;
+                        border-radius: 5px 0 0 5px;
+                        padding-left: 10px;
+                        border: none;
+                        background-color: var(--gray-100);
+                        }
+                    }
+                    .filter-box{
+                        position: relative;
+                        input{
+                        width: 270px;
+                        border-radius: 0 5px 5px 0;
+                        border: none;
+                        background-color: var(--gray-100);
+                        }
+                        .location-icon{
+                            position: absolute;
+                            top: 8px;
+                            left: 8px;
+                            width: 16px;
+                            fill: var(--gray-500);
+                        }
+                        button{
+                            background: var(--green-400);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 42px;
+                            height: 42px;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            border: none;
+                            border-radius: 0 5px 5px 0;
+                            .magnifying-glass{
+                                width: 21px;
+                                background: var(--green-400);
+                                fill: white;
+                            }
+                        }
+                        .filter-list-option{
+                            position: absolute;
+                            width: 228px;
+                            top: 46px;
+                            padding: 12px 0;
+                            background-color: white;
+                            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+                            border-radius: 3px;
+                            z-index: 1;
+                            small{
+                                margin-left: 12px;
+                            }
+                            ul{
+                                margin-bottom: 0;
+                                padding: 0;
+                                li{
+                                    display: flex;
+                                    padding: 8px 12px;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                    .icon{
+                                        text-align: center;
+                                        img{
+                                            margin-right: 10px;
+                                        }
+                                    }
+        
+                                }
+                                li:hover{
+                                    background: var(--gray-200);
+                                    cursor: pointer;
+                                }
+                                .region:hover{
+                                    .region-list{
+                                        visibility: visible;
+                                    }
+                                }
+                                .region-list{
+                                    position: absolute;
+                                    display: block;
+                                    left: 100%;
+                                    top: 30px;
+                                    right: auto;
+                                    min-width: 250px;
+                                    max-height: 420px;
+                                    margin-left: 2px;
+                                    overflow-y: scroll;
+                                    background-color: white;
+                                    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+                                    border-radius: 3px;
+                                    visibility: hidden;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .col3{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 295px;
+                .btm-border{
+                    .parent-menu{
+                        display: flex;
+                        color: var(--gray-500);
+                        font-weight: 500;
+                        letter-spacing: 1px;
+                        text-decoration: none;
+                        padding: 16px 0;
+                        .grid-icon{
+                            fill: var(--gray-500);
+                            width: 22px;
+                            padding-right: 7px;
+                        }
+                    }
+                }
+                .sticky-header-sell-btn{
+                    width: 83px;
+                    height: 40px;
+                }
+            }
+        }
+        
+    }
+    
+}
+.sticky-header {
+    transition: top 1s, opacity 0.3s;
+    position: fixed;
+    top: -100px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    opacity: 0;
+  }
+  
+  .sticky {
+    top: 0;
+    opacity: 1;
+  }
