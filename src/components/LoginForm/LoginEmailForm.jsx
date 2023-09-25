@@ -1,6 +1,6 @@
 import React, { useState} from 'react'
-import axios from 'axios'
-import {Link} from 'react-router-dom'
+import axios from "../../apicalls/axios";
+import { Link, useNavigate } from 'react-router-dom'
 import './style.scss'
 import LoginBtn from '../Button/LoginBtn'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
@@ -10,10 +10,11 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 const LOGIN_URL = '/api/login';
 
 const LoginEmailForm = () => {
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  
+  const navigate = useNavigate(); // Move this line outside of the handleSubmit function
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -34,6 +35,7 @@ const LoginEmailForm = () => {
 
       // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
       console.log('Login successful', response.data);
+      navigate('/');
     } catch (err) {
       // Handle login error based on the response from the backend.
       if (err.response) {
@@ -83,7 +85,7 @@ const LoginEmailForm = () => {
           <div className='col1'><b>Password</b><Link to="/ResetByEmail">Forgot the password?</Link></div>
           <div className='col2'>
             <input 
-              type="text" 
+              type="password" 
               placeholder='Enter your password'
               value={password} 
               onChange={handlePasswordChange} 
