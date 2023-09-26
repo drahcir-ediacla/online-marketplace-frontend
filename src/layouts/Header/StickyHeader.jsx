@@ -21,7 +21,7 @@ const StickyHeader = () => {
     useEffect(() => {
         const getUser = async () => {
             try {
-              const response = await fetch("https://yogeek-server.onrender.com/auth/check-auth", {
+              const response = await fetch("http://localhost:8081/auth/check-auth", {
                 method: "GET",
                 credentials: "include",
                 headers: {

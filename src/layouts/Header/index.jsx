@@ -21,7 +21,7 @@ function Header() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch("https://yogeek-server.onrender.com/auth/check-auth", {
+        const response = await fetch("http://localhost:8081/auth/check-auth", {
           method: "GET",
           credentials: "include",
           headers: {
@@ -77,7 +77,7 @@ function Header() {
   // }, []);
 
   const logout = () => {
-    window.open("https://yogeek-server.onrender.com/auth/logout", "_self");
+    window.open("http://localhost:8081/auth/logout", "_self");
   };
   
   // const logout = () => {
