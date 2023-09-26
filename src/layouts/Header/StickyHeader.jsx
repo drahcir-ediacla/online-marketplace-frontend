@@ -19,29 +19,33 @@ const StickyHeader = () => {
     };
 
     useEffect(() => {
-        const getUser = () => {
-            fetch("http://localhost:8081/auth/login/success", {
+        const getUser = async () => {
+            try {
+              const response = await fetch("https://yogeek-server.onrender.com/auth/check-auth", {
                 method: "GET",
                 credentials: "include",
                 headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Credentials": true,
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Credentials": true,
                 },
-            })
-                .then((response) => {
-                    if (response.status === 200) return response.json();
-                    throw new Error("authentication has been failed!");
-                })
-                .then((resObject) => {
-                    setUser(resObject.user);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
+              });
+          
+              if (response.status === 200) {
+                const resObject = await response.json();
+                setUser(resObject.user);
+              } else {
+                // Handle the case where the user is not authenticated
+                setUser(null); // Set user to null or handle the absence of user data
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          };
+          
+    
         getUser();
-    }, []);
+      }, []);
 
     useEffect(() => {
         const handleScroll = () => {
