@@ -1,20 +1,20 @@
 import React, { useState} from 'react'
 import axios from "../../apicalls/axios";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './style.scss'
 import LoginBtn from '../Button/LoginBtn'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 
-const LOGIN_URL = '/api/login';
+const LOGIN_URL = '/auth/local';
 
 const LoginEmailForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   
-  const navigate = useNavigate(); // Move this line outside of the handleSubmit function
+  
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -35,7 +35,6 @@ const LoginEmailForm = () => {
 
       // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
       console.log('Login successful', response.data);
-      navigate('/');
     } catch (err) {
       // Handle login error based on the response from the backend.
       if (err.response) {
