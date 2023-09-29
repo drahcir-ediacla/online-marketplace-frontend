@@ -84,7 +84,7 @@ const LoginEmailForm = () => {
           <div className="col1"><Link to="/"><img src={LogoGray} alt="" /></Link></div>
           <div className="col2">Sign in to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
         </div>
-        {error && <p>{error}</p>}
+        {error && <p className='error-msg'>{error}</p>}
         <div className='row2'>
           <div className='col1'><b>Email</b><Link to="/LoginPhone">Sign in with phone number</Link></div>
           <div className='col2'>

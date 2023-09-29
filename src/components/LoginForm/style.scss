@@ -35,6 +35,9 @@
     flex-direction: column;
     gap: 33px;
     height: auto;
+    .error-msg{
+        color: red;
+    }
     input{
         border: 1px solid var(--gray-300);
         border-radius: 3px;
