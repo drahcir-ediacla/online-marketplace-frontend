@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Header/style.scss';
-import axios from '../../apicalls/axios'
+// import axios from '../../apicalls/axios'
 import { ReactComponent as MessageIcon } from '../../assets/images/message-regular.svg';
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
@@ -13,66 +13,66 @@ import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 import StickyHeader from './StickyHeader';
 
-const GET_USER_LOGIN = '/auth/check-auth';
+// const GET_USER_LOGIN = '/auth/check-auth';
 
 function Header() {
 
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:8081/auth/check-auth", {
-  //         method: "GET",
-  //         credentials: "include",
-  //         headers: {
-  //           Accept: "application/json",
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Credentials": true,
-  //         },
-  //       });
-
-  //       if (response.status === 200) {
-  //         const resObject = await response.json();
-  //         setUser(resObject.user);
-  //       } else {
-  //         // Handle the case where the user is not authenticated
-  //         setUser(null); // Set user to null or handle the absence of user data
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-
-  //   getUser();
-  // }, []);
-
-
   useEffect(() => {
-    const getUser = () => {
-      axios.get(GET_USER_LOGIN, {
-        withCredentials: true, // Include credentials (cookies) in the request
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) return response.data; // Use response.data to access JSON data
-          throw new Error("Authentication has failed!");
-        })
-        .then((resObject) => {
-          console.log("User data:", resObject.user);
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log(err);
+    const getUser = async () => {
+      try {
+        const response = await fetch("https://yogeek-server.onrender.com/auth/check-auth", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
         });
+
+        if (response.status === 200) {
+          const resObject = await response.json();
+          setUser(resObject.user);
+        } else {
+          // Handle the case where the user is not authenticated
+          setUser(null); // Set user to null or handle the absence of user data
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
+
+
     getUser();
   }, []);
+
+
+  // useEffect(() => {
+  //   const getUser = () => {
+  //     axios.get(GET_USER_LOGIN, {
+  //       withCredentials: true, // Include credentials (cookies) in the request
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Credentials": true,
+  //       },
+  //     })
+  //       .then((response) => {
+  //         if (response.status === 200) return response.data; // Use response.data to access JSON data
+  //         throw new Error("Authentication has failed!");
+  //       })
+  //       .then((resObject) => {
+  //         console.log("User data:", resObject.user);
+  //         setUser(resObject.user);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   };
+  //   getUser();
+  // }, []);
 
 
   // const logout = () => {
