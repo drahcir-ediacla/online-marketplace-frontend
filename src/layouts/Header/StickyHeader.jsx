@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from '../../apicalls/axios'
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/Yogeek-logo-gray.png';
 import SearchBox from '../Header/HeaderSearchBox';
@@ -8,44 +9,44 @@ import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 
+const GET_USER_LOGIN = '/auth/check-auth';
+
 const StickyHeader = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [isSticky, setIsSticky] = useState(false);
 
+
+    useEffect(() => {
+        const getUser = () => {
+            axios.get(GET_USER_LOGIN, {
+                withCredentials: true, // Include credentials (cookies) in the request
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": true,
+                },
+            })
+                .then((response) => {
+                    if (response.status === 200) return response.data; // Use response.data to access JSON data
+                    throw new Error("Authentication has failed!");
+                })
+                .then((resObject) => {
+                    console.log("User data:", resObject.user);
+                    setUser(resObject.user);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+        getUser();
+    }, []);
+
+
     const toggleMenu = () => {
         setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
     };
-
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-              const response = await fetch("http://localhost:8081/auth/check-auth", {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Credentials": true,
-                },
-              });
-          
-              if (response.status === 200) {
-                const resObject = await response.json();
-                setUser(resObject.user);
-              } else {
-                // Handle the case where the user is not authenticated
-                setUser(null); // Set user to null or handle the absence of user data
-              }
-            } catch (err) {
-              console.log(err);
-            }
-          };
-          
-    
-        getUser();
-      }, []);
 
     useEffect(() => {
         const handleScroll = () => {

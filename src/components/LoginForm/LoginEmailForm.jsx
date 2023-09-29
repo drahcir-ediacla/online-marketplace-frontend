@@ -24,6 +24,8 @@ const LoginEmailForm = () => {
     setPassword(e.target.value);
   };
 
+
+  // LOCAL LOGIN METHOD
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,6 +37,7 @@ const LoginEmailForm = () => {
 
       // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
       console.log('Login successful', response.data);
+      document.cookie = `jwt=${response.data.accessToken}; max-age=86400; path=/`;
       navigate('/');
     } catch (err) {
       // Handle login error based on the response from the backend.
