@@ -24,10 +24,15 @@ import ScrollToTop from './utils/ScrollToTop'
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
+function Loading() {
+  return <div>Loading...</div>;
+}
+
 
 function App() {
 
   const [user, setUser] = useState(null);
+  const [isLoading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const getUser = () => {
@@ -46,9 +51,11 @@ function App() {
         .then((resObject) => {
           console.log("User data:", resObject.user);
           setUser(resObject.user);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     };
     getUser();
@@ -60,6 +67,9 @@ function App() {
     <>
       <Router>
         <ScrollToTop />
+        {isLoading ? ( // Render loading component while fetching data
+          <Loading />
+        ) : (
         <Routes>
           <Route path="/" index element={<Home />} />
           <Route path='/LoginEmail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
@@ -79,6 +89,7 @@ function App() {
           <Route path='/SetPassword' element={<SetPassword />} />
           <Route path='/AddListing' element={<AddListing />} />
         </Routes>
+        )}
       </Router>
     </>
   );
