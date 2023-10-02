@@ -20,13 +20,11 @@ import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
 import ScrollToTop from './utils/ScrollToTop'
+import LoadingSpinner from './components/LoadingSpinner'
 
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
-function Loading() {
-  return <div>Loading...</div>;
-}
 
 
 function App() {
@@ -68,7 +66,7 @@ function App() {
       <Router>
         <ScrollToTop />
         {isLoading ? ( // Render loading component while fetching data
-          <Loading />
+          <LoadingSpinner />
         ) : (
         <Routes>
           <Route path="/" index element={<Home />} />
