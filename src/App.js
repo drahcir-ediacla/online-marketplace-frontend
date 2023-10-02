@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../src/assets/styles/global.css';
-// import axios from './apicalls/axios'
+import axios from './apicalls/axios'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import LoginEmail from './pages/Auth/Login/LoginEmail'
@@ -22,7 +22,7 @@ import AddListing from './pages/AddListing/AddListing'
 import ScrollToTop from './utils/ScrollToTop'
 
 
-// const GET_USER_LOGIN = '/auth/check-auth';
+const GET_USER_LOGIN = '/auth/check-auth';
 
 
 function App() {
@@ -30,31 +30,27 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch("https://yogeek-server.onrender.com/auth/check-auth", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-        });
-
-        if (response.status === 200) {
-          const resObject = await response.json();
+    const getUser = () => {
+      axios.get(GET_USER_LOGIN, {
+        withCredentials: true, // Include credentials (cookies) in the request
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.data; // Use response.data to access JSON data
+          throw new Error("Authentication has failed!");
+        })
+        .then((resObject) => {
+          console.log("User data:", resObject.user);
           setUser(resObject.user);
-        } else {
-          // Handle the case where the user is not authenticated
-          setUser(null); // Set user to null or handle the absence of user data
-        }
-      } catch (err) {
-        console.log(err);
-      }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
-
-
     getUser();
   }, []);
 
