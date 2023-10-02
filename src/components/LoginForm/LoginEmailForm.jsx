@@ -1,5 +1,5 @@
 import React, { useState} from 'react'
-// import axios from "../../apicalls/axios";
+import axios from "../../apicalls/axios";
 import { Link, useNavigate } from 'react-router-dom'
 import './style.scss'
 import LoginBtn from '../Button/LoginBtn'
@@ -7,7 +7,7 @@ import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 
-// const LOGIN_URL = '/api/login';
+const LOGIN_URL = '/api/login';
 
 const LoginEmailForm = () => {
   const [email, setEmail] = useState('');
@@ -24,42 +24,33 @@ const LoginEmailForm = () => {
     setPassword(e.target.value);
   };
 
+  
 
   // LOCAL LOGIN METHOD
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://yogeek-server.onrender.com/api/login", {
-        method: "POST", // Assuming this is a POST request for login
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post(LOGIN_URL, {
+        email,
+        password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Login successful', data);
-
-        // Assuming you have a JWT token in the response
-        document.cookie = `jwt=${data.accessToken}; max-age=86400; path=/`;
-        navigate('/'); // Redirect to the dashboard or desired page
-      } else {
-        // Handle error response from the server
-        const errorData = await response.json();
-        setError(errorData.message || 'An error occurred. Please try again later.');
-      }
+      // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
+      console.log('Login successful', response.data);
+      document.cookie = `jwt=${response.data.accessToken}; max-age=86400; path=/`;
+      navigate('/');
     } catch (err) {
-      // Handle network or unexpected errors
-      console.error('An error occurred:', err);
-      setError('An error occurred. Please try again later.');
+      // Handle login error based on the response from the backend.
+      if (err.response) {
+        setError(err.response.data.message);
+      } else {
+        setError('An error occurred. Please try again later.');
+      }
     }
   };
-  
+
+
 
   //SOCIAL LOGIN REDIRECT PAGE
   const redirectToUrl = (url) => {
