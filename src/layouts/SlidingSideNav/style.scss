@@ -61,24 +61,27 @@
             background: white;
             width: 400px;
             .row1{
-                display: flex;
-                align-items: center;
-                font-family: 'Kanit', sans-serif;
                 background: var(--green-600);
                 height: 47px;
-                font-size: 16px;
                 padding-left: 20px;
-                gap: 20px;
-                .avatar-icon{
-                    img{
-                        width: 27px;
+                div{
+                    display: flex;
+                    align-items: center;
+                    font-family: 'Kanit', sans-serif;
+                    font-size: 16px;
+                    gap: 20px;
+                    .avatar-icon{
+                        img{
+                            width: 27px;
+                            border-radius: 100%;
+                        }
                     }
-                }
-                h4{
-                    margin: 0;
-                }
-                a{
-                    color: white;
+                    h5{
+                        margin: 0;
+                    }
+                    a{
+                        color: white;
+                    }
                 }
             }
             .row2{

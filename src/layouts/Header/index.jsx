@@ -189,7 +189,7 @@ function Header() {
         </div>
         <div className='row3'>
           <div className='container'>
-            <NavMenu user={user} />
+            <NavMenu />
           </div>
         </div>
       </header>

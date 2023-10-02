@@ -30,12 +30,12 @@ const GET_USER_LOGIN = '/auth/check-auth';
 function App() {
 
   const [user, setUser] = useState(null);
-  const [isLoading, setLoading] = useState(true); // Add loading state
+  const [isLoading, setLoading] = useState(true); 
 
   useEffect(() => {
     const getUser = () => {
       axios.get(GET_USER_LOGIN, {
-        withCredentials: true, // Include credentials (cookies) in the request
+        withCredentials: true, 
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

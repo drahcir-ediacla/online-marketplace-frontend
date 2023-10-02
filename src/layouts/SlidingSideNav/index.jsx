@@ -1,18 +1,49 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './style.scss'
+import axios from '../../apicalls/axios'
 import NavCategories from '../SlidingSideNav/NavCategories'
-import {ReactComponent as GridIcon} from '../../assets/images/grid-icon.svg';
-import {ReactComponent as MagnifyingGlass} from '../../assets/images/magnifying-glass.svg';
+import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
+import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 
-const SlidingSideNav = ({ user }) => {
+const GET_USER_LOGIN = '/auth/check-auth';
+
+const SlidingSideNav = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   const toggleMenu = () => {
     setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
   };
+
+  useEffect(() => {
+    const getUser = () => {
+      axios.get(GET_USER_LOGIN, {
+        withCredentials: true, // Include credentials (cookies) in the request
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) return response.data; // Use response.data to access JSON data
+          throw new Error("Authentication has failed!");
+        })
+        .then((resObject) => {
+          console.log("User data:", resObject.user);
+          setUser(resObject.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
+
+
 
   return (
     <>
@@ -22,7 +53,7 @@ const SlidingSideNav = ({ user }) => {
           All Categories
         </Link>
       </div>
-      <div id='SlidingMenu' style={{right: isMenuOpen ? '0' : '-435px'}}>
+      <div id='SlidingMenu' style={{ right: isMenuOpen ? '0' : '-435px' }}>
         <div id='menuBkgrnd' style={{ right: isMenuOpen ? '0' : '-100%' }} onClick={toggleMenu}></div>
         <nav id='menuBox'>
           <div className='col-left'>
@@ -34,16 +65,16 @@ const SlidingSideNav = ({ user }) => {
             <div className='row1'>
               {user ? (
                 <div>
-                  {user.photos && user.photos.length > 0 ? (
+                  {user.profile_pic && user.profile_pic.length > 0 ? (
                     <div className="avatar-icon">
-                      <img src={user.photos[0].value} alt="" />
+                      <Link to='/MyProfile'><img src={user.profile_pic} alt="" /></Link>
                     </div>
                   ) : (
                     <div className="avatar-icon">
-                      <img src={AvatarIcon} alt="" />
+                      <Link to='/MyProfile'><img src={AvatarIcon} alt="" /></Link>
                     </div>
                   )}
-                  <Link to='#'>{user.displayName}</Link>
+                  <Link to='/MyProfile'><h5>{user.display_name}</h5></Link>
                 </div>
               ) : (
                 <div>
@@ -68,7 +99,7 @@ const SlidingSideNav = ({ user }) => {
             </div>
           </div>
 
-        </nav>  
+        </nav>
       </div>
     </>
   )
