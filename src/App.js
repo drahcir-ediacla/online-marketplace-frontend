@@ -19,6 +19,7 @@ import DeactivateAccount from './pages/Settings/DeactivateAccount'
 import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
+import Dashboard from './pages/AdminPanel/Dashboard'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -86,6 +87,7 @@ function App() {
           <Route path='/DeactivateAccount' element={<DeactivateAccount />} />
           <Route path='/SetPassword' element={<SetPassword />} />
           <Route path='/AddListing' element={<AddListing />} />
+          <Route path='/Dashboard' element={<Dashboard />} />
         </Routes>
         )}
       </Router>
