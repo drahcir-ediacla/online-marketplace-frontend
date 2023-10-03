@@ -10,16 +10,22 @@ import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.sv
 const ResetByPhoneForm = () => {
 
   //SOCIAL LOGIN REDIRECT PAGE
-  const redirectToUrl = (url) => {
-    window.location.href = url;
-  };
-  
   const google = () => {
-    redirectToUrl("https://yogeek-server.onrender.com/auth/google");
+    const BaseUrl = process.env.REACT_APP_BASE_URL;
+    const googleAuthPath = '/auth/google';
+
+    const googleCallback = `${BaseUrl}${googleAuthPath}`;
+
+    window.open(googleCallback, '_self');
   };
-  
+
   const facebook = () => {
-    redirectToUrl("https://yogeek-server.onrender.com/auth/facebook/callback");
+    const BaseUrl = process.env.REACT_APP_BASE_URL;
+    const facebookAuthPath = '/auth/facebook/callback';
+
+    const facebookCallback = `${BaseUrl}${facebookAuthPath}`;
+
+    window.open(facebookCallback, '_self');
   };
 
   return (
