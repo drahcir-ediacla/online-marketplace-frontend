@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import './style.scss'
 import Logo from '../../../assets/images/Yogeek-logo-light-gray.png'
 import { ReactComponent as DashboardIcon } from '../../../assets/images/dashboard-icon.svg'
@@ -13,24 +13,34 @@ import { ReactComponent as LogoutIcon } from '../../../assets/images/logout-icon
 
 const SideMenu = () => {
 
+  
   useEffect(() => {
     const collapsibleElements = document.getElementsByClassName("collapsible");
-  
+
     const handleCollapsibleClick = function () {
+      // Toggle the active class on the clicked element
       this.classList.toggle("active");
       const content = this.nextElementSibling;
-  
+
       if (content.style.maxHeight) {
         content.style.maxHeight = null;
       } else {
         content.style.maxHeight = content.scrollHeight + "px";
       }
+
+      // Close other currently active elements
+      for (let i = 0; i < collapsibleElements.length; i++) {
+        if (collapsibleElements[i] !== this) {
+          collapsibleElements[i].classList.remove("active");
+          collapsibleElements[i].nextElementSibling.style.maxHeight = null;
+        }
+      }
     };
-  
+
     for (let i = 0; i < collapsibleElements.length; i++) {
       collapsibleElements[i].addEventListener("click", handleCollapsibleClick);
     }
-  
+
     return () => {
       // Clean up event listeners when the component unmounts
       for (let i = 0; i < collapsibleElements.length; i++) {
@@ -38,6 +48,7 @@ const SideMenu = () => {
       }
     };
   }, []);
+
 
 
   return (
@@ -50,13 +61,13 @@ const SideMenu = () => {
           <div className="menu-box">
             <ul>
               <li className='menus'>
-                <div className='main-menu active'>
+                <div className='main-menu'>
                   <div className='dashboard-icon menu-icon'><DashboardIcon /></div>
                   DASHBOARD
                 </div>
               </li>
               <li className='menus'>
-                <div className='main-menu'>
+                <div className='main-menu collapsible'>
                   <div className='pages-icon menu-icon'><PagesIcon /></div>
                   PAGES
                 </div>
@@ -64,13 +75,16 @@ const SideMenu = () => {
                   <li>ALL PAGES</li>
                   <li>ADD PAGE</li>
                 </ul>
-                <div class="collapsible"></div>
               </li>
               <li className='menus'>
-                <div className='main-menu'>
+                <div className='main-menu collapsible'>
                   <div className='categories-icon menu-icon'><CategoriesIcon /></div>
                   CATEGORIES
                 </div>
+                <ul className='sub-menu'>
+                  <li>MAIN CATEGORIES</li>
+                  <li>SUB CATEGORIES</li>
+                </ul>
               </li>
               <li className='menus'>
                 <div className='main-menu'>
