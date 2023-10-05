@@ -22,6 +22,7 @@ import AddListing from './pages/AddListing/AddListing'
 import Dashboard from './pages/AdminPanel/Dashboard'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
+import { useSelector } from 'react-redux';
 
 
 const GET_USER_LOGIN = '/auth/check-auth';
@@ -31,12 +32,12 @@ const GET_USER_LOGIN = '/auth/check-auth';
 function App() {
 
   const [user, setUser] = useState(null);
-  const [isLoading, setLoading] = useState(true); 
+  const {loading} = useSelector(state => state.loaders)
 
   useEffect(() => {
     const getUser = () => {
       axios.get(GET_USER_LOGIN, {
-        withCredentials: true, 
+        withCredentials: true,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -50,11 +51,9 @@ function App() {
         .then((resObject) => {
           console.log("User data:", resObject.user);
           setUser(resObject.user);
-          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
-          setLoading(false);
         });
     };
     getUser();
@@ -64,11 +63,10 @@ function App() {
 
   return (
     <>
+    
+    {loading && <LoadingSpinner />}
       <Router>
         <ScrollToTop />
-        {isLoading ? ( // Render loading component while fetching data
-          <LoadingSpinner />
-        ) : (
         <Routes>
           <Route path="/" index element={<Home />} />
           <Route path='/LoginEmail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
@@ -89,7 +87,6 @@ function App() {
           <Route path='/AddListing' element={<AddListing />} />
           <Route path='/Dashboard' element={<Dashboard />} />
         </Routes>
-        )}
       </Router>
     </>
   );

@@ -6,6 +6,8 @@ import LoginBtn from '../Button/LoginBtn'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
+import { useDispatch } from 'react-redux';
+import { Setloader } from '../../redux/loadersSlice';
 
 const LOGIN_URL = '/api/login';
 
@@ -13,6 +15,7 @@ const LoginEmailForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const dispatch = useDispatch()
 
   const navigate = useNavigate(); // Move this line outside of the handleSubmit function
 
@@ -31,16 +34,18 @@ const LoginEmailForm = () => {
     e.preventDefault();
 
     try {
+      dispatch(Setloader(true))
       const response = await axios.post(LOGIN_URL, {
         email,
         password,
       });
-
+      dispatch(Setloader(false))
       // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
       console.log('Login successful', response.data);
       document.cookie = `jwt=${response.data.accessToken}; max-age=86400; path=/`;
       navigate('/');
     } catch (err) {
+      dispatch(Setloader(false))
       // Handle login error based on the response from the backend.
       if (err.response) {
         setError(err.response.data.message);
