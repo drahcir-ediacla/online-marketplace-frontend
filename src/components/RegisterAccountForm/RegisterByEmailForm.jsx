@@ -9,6 +9,8 @@ import LoginBtn from '../../components/Button/LoginBtn'
 import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
+import { useDispatch } from 'react-redux';
+import { Setloader } from '../../redux/loadersSlice';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
@@ -34,6 +36,8 @@ const RegisterByEmailForm = () => {
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     emailRef.current.focus();
@@ -84,9 +88,11 @@ const RegisterByEmailForm = () => {
     }
 
     try {
+      dispatch(Setloader(true))
       const response = await axios.post(REGISTER_URL, formData);
 
       if (response.status === 201) {
+        dispatch(Setloader(false))
         // User registration was successful
         setSuccess(true);
         // Clear state and controlled inputs
@@ -96,6 +102,7 @@ const RegisterByEmailForm = () => {
         setMatchPwd('');
       }
     } catch (err) {
+      dispatch(Setloader(false))
       if (err.response?.status === 400) {
         // Email already exists, update the error message
         setSuccess(false);
