@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from '../../apicalls/axios'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../../redux/actions/userActions';
-import { Setloader } from '../../redux/loadersSlice';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -25,6 +25,7 @@ const EditProfile = () => {
   };
 
   const user = useSelector((state) => state.user.data);
+  const isLoading = useSelector((state) => state.user.loading);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
@@ -34,11 +35,14 @@ const EditProfile = () => {
 
   // Check if user is null before rendering user data
   if (user === null) {
-    dispatch(Setloader(true))
-    return;
-  }
-  else{
-    dispatch(Setloader(false))
+    return (
+      <>
+        <Header />
+        {/* Loading indicator or message can be added here */}
+        <div>Loading user profile...</div>
+        <Footer />
+      </>
+    );
   }
 
   return (
