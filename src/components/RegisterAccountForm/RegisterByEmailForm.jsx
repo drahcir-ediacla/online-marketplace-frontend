@@ -10,7 +10,7 @@ import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import { useDispatch } from 'react-redux';
-import { Setloader } from '../../redux/loadersSlice';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;

@@ -1,25 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile } from '../../redux/actions/userActions';
-import { Setloader } from '../../redux/loadersSlice';
-import './style.scss'
-import Header from '../../layouts/Header'
-import Footer from '../../layouts/Footer'
-import ManageAccountNav from '../../layouts/ManageAccountNav'
-import { ReactComponent as ToolTip } from '../../assets/images/tool-tip.svg'
-import ProfileAvatar from '../../assets/images/profile-avatar.png'
-import BtnClear from '../../components/Button/BtnClear'
-import BtnGreen from '../../components/Button/BtnGreen'
-import Input from '../../components/FormField/Input'
-import TextArea from '../../components/FormField/TextArea'
-import Select from '../../components/FormField/Select'
-import DatePicker from '../../components/FormField/DatePicker'
-import regionData from '../../data/regionData'
-import cityData from '../../data/cityData'
-import genderData from '../../data/genderData'
+import { fetchUserProfile, updateUserProfile } from '../../redux/actions/userActions';
+import { Setloader } from '../../redux/reducer/loadersSlice';
+import './style.scss';
+import Header from '../../layouts/Header';
+import Footer from '../../layouts/Footer';
+import ManageAccountNav from '../../layouts/ManageAccountNav';
+import { ReactComponent as ToolTip } from '../../assets/images/tool-tip.svg';
+import ProfileAvatar from '../../assets/images/profile-avatar.png';
+import BtnClear from '../../components/Button/BtnClear';
+import BtnGreen from '../../components/Button/BtnGreen';
+import Input from '../../components/FormField/Input';
+import TextArea from '../../components/FormField/TextArea';
+import Select from '../../components/FormField/Select';
+import DatePicker from '../../components/FormField/DatePicker';
+import regionData from '../../data/regionData';
+import cityData from '../../data/cityData';
+import genderData from '../../data/genderData';
 
 const EditProfile = () => {
-
   const handleOptionSelect = (value) => {
     console.log('Selected value:', value);
   };
@@ -28,18 +27,52 @@ const EditProfile = () => {
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
+  const [updatedUserData, setUpdatedUserData] = useState({
+    display_name: '',
+    email: '',
+  });
+
   useEffect(() => {
+    // Fetch the user's data when the component mounts
     dispatch(fetchUserProfile());
   }, [dispatch]);
 
-  // Check if user is null before rendering user data
-  if (user === null) {
-    dispatch(Setloader(true))
-    return;
-  }
-  else{
-    dispatch(Setloader(false))
-  }
+  // Update the local state when user data changes
+  useEffect(() => {
+    if (user) {
+      setUpdatedUserData({
+        display_name: user.display_name || '',
+        email: user.email || '',
+      });
+    }
+  }, [user]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedUserData({ ...updatedUserData, [name]: value });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Dispatch the action to update the user's profile
+      dispatch(Setloader(true));
+      dispatch(updateUserProfile(updatedUserData));
+
+      // Fetch the updated user's data after the update
+      dispatch(fetchUserProfile());
+
+      // Show a success message or redirect the user to a different page upon successful update
+      // (You can handle this as per your application's requirements)
+
+      
+    } catch (error) {
+      // Handle any errors, which are already handled in the action
+    } finally {
+      dispatch(Setloader(false)); // Move this line here to ensure it's always called
+    }
+  };
 
   return (
     <>
@@ -50,7 +83,7 @@ const EditProfile = () => {
           <div className="box">
             <div className="col-left"><ManageAccountNav className='active' /></div>
             <div className="col-right">
-              <form className="edit-profile-form">
+              <form className="edit-profile-form" onSubmit={handleFormSubmit}>
                 <div className='row1'>
                   <h5>Edit Profile</h5>
                   <hr />
@@ -68,9 +101,10 @@ const EditProfile = () => {
                   <div><Input
                     type='text'
                     id='displaynameID'
-                    name='displayname'
-                    value={user.display_name}
+                    name='display_name'
+                    value={updatedUserData.display_name}
                     className='profile-data-input'
+                    onChange={handleInputChange}
                   /></div>
                 </div>
                 <div className='row4 flex'>
@@ -118,8 +152,9 @@ const EditProfile = () => {
                     type="email"
                     id="emailID"
                     name="email"
-                    value={user.email}
+                    value={updatedUserData.email}
                     className='profile-data-input'
+                    onChange={handleInputChange}
                   /></div>
                 </div>
                 <div className='row13 flex'>
@@ -139,7 +174,7 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div></div>
-                <div><BtnGreen label='Save Changes' /></div>
+                <div><BtnGreen label='Save Changes' onClick={handleFormSubmit} /></div>
               </form>
             </div>
           </div>

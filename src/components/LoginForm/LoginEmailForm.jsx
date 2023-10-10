@@ -7,7 +7,7 @@ import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import { useDispatch } from 'react-redux';
-import { Setloader } from '../../redux/loadersSlice';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 const LOGIN_URL = '/api/login';
 
