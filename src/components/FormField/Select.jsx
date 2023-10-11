@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Select = ({ name, id, data, onSelect, className }) => {
+const Select = ({ name, id, data, value, onSelect, className, onChange }) => {
   const handleSelectChange = (e) => {
     const selectedIndex = e.target.value;
     onSelect(data[selectedIndex].value);
@@ -10,7 +10,7 @@ const Select = ({ name, id, data, onSelect, className }) => {
 
   return (
     <div className='select-box'>
-        <select name={name} id={id} onChange={handleSelectChange} className={`custom-select ${className}`}>
+        <select name={name} id={id} value={value} onChange={onChange} onSelect={handleSelectChange} className={`custom-select ${className}`}>
         {data.map((option, index) => (
             <option key={`${index}-${option.value}`} value={index}>
             {option.label}

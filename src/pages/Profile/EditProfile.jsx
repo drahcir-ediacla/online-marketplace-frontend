@@ -18,18 +18,31 @@ import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
 
+
+
 const EditProfile = () => {
   const handleOptionSelect = (value) => {
     console.log('Selected value:', value);
   };
+
 
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
   const [updatedUserData, setUpdatedUserData] = useState({
-    display_name: '',
     email: '',
+    display_name: '',
+    bio: '',
+    first_name: '',
+    last_name: '',
+    country: '',
+    region: '',
+    city: '',
+    phone: '',
+    gender: '',
+    birthday: '',
+    profile_pic: '',
   });
 
   useEffect(() => {
@@ -41,8 +54,18 @@ const EditProfile = () => {
   useEffect(() => {
     if (user) {
       setUpdatedUserData({
-        display_name: user.display_name || '',
         email: user.email || '',
+        display_name: user.display_name || '',
+        bio: user.bio || '',
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        country: user.country || '',
+        region: user.region || '',
+        city: user.city || '',
+        phone: user.phone || '',
+        gender: user.gender || '',
+        birthday: user.birthday || '',
+        profile_pic: user.profile_pic || '',
       });
     }
   }, [user]);
@@ -66,7 +89,7 @@ const EditProfile = () => {
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)
 
-      
+
     } catch (error) {
       // Handle any errors, which are already handled in the action
     } finally {
@@ -98,41 +121,83 @@ const EditProfile = () => {
                 </div>
                 <div className='row3 flex'>
                   <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /> <span className='asterisk'>*</span></label >
-                  <div><Input
-                    type='text'
-                    id='displaynameID'
-                    name='display_name'
-                    value={updatedUserData.display_name}
-                    className='profile-data-input'
-                    onChange={handleInputChange}
-                  /></div>
+                  <div>
+                    <Input
+                      type='text'
+                      id='displaynameID'
+                      name='display_name'
+                      value={updatedUserData.display_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row4 flex'>
-                  <div className='field-name'>BIO</div>
-                  <div><TextArea className='profile-data-textarea' rows='5' /><br /><small>0/255</small></div>
+                  <label htmlFor='bioID' className='field-name'>BIO</label>
+                  <div>
+                    <TextArea
+                      id='bioID'
+                      name='bio'
+                      value={updatedUserData.bio}
+                      className='profile-data-textarea'
+                      onChange={handleInputChange}
+                      rows='5' />
+                    <br /><small>0/255</small></div>
                 </div>
                 <div className='row5 flex'>
-                  <div className='field-name'>FIRST NAME <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor='firstnameID' className='field-name'>FIRST NAME <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type='text'
+                      id='firstnameID'
+                      name='first_name'
+                      value={updatedUserData.first_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row6 flex'>
-                  <div className='field-name'>LAST NAME <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor='lastnameID' className='field-name'>LAST NAME <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type='text'
+                      id='lastnameID'
+                      name='last_name'
+                      value={updatedUserData.last_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <hr />
                 <div className='row7'>
                   <div className='field-name'>LOCATION</div>
                 </div>
                 <div className='row8 flex'>
-                  <div className='field-name'>Country</div>
+                  <label htmlFor='countryID' className='field-name'>Country</label>
                   <div>
-                    <input type="text" placeholder='Philippines' disabled />
+                    <Input
+                      type='text'
+                      id='countryID'
+                      name='country'
+                      value={updatedUserData.country || 'Philippines'}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                      readOnly
+                    />
                   </div>
                 </div>
                 <div className='row9 flex'>
-                  <div className='field-name'>Region</div>
+                  <label htmlFor='regionID' className='field-name'>Region</label>
                   <div>
-                    <Select data={regionData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select
+                      id='regionID'
+                      name='region'
+                      value={updatedUserData.region}
+                      data={regionData}
+                      onChange={handleInputChange}
+                      className='profile-data-select' />
                   </div>
                 </div>
                 <div className='row10 flex'>
@@ -148,29 +213,49 @@ const EditProfile = () => {
                 </div>
                 <div className='row12 flex'>
                   <label htmlFor="emailID" className='field-name'>Email <span className='asterisk'>*</span></label>
-                  <div><Input
-                    type="email"
-                    id="emailID"
-                    name="email"
-                    value={updatedUserData.email}
-                    className='profile-data-input'
-                    onChange={handleInputChange}
-                  /></div>
+                  <div>
+                    <Input
+                      type="email"
+                      id="emailID"
+                      name="email"
+                      value={updatedUserData.email}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                      readOnly
+                    /></div>
                 </div>
                 <div className='row13 flex'>
-                  <div className='field-name'>Phone Number <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type="email"
+                      id="phoneID"
+                      name="phone"
+                      value={updatedUserData.phone}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row14 flex'>
                   <div className='field-name'>Gender</div>
                   <div>
-                    <Select data={genderData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select 
+                    data={genderData} 
+                    onSelect={handleOptionSelect} 
+                    className='profile-data-select' />
                   </div>
                 </div>
                 <div className='row15 flex'>
-                  <div className='field-name'>Birthday</div>
+                  <label htmlFor="birthdayID" className='field-name'>Birthday</label>
                   <div>
-                    <DatePicker className='birthday-date' />
+                    <DatePicker
+                      id="birthdayID"
+                      name="birthday"
+                      value={updatedUserData.birthday}
+                      className='birthday-date'
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </div>
                 <div></div>
