@@ -21,14 +21,13 @@ import genderData from '../../data/genderData';
 
 
 const EditProfile = () => {
-  const handleOptionSelect = (value) => {
-    console.log('Selected value:', value);
-  };
-
 
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
+
+  
+  
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -69,6 +68,50 @@ const EditProfile = () => {
       });
     }
   }, [user]);
+
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+  
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'auwcvbw0'); 
+      formData.append('cloud_name', 'yogeek-cloudinary');
+      formData.append('folder', 'profile_picture');
+      
+  
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+  
+      if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data.secure_url;
+  
+        // Update the profile_pic property in the local state
+        setUpdatedUserData({
+          ...updatedUserData,
+          profile_pic: imageUrl,
+        });
+      } else {
+        console.error('Image upload failed.');
+      }
+    } catch (error) {
+      console.error('Error uploading image to Cloudinary', error);
+    }
+  };
+  
+  const handleFileInputClick = () => {
+    document.getElementById('fileInput').click();
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -113,10 +156,13 @@ const EditProfile = () => {
                   {error && <div className="error">{error}</div>}
                 </div>
                 <div className='row2'>
-                  <div className='col1'><img src={ProfileAvatar} alt="" /></div>
+                  <div className='col1'><img src={updatedUserData.profile_pic || ProfileAvatar} alt="" className='profile-pic' /></div>
                   <div className='col2'>
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
-                    <div><BtnClear label="Upload Photo" /></div>
+                    <label htmlFor="fileInput" className="custom-file-upload">
+                      <div><BtnClear label="Choose Photo" onClick={handleFileInputClick} /></div>
+                    </label>
+                    <input type="file" id="fileInput" accept="image/png, image/jpg, image/jpeg" onChange={handleImageUpload} style={{ display: 'none' }} />
                   </div>
                 </div>
                 <div className='row3 flex'>
@@ -197,13 +243,20 @@ const EditProfile = () => {
                       value={updatedUserData.region}
                       data={regionData}
                       onChange={handleInputChange}
-                      className='profile-data-select' />
+                      className='profile-data-select'
+                    />
                   </div>
                 </div>
                 <div className='row10 flex'>
-                  <div className='field-name'>City</div>
+                  <label htmlFor='cityID' className='field-name'>City</label>
                   <div>
-                    <Select data={cityData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select
+                      id='cityID'
+                      name='city'
+                      value={updatedUserData.city}
+                      data={cityData}
+                      onChange={handleInputChange}
+                      className='profile-data-select' />
                   </div>
                 </div>
                 <hr />
@@ -228,7 +281,7 @@ const EditProfile = () => {
                   <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
                   <div>
                     <Input
-                      type="email"
+                      type="text"
                       id="phoneID"
                       name="phone"
                       value={updatedUserData.phone}
@@ -238,12 +291,15 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div className='row14 flex'>
-                  <div className='field-name'>Gender</div>
+                  <label htmlFor="genderID" className='field-name'>Gender</label>
                   <div>
-                    <Select 
-                    data={genderData} 
-                    onSelect={handleOptionSelect} 
-                    className='profile-data-select' />
+                    <Select
+                      id="genderID"
+                      name="gender"
+                      value={updatedUserData.gender}
+                      data={genderData}
+                      onChange={handleInputChange}
+                      className='profile-data-select' />
                   </div>
                 </div>
                 <div className='row15 flex'>

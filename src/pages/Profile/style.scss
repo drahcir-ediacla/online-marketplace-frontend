@@ -1,22 +1,25 @@
-
 // EDIT PROFILE STYLE
 
-.edit-profile-body{
-    .container{
+.edit-profile-body {
+    .container {
         display: block;
-        h3{
+
+        h3 {
             font-weight: 500;
             margin: 20px 0;
         }
-        .box{
+
+        .box {
             display: flex;
             gap: 20px;
-            .active{
+
+            .active {
                 color: var(--red-400);
                 background: none;
             }
-            .col-right{
-                .edit-profile-form{
+
+            .col-right {
+                .edit-profile-form {
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
@@ -25,56 +28,81 @@
                     padding: 30px 20px;
                     box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
                     margin-bottom: 150px;
-                    .field-name{
+
+                    .field-name {
                         font-weight: 500;
-                        display:flex;
+                        display: flex;
                         align-items: center;
                         gap: 8px;
-                        .asterisk{
+
+                        .asterisk {
                             color: red;
                         }
                     }
-                    .profile-data-input, .profile-data-textarea, .profile-data-select, input{
+
+                    .profile-data-input,
+                    .profile-data-textarea,
+                    .profile-data-select,
+                    input {
                         width: 557px;
                     }
-                    input{
-                            height: 40px;
-                            border-radius: 5px;
-                            border: 1px solid var(--gray-300);
-                            padding: 0 10px;
-                            appearance: none;
+
+                    input {
+                        height: 40px;
+                        border-radius: 5px;
+                        border: 1px solid var(--gray-300);
+                        padding: 0 10px;
+                        appearance: none;
                     }
-                    small{
+
+                    small {
                         font-weight: 500;
-                    }       
-                    .flex{
+                    }
+
+                    .flex {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
                     }
-                    .row1{
+
+                    .row1 {
                         width: 100%;
-                        h5{
+
+                        h5 {
                             margin: 10px 0 20px 0;
                         }
                     }
-                    .row2{
+
+                    .row2 {
                         display: flex;
                         align-items: center;
+                        justify-content: center;
                         gap: 27px;
-                        .col2{
+                        margin-bottom: 30px;
+
+                        .col1 {
+                            .profile-pic {
+                                width: 160px;
+                                height: 160px;
+                                border-radius: 100%;
+                            }
+                        }
+
+                        .col2 {
                             display: flex;
                             flex-direction: column;
-                            gap:20px;
+                            gap: 20px;
                         }
                     }
-                    .row4{
-                        small{
+
+                    .row4 {
+                        small {
                             float: right;
                         }
                     }
-                    .row15{
-                        .birthday-date{
+
+                    .row15 {
+                        .birthday-date {
                             padding-left: 30px;
                             outline: none;
                             color: black;
@@ -88,21 +116,25 @@
 
 // MY PROFILE STYLE
 
-.myprofile-body{
-    .container{
+.myprofile-body {
+    .container {
         display: block;
-        .row1{
+
+        .row1 {
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
-            h3{
+
+            h3 {
                 font-weight: 500;
             }
-            .edit-profile-btn{
+
+            .edit-profile-btn {
                 height: 40px;
             }
         }
-        .cover-photo{
+
+        .cover-photo {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -113,12 +145,14 @@
             margin-bottom: 20px;
             border: 2px dashed var(--gray-400);
         }
-        .box-body{
+
+        .box-body {
             display: flex;
             gap: 20px;
             margin-bottom: 150px;
-            .col-right{
-                .profile-tab-box{
+
+            .col-right {
+                .profile-tab-box {
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
@@ -126,9 +160,11 @@
                     background: white;
                     padding: 30px 20px;
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-                    .profile-tab-header{
+
+                    .profile-tab-header {
                         border-bottom: 1px solid var(--gray-300);
-                        .tab-name{
+
+                        .tab-name {
                             color: var(--gray-500);
                             background: none;
                             border: none;
@@ -139,111 +175,141 @@
                             margin-bottom: -1px;
                             cursor: pointer;
                         }
-                        .active{
+
+                        .active {
                             border-bottom: 1px solid var(--green-400);
                             color: var(--green-400);
                         }
                     }
-                    .listing-content{
-                        .row1{
-                            h5{
+
+                    .listing-content {
+                        .row1 {
+                            h5 {
                                 font-weight: 500;
                             }
-                            .col-right{
+
+                            .col-right {
                                 display: flex;
                                 gap: 20px;
                             }
                         }
-                        .prod-listing-container{
+
+                        .prod-listing-container {
                             display: flex;
                             flex-wrap: wrap;
                             justify-content: space-between;
                         }
                     }
-                    .reviews-content{
+
+                    .reviews-content {
                         width: 100%;
-                        .row1{
+
+                        .row1 {
                             display: flex;
                             justify-content: center;
                             align-items: center;
                             width: 100%;
                             gap: 28px;
-                            .overall-rating{
-                                .avg-rate-box{
+
+                            .overall-rating {
+                                .avg-rate-box {
                                     display: flex;
                                     align-items: center;
                                     gap: 10px;
                                     height: 55px;
-                                    .total-avg-rate{
+
+                                    .total-avg-rate {
                                         font-size: 48px;
                                         font-weight: 500;
                                     }
-                                    .out-of-5-stars{
+
+                                    .out-of-5-stars {
                                         width: 53px;
                                         font-weight: 500;
                                     }
-                                    .seller-rating{
+
+                                    .seller-rating {
                                         display: flex;
                                         gap: 3px;
-                                        .fa-star, .fa-regular{
+
+                                        .fa-star,
+                                        .fa-regular {
                                             font-size: 20px
                                         }
                                     }
                                 }
                             }
-                            .vl{
+
+                            .vl {
                                 height: 100px;
                                 border-left: 1px solid var(--gray-300);
                                 left: 50%;
                                 margin-left: -3px;
                                 top: 0;
                             }
-                            .progress-rating{
-                                .fa-star, .fa-regular{
+
+                            .progress-rating {
+
+                                .fa-star,
+                                .fa-regular {
                                     font-size: 15px
                                 }
-                                .progress-bar-box{
+
+                                .progress-bar-box {
                                     display: flex;
                                     gap: 13px;
                                     align-items: center;
-                                    .progress-bar-container{
+
+                                    .progress-bar-container {
                                         width: 130px;
                                         height: 15px;
                                         background-color: var(--gray-300);
-                                        .five-star-bar, .four-star-bar, .three-star-bar, .two-star-bar, .one-star-bar{
+
+                                        .five-star-bar,
+                                        .four-star-bar,
+                                        .three-star-bar,
+                                        .two-star-bar,
+                                        .one-star-bar {
                                             height: 100%;
                                             background-color: var(--yellow-star);
                                         }
-                                        .five-star-bar{
+
+                                        .five-star-bar {
                                             width: 90%;
                                         }
-                                        .four-star-bar{
+
+                                        .four-star-bar {
                                             width: 70%;
                                         }
-                                        .three-star-bar{
+
+                                        .three-star-bar {
                                             width: 40%;
                                         }
-                                        .two-star-bar{
+
+                                        .two-star-bar {
                                             width: 20%;
                                         }
-                                        .one-star-bar{
+
+                                        .one-star-bar {
                                             width: 5%;
                                         }
                                     }
                                 }
                             }
                         }
-                        .row2{
+
+                        .row2 {
                             height: 40px;
                             border-bottom: 1px solid var(--gray-300);
                         }
-                        .profile-review-container{
-                            .pagination-container{
+
+                        .profile-review-container {
+                            .pagination-container {
                                 margin-top: 20px;
                                 float: right;
                             }
                         }
-                        
+
                     }
                 }
             }
