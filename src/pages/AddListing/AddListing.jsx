@@ -7,6 +7,9 @@ import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-
 import Input from '../../components/FormField/Input';
 
 const AddListing = () => {
+
+  
+
   const [activeRadio, setActiveRadio] = useState(0);
 
   const openContent = (radioIndex) => {
@@ -15,6 +18,7 @@ const AddListing = () => {
 
   return (
     <>
+    
       <Header />
       <div className="add-listing-body">
         <div className="container">

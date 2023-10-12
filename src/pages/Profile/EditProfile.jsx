@@ -17,17 +17,16 @@ import DatePicker from '../../components/FormField/DatePicker';
 import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
+import AlertMessage from '../../components/AlertMessage';
 
 
 
 const EditProfile = () => {
 
+  const [showAlert, setShowAlert] = useState(false);
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
-
-  
-  
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -69,21 +68,24 @@ const EditProfile = () => {
     }
   }, [user]);
 
+  const handleFileInputClick = () => {
+    document.getElementById('fileInput').click();
+  };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
-  
+
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'auwcvbw0'); 
+      formData.append('upload_preset', 'auwcvbw0');
       formData.append('cloud_name', 'yogeek-cloudinary');
       formData.append('folder', 'profile_picture');
-      
-  
+
+
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload`,
         {
@@ -91,11 +93,11 @@ const EditProfile = () => {
           body: formData,
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
         const imageUrl = data.secure_url;
-  
+
         // Update the profile_pic property in the local state
         setUpdatedUserData({
           ...updatedUserData,
@@ -108,10 +110,8 @@ const EditProfile = () => {
       console.error('Error uploading image to Cloudinary', error);
     }
   };
+
   
-  const handleFileInputClick = () => {
-    document.getElementById('fileInput').click();
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -131,6 +131,7 @@ const EditProfile = () => {
 
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)
+      setShowAlert(true);
 
 
     } catch (error) {
@@ -142,6 +143,7 @@ const EditProfile = () => {
 
   return (
     <>
+    {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body">
         <div className="container">
@@ -160,7 +162,7 @@ const EditProfile = () => {
                   <div className='col2'>
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
                     <label htmlFor="fileInput" className="custom-file-upload">
-                      <div><BtnClear label="Choose Photo" onClick={handleFileInputClick} /></div>
+                      <div><BtnClear type="button" label="Choose Photo" onClick={handleFileInputClick} /></div>
                     </label>
                     <input type="file" id="fileInput" accept="image/png, image/jpg, image/jpeg" onChange={handleImageUpload} style={{ display: 'none' }} />
                   </div>
@@ -184,6 +186,7 @@ const EditProfile = () => {
                     <TextArea
                       id='bioID'
                       name='bio'
+                      placeholder="Write some introduction about your profile"
                       value={updatedUserData.bio}
                       className='profile-data-textarea'
                       onChange={handleInputChange}
@@ -197,6 +200,7 @@ const EditProfile = () => {
                       type='text'
                       id='firstnameID'
                       name='first_name'
+                      placeholder="Enter First Name"
                       value={updatedUserData.first_name}
                       className='profile-data-input'
                       onChange={handleInputChange}
@@ -210,6 +214,7 @@ const EditProfile = () => {
                       type='text'
                       id='lastnameID'
                       name='last_name'
+                      placeholder="Enter Last Name"
                       value={updatedUserData.last_name}
                       className='profile-data-input'
                       onChange={handleInputChange}
@@ -271,6 +276,7 @@ const EditProfile = () => {
                       type="email"
                       id="emailID"
                       name="email"
+                      placeholder="Enter Your Email"
                       value={updatedUserData.email}
                       className='profile-data-input'
                       onChange={handleInputChange}
@@ -284,6 +290,7 @@ const EditProfile = () => {
                       type="text"
                       id="phoneID"
                       name="phone"
+                      placeholder="Enter Phone Number"
                       value={updatedUserData.phone}
                       className='profile-data-input'
                       onChange={handleInputChange}
@@ -315,7 +322,7 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div></div>
-                <div><BtnGreen label='Save Changes' onClick={handleFormSubmit} /></div>
+                <div><BtnGreen label='Save Changes' onClick={() => setShowAlert(false)} /></div>
               </form>
             </div>
           </div>

@@ -8,10 +8,12 @@ import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import AlertMessage from '../AlertMessage';
 
 const LOGIN_URL = '/api/login';
 
 const LoginEmailForm = () => {
+  const [showAlert, setShowAlert] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -52,6 +54,7 @@ const LoginEmailForm = () => {
       } else {
         setError('An error occurred. Please try again later.');
       }
+      setShowAlert(true);
     }
   };
 
@@ -92,13 +95,15 @@ const LoginEmailForm = () => {
 
   return (
     <>
+    {showAlert && <AlertMessage type="error" message={error} />}
       <div className='login-form-container'>
         <form className='login-form' onSubmit={handleSubmit}>
           <div className='row1'>
             <div className="col1"><Link to="/"><img src={LogoGray} alt="" /></Link></div>
             <div className="col2">Sign in to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
           </div>
-          {error && <p className='error-msg'>{error}</p>}
+          {/* {error && <p className='error-msg'>{error}</p>} */}
+          
           <div className='row2'>
             <div className='col1'><b>Email</b><Link to="/LoginPhone">Sign in with phone number</Link></div>
             <div className='col2'>
@@ -121,7 +126,7 @@ const LoginEmailForm = () => {
               />
             </div>
           </div>
-          <div className='row4'><LoginBtn type='submit' label="Continue" className='continue-btn' /></div>
+          <div className='row4'><LoginBtn type='submit' label="Continue" className='continue-btn' onClick={() => setShowAlert(false)} /></div>
         </form>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>

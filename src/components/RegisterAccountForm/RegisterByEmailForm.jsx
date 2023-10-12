@@ -11,6 +11,7 @@ import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import AlertMessage from '../AlertMessage';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
@@ -18,6 +19,7 @@ const REGISTER_URL = '/api/register';
 
 const RegisterByEmailForm = () => {
 
+  const [showAlert, setShowAlert] = useState(false);
 
   const emailRef = useRef();
   const errRef = useRef();
@@ -62,6 +64,7 @@ const RegisterByEmailForm = () => {
   useEffect(() => {
     setErrMsg('');
   }, [email, pwd, matchPwd])
+  
 
   const [formData, setFormData] = useState({
     email: '',
@@ -104,15 +107,16 @@ const RegisterByEmailForm = () => {
     } catch (err) {
       dispatch(Setloader(false))
       if (err.response?.status === 400) {
-        // Email already exists, update the error message
         setSuccess(false);
         setErrMsg('Account already exists for this email.');
+        setShowAlert(true);
       }
       else {
         console.error('Error:', err);
         // Update the error message for network or unexpected errors
         setSuccess(false);
         setErrMsg('An error occurred during registration');
+        setShowAlert(true);
       }
     }
     if (errRef.current) {
@@ -153,13 +157,14 @@ const RegisterByEmailForm = () => {
           </p>
         </section>
       ) : (
+        <>{showAlert && <AlertMessage type="error" message={errMsg} />}
         <div className='register-form-container'>
           <form className='register-form' onSubmit={handleSubmit}>
             <div className='row1'>
               <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
               <div className='col2'><h4>Create an account</h4></div>
             </div>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
+            
             <div className='row2'>
               <div className='col1 input-container'>
                 <div className='row1'>
@@ -259,7 +264,7 @@ const RegisterByEmailForm = () => {
                 </div>
               </div>
             </div>
-            <div className='row4'><LoginBtn onClick={handleSubmit} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
+            <div className='row4'><LoginBtn onClick={() => setShowAlert(false)} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
           </form>
           <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
           <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
@@ -267,6 +272,7 @@ const RegisterByEmailForm = () => {
           <div className='row8'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
           <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
         </div>
+        </>
       )}
     </>
   )

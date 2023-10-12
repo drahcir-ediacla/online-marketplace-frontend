@@ -2,7 +2,7 @@ import React from 'react';
 import './Button.css'
 import {Link} from 'react-router-dom'
 
-const BtnClear = ({ to, label, onClick, className, disabled }) => {
+const BtnClear = ({ to, label, onClick, className, disabled, type }) => {
 
   // If `to` is defined, render a Link component; otherwise, render a regular button
   if (to) {
@@ -13,7 +13,7 @@ const BtnClear = ({ to, label, onClick, className, disabled }) => {
     );
   } else {
   return (
-    <button to={to} className={`clear-button ${className}`} onClick={onClick} disabled={disabled}>
+    <button type={type} to={to} className={`clear-button ${className}`} onClick={onClick} disabled={disabled}>
       {label}
     </button>
   );

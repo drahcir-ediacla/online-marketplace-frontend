@@ -1,0 +1,50 @@
+.alert-container {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1003;
+
+    .alert {
+        position: fixed;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #FFF;
+        border-radius: 5px;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        transition: 0.3s all;
+        opacity: 0;
+        transform: translate(0, -100px);
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+
+        &.show {
+            opacity: 1;
+            transform: translate(0, 0);
+
+        }
+    }
+
+    .success::before {
+        content: "\f058";
+        font-family: FontAwesome;
+        margin-right: 15px;
+        font-size: 20px;
+    }
+
+    .error::before {
+        content: "\f057";
+        font-family: FontAwesome;
+        margin-right: 15px;
+        font-size: 20px;
+    }
+
+    .warning::before {
+        content: "\f05a";
+        font-family: FontAwesome;
+        margin-right: 15px;
+        font-size: 20px;
+    }
+}
