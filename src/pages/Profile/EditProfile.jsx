@@ -13,10 +13,12 @@ import BtnGreen from '../../components/Button/BtnGreen';
 import Input from '../../components/FormField/Input';
 import TextArea from '../../components/FormField/TextArea';
 import Select from '../../components/FormField/Select';
+import DependentSelect from '../../components/FormField/DependentSelect';
 import DatePicker from '../../components/FormField/DatePicker';
 import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
+import testData from '../../data/testData.json'
 import AlertMessage from '../../components/AlertMessage';
 
 
@@ -245,6 +247,7 @@ const EditProfile = () => {
                     <Select
                       id='regionID'
                       name='region'
+                      defaultOption='Please select your region --'
                       value={updatedUserData.region}
                       data={regionData}
                       onChange={handleInputChange}
@@ -258,6 +261,7 @@ const EditProfile = () => {
                     <Select
                       id='cityID'
                       name='city'
+                      defaultOption='Please select your city --'
                       value={updatedUserData.city}
                       data={cityData}
                       onChange={handleInputChange}
@@ -303,6 +307,7 @@ const EditProfile = () => {
                     <Select
                       id="genderID"
                       name="gender"
+                      defaultOption='Please select your gender --'
                       value={updatedUserData.gender}
                       data={genderData}
                       onChange={handleInputChange}

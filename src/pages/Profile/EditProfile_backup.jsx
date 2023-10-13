@@ -17,69 +17,133 @@ import DatePicker from '../../components/FormField/DatePicker';
 import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
+import AlertMessage from '../../components/AlertMessage';
+
 
 
 const EditProfile = () => {
 
-  const handleOptionSelect = (value) => {
-    console.log('Selected value:', value);
-  };
-
+  const [showAlert, setShowAlert] = useState(false);
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
- 
-
-  // Check if the user object is null before accessing its properties
-  const display_name = user?.display_name || ''; // Default to an empty string if user is null
-
   const [updatedUserData, setUpdatedUserData] = useState({
-    display_name, // Use the value obtained from user or an empty string
-    email: user?.email || '', // Default to an empty string if user is null
+    email: '',
+    display_name: '',
+    bio: '',
+    first_name: '',
+    last_name: '',
+    country: '',
+    region: '',
+    city: '',
+    phone: '',
+    gender: '',
+    birthday: '',
+    profile_pic: '',
   });
+
+  useEffect(() => {
+    // Fetch the user's data when the component mounts
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
+
+  // Update the local state when user data changes
+  useEffect(() => {
+    if (user) {
+      setUpdatedUserData({
+        email: user.email || '',
+        display_name: user.display_name || '',
+        bio: user.bio || '',
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        country: user.country || '',
+        region: user.region || '',
+        city: user.city || '',
+        phone: user.phone || '',
+        gender: user.gender || '',
+        birthday: user.birthday || '',
+        profile_pic: user.profile_pic || '',
+      });
+    }
+  }, [user]);
+
+  const handleFileInputClick = () => {
+    document.getElementById('fileInput').click();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'auwcvbw0');
+      formData.append('cloud_name', 'yogeek-cloudinary');
+      formData.append('folder', 'profile_picture');
+
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data.secure_url;
+
+        // Update the profile_pic property in the local state
+        setUpdatedUserData({
+          ...updatedUserData,
+          profile_pic: imageUrl,
+        });
+      } else {
+        console.error('Image upload failed.');
+      }
+    } catch (error) {
+      console.error('Error uploading image to Cloudinary', error);
+    }
+  };
+
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedUserData({ ...updatedUserData, [name]: value });
   };
 
-
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-  }, [dispatch]);
-
-  
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      dispatch(Setloader(true));
       // Dispatch the action to update the user's profile
+      dispatch(Setloader(true));
       dispatch(updateUserProfile(updatedUserData));
+
+      // Fetch the updated user's data after the update
+      dispatch(fetchUserProfile());
 
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)
-      dispatch(Setloader(false));
+      setShowAlert(true);
+
 
     } catch (error) {
-      dispatch(Setloader(false));
       // Handle any errors, which are already handled in the action
+    } finally {
+      dispatch(Setloader(false)); // Move this line here to ensure it's always called
     }
   };
 
-  // Check if user is null before rendering user data
-  if (user === null) {
-    dispatch(Setloader(true))
-    return;
-  }
-  else {
-    dispatch(Setloader(false))
-  }
-
   return (
     <>
+    {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body">
         <div className="container">
@@ -94,55 +158,112 @@ const EditProfile = () => {
                   {error && <div className="error">{error}</div>}
                 </div>
                 <div className='row2'>
-                  <div className='col1'><img src={ProfileAvatar} alt="" /></div>
+                  <div className='col1'><img src={updatedUserData.profile_pic || ProfileAvatar} alt="" className='profile-pic' /></div>
                   <div className='col2'>
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
-                    <div><BtnClear label="Upload Photo" /></div>
+                    <label htmlFor="fileInput" className="custom-file-upload">
+                      <div><BtnClear type="button" label="Choose Photo" onClick={handleFileInputClick} /></div>
+                    </label>
+                    <input type="file" id="fileInput" accept="image/png, image/jpg, image/jpeg" onChange={handleImageUpload} style={{ display: 'none' }} />
                   </div>
                 </div>
                 <div className='row3 flex'>
                   <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /> <span className='asterisk'>*</span></label >
-                  <div><Input
-                    type='text'
-                    id='displaynameID'
-                    name='displayname'
-                    value={updatedUserData.display_name}
-                    className='profile-data-input'
-                    onChange={handleInputChange}
-                  /></div>
+                  <div>
+                    <Input
+                      type='text'
+                      id='displaynameID'
+                      name='display_name'
+                      value={updatedUserData.display_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row4 flex'>
-                  <div className='field-name'>BIO</div>
-                  <div><TextArea className='profile-data-textarea' rows='5' /><br /><small>0/255</small></div>
+                  <label htmlFor='bioID' className='field-name'>BIO</label>
+                  <div>
+                    <TextArea
+                      id='bioID'
+                      name='bio'
+                      placeholder="Write some introduction about your profile"
+                      value={updatedUserData.bio}
+                      className='profile-data-textarea'
+                      onChange={handleInputChange}
+                      rows='5' />
+                    <br /><small>0/255</small></div>
                 </div>
                 <div className='row5 flex'>
-                  <div className='field-name'>FIRST NAME <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor='firstnameID' className='field-name'>FIRST NAME <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type='text'
+                      id='firstnameID'
+                      name='first_name'
+                      placeholder="Enter First Name"
+                      value={updatedUserData.first_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row6 flex'>
-                  <div className='field-name'>LAST NAME <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor='lastnameID' className='field-name'>LAST NAME <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type='text'
+                      id='lastnameID'
+                      name='last_name'
+                      placeholder="Enter Last Name"
+                      value={updatedUserData.last_name}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <hr />
                 <div className='row7'>
                   <div className='field-name'>LOCATION</div>
                 </div>
                 <div className='row8 flex'>
-                  <div className='field-name'>Country</div>
+                  <label htmlFor='countryID' className='field-name'>Country</label>
                   <div>
-                    <input type="text" placeholder='Philippines' disabled />
+                    <Input
+                      type='text'
+                      id='countryID'
+                      name='country'
+                      value={updatedUserData.country || 'Philippines'}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                      readOnly
+                    />
                   </div>
                 </div>
                 <div className='row9 flex'>
-                  <div className='field-name'>Region</div>
+                  <label htmlFor='regionID' className='field-name'>Region</label>
                   <div>
-                    <Select data={regionData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select
+                      id='regionID'
+                      name='region'
+                      defaultOption='Please select your region --'
+                      value={updatedUserData.region}
+                      data={regionData}
+                      onChange={handleInputChange}
+                      className='profile-data-select'
+                    />
                   </div>
                 </div>
                 <div className='row10 flex'>
-                  <div className='field-name'>City</div>
+                  <label htmlFor='cityID' className='field-name'>City</label>
                   <div>
-                    <Select data={cityData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select
+                      id='cityID'
+                      name='city'
+                      defaultOption='Please select your city --'
+                      value={updatedUserData.city}
+                      data={cityData}
+                      onChange={handleInputChange}
+                      className='profile-data-select' />
                   </div>
                 </div>
                 <hr />
@@ -152,33 +273,59 @@ const EditProfile = () => {
                 </div>
                 <div className='row12 flex'>
                   <label htmlFor="emailID" className='field-name'>Email <span className='asterisk'>*</span></label>
-                  <div><Input
-                    type="email"
-                    id="emailID"
-                    name="email"
-                    value={updatedUserData.email}
-                    className='profile-data-input'
-                    onChange={handleInputChange}
-                  /></div>
+                  <div>
+                    <Input
+                      type="email"
+                      id="emailID"
+                      name="email"
+                      placeholder="Enter Your Email"
+                      value={updatedUserData.email}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                      readOnly
+                    /></div>
                 </div>
                 <div className='row13 flex'>
-                  <div className='field-name'>Phone Number <span className='asterisk'>*</span></div>
-                  <div><Input className='profile-data-input' /></div>
+                  <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
+                  <div>
+                    <Input
+                      type="text"
+                      id="phoneID"
+                      name="phone"
+                      placeholder="Enter Phone Number"
+                      value={updatedUserData.phone}
+                      className='profile-data-input'
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
                 <div className='row14 flex'>
-                  <div className='field-name'>Gender</div>
+                  <label htmlFor="genderID" className='field-name'>Gender</label>
                   <div>
-                    <Select data={genderData} onSelect={handleOptionSelect} className='profile-data-select' />
+                    <Select
+                      id="genderID"
+                      name="gender"
+                      defaultOption='Please select your gender --'
+                      value={updatedUserData.gender}
+                      data={genderData}
+                      onChange={handleInputChange}
+                      className='profile-data-select' />
                   </div>
                 </div>
                 <div className='row15 flex'>
-                  <div className='field-name'>Birthday</div>
+                  <label htmlFor="birthdayID" className='field-name'>Birthday</label>
                   <div>
-                    <DatePicker className='birthday-date' />
+                    <DatePicker
+                      id="birthdayID"
+                      name="birthday"
+                      value={updatedUserData.birthday}
+                      className='birthday-date'
+                      onChange={handleInputChange}
+                    />
                   </div>
                 </div>
                 <div></div>
-                <div><BtnGreen label='Save Changes' onClick={handleFormSubmit} /></div>
+                <div><BtnGreen label='Save Changes' onClick={() => setShowAlert(false)} /></div>
               </form>
             </div>
           </div>

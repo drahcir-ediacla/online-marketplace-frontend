@@ -20,6 +20,7 @@ import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
 import Dashboard from './pages/AdminPanel/Dashboard'
+import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 import { useSelector } from 'react-redux';
@@ -86,6 +87,7 @@ function App() {
           <Route path='/SetPassword' element={<SetPassword />} />
           <Route path='/AddListing' element={<AddListing />} />
           <Route path='/Dashboard' element={<Dashboard />} />
+          <Route path='/test' element={<TestPage />} />
         </Routes>
       </Router>
     </>
