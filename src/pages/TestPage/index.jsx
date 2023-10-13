@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DependentSelect from '../../components/FormField/DependentSelect';
-import testData from '../../data/testData.json'
+import userLocationData from '../../data/userLocationData.json'
 
 const DependentDropdown = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -27,8 +27,8 @@ const DependentDropdown = () => {
         id="regionID"
         name='region'
         value={selectedRegion}
-        data={Object.keys(testData)}
-        defaultOption="Please choose region --"
+        data={Object.keys(userLocationData)}
+        defaultOption="Select your region --"
         onChange={handleRegionChange}
       />
 
@@ -36,8 +36,9 @@ const DependentDropdown = () => {
         id="cityID"
         name='city'
         value={selectedCity}
-        data={selectedRegion ? testData[selectedRegion] : []}
-        defaultOption="Please choose city --"
+        data={selectedRegion ? userLocationData[selectedRegion] : []}
+        defaultOption="Select your city --"
+        noOptionCaption="Please choose your region first --"
         onChange={handleCityChange}
       />
     </div>

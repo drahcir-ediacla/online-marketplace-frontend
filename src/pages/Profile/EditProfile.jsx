@@ -18,7 +18,7 @@ import DatePicker from '../../components/FormField/DatePicker';
 import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
-import testData from '../../data/testData.json'
+import userLocationData from '../../data/userLocationData.json'
 import AlertMessage from '../../components/AlertMessage';
 
 
@@ -29,6 +29,18 @@ const EditProfile = () => {
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
+
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+
+  const handleRegionChange = (event) => {
+    setSelectedRegion(event.target.value);
+    setSelectedCity('');
+  };
+
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+  };
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -113,7 +125,7 @@ const EditProfile = () => {
     }
   };
 
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -145,7 +157,7 @@ const EditProfile = () => {
 
   return (
     <>
-    {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
+      {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body">
         <div className="container">
@@ -244,13 +256,13 @@ const EditProfile = () => {
                 <div className='row9 flex'>
                   <label htmlFor='regionID' className='field-name'>Region</label>
                   <div>
-                    <Select
-                      id='regionID'
+                    <DependentSelect
+                      id="regionID"
                       name='region'
-                      defaultOption='Please select your region --'
-                      value={updatedUserData.region}
-                      data={regionData}
-                      onChange={handleInputChange}
+                      value={selectedRegion}
+                      data={Object.keys(userLocationData)}
+                      defaultOption="Select your region --"
+                      onChange={handleRegionChange}
                       className='profile-data-select'
                     />
                   </div>
@@ -258,14 +270,16 @@ const EditProfile = () => {
                 <div className='row10 flex'>
                   <label htmlFor='cityID' className='field-name'>City</label>
                   <div>
-                    <Select
-                      id='cityID'
+                    <DependentSelect
+                      id="cityID"
                       name='city'
-                      defaultOption='Please select your city --'
-                      value={updatedUserData.city}
-                      data={cityData}
-                      onChange={handleInputChange}
-                      className='profile-data-select' />
+                      value={selectedCity}
+                      data={selectedRegion ? userLocationData[selectedRegion] : []}
+                      defaultOption="Select your city --"
+                      noOptionCaption="Please choose your region first --"
+                      onChange={handleCityChange}
+                      className='profile-data-select'
+                    />
                   </div>
                 </div>
                 <hr />
