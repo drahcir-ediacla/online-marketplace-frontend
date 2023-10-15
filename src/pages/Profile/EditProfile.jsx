@@ -15,8 +15,6 @@ import TextArea from '../../components/FormField/TextArea';
 import Select from '../../components/FormField/Select';
 import DependentSelect from '../../components/FormField/DependentSelect';
 import DatePicker from '../../components/FormField/DatePicker';
-import regionData from '../../data/regionData';
-import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
 import userLocationData from '../../data/userLocationData.json'
 import AlertMessage from '../../components/AlertMessage';
@@ -34,13 +32,28 @@ const EditProfile = () => {
   const [selectedCity, setSelectedCity] = useState('');
 
   const handleRegionChange = (event) => {
-    setSelectedRegion(event.target.value);
-    setSelectedCity('');
+    const selectedRegion = event.target.value;
+    setSelectedRegion(selectedRegion);
+
+    // Update the updatedUserData with the selected region
+    setUpdatedUserData({
+      ...updatedUserData,
+      region: selectedRegion,
+    });
   };
 
   const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
+    const selectedCity = event.target.value;
+    setSelectedCity(selectedCity);
+
+    // Update the updatedUserData with the selected city
+    setUpdatedUserData({
+      ...updatedUserData,
+      city: selectedCity,
+    });
   };
+
+  
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -57,10 +70,14 @@ const EditProfile = () => {
     profile_pic: '',
   });
 
+
+  
   useEffect(() => {
     // Fetch the user's data when the component mounts
     dispatch(fetchUserProfile());
   }, [dispatch]);
+
+
 
   // Update the local state when user data changes
   useEffect(() => {
@@ -259,7 +276,7 @@ const EditProfile = () => {
                     <DependentSelect
                       id="regionID"
                       name='region'
-                      value={selectedRegion}
+                      value={updatedUserData.region}
                       data={Object.keys(userLocationData)}
                       defaultOption="Select your region --"
                       onChange={handleRegionChange}

@@ -13,10 +13,12 @@ import BtnGreen from '../../components/Button/BtnGreen';
 import Input from '../../components/FormField/Input';
 import TextArea from '../../components/FormField/TextArea';
 import Select from '../../components/FormField/Select';
+import DependentSelect from '../../components/FormField/DependentSelect';
 import DatePicker from '../../components/FormField/DatePicker';
 import regionData from '../../data/regionData';
 import cityData from '../../data/cityData';
 import genderData from '../../data/genderData';
+import userLocationData from '../../data/userLocationData.json'
 import AlertMessage from '../../components/AlertMessage';
 
 
@@ -27,6 +29,33 @@ const EditProfile = () => {
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
+
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+
+  const handleRegionChange = (event) => {
+    const selectedRegion = event.target.value;
+    setSelectedRegion(selectedRegion);
+
+    // Update the updatedUserData with the selected region
+    setUpdatedUserData({
+      ...updatedUserData,
+      region: selectedRegion,
+    });
+  };
+
+  const handleCityChange = (event) => {
+    const selectedCity = event.target.value;
+    setSelectedCity(selectedCity);
+
+    // Update the updatedUserData with the selected city
+    setUpdatedUserData({
+      ...updatedUserData,
+      city: selectedCity,
+    });
+  };
+
+  
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -43,10 +72,14 @@ const EditProfile = () => {
     profile_pic: '',
   });
 
+
+  
   useEffect(() => {
     // Fetch the user's data when the component mounts
     dispatch(fetchUserProfile());
   }, [dispatch]);
+
+
 
   // Update the local state when user data changes
   useEffect(() => {
@@ -111,7 +144,7 @@ const EditProfile = () => {
     }
   };
 
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -143,7 +176,7 @@ const EditProfile = () => {
 
   return (
     <>
-    {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
+      {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body">
         <div className="container">
@@ -242,13 +275,13 @@ const EditProfile = () => {
                 <div className='row9 flex'>
                   <label htmlFor='regionID' className='field-name'>Region</label>
                   <div>
-                    <Select
-                      id='regionID'
+                    <DependentSelect
+                      id="regionID"
                       name='region'
-                      defaultOption='Please select your region --'
                       value={updatedUserData.region}
-                      data={regionData}
-                      onChange={handleInputChange}
+                      data={Object.keys(userLocationData)}
+                      defaultOption="Select your region --"
+                      onChange={handleRegionChange}
                       className='profile-data-select'
                     />
                   </div>
@@ -256,14 +289,16 @@ const EditProfile = () => {
                 <div className='row10 flex'>
                   <label htmlFor='cityID' className='field-name'>City</label>
                   <div>
-                    <Select
-                      id='cityID'
+                    <DependentSelect
+                      id="cityID"
                       name='city'
-                      defaultOption='Please select your city --'
                       value={updatedUserData.city}
-                      data={cityData}
-                      onChange={handleInputChange}
-                      className='profile-data-select' />
+                      data={selectedRegion ? userLocationData[selectedRegion] : []}
+                      defaultOption="Select your city --"
+                      noOptionCaption="Please choose your region first --"
+                      onChange={handleCityChange}
+                      className='profile-data-select'
+                    />
                   </div>
                 </div>
                 <hr />
