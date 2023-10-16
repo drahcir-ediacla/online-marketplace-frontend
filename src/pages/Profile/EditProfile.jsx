@@ -83,9 +83,7 @@ const EditProfile = () => {
   }, [user]);
 
   const [selectedRegion, setSelectedRegion] = useState('');
-  console.log({selectedRegion})
   const [selectedCity, setSelectedCity] = useState('');
-  console.log({selectedCity})
 
   const handleRegionChange = (event) => {
     const selectedRegion = event.target.value;
