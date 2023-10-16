@@ -28,8 +28,7 @@ const EditProfile = () => {
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+
 
 
 
@@ -51,7 +50,7 @@ const EditProfile = () => {
   });
 
 
-
+ 
 
   useEffect(() => {
     // Fetch the user's data when the component mounts
@@ -77,9 +76,16 @@ const EditProfile = () => {
         birthday: user.birthday || '',
         profile_pic: user.profile_pic || '',
       });
+      // Set selectedCity when user data is available
+      setSelectedRegion(user.region || ''); 
+      setSelectedCity(user.city || '');
     }
   }, [user]);
 
+  const [selectedRegion, setSelectedRegion] = useState('');
+  console.log({selectedRegion})
+  const [selectedCity, setSelectedCity] = useState('');
+  console.log({selectedCity})
 
   const handleRegionChange = (event) => {
     const selectedRegion = event.target.value;
@@ -282,7 +288,7 @@ const EditProfile = () => {
                     <DependentSelect
                       id="regionID"
                       name='region'
-                      value={updatedUserData.region}
+                      value={selectedRegion}
                       data={Object.keys(userLocationData)}
                       defaultOption="Select your region --"
                       onChange={handleRegionChange}
@@ -296,7 +302,7 @@ const EditProfile = () => {
                     <DependentSelect
                       id="cityID"
                       name="city"
-                      value={selectedCity ? updatedUserData.city : ''}
+                      value={selectedCity}
                       data={selectedRegion ? userLocationData[selectedRegion] : []}
                       defaultOption="Select your city --"
                       noOptionCaption="Please choose your region first --"
