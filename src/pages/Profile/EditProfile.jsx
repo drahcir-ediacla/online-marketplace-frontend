@@ -31,29 +31,9 @@ const EditProfile = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
 
-  const handleRegionChange = (event) => {
-    const selectedRegion = event.target.value;
-    setSelectedRegion(selectedRegion);
 
-    // Update the updatedUserData with the selected region
-    setUpdatedUserData({
-      ...updatedUserData,
-      region: selectedRegion,
-    });
-  };
 
-  const handleCityChange = (event) => {
-    const selectedCity = event.target.value;
-    setSelectedCity(selectedCity);
 
-    // Update the updatedUserData with the selected city
-    setUpdatedUserData({
-      ...updatedUserData,
-      city: selectedCity,
-    });
-  };
-
-  
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -71,7 +51,8 @@ const EditProfile = () => {
   });
 
 
-  
+
+
   useEffect(() => {
     // Fetch the user's data when the component mounts
     dispatch(fetchUserProfile());
@@ -98,6 +79,31 @@ const EditProfile = () => {
       });
     }
   }, [user]);
+
+
+  const handleRegionChange = (event) => {
+    const selectedRegion = event.target.value;
+    setSelectedRegion(selectedRegion);
+    setSelectedCity('');
+
+    // Update the updatedUserData with the selected region
+    setUpdatedUserData({
+      ...updatedUserData,
+      region: selectedRegion,
+    });
+  };
+
+  const handleCityChange = (event) => {
+    const selectedCity = event.target.value;
+    setSelectedCity(selectedCity);
+
+    // Update the updatedUserData with the selected city
+    setUpdatedUserData({
+      ...updatedUserData,
+      city: selectedCity,
+    });
+  };
+
 
   const handleFileInputClick = () => {
     document.getElementById('fileInput').click();
@@ -289,8 +295,8 @@ const EditProfile = () => {
                   <div>
                     <DependentSelect
                       id="cityID"
-                      name='city'
-                      value={selectedCity}
+                      name="city"
+                      value={selectedCity ? updatedUserData.city : ''}
                       data={selectedRegion ? userLocationData[selectedRegion] : []}
                       defaultOption="Select your city --"
                       noOptionCaption="Please choose your region first --"
