@@ -28,12 +28,6 @@ const EditProfile = () => {
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
 
-
-
-
-
-
-
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
     display_name: '',
@@ -49,14 +43,13 @@ const EditProfile = () => {
     profile_pic: '',
   });
 
-
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
  
-
   useEffect(() => {
     // Fetch the user's data when the component mounts
     dispatch(fetchUserProfile());
   }, [dispatch]);
-
 
 
   // Update the local state when user data changes
@@ -82,30 +75,19 @@ const EditProfile = () => {
     }
   }, [user]);
 
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  
 
   const handleRegionChange = (event) => {
     const selectedRegion = event.target.value;
     setSelectedRegion(selectedRegion);
     setSelectedCity('');
-
-    // Update the updatedUserData with the selected region
-    setUpdatedUserData({
-      ...updatedUserData,
-      region: selectedRegion,
-    });
+    setUpdatedUserData({ ...updatedUserData, region: selectedRegion });
   };
 
   const handleCityChange = (event) => {
     const selectedCity = event.target.value;
     setSelectedCity(selectedCity);
-
-    // Update the updatedUserData with the selected city
-    setUpdatedUserData({
-      ...updatedUserData,
-      city: selectedCity,
-    });
+    setUpdatedUserData({ ...updatedUserData, city: selectedCity });
   };
 
 
@@ -173,7 +155,6 @@ const EditProfile = () => {
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)
       setShowAlert(true);
-
 
     } catch (error) {
       // Handle any errors, which are already handled in the action
