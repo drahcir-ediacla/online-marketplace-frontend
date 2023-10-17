@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserProfile } from '../../redux/actions/userActions';
+import { getUser } from '../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
 import './style.scss'
 import NavCategories from '../SlidingSideNav/NavCategories'
@@ -16,7 +16,7 @@ const SlidingSideNav = () => {
   const dispatch = useDispatch();
 
   useEffect (() => {
-    dispatch(fetchUserProfile())
+    dispatch(getUser())
   }, [dispatch]);
 
   const toggleMenu = () => {

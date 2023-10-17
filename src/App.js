@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile } from './redux/actions/userActions';
+import { getUser } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home'
@@ -34,7 +34,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect (() => {
-    dispatch(fetchUserProfile())
+    dispatch(getUser())
   }, [dispatch]);
 
 

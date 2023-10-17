@@ -140,7 +140,7 @@ const LoginEmailForm = () => {
             <div className='col1'><b>Email</b><Link to="/LoginPhone">Sign in with phone number</Link></div>
             <div className='col2'>
               <input
-                type="text"
+                type="email"
                 placeholder='Enter your email'
                 value={email}
                 onChange={handleEmailChange}

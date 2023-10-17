@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile } from '../../redux/actions/userActions'
+import { getUser } from '../../redux/actions/userActions'
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
@@ -19,7 +19,7 @@ const ProfileInfoCard = () => {
         dispatch(Setloader(true));
       
         // Fetch the user's data
-        dispatch(fetchUserProfile())
+        dispatch(getUser())
           .then(() => {
             // Set the loader to false when data fetching is complete
             dispatch(Setloader(false));

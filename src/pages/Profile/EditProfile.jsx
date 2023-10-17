@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile, updateUserProfile } from '../../redux/actions/userActions';
+import { getUser, updateUser } from '../../redux/actions/userActions';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss';
 import Header from '../../layouts/Header';
@@ -52,7 +52,7 @@ const EditProfile = () => {
     dispatch(Setloader(true));
   
     // Fetch the user's data
-    dispatch(fetchUserProfile())
+    dispatch(getUser())
       .then(() => {
         // Set the loader to false when data fetching is complete
         dispatch(Setloader(false));
@@ -177,10 +177,10 @@ const EditProfile = () => {
     try {
       // Dispatch the action to update the user's profile
       dispatch(Setloader(true));
-      dispatch(updateUserProfile(updatedUserData));
+      dispatch(updateUser(updatedUserData));
 
       // Fetch the updated user's data after the update
-      dispatch(fetchUserProfile());
+      dispatch(getUser());
 
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)

@@ -5,7 +5,7 @@ import { Setloader } from '../reducer/loadersSlice';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
-export const fetchUserProfile = () => async (dispatch) => {
+export const getUser = () => async (dispatch) => {
   try {
 
     const response = await axios.get(GET_USER_LOGIN, {
@@ -40,7 +40,7 @@ export const fetchUserProfile = () => async (dispatch) => {
 };
 
 
-export const updateUserProfile = (userData) => async (dispatch) => {
+export const updateUser = (userData) => async (dispatch) => {
   try {
     dispatch(Setloader(true));
 
