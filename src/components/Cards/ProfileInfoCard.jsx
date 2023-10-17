@@ -23,7 +23,8 @@ const ProfileInfoCard = () => {
     const displayName = user?.display_name || "Anonymous";
     const bio = user?.bio || '';
     const city = user?.city || '';
-    const joined = user?.createdAt_MonthYear || '';
+    const originalDate = user?.createdAt || '';
+    const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
     return (
         <>
@@ -39,7 +40,7 @@ const ProfileInfoCard = () => {
                     <i class="fa-regular fa-star"></i>
                     <span> | </span><span>5 Review(s)</span>
                 </div>
-                <div className='joined-date-loc'><span>{city}</span> · <span>{joined}</span></div>
+                <div className='joined-date-loc'><span>{city}</span> · <span>{formattedDate}</span></div>
                 <div className="profile-social-media">
                     <span>Social Media:</span>
                     <div className='fb-icon'><FBIcon /></div>
