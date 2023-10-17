@@ -19,3 +19,13 @@ export const LoginUser = async (payload) => {
         return error.message
     }
 }
+
+// get current user
+export const GetCurrentUser = async () => {
+    try{
+        const response = await axios.get('/auth/check-auth');
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}
