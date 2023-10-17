@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../../redux/actions/userActions'
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
@@ -14,9 +15,20 @@ const ProfileInfoCard = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Fetch the user's data when the component mounts
-        dispatch(fetchUserProfile());
-    }, [dispatch]);
+        // Set the loader to true when data fetching starts
+        dispatch(Setloader(true));
+      
+        // Fetch the user's data
+        dispatch(fetchUserProfile())
+          .then(() => {
+            // Set the loader to false when data fetching is complete
+            dispatch(Setloader(false));
+          })
+          .catch(error => {
+            console.error("Error fetching user profile:", error);
+            dispatch(Setloader(false)); 
+          });
+      }, [dispatch]);
 
     // Check if user exists before accessing its properties
     const profilePic = user?.profile_pic || DefaultProfilePic;

@@ -16,10 +16,12 @@ const LoginEmailForm = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const dispatch = useDispatch()
 
-  const navigate = useNavigate(); // Move this line outside of the handleSubmit function
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -30,11 +32,34 @@ const LoginEmailForm = () => {
   };
 
 
+  const validateForm = () => {
+    let hasErrors = false;
+
+    if (!email) {
+      setEmailError('Email is required');
+      hasErrors = true;
+    } else {
+      setEmailError('');
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      hasErrors = true;
+    } else {
+      setPasswordError('');
+    }
+
+    return !hasErrors;
+  };
+
 
   // LOCAL LOGIN METHOD
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
     try {
       dispatch(Setloader(true))
       const response = await axios.post(LOGIN_URL, {
@@ -56,6 +81,13 @@ const LoginEmailForm = () => {
       }
       setShowAlert(true);
     }
+  };
+
+  const clearErrors = () => {
+    setEmailError('');
+    setPasswordError('');
+    setError('');
+    setShowAlert(false);
   };
 
 
@@ -112,7 +144,9 @@ const LoginEmailForm = () => {
                 placeholder='Enter your email'
                 value={email}
                 onChange={handleEmailChange}
+                onFocus={clearErrors}
               />
+              {emailError && <div className="errmsg">{emailError}</div>}
             </div>
           </div>
           <div className='row3'>
@@ -123,7 +157,9 @@ const LoginEmailForm = () => {
                 placeholder='Enter your password'
                 value={password}
                 onChange={handlePasswordChange}
+                onFocus={clearErrors}
               />
+              {passwordError && <div className="errmsg">{passwordError}</div>}
             </div>
           </div>
           <div className='row4'><LoginBtn type='submit' label="Continue" className='continue-btn' onClick={() => setShowAlert(false)} /></div>

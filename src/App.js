@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserProfile } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
-import axios from './apicalls/axios'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import LoginEmail from './pages/Auth/Login/LoginEmail'
@@ -23,42 +24,18 @@ import Dashboard from './pages/AdminPanel/Dashboard'
 import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
-import { useSelector } from 'react-redux';
-
-
-const GET_USER_LOGIN = '/auth/check-auth';
 
 
 
 function App() {
 
-  const [user, setUser] = useState(null);
-  const {loading} = useSelector(state => state.loaders)
+  const user = useSelector((state) => state.user.data);
+  const {loading} = useSelector(state => state.loaders);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const getUser = () => {
-      axios.get(GET_USER_LOGIN, {
-        withCredentials: true,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) return response.data; // Use response.data to access JSON data
-          throw new Error("Authentication has failed!");
-        })
-        .then((resObject) => {
-          console.log("User data:", resObject.user);
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getUser();
-  }, []);
+  useEffect (() => {
+    dispatch(fetchUserProfile())
+  }, [dispatch]);
 
 
 

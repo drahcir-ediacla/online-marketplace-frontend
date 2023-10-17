@@ -7,7 +7,6 @@ const GET_USER_LOGIN = '/auth/check-auth';
 
 export const fetchUserProfile = () => async (dispatch) => {
   try {
-    dispatch(Setloader(true));
 
     const response = await axios.get(GET_USER_LOGIN, {
       withCredentials: true,
@@ -19,7 +18,6 @@ export const fetchUserProfile = () => async (dispatch) => {
     });
 
     if (response.status === 200) {
-      dispatch(Setloader(false))
       const userData = response.data.user;
       dispatch(setUser(userData));
     } else {

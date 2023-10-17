@@ -23,6 +23,7 @@ import AlertMessage from '../../components/AlertMessage';
 
 const EditProfile = () => {
 
+  const [requiredFieldErrors, setRequiredFieldErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
@@ -47,9 +48,21 @@ const EditProfile = () => {
   const [selectedCity, setSelectedCity] = useState('');
  
   useEffect(() => {
-    // Fetch the user's data when the component mounts
-    dispatch(fetchUserProfile());
+    // Set the loader to true when data fetching starts
+    dispatch(Setloader(true));
+  
+    // Fetch the user's data
+    dispatch(fetchUserProfile())
+      .then(() => {
+        // Set the loader to false when data fetching is complete
+        dispatch(Setloader(false));
+      })
+      .catch(error => {
+        console.error("Error fetching user profile:", error);
+        dispatch(Setloader(false));
+      });
   }, [dispatch]);
+  
 
 
   // Update the local state when user data changes
@@ -144,6 +157,23 @@ const EditProfile = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    // Check for required fields
+    const requiredFields = ['first_name', 'last_name', 'region', 'city', 'email'];
+    const errors = {};
+    let hasErrors = false;
+
+    requiredFields.forEach((field) => {
+      if (!updatedUserData[field]) {
+        errors[field] = `${field.replace('_', ' ').toUpperCase()} is required`;
+        hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      setRequiredFieldErrors(errors);
+      return;
+    }
+
     try {
       // Dispatch the action to update the user's profile
       dispatch(Setloader(true));
@@ -160,6 +190,7 @@ const EditProfile = () => {
       // Handle any errors, which are already handled in the action
     } finally {
       dispatch(Setloader(false)); // Move this line here to ensure it's always called
+      setRequiredFieldErrors({}); // Clear validation errors
     }
   };
 
@@ -190,7 +221,7 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div className='row3 flex'>
-                  <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /> <span className='asterisk'>*</span></label >
+                  <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /></label >
                   <div>
                     <Input
                       type='text'
@@ -227,6 +258,7 @@ const EditProfile = () => {
                       className='profile-data-input'
                       onChange={handleInputChange}
                     />
+                    {requiredFieldErrors.first_name && <div className="errmsg">{requiredFieldErrors.first_name}</div>}
                   </div>
                 </div>
                 <div className='row6 flex'>
@@ -241,6 +273,7 @@ const EditProfile = () => {
                       className='profile-data-input'
                       onChange={handleInputChange}
                     />
+                    {requiredFieldErrors.last_name && <div className="errmsg">{requiredFieldErrors.last_name}</div>}
                   </div>
                 </div>
                 <hr />
@@ -262,7 +295,7 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div className='row9 flex'>
-                  <label htmlFor='regionID' className='field-name'>Region</label>
+                  <label htmlFor='regionID' className='field-name'>Region <span className='asterisk'>*</span></label>
                   <div>
                     <DependentSelect
                       id="regionID"
@@ -273,10 +306,11 @@ const EditProfile = () => {
                       onChange={handleRegionChange}
                       className='profile-data-select'
                     />
+                    {requiredFieldErrors.region && <div className="errmsg">{requiredFieldErrors.region}</div>}
                   </div>
                 </div>
                 <div className='row10 flex'>
-                  <label htmlFor='cityID' className='field-name'>City</label>
+                  <label htmlFor='cityID' className='field-name'>City <span className='asterisk'>*</span></label>
                   <div>
                     <DependentSelect
                       id="cityID"
@@ -288,6 +322,7 @@ const EditProfile = () => {
                       onChange={handleCityChange}
                       className='profile-data-select'
                     />
+                    {requiredFieldErrors.city && <div className="errmsg">{requiredFieldErrors.city}</div>}
                   </div>
                 </div>
                 <hr />
@@ -307,10 +342,12 @@ const EditProfile = () => {
                       className='profile-data-input'
                       onChange={handleInputChange}
                       readOnly
-                    /></div>
+                    />
+                    {requiredFieldErrors.email && <div className="errmsg">{requiredFieldErrors.email}</div>}
+                  </div>
                 </div>
                 <div className='row13 flex'>
-                  <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
+                  <label htmlFor="phoneID" className='field-name'>Phone Number</label>
                   <div>
                     <Input
                       type="text"
