@@ -67,7 +67,7 @@ const LoginEmailForm = () => {
         password,
       });
       dispatch(Setloader(false))
-      // If login is successful, you can handle the success here, e.g., redirect to a dashboard.
+
       console.log('Login successful', response.data);
       document.cookie = `jwt=${response.data.accessToken}; max-age=86400; path=/`;
       navigate('/');
@@ -127,7 +127,7 @@ const LoginEmailForm = () => {
 
   return (
     <>
-    {showAlert && <AlertMessage type="error" message={error} />}
+      {showAlert && <AlertMessage type="error" message={error} />}
       <div className='login-form-container'>
         <form className='login-form' onSubmit={handleSubmit}>
           <div className='row1'>
@@ -135,7 +135,7 @@ const LoginEmailForm = () => {
             <div className="col2">Sign in to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
           </div>
           {/* {error && <p className='error-msg'>{error}</p>} */}
-          
+
           <div className='row2'>
             <div className='col1'><b>Email</b><Link to="/LoginPhone">Sign in with phone number</Link></div>
             <div className='col2'>

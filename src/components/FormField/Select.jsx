@@ -5,8 +5,7 @@ const Select = ({ name, id, data, value, onSelect, className, onChange, defaultO
   //   const selectedIndex = e.target.value;
   //   onSelect(data[selectedIndex].value);
   // };
-  console.log("data:", data);
-  console.log("defaultOption:", defaultOption);
+
   
   const handleSelectChange = (e) => {
     const selectedValue = e.target.value;

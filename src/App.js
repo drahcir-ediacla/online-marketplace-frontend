@@ -55,7 +55,7 @@ function App() {
           <Route path='/ResetByPhone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
           <Route path='/RegisterByEmail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
           <Route path='/RegisterByPhone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
-          <Route path='/EditProfile' element={<ProtectedPage><EditProfile /></ProtectedPage>} />
+          <Route path='/EditProfile' element={<EditProfile />} />
           <Route path='/MyProfile' element={<MyProfile />} />
           <Route path='/BuyerProductDetails' element={<BuyerProductDetails />} />
           <Route path='/MainCategory' element={<MainCategory />} />
