@@ -1,14 +1,20 @@
-.add-listing-body{
+.add-listing-body {
     margin-bottom: 150px;
-    .container{
+
+    .container {
         display: block;
-        h3{
+
+        h3 {
             font-weight: 500;
             margin: 20px 0;
         }
-        .box{
-            .col-left{
-                .add-media-container{
+
+        .box {
+            display: flex;
+            gap: 20px;
+
+            .col-left {
+                .add-media-container {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -17,7 +23,8 @@
                     background: white;
                     padding: 30px 20px;
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-                    .add-image-box{
+
+                    .add-image-box {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
@@ -27,27 +34,32 @@
                         border: 1px dashed var(--gray-500);
                         color: var(--green-400);
                         padding: 30px 0;
-                        .addlisting-upload-img{
+
+                        .addlisting-upload-img {
                             width: 36px;
                             fill: var(--green-400);
                         }
                     }
-                    .atleast-one-photo{
+
+                    .atleast-one-photo {
                         color: #910000;
                     }
-                    .add-video-container{
+
+                    .add-video-container {
                         display: flex;
                         flex-direction: column;
                         gap: 16px;
                         width: 100%;
-                        .title-video{
+
+                        .title-video {
                             font-weight: 500;
                         }
 
-                        .upload-vid-options{
+                        .upload-vid-options {
                             display: flex;
                             gap: 35px;
-                            .radio-container{
+
+                            .radio-container {
                                 display: block;
                                 position: relative;
                                 padding-left: 20px;
@@ -56,12 +68,14 @@
                                 -moz-user-select: none;
                                 -ms-user-select: none;
                                 user-select: none;
+
                                 /* Hide the browser's default radio button */
-                                input{
+                                input {
                                     position: absolute;
                                     opacity: 0;
                                     cursor: pointer;
                                 }
+
                                 /* Create a custom radio button */
                                 .checkmark {
                                     position: absolute;
@@ -71,21 +85,25 @@
                                     width: 15px;
                                     border-radius: 50%;
                                 }
+
                                 /* When the radio button is checked, add a blue background */
-                                input:checked ~ .checkmark {
+                                input:checked~.checkmark {
                                     background-color: var(--green-400);
                                     border: var(--green-400);
                                 }
+
                                 /* Create the indicator (the dot/circle - hidden when not checked) */
                                 .checkmark:after {
                                     content: "";
                                     position: absolute;
                                     display: none;
                                 }
+
                                 /* Show the indicator (dot/circle) when checked */
-                                input:checked ~ .checkmark:after {
+                                input:checked~.checkmark:after {
                                     display: block;
                                 }
+
                                 /* Style the indicator (dot/circle) */
                                 .checkmark:after {
                                     top: 5px;
@@ -96,12 +114,14 @@
                                     background: white;
                                 }
                             }
-                            
+
                         }
-                        .upload-video-content{
+
+                        .upload-video-content {
                             display: flex;
                             justify-content: space-between;
-                            .upload-video-box{
+
+                            .upload-video-box {
                                 display: flex;
                                 flex-direction: column;
                                 align-items: center;
@@ -111,22 +131,181 @@
                                 border: 1px dashed var(--gray-500);
                                 color: var(--green-400);
                                 padding: 25px 0px;
-                                .addlisting-upload-vid{
+
+                                .addlisting-upload-vid {
                                     width: 36px;
                                     fill: var(--green-400);
                                 }
                             }
-                            ul{
-                                li{
+
+                            ul {
+                                li {
                                     font-size: 12px;
                                     list-style: disc;
                                 }
                             }
                         }
-                        .input-youtube-link{
+
+                        .input-youtube-link {
                             width: 100%;
                         }
                     }
+                }
+            }
+
+            .col-right {
+                flex-grow: 1;
+                flex-shrink: 0;
+
+                .select-category-container {
+                    position: relative;
+                    display: flex;
+                    flex-grow: 1;
+                    padding: 30px 20px;
+                    background: white;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+
+                    .wrapper {
+                        position: relative;
+                        flex-grow: 1;
+
+                        .dropdown-category {
+                            position: relative;
+                            display: flex;
+                            flex-grow: 1;
+                            background: none;
+
+                            #selectCategory {
+                                min-width: 300px;
+                                flex-grow: 1;
+                                height: 42px;
+                                border-radius: 5px;
+                                padding: 0 15px;
+                                outline: none;
+                                border: 1px solid var(--gray-300);
+                            }
+
+                            .select-arrow {
+                                position: absolute;
+                                top: 6px;
+                                width: 100%;
+                                height: 32px;
+                                text-align: end;
+                                font-size: 16px;
+                                line-height: 32px;
+                                padding-right: 15px;
+                                outline: none;
+                                cursor: pointer;
+                                background: none;
+                            }
+
+                            .select-arrow::after {
+                                content: "\f078";
+                                font-family: FontAwesome;
+                                color: var(--gray-300);
+                                text-align: right;
+                            }
+                        }
+
+                        .category-option-list {
+                            position: absolute;
+                            overflow: hidden;
+                            max-height: 0;
+                            width: 100%;
+                            left: 0;
+                            top: 50px;
+                            background: white;
+                            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+
+                            ul {
+                                display: flex;
+                                flex-direction: column;
+                                padding: 0;
+                                margin: 0;
+                                max-height: 500px;
+                                overflow-y: scroll;
+                            }
+
+                            .main-category {
+                                position: relative;
+                                display: flex;
+                                justify-content: center;
+                                flex-direction: column;
+                                width: 100%;
+                                height: auto;
+                                border-bottom: 1px solid var(--gray-200);
+
+                                .category-icon {
+                                    display: flex;
+                                    align-items: center;
+                                    padding: 10px 12px;
+
+                                    img {
+                                        margin-right: 10px;
+                                    }
+                                }
+
+                                .category-icon:hover {
+                                    background-color: var(--gray-200);
+                                }
+
+                                .sub-category {
+                                    overflow: hidden;
+                                    max-height: 0;
+                                    transition: max-height 0.3s ease-out;
+                                    align-items: start;
+
+                                    li {
+                                        padding: 6px 0 6px 36px;
+                                    }
+
+                                    li:first-child {
+                                        padding-top: 15px;
+                                    }
+
+                                    li:last-child {
+                                        padding-bottom: 12px;
+                                    }
+                                }
+
+                                .sub-category li:hover {
+                                    color: var(--green-400);
+                                    cursor: pointer;
+                                }
+
+                                .active,
+                                .collapsible {
+                                    right: 6px;
+                                    top: 6px;
+                                    width: 100%;
+                                    height: 100%;
+                                    text-align: end;
+                                    font-size: 16px;
+                                    color: var(--gray-500);
+                                    line-height: 32px;
+                                    outline: none;
+                                    cursor: pointer;
+                                    background: none;
+                                }
+
+                                .collapsible::after {
+                                    content: "\f078";
+                                    font-family: FontAwesome;
+                                    color: var(--gray-300);
+                                    position: absolute;
+                                    right: 10px;
+                                }
+
+                                .active:after {
+                                    content: "\f077";
+                                    font-family: FontAwesome;
+                                }
+                            }
+                        }
+                    }
+
+
+
                 }
             }
         }

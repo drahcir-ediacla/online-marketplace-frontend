@@ -1,14 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg';
 import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-icon.svg';
 import Input from '../../components/FormField/Input';
+import SelectAddListing from '../../components/FormField/SelectAddListing'
 
 const AddListing = () => {
 
-  
+  useEffect(() => {
+    const collapsibleElements = document.getElementsByClassName("collapsible");
+
+    const handleCollapsibleClick = function () {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    };
+
+    for (let i = 0; i < collapsibleElements.length; i++) {
+      collapsibleElements[i].addEventListener("click", handleCollapsibleClick);
+    }
+
+    return () => {
+      // Clean up event listeners when the component unmounts
+      for (let i = 0; i < collapsibleElements.length; i++) {
+        collapsibleElements[i].removeEventListener("click", handleCollapsibleClick);
+      }
+    };
+  }, []);
 
   const [activeRadio, setActiveRadio] = useState(0);
 
@@ -18,7 +43,7 @@ const AddListing = () => {
 
   return (
     <>
-    
+
       <Header />
       <div className="add-listing-body">
         <div className="container">
@@ -40,43 +65,43 @@ const AddListing = () => {
                   <span className='title-video'>Video</span>
                   <div className="upload-vid-options">
                     <div>
-                        <label htmlFor="uploadvidID" class="radio-container">Upload Video
-                            <input
-                                type="radio"
-                                id="uploadvidID"
-                                checked={activeRadio === 0}
-                                className={`${activeRadio === 0 ? 'active' : ''}`}
-                                onClick={() => openContent(0)}
-                            />
-                            <span class="checkmark"></span>
+                      <label htmlFor="uploadvidID" className="radio-container">Upload Video
+                        <input
+                          type="radio"
+                          id="uploadvidID"
+                          checked={activeRadio === 0}
+                          className={`${activeRadio === 0 ? 'active' : ''}`}
+                          onClick={() => openContent(0)}
+                        />
+                        <span className="checkmark"></span>
                       </label>
                     </div>
                     <div>
-                        <label htmlFor="youtubelinkID" class="radio-container">Youtube Link
-                            <input
-                                type="radio"
-                                id="youtubelinkID"
-                                checked={activeRadio === 1}
-                                className={`${activeRadio === 1 ? 'active' : ''}`}
-                                onClick={() => openContent(1)}
-                            />
-                            <span class="checkmark"></span>
-                        </label>
+                      <label htmlFor="youtubelinkID" className="radio-container">Youtube Link
+                        <input
+                          type="radio"
+                          id="youtubelinkID"
+                          checked={activeRadio === 1}
+                          className={`${activeRadio === 1 ? 'active' : ''}`}
+                          onClick={() => openContent(1)}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
                     </div>
                   </div>
                   <div style={{ display: activeRadio === 0 ? 'block' : 'none' }}>
                     <div className='upload-video-content'>
-                        <div className='upload-video-box'>
-                            <div className='addlisting-upload-vid'><UploadVidIcon /></div>
-                            <span>Add Video</span>
-                        </div>
-                        <div>
-                            <ul>
-                                <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
-                                <li>Supported Format: mp4</li>
-                                <li>New Video might take up to 36 hrs to be approved</li>
-                            </ul>
-                        </div>
+                      <div className='upload-video-box'>
+                        <div className='addlisting-upload-vid'><UploadVidIcon /></div>
+                        <span>Add Video</span>
+                      </div>
+                      <div>
+                        <ul>
+                          <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
+                          <li>Supported Format: mp4</li>
+                          <li>New Video might take up to 36 hrs to be approved</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>
@@ -85,7 +110,9 @@ const AddListing = () => {
                 </div>
               </div>
             </div>
-            <div className="col-right"></div>
+            <div className="col-right">
+              <SelectAddListing />
+            </div>
           </div>
         </div>
       </div>

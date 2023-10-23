@@ -58,7 +58,7 @@ const NavCategories = () => {
           </li>
           <li className='main-category'>
             <div className='category-icon'><img src={CategoryIcon5} alt="" />Women’s Fashion</div>
-            <div class="collapsible"></div>
+            <div className="collapsible"></div>
             <ul className='sub-category'>
               <li>Bottoms</li>
               <li>Tops & Sets</li>
@@ -70,7 +70,7 @@ const NavCategories = () => {
           </li>
           <li className='main-category'>
             <div className='category-icon'><img src={CategoryIcon6} alt="" />Men’s Fashion</div>
-            <div class="collapsible"></div>
+            <div className="collapsible"></div>
             <ul className='sub-category'>
               <li>Bottoms</li>
               <li>Tops & Sets</li>
