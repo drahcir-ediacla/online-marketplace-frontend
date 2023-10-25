@@ -27,11 +27,19 @@
         }
     }
 
+    .success {
+        background: rgba(0, 155, 39, 1);
+    }
+
     .success::before {
         content: "\f058";
         font-family: FontAwesome;
         margin-right: 15px;
         font-size: 20px;
+    }
+
+    .error {
+        background: rgba(255, 0, 0, 0.8);
     }
 
     .error::before {

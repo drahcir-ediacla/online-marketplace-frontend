@@ -1,10 +1,73 @@
+// import React, { useState } from 'react';
+// import testData from '../../data/testData.json'
+
+// function FormDropdown() {
+//   const [selectedOption, setSelectedOption] = useState(''); // State to track the selected option
+//   const [isDropdownOpen, setDropdownOpen] = useState(false); // State to track if the dropdown is open
+
+//   const handleOptionClick = (option) => {
+//     setSelectedOption(option);
+//     setDropdownOpen(false);
+//   };
+
+//   const toggleDropdown = () => {
+//     setDropdownOpen(!isDropdownOpen);
+//   };
+
+//   return (
+//     <div>
+//       <h2>Select a Form:</h2>
+//       <div className="custom-dropdown" onClick={toggleDropdown}>
+//         <div className="selected-option">
+//           {selectedOption ? selectedOption : 'Select an option'}
+//         </div>
+//         <ul className={`options ${isDropdownOpen ? 'open' : ''}`}>
+//           {testData.map((option) => (
+//             <li key={option.value} onClick={() => handleOptionClick(option.value)}>
+//               {option.label}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {selectedOption === 'form1' && (
+//         <div>
+//           <h3>Form 1</h3>
+//           {/* Render your Form 1 component here */}
+//         </div>
+//       )}
+
+//       {selectedOption === 'form2' && (
+//         <div>
+//           <h3>Form 2</h3>
+//           {/* Render your Form 2 component here */}
+//         </div>
+//       )}
+
+//       {selectedOption === 'form3' && (
+//         <div>
+//           <h3>Form 3</h3>
+//           {/* Render your Form 3 component here */}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default FormDropdown;
+
+
+
 import React, { useState } from 'react';
 
 const options = [
-  { value: 'option1', label: 'Option 1' },
-  { value: 'option2', label: 'Option 2' },
-  { value: 'option3', label: 'Option 3' },
-  // Add more options as needed
+  { value: 'option1', label: 'Option 1', fields: ['field1', 'field2'] },
+  { value: 'option2', label: 'Option 2', fields: ['field3'] },
+  { value: 'option3', label: 'Option 3', fields: ['field4', 'field5'] },
+  { value: 'option4', label: 'Option 4', children: [
+    { value: 'suboption1', label: 'Suboption 1', fields: ['field6', 'field7'] },
+    { value: 'suboption2', label: 'Suboption 2', fields: ['field8'] },
+  ]}
 ];
 
 function CustomSelect() {
@@ -32,7 +95,7 @@ function CustomSelect() {
     <div className="custom-select">
       <div className={`select-container ${isOpen ? 'open' : ''}`}>
         <div className="selected-option" onClick={toggleDropdown}>
-          {selectedOption.label || 'Select an option'}
+          <input placeholder={selectedOption.label || 'Select an option'} readOnly/>
         </div>
         {isOpen && (
           <div className="options">
@@ -57,19 +120,14 @@ function CustomSelect() {
         )}
       </div>
 
-      {selectedOption.value === 'option1' && (
-        <div>
-          <label>Field 1:</label>
-          <input type="text" name="field1" />
-          <label>Field 2:</label>
-          <input type="text" name="field2" />
-        </div>
-      )}
-
-      {selectedOption.value === 'option2' && (
-        <div>
-          <label>Field 3:</label>
-          <input type="text" name="field3" />
+      {selectedOption.fields && (
+        <div className="form-fields">
+          {selectedOption.fields.map((fieldName) => (
+            <div key={fieldName}>
+              <label>{fieldName}:</label>
+              <input type="text" name={fieldName} />
+            </div>
+          ))}
         </div>
       )}
     </div>

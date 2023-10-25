@@ -57,11 +57,11 @@ const SelectAddListing = () => {
         <>
             <div className="select-category-container">
                 <div className={`wrapper ${isOpen ? 'open' : ''}`}>
-                    <div className="dropdown-category collapsible">
+                    <div className="dropdown-category" onClick={toggleDropdown}>
                         <input type="text" id='selectCategory' value={selectedOption.label || 'Select Category'} readOnly />
                         <div className='select-arrow'></div>
                     </div>
-                    
+                    {isOpen && (
                         <div className="category-option-list">
                             <ul>
                                 <li>
@@ -74,7 +74,7 @@ const SelectAddListing = () => {
                                     console.log(option.label, option.subcategories); // Debugging
 
                                     return (
-                                        <li key={option.value} className='main-category' >
+                                        <li key={option.value} className='main-category'>
                                             <div className={`category-icon ${option.subcategories ? "collapsible" : ""}`}>
                                                 <img src={option.icon} alt="" />
                                                 {option.label}
@@ -93,7 +93,7 @@ const SelectAddListing = () => {
 
                             </ul>
                         </div>
-                    
+                    )}
                 </div>
             </div>
         </>
