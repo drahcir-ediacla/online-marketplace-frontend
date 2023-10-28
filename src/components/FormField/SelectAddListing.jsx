@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as MagnifyingGlass } from "../../assets/images/magnifying-glass.svg";
 import productCategoryData from '../../data/productCategoryData.json';
 
@@ -7,6 +7,7 @@ const SelectAddListing = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState(productCategoryData);
+    const dropDownCategory = useRef(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -33,15 +34,49 @@ const SelectAddListing = () => {
         );
     };
 
-    
+    const handleSubcategoryClick = (clickedSubcategory, category) => {
+        category.subcategories = category.subcategories.map((subcategory) => {
+            if (subcategory === clickedSubcategory) {
+                return { ...subcategory, isOpen: !subcategory.isOpen };
+            } else {
+                return { ...subcategory, isOpen: false };
+            }
+        });
+
+        setCategories([...categories]); // This triggers a re-render
+    };
+
+    const resetCategoryState = () => {
+        setCategories((prevCategories) =>
+            prevCategories.map((category) => {
+                return { ...category, isOpen: false };
+            })
+        );
+    };
+
+
+    useEffect(() => {
+        const handleGlobalClick = event => {
+            if (dropDownCategory.current && !dropDownCategory.current.contains(event.target)) {
+                setIsOpen(false);
+                resetCategoryState();
+            }
+        };
+
+        document.addEventListener('click', handleGlobalClick);
+
+        return () => {
+            document.removeEventListener('click', handleGlobalClick);
+        };
+    }, []);
 
     return (
         <>
             <div className="select-category-container">
-                <div className={`wrapper ${isOpen ? 'open' : ''}`}>
-                    <div className="dropdown-category" onClick={toggleDropdown}>
-                        <input type="text" id='selectCategory' value={selectedOption.label || 'Select Category'} readOnly />
-                        <div className='select-arrow'></div>
+                <div className='wrapper' ref={dropDownCategory}>
+                    <div className={`select-arrow ${isOpen ? 'active' : ''}`} onClick={toggleDropdown}></div>
+                    <div className="dropdown-category">
+                        <input type="text" id='selectCategory' value={selectedOption || 'Select Category'} readOnly />
                     </div>
                     {isOpen && (
                         <div className="category-option-list">
@@ -56,11 +91,10 @@ const SelectAddListing = () => {
                                     if (!category.label.toLowerCase().includes(searchTerm.toLowerCase())) {
                                         return null; // Skip rendering if not matching the search term
                                     }
-
                                     return (
                                         <li key={category.value} className='main-category'>
                                             <div
-                                                className={`category-icon ${category.subcategories ? "collapsible" : ""}`}
+                                                className={`parent-category ${category.subcategories ? "collapsible" : ""} ${category.isOpen && category.subcategories ? "active" : ""}`}
                                                 onClick={() => handleCategoryClick(category)}
                                             >
                                                 <img src={category.icon} alt="" />
@@ -69,7 +103,30 @@ const SelectAddListing = () => {
                                             {category.isOpen && category.subcategories && category.subcategories.length > 0 ? (
                                                 <ul className='sub-category'>
                                                     {category.subcategories.map((subcategory) => (
-                                                        <li key={subcategory.value} onClick={() => handleOptionClick(subcategory)}>{subcategory.label}</li>
+                                                        <li key={subcategory.value}>
+                                                            {subcategory.subcategories ? ( // Check if subcategories exist
+                                                                <div className={`first-level-sub-category collapsible ${subcategory.isOpen ? "active" : ""}`}
+                                                                    onClick={() => handleSubcategoryClick(subcategory, category)}
+                                                                >
+                                                                    {subcategory.label}
+                                                                </div>
+                                                            ) : ( // No subcategories, enable handleOptionClick
+                                                                <div className="first-level-sub-category" onClick={() => handleOptionClick(subcategory.label)}>
+                                                                    {subcategory.label}
+                                                                </div>
+                                                            )}
+                                                            {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
+                                                                <ul className='sub-sub-category'>
+                                                                    {subcategory.subcategories.map((subsubcategory) => (
+                                                                        <li key={subsubcategory.value}>
+                                                                            <div className="second-level-sub-category" onClick={() => handleOptionClick(subsubcategory.label)}>
+                                                                                {subsubcategory.label}
+                                                                            </div>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            ) : null}
+                                                        </li>
                                                     ))}
                                                 </ul>
                                             ) : null}
@@ -80,6 +137,26 @@ const SelectAddListing = () => {
                         </div>
                     )}
                 </div>
+                {selectedOption === 'Nike' && (
+                    <div>
+                        <h3>Nike</h3>
+                        {/* Render your Form 1 component here */}
+                    </div>
+                )}
+
+                {selectedOption === 'Adidas' && (
+                    <div>
+                        <h3>Adidas</h3>
+                        {/* Render your Form 2 component here */}
+                    </div>
+                )}
+
+                {selectedOption === 'New Balance' && (
+                    <div>
+                        <h3>New Balance</h3>
+                        {/* Render your Form 3 component here */}
+                    </div>
+                )}
             </div>
         </>
     );

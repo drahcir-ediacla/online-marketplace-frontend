@@ -18,7 +18,25 @@
         },
         {
             "label": "Footwear",
-            "value": "Footwear"
+            "value": "Footwear",
+            "subcategories": [
+                {
+                    "label": "Nike",
+                    "value": "Nike"
+                },
+                {
+                    "label": "Adidas",
+                    "value": "Adidas"
+                },
+                {
+                    "label": "New Balance",
+                    "value": "New Balance"
+                },
+                {
+                    "label": "Fila",
+                    "value": "Fila"
+                }                 
+            ]
         },
         {
             "label": "Coats & Jackets",

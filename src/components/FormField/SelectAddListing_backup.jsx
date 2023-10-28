@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as MagnifyingGlass } from "../../assets/images/magnifying-glass.svg";
-import productCategoryData from '../../data/productCategoryData.json'
-
-
+import productCategoryData from '../../data/productCategoryData.json';
 
 const SelectAddListing = () => {
-
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const filteredOptions = productCategoryData.filter(option =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const [categories, setCategories] = useState(productCategoryData);
+    const dropDownCategory = useRef(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -26,40 +22,61 @@ const SelectAddListing = () => {
         setSearchTerm(e.target.value);
     }
 
-    useEffect(() => {
-        const collapsibleElements = document.getElementsByClassName("collapsible");
+    const handleCategoryClick = (clickedCategory) => {
+        setCategories((prevCategories) =>
+            prevCategories.map((category) => {
+                if (category === clickedCategory) {
+                    return { ...category, isOpen: !category.isOpen };
+                } else {
+                    return { ...category, isOpen: false };
+                }
+            })
+        );
+    };
 
-        const handleCollapsibleClick = function () {
-            this.classList.toggle("active");
-            const content = this.nextElementSibling;
-
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
+    const handleSubcategoryClick = (clickedSubcategory, category) => {
+        category.subcategories = category.subcategories.map((subcategory) => {
+            if (subcategory === clickedSubcategory) {
+                return { ...subcategory, isOpen: !subcategory.isOpen };
             } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+                return { ...subcategory, isOpen: false };
+            }
+        });
+
+        setCategories([...categories]); // This triggers a re-render
+    };
+
+    const resetCategoryState = () => {
+        setCategories((prevCategories) =>
+            prevCategories.map((category) => {
+                return { ...category, isOpen: false };
+            })
+        );
+    };
+
+
+    useEffect(() => {
+        const handleGlobalClick = event => {
+            if (dropDownCategory.current && !dropDownCategory.current.contains(event.target)) {
+                setIsOpen(false);
+                resetCategoryState();
             }
         };
 
-        for (let i = 0; i < collapsibleElements.length; i++) {
-            collapsibleElements[i].addEventListener("click", handleCollapsibleClick);
-        }
+        document.addEventListener('click', handleGlobalClick);
 
         return () => {
-            // Clean up event listeners when the component unmounts
-            for (let i = 0; i < collapsibleElements.length; i++) {
-                collapsibleElements[i].removeEventListener("click", handleCollapsibleClick);
-            }
+            document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
-
 
     return (
         <>
             <div className="select-category-container">
-                <div className={`wrapper ${isOpen ? 'open' : ''}`}>
-                    <div className="dropdown-category" onClick={toggleDropdown}>
+                <div className='wrapper' ref={dropDownCategory}>
+                    <div className={`select-arrow ${isOpen ? 'active' : ''}`} onClick={toggleDropdown}></div>
+                    <div className="dropdown-category">
                         <input type="text" id='selectCategory' value={selectedOption.label || 'Select Category'} readOnly />
-                        <div className='select-arrow'></div>
                     </div>
                     {isOpen && (
                         <div className="category-option-list">
@@ -70,34 +87,59 @@ const SelectAddListing = () => {
                                         <div className='magnifying-glass'><MagnifyingGlass /></div>
                                     </div>
                                 </li>
-                                {filteredOptions.map((option) => {
-                                    console.log(option.label, option.subcategories); // Debugging
-
+                                {categories.map((category) => {
+                                    if (!category.label.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                        return null; // Skip rendering if not matching the search term
+                                    }
                                     return (
-                                        <li key={option.value} className='main-category'>
-                                            <div className={`category-icon ${option.subcategories ? "collapsible" : ""}`}>
-                                                <img src={option.icon} alt="" />
-                                                {option.label}
+                                        <li key={category.value} className='main-category'>
+                                            <div
+                                                className={`parent-category ${category.subcategories ? "collapsible" : ""} ${category.isOpen && category.subcategories ? "active" : ""}`}
+                                                onClick={() => handleCategoryClick(category)}
+                                            >
+                                                <img src={category.icon} alt="" />
+                                                {category.label}
                                             </div>
-                                            {option.subcategories && option.subcategories.length > 0 ? (
+                                            {category.isOpen && category.subcategories && category.subcategories.length > 0 ? (
                                                 <ul className='sub-category'>
-                                                    {option.subcategories.map((subcategory) => (
-                                                        <li key={subcategory.value} onClick={() => handleOptionClick(subcategory)}>{subcategory.label}</li>
+                                                    {category.subcategories.map((subcategory) => (
+                                                        <li key={subcategory.value}>
+                                                            {subcategory.subcategories ? ( // Check if subcategories exist
+                                                                <div className={`first-level-sub-category collapsible ${subcategory.isOpen ? "active" : ""}`}
+                                                                    onClick={() => handleSubcategoryClick(subcategory, category)}
+                                                                >
+                                                                    {subcategory.label}
+                                                                </div>
+                                                            ) : ( // No subcategories, enable handleOptionClick
+                                                                <div className="first-level-sub-category" onClick={() => handleOptionClick(subcategory)}>
+                                                                    {subcategory.label}
+                                                                </div>
+                                                            )}
+                                                            {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
+                                                                <ul className='sub-sub-category'>
+                                                                    {subcategory.subcategories.map((subsubcategory) => (
+                                                                        <li key={subsubcategory.value} onClick={() => handleOptionClick(subsubcategory)}>
+                                                                            <div className="second-level-sub-category">
+                                                                                {subsubcategory.label}
+                                                                            </div>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            ) : null}
+                                                        </li>
                                                     ))}
                                                 </ul>
                                             ) : null}
                                         </li>
                                     );
                                 })}
-
-
                             </ul>
                         </div>
                     )}
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default SelectAddListing;

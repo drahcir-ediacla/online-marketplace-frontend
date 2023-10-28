@@ -159,7 +159,6 @@
 
                 .select-category-container {
                     position: relative;
-                    display: flex;
                     flex-grow: 1;
                     padding: 30px 20px;
                     background: white;
@@ -170,7 +169,6 @@
                         flex-grow: 1;
 
                         .dropdown-category {
-                            position: relative;
                             display: flex;
                             flex-grow: 1;
                             background: none;
@@ -184,27 +182,34 @@
                                 outline: none;
                                 border: 1px solid var(--gray-300);
                             }
+                        }
 
-                            .select-arrow {
-                                position: absolute;
-                                top: 6px;
-                                width: 100%;
-                                height: 32px;
-                                text-align: end;
-                                font-size: 16px;
-                                line-height: 32px;
-                                padding-right: 15px;
-                                outline: none;
-                                cursor: pointer;
-                                background: none;
-                            }
+                        .select-arrow {
+                            position: absolute;
+                            display: flex;
+                            justify-content: flex-end;
+                            align-items: center;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            font-size: 16px;
+                            line-height: 32px;
+                            padding-right: 15px;
+                            outline: none;
+                            cursor: pointer;
+                            background: none;
+                        }
 
-                            .select-arrow::after {
-                                content: "\f078";
-                                font-family: FontAwesome;
-                                color: var(--gray-300);
-                                text-align: right;
-                            }
+                        .select-arrow::after {
+                            content: "\f078";
+                            font-family: FontAwesome;
+                            color: var(--gray-300);
+                            text-align: right;
+                        }
+
+                        .active:after {
+                            content: "\f077";
+                            font-family: FontAwesome;
                         }
 
                         .category-option-list {
@@ -257,46 +262,71 @@
                                 flex-direction: column;
                                 width: 100%;
                                 height: auto;
-                                border-bottom: 1px solid var(--gray-200);
 
-                                .category-icon {
+                                .parent-category {
                                     display: flex;
                                     align-items: center;
                                     padding: 10px 12px;
+                                    border-top: 1px solid var(--gray-200);
 
                                     img {
                                         margin-right: 10px;
                                     }
                                 }
 
-                                .category-icon:hover {
+                                .parent-category:hover {
                                     background-color: var(--gray-200);
+                                    cursor: pointer;
                                 }
 
                                 .sub-category {
                                     overflow: hidden;
-                                    max-height: auto;
                                     transition: max-height 0.3s ease-out;
                                     align-items: start;
 
                                     li {
-                                        padding: 6px 0 6px 36px;
-                                    }
+                                        width: 100%;
 
+                                        .first-level-sub-category {
+                                            display: flex;
+                                            align-items: center;
+                                            padding: 10px 12px 10px 36px;
+                                            border-top: 1px solid var(--gray-200);
+                                        }
+
+                                        .first-level-sub-category:hover {
+                                            background-color: var(--gray-200);
+                                            cursor: pointer;
+                                        }
+
+                                        ul {
+                                            overflow-y: auto;
+                                            border-top: 1px solid var(--gray-200);
+                                        }
+
+                                        .sub-sub-category {
+                                            overflow: hidden;
+                                            transition: max-height 0.3s ease-out;
+                                            align-items: start;
+
+                                            .second-level-sub-category {
+                                                display: flex;
+                                                align-items: center;
+                                                padding: 10px 12px 10px 50px;
+                                                border-top: 1px solid var(--gray-200);
+                                            }
+                                            .second-level-sub-category:hover {
+                                                background-color: var(--gray-200);
+                                                cursor: pointer;
+                                            }
+                                        }
+
+                                    }
                                     li:first-child {
-                                        padding-top: 15px;
+                                        padding-top: 0;
                                     }
 
-                                    li:last-child {
-                                        padding-bottom: 12px;
-                                    }
                                 }
-
-                                .sub-category li:hover {
-                                    color: var(--green-400);
-                                    cursor: pointer;
-                                }
-
                                 .active,
                                 .collapsible {
                                     right: 6px;
@@ -327,9 +357,6 @@
                             }
                         }
                     }
-
-
-
                 }
             }
         }
