@@ -6,9 +6,10 @@ header{
         font-size: 14px;
         color: white;
         .container{
+            max-width: 1352px;
             display: flex;
             justify-content: space-between;
-            padding: 0;
+            padding: 0 16px;
             .col-left{
                 display: flex;
                 .language-selector{
@@ -159,7 +160,8 @@ header{
         background-color: var(--green-500);
         display: flex;
         .container{
-            padding: 0;
+            max-width: 1352px;
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -332,8 +334,9 @@ header{
         display: flex;
         border-bottom: 1px solid var(--gray-300);
         .container{
+            max-width: 1352px;
             display: flex;
-            padding: 0;
+            padding: 0 16px;
             .nav-menu{
                 display: flex;
                 width: 1320px;

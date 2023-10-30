@@ -1,4 +1,5 @@
 import React from 'react'
+import './style.scss'
 import HeroBanner from '../../components/Hero'
 import Header from '../../layouts/Header'
 import GainGreenBanner from '../../components/GainGreenBanner'
@@ -12,14 +13,14 @@ function Home() {
 
   return (
     <>
-      <Header />
-      <HeroBanner />
-      <GainGreenBanner />
-      <PopularItems />
-      <NewItems />
-      <RecommendedItems />
-      <WhyChooseUs />
-      <Footer />
+        <Header />
+        <HeroBanner />
+        <GainGreenBanner />
+        <PopularItems />
+        <NewItems />
+        <RecommendedItems />
+        <WhyChooseUs />
+        <Footer />
     </>
   )
 }
