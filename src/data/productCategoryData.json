@@ -1,90 +1,186 @@
 [
-    { "label": "Mobile and Electronics", "value": "Mobile and Electronics", "icon": "images/category-icon1.png" },
-    { "label": "Furniture", "value": "Furniture", "icon": "images/category-icon2.png" },
-    { "label": "Home, Garden & DIY", "value": "Home, Garden & DIY", "icon": "images/category-icon3.png" },
-    { "label": "Baby & Kids", "value": "Baby & Kids", "icon": "images/category-icon4.png" },
-    { 
-    "label": "Women's Fashion", 
-    "value": "Women's Fashion", 
-    "icon": "images/category-icon5.png", 
-    "subcategories": [
-        {
-            "label": "Bottoms",
-            "value": "Bottoms"
-        },
-        {
-            "label": "Tops & Sets",
-            "value": "Tops & Sets"
-        },
-        {
-            "label": "Footwear",
-            "value": "Footwear",
-            "subcategories": [
-                {
-                    "label": "Nike",
-                    "value": "Nike"
-                },
-                {
-                    "label": "Adidas",
-                    "value": "Adidas"
-                },
-                {
-                    "label": "New Balance",
-                    "value": "New Balance"
-                },
-                {
-                    "label": "Fila",
-                    "value": "Fila"
-                }                 
-            ]
-        },
-        {
-            "label": "Coats & Jackets",
-            "value": "Coats & Jackets"
-        },
-        {
-            "label": "Bags",
-            "value": "Bags"
-        },
-        {
-            "label": "Watches and Accessories",
-            "value": "Watches and Accessories"
-        }
-    ]
+    {
+        "label": "Mobile and Electronics",
+        "value": "Mobile and Electronics",
+        "icon": "images/category-icon1.png",
+        "subcategories": []
     },
-    { 
-    "label": "Men's Fashion", 
-    "value": "Men's Fashion", 
-    "icon": "images/category-icon6.png",
-    "subcategories": [
-        {
-            "label": "Bottoms",
-            "value": "Bottoms"
-        },
-        {
-            "label": "Tops & Sets",
-            "value": "Tops & Sets"
-        },
-        {
-            "label": "Footwear",
-            "value": "Footwear"
-        },
-        {
-            "label": "Coats & Jackets",
-            "value": "Coats & Jackets"
-        },
-        {
-            "label": "Bags",
-            "value": "Bags"
-        },
-        {
-            "label": "Watches and Accessories",
-            "value": "Watches and Accessories"
-        }
-    ] 
+    {
+        "label": "Furniture",
+        "value": "Furniture",
+        "icon": "images/category-icon2.png",
+        "subcategories": []
     },
-    { "label": "Health & Beauty", "value": "Health & Beauty", "icon": "images/category-icon7.png" },
-    { "label": "Sports & Leisure", "value": "Sports & Leisure", "icon": "images/category-icon8.png" },
-    { "label": "Games, Hobbies & Crafts", "value": "Games, Hobbies & Crafts", "icon": "images/category-icon9.png" },
-    { "label": "Book, Music & Tickets", "value": "Book, Music & Tickets", "icon": "images/category-icon10.png" }
+    {
+        "label": "Home, Garden & DIY",
+        "value": "Home, Garden & DIY",
+        "icon": "images/category-icon3.png",
+        "subcategories": []
+    },
+    {
+        "label": "Baby & Kids",
+        "value": "Baby & Kids",
+        "icon": "images/category-icon4.png",
+        "subcategories": []
+    },
+    {
+        "label": "Women's Fashion",
+        "value": "Women's Fashion",
+        "icon": "images/category-icon5.png",
+        "subcategories": [
+            {
+                "label": "Bottoms",
+                "value": "Bottoms",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Tops & Sets",
+                "value": "Tops & Sets",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Footwear",
+                "value": "Footwear",
+                "icon": "",
+                "subcategories": [
+                    {
+                        "label": "Nike",
+                        "value": "Nike",
+                        "icon": "",
+                        "subcategories": []
+                    },
+                    {
+                        "label": "Adidas",
+                        "value": "Adidas",
+                        "icon": "",
+                        "subcategories": []
+                    },
+                    {
+                        "label": "New Balance",
+                        "value": "New Balance",
+                        "icon": "",
+                        "subcategories": []
+                    },
+                    {
+                        "label": "Fila",
+                        "value": "Fila",
+                        "icon": "",
+                        "subcategories": []
+                    }
+                ]
+            },
+            {
+                "label": "Coats & Jackets",
+                "value": "Coats & Jackets",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Bags",
+                "value": "Bags",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Watches and Accessories",
+                "value": "Watches and Accessories",
+                "icon": "",
+                "subcategories": []
+            }
+        ]
+    },
+    {
+        "label": "Men's Fashion",
+        "value": "Men's Fashion",
+        "icon": "images/category-icon6.png",
+        "subcategories": [
+            {
+                "label": "Bottoms",
+                "value": "Bottoms",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Tops & Sets",
+                "value": "Tops & Sets",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Footwear",
+                "value": "Footwear",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Coats & Jackets",
+                "value": "Coats & Jackets",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Bags",
+                "value": "Bags",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Watches and Accessories",
+                "value": "Watches and Accessories",
+                "icon": "",
+                "subcategories": []
+            }
+        ]
+    },
+    {
+        "label": "Health & Beauty",
+        "value": "Health & Beauty",
+        "icon": "images/category-icon7.png",
+        "subcategories": []
+    },
+    {
+        "label": "Sports & Leisure",
+        "value": "Sports & Leisure",
+        "icon": "images/category-icon8.png",
+        "subcategories": [
+            {
+                "label": "Nike",
+                "value": "Nike",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Adidas",
+                "value": "Adidas",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "New Balance",
+                "value": "New Balance",
+                "icon": "",
+                "subcategories": []
+            },
+            {
+                "label": "Fila",
+                "value": "Fila",
+                "icon": "",
+                "subcategories": []
+            }
+        ]
+    },
+    {
+        "label": "Games, Hobbies & Crafts",
+        "value": "Games, Hobbies & Crafts",
+        "icon": "images/category-icon9.png",
+        "subcategories": []
+    },
+    {
+        "label": "Book, Music & Tickets",
+        "value": "Book, Music & Tickets",
+        "icon": "images/category-icon10.png",
+        "subcategories": []
+    }
 ]

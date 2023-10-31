@@ -76,7 +76,7 @@ const SelectAddListing = () => {
                 <div className='wrapper' ref={dropDownCategory}>
                     <div className={`select-arrow ${isOpen ? 'active' : ''}`} onClick={toggleDropdown}></div>
                     <div className="dropdown-category">
-                        <input type="text" id='selectCategory' value={selectedOption.label || 'Select Category'} readOnly />
+                        <input type="text" id='selectCategory' value={selectedOption || 'Select Category'} readOnly />
                     </div>
                     {isOpen && (
                         <div className="category-option-list">
@@ -111,15 +111,15 @@ const SelectAddListing = () => {
                                                                     {subcategory.label}
                                                                 </div>
                                                             ) : ( // No subcategories, enable handleOptionClick
-                                                                <div className="first-level-sub-category" onClick={() => handleOptionClick(subcategory)}>
+                                                                <div className="first-level-sub-category" onClick={() => handleOptionClick(subcategory.label)}>
                                                                     {subcategory.label}
                                                                 </div>
                                                             )}
                                                             {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
                                                                 <ul className='sub-sub-category'>
                                                                     {subcategory.subcategories.map((subsubcategory) => (
-                                                                        <li key={subsubcategory.value} onClick={() => handleOptionClick(subsubcategory)}>
-                                                                            <div className="second-level-sub-category">
+                                                                        <li key={subsubcategory.value}>
+                                                                            <div className="second-level-sub-category" onClick={() => handleOptionClick(subsubcategory.label)}>
                                                                                 {subsubcategory.label}
                                                                             </div>
                                                                         </li>
@@ -137,6 +137,26 @@ const SelectAddListing = () => {
                         </div>
                     )}
                 </div>
+                {selectedOption === 'Nike' && (
+                    <div>
+                        <h3>Nike</h3>
+                        {/* Render your Form 1 component here */}
+                    </div>
+                )}
+
+                {selectedOption === 'Adidas' && (
+                    <div>
+                        <h3>Adidas</h3>
+                        {/* Render your Form 2 component here */}
+                    </div>
+                )}
+
+                {selectedOption === 'New Balance' && (
+                    <div>
+                        <h3>New Balance</h3>
+                        {/* Render your Form 3 component here */}
+                    </div>
+                )}
             </div>
         </>
     );
