@@ -57,7 +57,7 @@ const SelectAddListing = () => {
 
     useEffect(() => {
         // Fetch data from the API endpoint
-        fetch("http://localhost:8081/api/getProductCategories")
+        fetch("https://yogeek-server.onrender.com/api/getProductCategories")
             .then((response) => response.json())
             .then((data) => setCategories(data))
             .catch((error) => console.error("Error fetching data:", error));
