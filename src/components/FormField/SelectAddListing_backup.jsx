@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as MagnifyingGlass } from "../../assets/images/magnifying-glass.svg";
-import productCategoryData from '../../data/productCategoryData.json';
+import axios from '../../apicalls/axios'
+import Input from '../../components/FormField/Input'
+import RadioButton from '../../components/FormField/RadioButton'
+import TextArea from '../../components/FormField/TextArea'
+import CheckBox from '../../components/FormField/CheckBox/CheckBox'
+import CheckboxWithTextarea from '../../components/FormField/CheckBox/CheckboxWithTextarea'
+import BtnGreen from '../../components/Button/BtnGreen'
+
 
 const SelectAddListing = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState(productCategoryData);
+    const [categories, setCategories] = useState([]);
     const dropDownCategory = useRef(null);
+    const [condition, setCondition] = useState('Brand New')
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -21,6 +29,10 @@ const SelectAddListing = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     }
+
+    const handleConditionChange = (event) => {
+        setCondition(event.target.value);
+    };
 
     const handleCategoryClick = (clickedCategory) => {
         setCategories((prevCategories) =>
@@ -56,7 +68,20 @@ const SelectAddListing = () => {
 
 
     useEffect(() => {
-        const handleGlobalClick = event => {
+        // Fetch data from the API endpoint
+        axios.get("/api/getProductCategories")
+            .then((response) => {
+                // Handle the success response here
+                setCategories(response.data);
+            })
+            .catch((error) => {
+                // Handle any errors that occurred during the request
+                console.error("Error fetching data:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        const handleGlobalClick = (event) => {
             if (dropDownCategory.current && !dropDownCategory.current.contains(event.target)) {
                 setIsOpen(false);
                 resetCategoryState();
@@ -94,7 +119,7 @@ const SelectAddListing = () => {
                                     return (
                                         <li key={category.value} className='main-category'>
                                             <div
-                                                className={`parent-category ${category.subcategories ? "collapsible" : ""} ${category.isOpen && category.subcategories ? "active" : ""}`}
+                                                className={`parent-category ${category.subcategories.length > 0 ? "collapsible" : ""} ${category.isOpen && category.subcategories.length > 0 ? "active" : ""}`}
                                                 onClick={() => handleCategoryClick(category)}
                                             >
                                                 <img src={category.icon} alt="" />
@@ -104,17 +129,17 @@ const SelectAddListing = () => {
                                                 <ul className='sub-category'>
                                                     {category.subcategories.map((subcategory) => (
                                                         <li key={subcategory.value}>
-                                                            {subcategory.subcategories ? ( // Check if subcategories exist
-                                                                <div className={`first-level-sub-category collapsible ${subcategory.isOpen ? "active" : ""}`}
-                                                                    onClick={() => handleSubcategoryClick(subcategory, category)}
-                                                                >
-                                                                    {subcategory.label}
-                                                                </div>
-                                                            ) : ( // No subcategories, enable handleOptionClick
-                                                                <div className="first-level-sub-category" onClick={() => handleOptionClick(subcategory.label)}>
-                                                                    {subcategory.label}
-                                                                </div>
-                                                            )}
+                                                            <div className={`first-level-sub-category ${subcategory.subcategories.length > 0 ? "collapsible" : ""} ${subcategory.isOpen && subcategory.subcategories.length > 0 ? "active" : ""}`}
+                                                                onClick={() => {
+                                                                    if (subcategory.subcategories.length === 0) {
+                                                                        handleOptionClick(subcategory.label);
+                                                                    } else {
+                                                                        handleSubcategoryClick(subcategory, category);
+                                                                    }
+                                                                }}>
+                                                                {subcategory.label}
+                                                            </div>
+
                                                             {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
                                                                 <ul className='sub-sub-category'>
                                                                     {subcategory.subcategories.map((subsubcategory) => (
@@ -138,9 +163,90 @@ const SelectAddListing = () => {
                     )}
                 </div>
                 {selectedOption === 'Nike' && (
-                    <div>
-                        <h3>Nike</h3>
-                        {/* Render your Form 1 component here */}
+                    <div className="add-prod-details-form">
+                        <div>
+                            <label>Title</label>
+                            <Input
+                                type='text'
+                                id='listingTitleID'
+                                name='title'
+                                className='listing-input-field'
+                                placeholder='Listing Title'
+                            ></Input>
+                        </div>
+                        <h3>About the item</h3>
+                        <div>
+                            <label>Condition</label>
+                            <div className="product-conditions">
+                                <RadioButton
+                                    id="brandNewID"
+                                    name="brandNew"
+                                    value="Brand New"
+                                    label="Brand New"
+                                    checked={condition === 'Brand New'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="likeNewID"
+                                    name="likeNew"
+                                    value="Like New"
+                                    label="Like New"
+                                    checked={condition === 'Like New'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="lightlyUsedID"
+                                    name="lightlyUsed"
+                                    value="Lightly Used"
+                                    label="Lightly Used"
+                                    checked={condition === 'Lightly Used'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="wellUsedID"
+                                    name="wellUsed"
+                                    value="Well Used"
+                                    label="Well Used"
+                                    checked={condition === 'Well Used'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="heavilyUsedID"
+                                    name="heavilyUsed"
+                                    value="Heavily Used"
+                                    label="Heavily Used"
+                                    checked={condition === 'Heavily Used'}
+                                    onChange={handleConditionChange}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label>Price</label>
+                            <Input
+                                type='text'
+                                id='listingTitleID'
+                                name='listingTitle'
+                                className='listing-input-field'
+                                placeholder='Price of your listing'
+                            ></Input>
+                        </div>
+                        <div>
+                            <label>Description</label>
+                            <div>
+                                <TextArea
+                                    id='listingDescID'
+                                    name='listingDesc'
+                                    className='listing-description'
+                                    placeholder="Type the details of your product here..."
+                                    rows='7' />
+                            </div>
+                        </div>
+                        <h3>Deal Method</h3>
+                        <div>
+                            <CheckBox label='Meet Up' />
+                            <CheckboxWithTextarea label='Mailing & Delivery' />
+                        </div>
+                        <BtnGreen label='List Now' />
                     </div>
                 )}
 

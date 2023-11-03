@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -22,7 +22,7 @@ const AddListing = () => {
 
       <Header />
       <div className="add-listing-body">
-        <div className="container">
+        <form className="container">
           <h3>What are you listing today?</h3>
           <div className="box">
             <div className="col-left">
@@ -90,7 +90,7 @@ const AddListing = () => {
               <SelectAddListing />
             </div>
           </div>
-        </div>
+        </form>
       </div>
       <Footer />
     </>

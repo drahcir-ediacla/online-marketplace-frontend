@@ -221,6 +221,7 @@
                             top: 50px;
                             background: white;
                             box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+                            z-index: 990;
 
                             ul {
                                 display: flex;
@@ -315,6 +316,7 @@
                                                 padding: 10px 12px 10px 50px;
                                                 border-top: 1px solid var(--gray-200);
                                             }
+
                                             .second-level-sub-category:hover {
                                                 background-color: var(--gray-200);
                                                 cursor: pointer;
@@ -322,11 +324,13 @@
                                         }
 
                                     }
+
                                     li:first-child {
                                         padding-top: 0;
                                     }
 
                                 }
+
                                 .active,
                                 .collapsible {
                                     right: 6px;
@@ -355,6 +359,39 @@
                                     font-family: FontAwesome;
                                 }
                             }
+                        }
+                    }
+
+                    .add-prod-details-form {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 30px;
+                        margin-top: 42px;
+
+                        label {
+                            font-weight: 500;
+                            margin-bottom: 10px;
+                        }
+                        h3 {
+                            margin: 0;
+                        }
+
+                        .listing-input-field {
+                            width: 100%;
+                        }
+
+                        .product-conditions {
+                            display: flex;
+                            gap: 35px;
+
+                            label {
+                                font-weight: 400;
+                                margin: 0;
+                            }
+                        }
+
+                        .listing-description {
+                            width: 100%;
                         }
                     }
                 }

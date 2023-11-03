@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as MagnifyingGlass } from "../../assets/images/magnifying-glass.svg";
+import axios from '../../apicalls/axios'
+import Input from '../../components/FormField/Input'
+import RadioButton from '../../components/FormField/RadioButton'
+import TextArea from '../../components/FormField/TextArea'
+import CheckBox from '../../components/FormField/CheckBox/CheckBox'
+import CheckboxWithTextarea from '../../components/FormField/CheckBox/CheckboxWithTextarea'
+import BtnGreen from '../../components/Button/BtnGreen'
 
 
 const SelectAddListing = () => {
@@ -8,6 +15,7 @@ const SelectAddListing = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const dropDownCategory = useRef(null);
+    const [condition, setCondition] = useState('Brand New')
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -21,6 +29,10 @@ const SelectAddListing = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     }
+
+    const handleConditionChange = (event) => {
+        setCondition(event.target.value);
+    };
 
     const handleCategoryClick = (clickedCategory) => {
         setCategories((prevCategories) =>
@@ -56,10 +68,8 @@ const SelectAddListing = () => {
 
 
     useEffect(() => {
-        // Fetch data from the API endpoint
-        fetch("https://yogeek-server.onrender.com/api/getProductCategories")
-            .then((response) => response.json())
-            .then((data) => setCategories(data))
+        axios.get("/api/getProductCategories")
+            .then((response) => setCategories(response.data))
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
@@ -145,10 +155,92 @@ const SelectAddListing = () => {
                         </div>
                     )}
                 </div>
+
                 {selectedOption === 'Nike' && (
-                    <div>
-                        <h3>Nike</h3>
-                        {/* Render your Form 1 component here */}
+                    <div className="add-prod-details-form">
+                        <div>
+                            <label>Title</label>
+                            <Input
+                                type='text'
+                                id='listingTitleID'
+                                name='title'
+                                className='listing-input-field'
+                                placeholder='Listing Title'
+                            ></Input>
+                        </div>
+                        <h3>About the item</h3>
+                        <div>
+                            <label>Condition</label>
+                            <div className="product-conditions">
+                                <RadioButton
+                                    id="brandNewID"
+                                    name="brandNew"
+                                    value="Brand New"
+                                    label="Brand New"
+                                    checked={condition === 'Brand New'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="likeNewID"
+                                    name="likeNew"
+                                    value="Like New"
+                                    label="Like New"
+                                    checked={condition === 'Like New'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="lightlyUsedID"
+                                    name="lightlyUsed"
+                                    value="Lightly Used"
+                                    label="Lightly Used"
+                                    checked={condition === 'Lightly Used'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="wellUsedID"
+                                    name="wellUsed"
+                                    value="Well Used"
+                                    label="Well Used"
+                                    checked={condition === 'Well Used'}
+                                    onChange={handleConditionChange}
+                                />
+                                <RadioButton
+                                    id="heavilyUsedID"
+                                    name="heavilyUsed"
+                                    value="Heavily Used"
+                                    label="Heavily Used"
+                                    checked={condition === 'Heavily Used'}
+                                    onChange={handleConditionChange}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label>Price</label>
+                            <Input
+                                type='text'
+                                id='listingTitleID'
+                                name='listingTitle'
+                                className='listing-input-field'
+                                placeholder='Price of your listing'
+                            ></Input>
+                        </div>
+                        <div>
+                            <label>Description</label>
+                            <div>
+                                <TextArea
+                                    id='listingDescID'
+                                    name='listingDesc'
+                                    className='listing-description'
+                                    placeholder="Type the details of your product here..."
+                                    rows='7' />
+                            </div>
+                        </div>
+                        <h3>Deal Method</h3>
+                        <div>
+                            <CheckBox label='Meet Up' />
+                            <CheckboxWithTextarea label='Mailing & Delivery' />
+                        </div>
+                        <BtnGreen label='List Now' />
                     </div>
                 )}
 
@@ -163,6 +255,13 @@ const SelectAddListing = () => {
                     <div>
                         <h3>New Balance</h3>
                         {/* Render your Form 3 component here */}
+                    </div>
+                )}
+
+                {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && (
+                    <div className="default-form">
+                        <h3>Default Form</h3>
+                        {/* Default form content */}
                     </div>
                 )}
             </div>
