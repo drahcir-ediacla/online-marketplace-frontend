@@ -69,7 +69,7 @@ const LoginEmailForm = () => {
       dispatch(Setloader(false))
 
       console.log('Login successful', response.data);
-      document.cookie = `jwt=${response.data.accessToken}; httpOnly: true; sameSite: 'none'; secure: true; max-age=86400; path=/`;
+      document.cookie = `jwt=${response.data.accessToken}; HttpOnly=true; SameSite=None; Secure=true; Max-Age=86400; Path=/`;
       navigate('/');
     } catch (err) {
       dispatch(Setloader(false))
