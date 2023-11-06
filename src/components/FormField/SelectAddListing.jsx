@@ -20,7 +20,7 @@ const SelectAddListing = () => {
         product_name: '',
         description: '',
         price: 0, // You can set a default value
-        category_id: null, // Set the selected category's ID here
+        category_id: "8", // Set the selected category's ID here
     });
     
 
@@ -96,17 +96,19 @@ const SelectAddListing = () => {
     }, []);
 
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (event) => {
+        event.preventDefault(); // Prevent the default form submission behavior
+    
         axios.post("/api/addnewproduct", productDetails)
             .then((response) => {
-                // Handle the success response if needed
                 console.log("Product added successfully:", response.data);
             })
             .catch((error) => {
-                // Handle the error response if there's an issue with adding the product
                 console.error("Error adding product:", error);
             });
     };
+    
+    
 
 
     return (
