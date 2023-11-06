@@ -372,8 +372,28 @@
                             font-weight: 500;
                             margin-bottom: 10px;
                         }
+
                         h3 {
                             margin: 0;
+                        }
+
+                        .listing-price-container {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+
+                            .listing-currency {
+                                position: absolute;
+                                font-size: 18px;
+                                font-weight: 500;
+                                padding: 0 15px;
+                            }
+
+                            .listing-price-input-field {
+                                width: 100%;
+                                padding-left: 30px;
+                            }
+
                         }
 
                         .listing-input-field {

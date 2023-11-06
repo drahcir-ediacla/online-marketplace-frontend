@@ -15,7 +15,14 @@ const SelectAddListing = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const dropDownCategory = useRef(null);
-    const [condition, setCondition] = useState('Brand New')
+    const [condition, setCondition] = useState('Brand New');
+    const [productDetails, setProductDetails] = useState({
+        product_name: '',
+        description: '',
+        price: 0, // You can set a default value
+        category_id: null, // Set the selected category's ID here
+    });
+    
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -68,7 +75,7 @@ const SelectAddListing = () => {
 
 
     useEffect(() => {
-        axios.get("/api/getProductCategories")
+        axios.get("/api/getproductcategories")
             .then((response) => setCategories(response.data))
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
@@ -87,6 +94,20 @@ const SelectAddListing = () => {
             document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
+
+
+    const handleFormSubmit = () => {
+        axios.post("/api/addnewproduct", productDetails)
+            .then((response) => {
+                // Handle the success response if needed
+                console.log("Product added successfully:", response.data);
+            })
+            .catch((error) => {
+                // Handle the error response if there's an issue with adding the product
+                console.error("Error adding product:", error);
+            });
+    };
+
 
     return (
         <>
@@ -157,90 +178,8 @@ const SelectAddListing = () => {
                 </div>
 
                 {selectedOption === 'Nike' && (
-                    <div className="add-prod-details-form">
-                        <div>
-                            <label>Title</label>
-                            <Input
-                                type='text'
-                                id='listingTitleID'
-                                name='title'
-                                className='listing-input-field'
-                                placeholder='Listing Title'
-                            ></Input>
-                        </div>
-                        <h3>About the item</h3>
-                        <div>
-                            <label>Condition</label>
-                            <div className="product-conditions">
-                                <RadioButton
-                                    id="brandNewID"
-                                    name="brandNew"
-                                    value="Brand New"
-                                    label="Brand New"
-                                    checked={condition === 'Brand New'}
-                                    onChange={handleConditionChange}
-                                />
-                                <RadioButton
-                                    id="likeNewID"
-                                    name="likeNew"
-                                    value="Like New"
-                                    label="Like New"
-                                    checked={condition === 'Like New'}
-                                    onChange={handleConditionChange}
-                                />
-                                <RadioButton
-                                    id="lightlyUsedID"
-                                    name="lightlyUsed"
-                                    value="Lightly Used"
-                                    label="Lightly Used"
-                                    checked={condition === 'Lightly Used'}
-                                    onChange={handleConditionChange}
-                                />
-                                <RadioButton
-                                    id="wellUsedID"
-                                    name="wellUsed"
-                                    value="Well Used"
-                                    label="Well Used"
-                                    checked={condition === 'Well Used'}
-                                    onChange={handleConditionChange}
-                                />
-                                <RadioButton
-                                    id="heavilyUsedID"
-                                    name="heavilyUsed"
-                                    value="Heavily Used"
-                                    label="Heavily Used"
-                                    checked={condition === 'Heavily Used'}
-                                    onChange={handleConditionChange}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label>Price</label>
-                            <Input
-                                type='text'
-                                id='listingTitleID'
-                                name='listingTitle'
-                                className='listing-input-field'
-                                placeholder='Price of your listing'
-                            ></Input>
-                        </div>
-                        <div>
-                            <label>Description</label>
-                            <div>
-                                <TextArea
-                                    id='listingDescID'
-                                    name='listingDesc'
-                                    className='listing-description'
-                                    placeholder="Type the details of your product here..."
-                                    rows='7' />
-                            </div>
-                        </div>
-                        <h3>Deal Method</h3>
-                        <div>
-                            <CheckBox label='Meet Up' />
-                            <CheckboxWithTextarea label='Mailing & Delivery' />
-                        </div>
-                        <BtnGreen label='List Now' />
+                    <div>
+                        <h3>Nike</h3>
                     </div>
                 )}
 
@@ -259,10 +198,101 @@ const SelectAddListing = () => {
                 )}
 
                 {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && (
-                    <div className="default-form">
-                        <h3>Default Form</h3>
-                        {/* Default form content */}
+                    <div className="add-prod-details-form">
+                    <div>
+                        <label>Title</label>
+                        <Input
+                            type='text'
+                            id='listingTitleID'
+                            name='product_name'
+                            value={productDetails.product_name}
+                            className='listing-input-field'
+                            placeholder='Listing Title'
+                            onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
+                        />
                     </div>
+                    <h3>About the item</h3>
+                    <div>
+                        <label>Condition</label>
+                        <div className="product-conditions">
+                            <RadioButton
+                                id="brandNewID"
+                                name="brandNew"
+                                value="Brand New"
+                                label="Brand New"
+                                checked={condition === 'Brand New'}
+                                onChange={handleConditionChange}
+                            />
+                            <RadioButton
+                                id="likeNewID"
+                                name="likeNew"
+                                value="Like New"
+                                label="Like New"
+                                checked={condition === 'Like New'}
+                                onChange={handleConditionChange}
+                            />
+                            <RadioButton
+                                id="lightlyUsedID"
+                                name="lightlyUsed"
+                                value="Lightly Used"
+                                label="Lightly Used"
+                                checked={condition === 'Lightly Used'}
+                                onChange={handleConditionChange}
+                            />
+                            <RadioButton
+                                id="wellUsedID"
+                                name="wellUsed"
+                                value="Well Used"
+                                label="Well Used"
+                                checked={condition === 'Well Used'}
+                                onChange={handleConditionChange}
+                            />
+                            <RadioButton
+                                id="heavilyUsedID"
+                                name="heavilyUsed"
+                                value="Heavily Used"
+                                label="Heavily Used"
+                                checked={condition === 'Heavily Used'}
+                                onChange={handleConditionChange}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label>Price</label>
+                        <div className="listing-price-container">
+                            <div className="listing-currency">₱</div>
+                            <Input
+                                type='number'
+                                id='listingPriceID'
+                                name='price'
+                                value={productDetails.price}
+                                className='listing-price-input-field'
+                                placeholder='Price of your listing'
+                                onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <div>
+                            <TextArea
+                                id='listingDescID'
+                                name='description'
+                                value={productDetails.description}
+                                className='listing-description'
+                                placeholder="Type the details of your product here..."
+                                rows='7' 
+                                onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                    <h3>Deal Method</h3>
+                    <div>
+                        <CheckBox label='Meet Up' />
+                        <CheckboxWithTextarea label='Mailing & Delivery' />
+                    </div>
+                    <BtnGreen label='List Now' onClick={handleFormSubmit} />
+                </div>
                 )}
             </div>
         </>
