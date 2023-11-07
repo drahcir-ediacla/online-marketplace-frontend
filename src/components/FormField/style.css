@@ -288,7 +288,3 @@ input[type="number"]::-webkit-outer-spin-button {
     appearance: none;
 }
 
-/* For Firefox */
-input[type="number"] {
-    -moz-appearance: textfield;
-}
