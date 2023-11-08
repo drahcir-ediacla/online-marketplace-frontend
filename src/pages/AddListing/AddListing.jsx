@@ -3,6 +3,7 @@ import axios from '../../apicalls/axios'
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import { ReactComponent as MagnifyingGlass } from "../../assets/images/magnifying-glass.svg";
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg';
 import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-icon.svg';
@@ -12,9 +13,12 @@ import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import CheckboxWithTextarea from '../../components/FormField/CheckBox/CheckboxWithTextarea'
 import BtnGreen from '../../components/Button/BtnGreen'
+import BtnClear from '../../components/Button/BtnClear';
+import { useDispatch } from 'react-redux';
 
 const AddListing = () => {
 
+  const dispatch = useDispatch()
   const [activeRadio, setActiveRadio] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
@@ -42,7 +46,7 @@ const AddListing = () => {
   const handleOptionClick = (option) => {
     // Find the category or subcategory object based on the selectedOption
     let selectedCategory = categories.find((category) => category.label === option);
-  
+
     // If the selectedOption is not found in the top-level categories, search subcategories
     if (!selectedCategory) {
       for (const category of categories) {
@@ -52,7 +56,7 @@ const AddListing = () => {
         }
       }
     }
-  
+
     if (selectedCategory) {
       setSelectedOption(option); // Update the selectedOption
       setProductDetails({
@@ -60,10 +64,10 @@ const AddListing = () => {
         category_id: selectedCategory.id, // Set the category ID
       });
     }
-  
+
     setIsOpen(false);
   };
-  
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -72,13 +76,13 @@ const AddListing = () => {
   const handleConditionChange = (event) => {
     const selectedCondition = event.target.value;
     setCondition(selectedCondition); // Update the local state
-  
+
     setProductDetails({
       ...productDetails,
       product_condition: selectedCondition, // Set the product_condition in productDetails
     });
   };
-  
+
 
   const handleCategoryClick = (clickedCategory) => {
     setCategories((prevCategories) =>
@@ -118,7 +122,7 @@ const AddListing = () => {
       .then((response) => setCategories(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
-  
+
 
   useEffect(() => {
     const handleGlobalClick = (event) => {
@@ -136,20 +140,113 @@ const AddListing = () => {
   }, []);
 
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
-    axios.post("/api/addnewproduct", productDetails)
-      .then((response) => {
-        console.log("Product added successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error adding product:", error);
-      });
+  const maxImages = 10; // Define the maximum number of images allowed
+
+  const handleImgInputClick = () => {
+    document.getElementById('imgUpload').click();
   };
 
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const selectedImagesArray = Array.from(files);
+
+    if (selectedImagesArray.length + selectedImages.length > maxImages) {
+      alert(`You can only select up to ${maxImages} images.`);
+      return;
+    }
+
+    const imagePreviewsArray = [];
+
+    selectedImagesArray.forEach((image) => {
+      if (!image.type.startsWith('image/')) {
+        alert('Only image files are allowed.');
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        imagePreviewsArray.push(e.target.result);
+        if (imagePreviewsArray.length === selectedImagesArray.length) {
+          setImagePreviews((prevPreviews) => [...prevPreviews, ...imagePreviewsArray]);
+          setSelectedImages((prevImages) => [...prevImages, ...selectedImagesArray]);
+        }
+      };
+
+      reader.readAsDataURL(image);
+    });
+  };
+
+  const removeImage = (index) => {
+    const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
+    const updatedImages = selectedImages.filter((_, i) => i !== index);
+    setImagePreviews(updatedPreviews);
+    setSelectedImages(updatedImages);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
   
+    // Create an array to store image URLs
+    const imageUrls = [];
   
+    // Create a FormData object to send the form data
+    const formData = new FormData();
+    formData.append('upload_preset', 'auwcvbw0');
+    formData.append('cloud_name', 'yogeek-cloudinary');
+    formData.append('folder', 'product_images');
+  
+    // Append product details to the FormData
+    for (const key in productDetails) {
+      formData.append(key, productDetails[key]);
+    }
+  
+    // Upload selected images to Cloudinary
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append('file', selectedImages[i]); // Append images directly to the main FormData
+  
+      try {
+        dispatch(Setloader(true))
+        const response = await fetch(
+          'https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload',
+          {
+            method: 'POST',
+            body: formData, // Use the main FormData
+          }
+        );
+  
+        if (response.ok) {
+          const data = await response.json();
+          const imageUrl = data.secure_url; // Get the secure URL from Cloudinary response
+          imageUrls.push(imageUrl); // Add the URL to the array
+        } else {
+          console.error('Error uploading image to Cloudinary:', response.statusText);
+        }
+      } catch ({ error, response }) {
+        console.error('Error uploading image to Cloudinary:', error);
+        console.log('Response:', response);
+      }
+    }
+  
+    // After all images are uploaded, add the image URLs to the productDetails
+    productDetails.imageUrls = imageUrls;
+  
+    // Send the form data (including image URLs) to your backend
+    axios.post('/api/addnewproduct', productDetails)
+      .then((response) => {
+        dispatch(Setloader(false))
+        console.log('Product added successfully:', response.data);
+      })
+      .catch((error) => {
+        dispatch(Setloader(false))
+        console.error('Error adding the product:', error);
+      });
+  };
+  
+
 
   return (
     <>
@@ -166,11 +263,22 @@ const AddListing = () => {
                     <UploadImgIcon />
                   </div>
                   <div>
-                    Add Image
-                    <div>(0/10 photos)</div>
+                    <label htmlFor="imgUpload" className="custom-file-upload">
+                      <BtnClear type='button' label='Add Image' className='add-img-btn' onClick={handleImgInputClick} />
+                    </label>
+                    <input type="file" id="imgUpload" multiple accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+                    <div>(Maximum of 10 photos)</div>
                   </div>
                 </div>
-                <span className="atleast-one-photo">Add at least 1 photo.</span>
+                {/* <span className="atleast-one-photo">Add at least 1 photo.</span> */}
+                <div className="upload-img-preview-container">
+                  {imagePreviews.map((preview, index) => (
+                    <div className="upload-img-box" key={index}>
+                      <img src={preview} alt={`Img ${index}`} className='upload-img-preview' />
+                      <div onClick={() => removeImage(index)} className="upload-img-close"></div>
+                    </div>
+                  ))}
+                </div>
                 <div className="add-video-container">
                   <span className='title-video'>Video</span>
                   <div className="upload-vid-options">

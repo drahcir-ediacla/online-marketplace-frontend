@@ -179,19 +179,101 @@
 // export default CheckboxWithTextarea;
 
 
+// import React, { useState } from 'react';
+// import './style.scss'
+
+// const ImageUpload = () => {
+//   const [selectedImages, setSelectedImages] = useState([]);
+//   const [imagePreviews, setImagePreviews] = useState([]);
+//   const maxImages = 10; // Define the maximum number of images allowed
+
+//   const handleImageChange = (e) => {
+//     const files = e.target.files;
+//     const selectedImagesArray = Array.from(files);
+
+//     // Check if the total selected images don't exceed the maximum allowed
+//     if (selectedImagesArray.length + selectedImages.length > maxImages) {
+//       alert(`You can select up to ${maxImages} images.`);
+//       return;
+//     }
+
+//     const imagePreviewsArray = [];
+
+//     selectedImagesArray.forEach((image) => {
+//       if (!image.type.startsWith('image/')) {
+//         alert('Only image files are allowed.');
+//         return;
+//       }
+
+//       const reader = new FileReader();
+
+//       reader.onload = (e) => {
+//         imagePreviewsArray.push(e.target.result);
+//         if (imagePreviewsArray.length === selectedImagesArray.length) {
+//           setImagePreviews((prevPreviews) => [...prevPreviews, ...imagePreviewsArray]);
+//           setSelectedImages((prevImages) => [...prevImages, ...selectedImagesArray]);
+//         }
+//       };
+
+//       reader.readAsDataURL(image);
+//     });
+//   };
+
+//   const removeImage = (file) => {
+//     const updatedPreviews = imagePreviews.filter((preview) => preview !== file.preview);
+//     const updatedImages = selectedImages.filter((image) => image !== file.image);
+//     setImagePreviews(updatedPreviews);
+//     setSelectedImages(updatedImages);
+//   };
+
+//   return (
+//     <div className="upload__box">
+//       <div className="upload__btn-box">
+//         <label className="upload__btn">
+//           <p>Upload images</p>
+//           <input
+//             type="file"
+//             multiple
+//             accept="image/*"
+//             className="upload__inputfile"
+//             onChange={handleImageChange}
+//           />
+//         </label>
+//       </div>
+//       <div className="upload__img-wrap">
+//         {imagePreviews.map((preview, index) => (
+//           <div className="upload__img-box" key={index}>
+//             <div
+//               className="img-bg"
+//               style={{ backgroundImage: `url(${preview})` }}
+//               data-number={index}
+//             >
+//               <div className="upload__img-close" onClick={() => removeImage({ preview, image: selectedImages[index] })}>
+                
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ImageUpload;
+
+
 import React, { useState } from 'react';
-import './style.scss'
 
 const ImageUpload = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+
   const maxImages = 10; // Define the maximum number of images allowed
 
   const handleImageChange = (e) => {
     const files = e.target.files;
     const selectedImagesArray = Array.from(files);
 
-    // Check if the total selected images don't exceed the maximum allowed
     if (selectedImagesArray.length + selectedImages.length > maxImages) {
       alert(`You can select up to ${maxImages} images.`);
       return;
@@ -219,42 +301,53 @@ const ImageUpload = () => {
     });
   };
 
-  const removeImage = (file) => {
-    const updatedPreviews = imagePreviews.filter((preview) => preview !== file.preview);
-    const updatedImages = selectedImages.filter((image) => image !== file.image);
+  const removeImage = (index) => {
+    const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
+    const updatedImages = selectedImages.filter((_, i) => i !== index);
     setImagePreviews(updatedPreviews);
     setSelectedImages(updatedImages);
   };
 
+  const handleSubmit = () => {
+    // You can send the selected images to your server here using an API request
+    const formData = new FormData();
+
+    selectedImages.forEach((image) => {
+      formData.append('images', image);
+    });
+
+    // Use fetch or an HTTP library like axios to send the images to your API
+    fetch('/api/upload-images', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the server, which should include product information and image URLs
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error uploading images:', error);
+      });
+  };
+
   return (
-    <div className="upload__box">
-      <div className="upload__btn-box">
-        <label className="upload__btn">
-          <p>Upload images</p>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            className="upload__inputfile"
-            onChange={handleImageChange}
-          />
-        </label>
-      </div>
-      <div className="upload__img-wrap">
+    <div>
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={handleImageChange}
+      />
+      <div>
         {imagePreviews.map((preview, index) => (
-          <div className="upload__img-box" key={index}>
-            <div
-              className="img-bg"
-              style={{ backgroundImage: `url(${preview})` }}
-              data-number={index}
-            >
-              <div className="upload__img-close" onClick={() => removeImage({ preview, image: selectedImages[index] })}>
-                
-              </div>
-            </div>
+          <div key={index}>
+            <img src={preview} alt={`Img ${index}`} width="100" />
+            <button onClick={() => removeImage(index)}>Remove</button>
           </div>
         ))}
       </div>
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 };
