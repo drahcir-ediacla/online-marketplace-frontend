@@ -14,6 +14,7 @@ import RegisterByPhone from './pages/Auth/RegisterAccount/RegisterByPhone'
 import EditProfile from './pages/Profile/EditProfile'
 import MyProfile from './pages/Profile/MyProfile'
 import BuyerProductDetails from './pages/ProducDetails/BuyerProductDetails'
+import ProductDetails from './pages/ProducDetails/ProductDetails'
 import MainCategory from './pages/Categories/MainCategory'
 import SubCategory from './pages/Categories/SubCategory'
 import DeactivateAccount from './pages/Settings/DeactivateAccount'
@@ -57,6 +58,7 @@ function App() {
           <Route path='/RegisterByPhone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
           <Route path='/EditProfile' element={<EditProfile />} />
           <Route path='/MyProfile' element={<MyProfile />} />
+          <Route path='/ProductDetails/:id/:name' element={<ProductDetails />} />
           <Route path='/BuyerProductDetails' element={<BuyerProductDetails />} />
           <Route path='/MainCategory' element={<MainCategory />} />
           <Route path='/SubCategory' element={<SubCategory />} />
