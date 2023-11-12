@@ -45,7 +45,7 @@ const StickyHeader = () => {
                                 <SlidingSideNav />
                             </div>
                             <div>
-                                <BtnGreen to="/AddListing" label="Sell" className="sticky-header-sell-btn" />
+                                <BtnGreen to="/addlisting" label="Sell" className="sticky-header-sell-btn" />
                             </div>
                         </div>
                     </div>

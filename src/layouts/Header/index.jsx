@@ -145,17 +145,17 @@ function Header() {
                   <div className='nav-tools'>
                     <div className='message-icon'><MessageIcon /></div>
                     <div className='bell-icon'><BellIcon /></div>
-                    <Link to='/Wishlist' className='heart-icon'><HeartIcon /></Link>
+                    <Link to='/wishlist' className='heart-icon'><HeartIcon /></Link>
                   </div>
-                  <span><Link to='/AddListing' className='sell-btn'>Sell</Link></span>
+                  <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>
                     <span>My Account</span>
                     <div className='my-account-dropdown'>
                       <div className='triangle-icon'><TriangleIcon /></div>
                       <ul>
-                        <li><Link to='/EditProfile'>Manage Account</Link></li>
-                        <li><Link to='/MyProfile'>My Profile</Link></li>
-                        <li><Link to='/DeactivateAccount'>Settings</Link></li>
+                        <li><Link to='/editprofile'>Manage Account</Link></li>
+                        <li><Link to='/myprofile'>My Profile</Link></li>
+                        <li><Link to='/deactivateaccount'>Settings</Link></li>
                         <li>Help & Support</li>
                         <li><Link onClick={logout}>Logout</Link></li>
                       </ul>
@@ -164,9 +164,9 @@ function Header() {
                 </>
               ) : (
                 <div className='login-register'>
-                  <Link to='/LoginEmail'>SELL</Link>
-                  <Link to='/LoginEmail'>LOGIN</Link>
-                  <Link to='/RegisterByEmail'>REGISTER</Link>
+                  <Link to='/loginemail'>SELL</Link>
+                  <Link to='/loginemail'>LOGIN</Link>
+                  <Link to='/registerbyemail'>REGISTER</Link>
                 </div>
               )}
             </div>

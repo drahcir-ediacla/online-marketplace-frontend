@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../apicalls/axios'
+import { useDispatch } from 'react-redux';
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -14,7 +15,6 @@ import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import CheckboxWithTextarea from '../../components/FormField/CheckBox/CheckboxWithTextarea'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
-import { useDispatch } from 'react-redux';
 
 const AddListing = () => {
 
@@ -189,25 +189,25 @@ const AddListing = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-  
+
     // Create an array to store image URLs
     const imageUrls = [];
-  
+
     // Create a FormData object to send the form data
     const formData = new FormData();
     formData.append('upload_preset', 'auwcvbw0');
     formData.append('cloud_name', 'yogeek-cloudinary');
     formData.append('folder', 'product_images');
-  
+
     // Append product details to the FormData
     for (const key in productDetails) {
       formData.append(key, productDetails[key]);
     }
-  
+
     // Upload selected images to Cloudinary
     for (let i = 0; i < selectedImages.length; i++) {
       formData.append('file', selectedImages[i]); // Append images directly to the main FormData
-  
+
       try {
         dispatch(Setloader(true))
         const response = await fetch(
@@ -217,11 +217,12 @@ const AddListing = () => {
             body: formData, // Use the main FormData
           }
         );
-  
+
         if (response.ok) {
           const data = await response.json();
           const imageUrl = data.secure_url; // Get the secure URL from Cloudinary response
           imageUrls.push(imageUrl); // Add the URL to the array
+          window.location.href = '/addlistingsuccess';
         } else {
           console.error('Error uploading image to Cloudinary:', response.statusText);
         }
@@ -230,10 +231,10 @@ const AddListing = () => {
         console.log('Response:', response);
       }
     }
-  
+
     // After all images are uploaded, add the image URLs to the productDetails
     productDetails.imageUrls = imageUrls;
-  
+
     // Send the form data (including image URLs) to your backend
     axios.post('/api/addnewproduct', productDetails)
       .then((response) => {
@@ -245,7 +246,7 @@ const AddListing = () => {
         console.error('Error adding the product:', error);
       });
   };
-  
+
 
 
   return (
@@ -253,276 +254,277 @@ const AddListing = () => {
 
       <Header />
       <div className="add-listing-body">
-        <form className="container">
-          <h3>What are you listing today?</h3>
-          <div className="box">
-            <div className="col-left">
-              <div className="add-media-container">
-                <div className="add-image-box">
-                  <div className="addlisting-upload-img">
-                    <UploadImgIcon />
-                  </div>
-                  <div>
-                    <label htmlFor="imgUpload" className="custom-file-upload">
-                      <BtnClear type='button' label='Add Image' className='add-img-btn' onClick={handleImgInputClick} />
-                    </label>
-                    <input type="file" id="imgUpload" multiple accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
-                    <div>(Maximum of 10 photos)</div>
-                  </div>
-                </div>
-                {/* <span className="atleast-one-photo">Add at least 1 photo.</span> */}
-                <div className="upload-img-preview-container">
-                  {imagePreviews.map((preview, index) => (
-                    <div className="upload-img-box" key={index}>
-                      <img src={preview} alt={`Img ${index}`} className='upload-img-preview' />
-                      <div onClick={() => removeImage(index)} className="upload-img-close"></div>
-                    </div>
-                  ))}
-                </div>
-                <div className="add-video-container">
-                  <span className='title-video'>Video</span>
-                  <div className="upload-vid-options">
-                    <div>
-                      <label htmlFor="uploadvidID" className="radio-container">Upload Video
-                        <input
-                          type="radio"
-                          id="uploadvidID"
-                          checked={activeRadio === 0}
-                          className={`${activeRadio === 0 ? 'active' : ''}`}
-                          onClick={() => openContent(0)}
-                        />
-                        <span className="checkmark"></span>
-                      </label>
+        
+          <form className="container">
+            <h3>What are you listing today?</h3>
+            <div className="box">
+              <div className="col-left">
+                <div className="add-media-container">
+                  <div className="add-image-box">
+                    <div className="addlisting-upload-img">
+                      <UploadImgIcon />
                     </div>
                     <div>
-                      <label htmlFor="youtubelinkID" className="radio-container">Youtube Link
-                        <input
-                          type="radio"
-                          id="youtubelinkID"
-                          checked={activeRadio === 1}
-                          className={`${activeRadio === 1 ? 'active' : ''}`}
-                          onClick={() => openContent(1)}
-                        />
-                        <span className="checkmark"></span>
+                      <label htmlFor="imgUpload" className="custom-file-upload">
+                        <BtnClear type='button' label='Add Image' className='add-img-btn' onClick={handleImgInputClick} />
                       </label>
+                      <input type="file" id="imgUpload" multiple accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+                      <div>(Maximum of 10 photos)</div>
                     </div>
                   </div>
-                  <div style={{ display: activeRadio === 0 ? 'block' : 'none' }}>
-                    <div className='upload-video-content'>
-                      <div className='upload-video-box'>
-                        <div className='addlisting-upload-vid'><UploadVidIcon /></div>
-                        <span>Add Video</span>
+                  {/* <span className="atleast-one-photo">Add at least 1 photo.</span> */}
+                  <div className="upload-img-preview-container">
+                    {imagePreviews.map((preview, index) => (
+                      <div className="upload-img-box" key={index}>
+                        <img src={preview} alt={`Img ${index}`} className='upload-img-preview' />
+                        <div onClick={() => removeImage(index)} className="upload-img-close"></div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="add-video-container">
+                    <span className='title-video'>Video</span>
+                    <div className="upload-vid-options">
+                      <div>
+                        <label htmlFor="uploadvidID" className="radio-container">Upload Video
+                          <input
+                            type="radio"
+                            id="uploadvidID"
+                            checked={activeRadio === 0}
+                            className={`${activeRadio === 0 ? 'active' : ''}`}
+                            onClick={() => openContent(0)}
+                          />
+                          <span className="checkmark"></span>
+                        </label>
                       </div>
                       <div>
-                        <ul>
-                          <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
-                          <li>Supported Format: mp4</li>
-                          <li>New Video might take up to 36 hrs to be approved</li>
-                        </ul>
+                        <label htmlFor="youtubelinkID" className="radio-container">Youtube Link
+                          <input
+                            type="radio"
+                            id="youtubelinkID"
+                            checked={activeRadio === 1}
+                            className={`${activeRadio === 1 ? 'active' : ''}`}
+                            onClick={() => openContent(1)}
+                          />
+                          <span className="checkmark"></span>
+                        </label>
                       </div>
                     </div>
-                  </div>
-                  <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>
-                    <Input name='youtube_link' value={productDetails.youtube_link} placeholder='Paste your Youtube URL link here' className='input-youtube-link' onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })} />
+                    <div style={{ display: activeRadio === 0 ? 'block' : 'none' }}>
+                      <div className='upload-video-content'>
+                        <div className='upload-video-box'>
+                          <div className='addlisting-upload-vid'><UploadVidIcon /></div>
+                          <span>Add Video</span>
+                        </div>
+                        <div>
+                          <ul>
+                            <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
+                            <li>Supported Format: mp4</li>
+                            <li>New Video might take up to 36 hrs to be approved</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>
+                      <Input name='youtube_link' value={productDetails.youtube_link} placeholder='Paste your Youtube URL link here' className='input-youtube-link' onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-right">
-              <div className="select-category-container">
-                <div className='wrapper' ref={dropDownCategory}>
-                  <div className={`select-arrow ${isOpen ? 'active' : ''}`} onClick={toggleDropdown}></div>
-                  <div className="dropdown-category">
-                    <input type="text" id='selectCategory' value={selectedOption} placeholder='Select Category' readOnly />
-                  </div>
-                  {isOpen && (
-                    <div className="category-option-list">
-                      <ul>
-                        <li>
-                          <div className='search-container'>
-                            <input type="text" placeholder='Search Categories' value={searchTerm} onChange={handleSearchChange} />
-                            <div className='magnifying-glass'><MagnifyingGlass /></div>
-                          </div>
-                        </li>
-                        {categories.map((category) => {
-                          if (!category.label.toLowerCase().includes(searchTerm.toLowerCase())) {
-                            return null; // Skip rendering if not matching the search term
-                          }
-                          return (
-                            <li key={category.value} className='main-category'>
-                              <div
-                                className={`parent-category ${category.subcategories.length > 0 ? "collapsible" : ""} ${category.isOpen && category.subcategories.length > 0 ? "active" : ""}`}
-                                onClick={() => {
-                                  if (category.subcategories.length === 0) {
-                                    handleOptionClick(category.label);
-                                  } else {
-                                    handleCategoryClick(category);
-                                  }
-                                }}
-                              >
-                                <img src={category.icon} alt="" />
-                                {category.label}
-                              </div>
-                              {category.isOpen && category.subcategories && category.subcategories.length > 0 ? (
-                                <ul className='sub-category'>
-                                  {category.subcategories.map((subcategory) => (
-                                    <li key={subcategory.value}>
-                                      <div className={`first-level-sub-category ${subcategory.subcategories.length > 0 ? "collapsible" : ""} ${subcategory.isOpen && subcategory.subcategories.length > 0 ? "active" : ""}`}
-                                        onClick={() => {
-                                          if (subcategory.subcategories.length === 0) {
-                                            handleOptionClick(subcategory.label);
-                                          } else {
-                                            handleSubcategoryClick(subcategory, category);
-                                          }
-                                        }}>
-                                        {subcategory.label}
-                                      </div>
+              <div className="col-right">
+                <div className="select-category-container">
+                  <div className='wrapper' ref={dropDownCategory}>
+                    <div className={`select-arrow ${isOpen ? 'active' : ''}`} onClick={toggleDropdown}></div>
+                    <div className="dropdown-category">
+                      <input type="text" id='selectCategory' value={selectedOption} placeholder='Select Category' readOnly />
+                    </div>
+                    {isOpen && (
+                      <div className="category-option-list">
+                        <ul>
+                          <li>
+                            <div className='search-container'>
+                              <input type="text" placeholder='Search Categories' value={searchTerm} onChange={handleSearchChange} />
+                              <div className='magnifying-glass'><MagnifyingGlass /></div>
+                            </div>
+                          </li>
+                          {categories.map((category) => {
+                            if (!category.label.toLowerCase().includes(searchTerm.toLowerCase())) {
+                              return null; // Skip rendering if not matching the search term
+                            }
+                            return (
+                              <li key={category.value} className='main-category'>
+                                <div
+                                  className={`parent-category ${category.subcategories.length > 0 ? "collapsible" : ""} ${category.isOpen && category.subcategories.length > 0 ? "active" : ""}`}
+                                  onClick={() => {
+                                    if (category.subcategories.length === 0) {
+                                      handleOptionClick(category.label);
+                                    } else {
+                                      handleCategoryClick(category);
+                                    }
+                                  }}
+                                >
+                                  <img src={category.icon} alt="" />
+                                  {category.label}
+                                </div>
+                                {category.isOpen && category.subcategories && category.subcategories.length > 0 ? (
+                                  <ul className='sub-category'>
+                                    {category.subcategories.map((subcategory) => (
+                                      <li key={subcategory.value}>
+                                        <div className={`first-level-sub-category ${subcategory.subcategories.length > 0 ? "collapsible" : ""} ${subcategory.isOpen && subcategory.subcategories.length > 0 ? "active" : ""}`}
+                                          onClick={() => {
+                                            if (subcategory.subcategories.length === 0) {
+                                              handleOptionClick(subcategory.label);
+                                            } else {
+                                              handleSubcategoryClick(subcategory, category);
+                                            }
+                                          }}>
+                                          {subcategory.label}
+                                        </div>
 
-                                      {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
-                                        <ul className='sub-sub-category'>
-                                          {subcategory.subcategories.map((subsubcategory) => (
-                                            <li key={subsubcategory.value}>
-                                              <div className="second-level-sub-category" onClick={() => handleOptionClick(subsubcategory.label)}>
-                                                {subsubcategory.label}
-                                              </div>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      ) : null}
-                                    </li>
-                                  ))}
-                                </ul>
-                              ) : null}
-                            </li>
-                          );
-                        })}
-                      </ul>
+                                        {subcategory.isOpen && subcategory.subcategories && subcategory.subcategories.length > 0 ? (
+                                          <ul className='sub-sub-category'>
+                                            {subcategory.subcategories.map((subsubcategory) => (
+                                              <li key={subsubcategory.value}>
+                                                <div className="second-level-sub-category" onClick={() => handleOptionClick(subsubcategory.label)}>
+                                                  {subsubcategory.label}
+                                                </div>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        ) : null}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {selectedOption === 'Nike' && (
+                    <div>
+                      <h3>Nike</h3>
+                    </div>
+                  )}
+
+                  {selectedOption === 'Adidas' && (
+                    <div>
+                      <h3>Adidas</h3>
+                      {/* Render your Form 2 component here */}
+                    </div>
+                  )}
+
+                  {selectedOption === 'New Balance' && (
+                    <div>
+                      <h3>New Balance</h3>
+                      {/* Render your Form 3 component here */}
+                    </div>
+                  )}
+
+                  {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && (
+                    <div className="add-prod-details-form">
+                      <input type="hidden" name="category_id" value={productDetails.category_id} onChange={(e) => setProductDetails({ ...productDetails, category_id: e.target.value })} />
+                      <div>
+                        <label>Title</label>
+                        <Input
+                          type='text'
+                          id='listingTitleID'
+                          name='product_name'
+                          value={productDetails.product_name}
+                          className='listing-input-field'
+                          placeholder='Listing Title'
+                          onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
+                        />
+                      </div>
+                      <h3>About the item</h3>
+                      <div>
+                        <label>Condition</label>
+                        <div className="product-conditions">
+                          <RadioButton
+                            id="brandNewID"
+                            name="product_condition"
+                            value="Brand New"
+                            label="Brand New"
+                            checked={condition === 'Brand New'}
+                            onChange={handleConditionChange}
+                          />
+                          <RadioButton
+                            id="likeNewID"
+                            name="product_condition"
+                            value="Like New"
+                            label="Like New"
+                            checked={condition === 'Like New'}
+                            onChange={handleConditionChange}
+                          />
+                          <RadioButton
+                            id="lightlyUsedID"
+                            name="product_condition"
+                            value="Lightly Used"
+                            label="Lightly Used"
+                            checked={condition === 'Lightly Used'}
+                            onChange={handleConditionChange}
+                          />
+                          <RadioButton
+                            id="wellUsedID"
+                            name="product_condition"
+                            value="Well Used"
+                            label="Well Used"
+                            checked={condition === 'Well Used'}
+                            onChange={handleConditionChange}
+                          />
+                          <RadioButton
+                            id="heavilyUsedID"
+                            name="product_condition"
+                            value="Heavily Used"
+                            label="Heavily Used"
+                            checked={condition === 'Heavily Used'}
+                            onChange={handleConditionChange}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label>Price</label>
+                        <div className="listing-price-container">
+                          <div className="listing-currency">₱</div>
+                          <Input
+                            type='number'
+                            id='listingPriceID'
+                            name='price'
+                            value={productDetails.price}
+                            className='listing-price-input-field'
+                            placeholder='Price of your listing'
+                            onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label>Description</label>
+                        <div>
+                          <TextArea
+                            id='listingDescID'
+                            name='description'
+                            value={productDetails.description}
+                            className='listing-description'
+                            placeholder="Type the details of your product here..."
+                            rows='7'
+                            onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                      <h3>Deal Method</h3>
+                      <div>
+                        <CheckBox label='Meet Up' />
+                        <CheckboxWithTextarea label='Mailing & Delivery' />
+                      </div>
+                      <BtnGreen label='List Now' onClick={handleFormSubmit} />
                     </div>
                   )}
                 </div>
-
-                {selectedOption === 'Nike' && (
-                  <div>
-                    <h3>Nike</h3>
-                  </div>
-                )}
-
-                {selectedOption === 'Adidas' && (
-                  <div>
-                    <h3>Adidas</h3>
-                    {/* Render your Form 2 component here */}
-                  </div>
-                )}
-
-                {selectedOption === 'New Balance' && (
-                  <div>
-                    <h3>New Balance</h3>
-                    {/* Render your Form 3 component here */}
-                  </div>
-                )}
-
-                {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && (
-                  <div className="add-prod-details-form">
-                    <input type="hidden" name="category_id" value={productDetails.category_id} onChange={(e) => setProductDetails({ ...productDetails, category_id: e.target.value })} />
-                    <div>
-                      <label>Title</label>
-                      <Input
-                        type='text'
-                        id='listingTitleID'
-                        name='product_name'
-                        value={productDetails.product_name}
-                        className='listing-input-field'
-                        placeholder='Listing Title'
-                        onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
-                      />
-                    </div>
-                    <h3>About the item</h3>
-                    <div>
-                      <label>Condition</label>
-                      <div className="product-conditions">
-                        <RadioButton
-                          id="brandNewID"
-                          name="product_condition"
-                          value="Brand New"
-                          label="Brand New"
-                          checked={condition === 'Brand New'}
-                          onChange={handleConditionChange}
-                        />
-                        <RadioButton
-                          id="likeNewID"
-                          name="product_condition"
-                          value="Like New"
-                          label="Like New"
-                          checked={condition === 'Like New'}
-                          onChange={handleConditionChange}
-                        />
-                        <RadioButton
-                          id="lightlyUsedID"
-                          name="product_condition"
-                          value="Lightly Used"
-                          label="Lightly Used"
-                          checked={condition === 'Lightly Used'}
-                          onChange={handleConditionChange}
-                        />
-                        <RadioButton
-                          id="wellUsedID"
-                          name="product_condition"
-                          value="Well Used"
-                          label="Well Used"
-                          checked={condition === 'Well Used'}
-                          onChange={handleConditionChange}
-                        />
-                        <RadioButton
-                          id="heavilyUsedID"
-                          name="product_condition"
-                          value="Heavily Used"
-                          label="Heavily Used"
-                          checked={condition === 'Heavily Used'}
-                          onChange={handleConditionChange}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label>Price</label>
-                      <div className="listing-price-container">
-                        <div className="listing-currency">₱</div>
-                        <Input
-                          type='number'
-                          id='listingPriceID'
-                          name='price'
-                          value={productDetails.price}
-                          className='listing-price-input-field'
-                          placeholder='Price of your listing'
-                          onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label>Description</label>
-                      <div>
-                        <TextArea
-                          id='listingDescID'
-                          name='description'
-                          value={productDetails.description}
-                          className='listing-description'
-                          placeholder="Type the details of your product here..."
-                          rows='7'
-                          onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <h3>Deal Method</h3>
-                    <div>
-                      <CheckBox label='Meet Up' />
-                      <CheckboxWithTextarea label='Mailing & Delivery' />
-                    </div>
-                    <BtnGreen label='List Now' onClick={handleFormSubmit} />
-                  </div>
-                )}
               </div>
             </div>
-          </div>
-        </form>
+          </form>
       </div>
       <Footer />
     </>

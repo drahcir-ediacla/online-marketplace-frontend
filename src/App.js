@@ -21,6 +21,7 @@ import DeactivateAccount from './pages/Settings/DeactivateAccount'
 import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
+import AddListingSuccess from './pages/AddListing/AddListingSuccess'
 import Dashboard from './pages/AdminPanel/Dashboard'
 import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
@@ -49,24 +50,25 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" index element={<Home />} />
-          <Route path='/LoginEmail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
-          <Route path='/LoginPhone' element={user ? <Navigate to="/" /> : <LoginPhone />} />
-          <Route path='/LoginSMS' element={user ? <Navigate to="/" /> : <LoginSMS />} />
-          <Route path='/ResetByEmail' element={user ? <Navigate to="/" /> : <ResetByEmail />} />
-          <Route path='/ResetByPhone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
-          <Route path='/RegisterByEmail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
-          <Route path='/RegisterByPhone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
-          <Route path='/EditProfile' element={<EditProfile />} />
-          <Route path='/MyProfile' element={<MyProfile />} />
-          <Route path='/ProductDetails/:id/:name' element={<ProductDetails />} />
-          <Route path='/BuyerProductDetails' element={<BuyerProductDetails />} />
-          <Route path='/MainCategory' element={<MainCategory />} />
-          <Route path='/SubCategory' element={<SubCategory />} />
-          <Route path='/Wishlist' element={<Wishlist />} />
-          <Route path='/DeactivateAccount' element={<DeactivateAccount />} />
-          <Route path='/SetPassword' element={<SetPassword />} />
-          <Route path='/AddListing' element={<AddListing />} />
-          <Route path='/Dashboard' element={<Dashboard />} />
+          <Route path='/loginemail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
+          <Route path='/loginphone' element={user ? <Navigate to="/" /> : <LoginPhone />} />
+          <Route path='/loginsms' element={user ? <Navigate to="/" /> : <LoginSMS />} />
+          <Route path='/resetbyemail' element={user ? <Navigate to="/" /> : <ResetByEmail />} />
+          <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
+          <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
+          <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
+          <Route path='/editprofile' element={<EditProfile />} />
+          <Route path='/myprofile' element={<MyProfile />} />
+          <Route path='/productdetails/:id/:name' element={<ProductDetails />} />
+          <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
+          <Route path='/maincategory' element={<MainCategory />} />
+          <Route path='/subcategory' element={<SubCategory />} />
+          <Route path='/wishlist' element={<Wishlist />} />
+          <Route path='/deactivateaccount' element={<DeactivateAccount />} />
+          <Route path='/setpassword' element={<SetPassword />} />
+          <Route path='/addlisting' element={<AddListing />} />
+          <Route path='/addlistingsuccess' element={<AddListingSuccess />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test' element={<TestPage />} />
         </Routes>
       </Router>
