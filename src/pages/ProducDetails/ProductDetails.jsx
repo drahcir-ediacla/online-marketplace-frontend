@@ -74,7 +74,7 @@ const BuyerProductDetails = () => {
                 </div>
                 <div className='row2'>
                     <div className='col-left'>
-                        <ItemImgGallery gallery={itemGalleryData} />
+                        <ItemImgGallery gallery={product.images.map(image => image.image_url)} />
                     </div>
                     <div className='col-right'>
                         <div className='prod-details-title'><span>{product.product_name}</span></div>
@@ -107,13 +107,7 @@ const BuyerProductDetails = () => {
                             <span className='time-posted'><b>Posted:</b> 12 hours ago</span>
                             <hr />
                             <div className='prod-details-title-desc'><h2>{product.product_name}</h2></div>
-                            <div className='prod-details-spec'><p>Count on MLBShop.com for all the best in official Mexico Baseball men's gear. We have everything from authentic player jerseys and on-field New Era caps to collectible and exclusive Mexico Baseball memorabilia. Shop for Mexico Baseball men's t-shirts, hoodies, and authentic MLB gear for all 30 teams so you can show your loyalty all year long from Spring Training to the World Series. You can shop for Mexico Baseball accessories for your office, car, the gym, even the golf course.</p><br /><br />
-                                <ul>
-                                    <li><b>Snapback hat:</b> These hats feature a snap closure in the back along with a flat brim. These are considered to be high profile and are adjustable.</li>
-                                    <li><b>Adjustable hat:</b> These hats have a velcro closure in the back but are unstructured yet adjustable. These have a curved brim and low profile.</li>
-                                    <li><b>Fitted hat: These</b> hats feature either a curved or flat brim and are structured, high profile but unadjustable.</li>
-                                    <li><b>Flexfit hat:</b> These hats feature a curved or flat brim and are structured, high profile and can be adjusted by the use of elastic materials.</li>
-                                </ul>
+                            <div className='prod-details-spec'><p>{product.description}</p>
                             </div>
                             <div className="product-details-review">
                                 <div className='review-for'>

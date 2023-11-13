@@ -37,6 +37,7 @@
 
             .new-listed-info {
                 display: flex;
+                justify-content: center;
                 gap: 20px;
 
                 img {
@@ -44,9 +45,19 @@
                     height: 150px;
                 }
 
-                p {
-                    font-size: 18px;
+                .new-listed-info-col-left {
+
+                    p {
+                        font-size: 18px;
+                    }
+
+                    span {
+                        font-size: 18px;
+                        color: var(--red-300);
+                    }
                 }
+
+                
             }
 
             .redirect-buttons {

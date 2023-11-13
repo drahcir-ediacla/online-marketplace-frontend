@@ -67,7 +67,7 @@ function App() {
           <Route path='/deactivateaccount' element={<DeactivateAccount />} />
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />
-          <Route path='/addlistingsuccess' element={<AddListingSuccess />} />
+          <Route path='/addlistingsuccess/:id/:name' element={<AddListingSuccess />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test' element={<TestPage />} />
         </Routes>

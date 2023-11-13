@@ -1,17 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from '../../apicalls/axios';
+import { useParams } from 'react-router-dom';
 import './style.scss'
 import { ReactComponent as CircleCheck } from '../../assets/images/circle-check-solid.svg';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer';
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
-import Cap from '../../assets/images/cap-5.jpg'
 
 
 
 const AddListingSuccess = () => {
 
+    const { id, name } = useParams();
+    const [product, setProduct] = useState(null);
 
+    useEffect(() => {
+        // Fetch product details from the backend using both ID and name
+        axios.get(`/api/getproductdetails/${id}/${name}`)
+            .then((response) => {
+                setProduct(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching product details:', error);
+            });
+    }, [id, name]);
+
+    if (!product) {
+        // Render loading state or handle error
+        return <div>Loading...</div>;
+    }
+
+    const viewListing = () => {
+        window.location.href = `/productdetails/${id}/${name}`;
+    }
+
+    const addNewListing = () => {
+        window.location.href = '/addlisting';
+    }
 
     return (
         <>
@@ -25,11 +51,15 @@ const AddListingSuccess = () => {
                         </div>
                         <div className="success-new-listed-box">
                             <div className="new-listed-info">
-                                <img src={Cap} alt="" />
-                                <p>“PRIMO Red Grape Sparkling Juice 750ml PRIMO Red Grape Sparkling Juice 750ml PRIMO Red Grape Sparkling Juice 750ml”</p>
+                                {/* Use the first image in the images array */}
+                                <img src={product.images[0].image_url} alt="" />
+                                <div className='new-listed-info-col-left'>
+                                    <p>"{product.product_name}"</p>
+                                    <span>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                </div>
                             </div>
                             <div className="redirect-buttons">
-                                <BtnClear label="Add New Listing" /> <BtnGreen label="View Listing" />
+                                <BtnClear label="Add New Listing" onClick={addNewListing} /> <BtnGreen label="View Listing" onClick={viewListing} />
                             </div>
                         </div>
                     </div>

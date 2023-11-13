@@ -222,7 +222,6 @@ const AddListing = () => {
           const data = await response.json();
           const imageUrl = data.secure_url; // Get the secure URL from Cloudinary response
           imageUrls.push(imageUrl); // Add the URL to the array
-          window.location.href = '/addlistingsuccess';
         } else {
           console.error('Error uploading image to Cloudinary:', response.statusText);
         }
@@ -240,6 +239,10 @@ const AddListing = () => {
       .then((response) => {
         dispatch(Setloader(false))
         console.log('Product added successfully:', response.data);
+
+        const productId = response.data.id;
+        const productName = response.data.product_name;
+        window.location.href = `/addlistingsuccess/${productId}/${productName}`;
       })
       .catch((error) => {
         dispatch(Setloader(false))
