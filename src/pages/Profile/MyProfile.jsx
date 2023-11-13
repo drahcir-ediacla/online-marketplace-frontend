@@ -4,7 +4,7 @@ import recommendedItemsData from '../../data/recommendedItemsData'
 import customerReviewsData from '../../data/customerReviewsData.json'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
-import ProfileInfoCard from '../../components/Cards/ProfileInfoCard'
+import ProfileCard from '../../components/Cards/ProfileCard'
 import SearchBox from '../../components/SearchBox'
 import Filters from '../../components/Button/Filters'
 import ListingCard from '../../components/Cards/ListingCard'
@@ -48,7 +48,7 @@ const MyProfile = () => {
             </div>
             <div className="row2 cover-photo">COVER PHOTO</div>
             <div className="row3 box-body">
-                <div className="col-left"><ProfileInfoCard /></div>
+                <div className="col-left"><ProfileCard /></div>
                 <div className="col-right">
                     <div className="profile-tab-box">
                         <div className="profile-tab-header">

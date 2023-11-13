@@ -44,7 +44,7 @@ export const updateUser = (userData) => async (dispatch) => {
   try {
     dispatch(Setloader(true));
 
-    const response = await axios.put('/api/updateuser', userData);
+    const response = await axios.put('/verify/api/updateuser', userData);
 
     // Check if the server response indicates a successful update
     if (response.status === 200) {

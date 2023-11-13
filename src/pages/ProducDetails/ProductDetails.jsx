@@ -6,7 +6,6 @@ import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import customerReviewsData from '../../data/customerReviewsData.json'
-import itemGalleryData from '../../data/itemGalleryData.json'
 import ItemImgGallery from '../../components/Gallery/ItemImgGallery'
 import Pagination from '../../components/Pagination/Pagination'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
@@ -87,7 +86,7 @@ const BuyerProductDetails = () => {
                                 <div><span>Delivery - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> 186 Blumentritt Tondo Manila</span></div>
                             </div>
                         </div>
-                        <div className='prod-details-listed-in'><small>Listed in Caloocan, Metro Manila</small></div>
+                        <div className='prod-details-listed-in'><small>Listed in {product.seller.city}, {product.seller.region}, Philippines</small></div>
                         <div><img src={ListedInMap} alt="" /></div>
                         <div>
                             <div className='prod-details-icon-btn'>

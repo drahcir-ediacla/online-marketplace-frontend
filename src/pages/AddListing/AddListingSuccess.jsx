@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../apicalls/axios';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss'
 import { ReactComponent as CircleCheck } from '../../assets/images/circle-check-solid.svg';
 import Header from '../../layouts/Header'
@@ -14,22 +16,21 @@ const AddListingSuccess = () => {
 
     const { id, name } = useParams();
     const [product, setProduct] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         // Fetch product details from the backend using both ID and name
+        dispatch(Setloader(true));
         axios.get(`/api/getproductdetails/${id}/${name}`)
             .then((response) => {
+                dispatch(Setloader(false))
                 setProduct(response.data);
             })
             .catch((error) => {
+                dispatch(Setloader(false))
                 console.error('Error fetching product details:', error);
             });
-    }, [id, name]);
-
-    if (!product) {
-        // Render loading state or handle error
-        return <div>Loading...</div>;
-    }
+    }, [id, name, dispatch]);
 
     const viewListing = () => {
         window.location.href = `/productdetails/${id}/${name}`;
@@ -55,7 +56,9 @@ const AddListingSuccess = () => {
                                 <img src={product.images[0].image_url} alt="" />
                                 <div className='new-listed-info-col-left'>
                                     <p>"{product.product_name}"</p>
-                                    <span>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    <span className='listed-price'>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                    <p className='listed-in'>Listed in {product.seller.city}, {product.seller.region}, Philippines</p>
+                                    
                                 </div>
                             </div>
                             <div className="redirect-buttons">

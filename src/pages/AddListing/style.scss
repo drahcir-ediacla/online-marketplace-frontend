@@ -51,9 +51,14 @@
                         font-size: 18px;
                     }
 
-                    span {
+                    .listed-price {
                         font-size: 18px;
                         color: var(--red-300);
+                    }
+
+                    .listed-in {
+                        font-size: 12px;
+                        font-style: italic;
                     }
                 }
 
