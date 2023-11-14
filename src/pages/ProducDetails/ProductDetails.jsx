@@ -23,7 +23,7 @@ import CustomerPic from '../../assets/images/profile-pic_1.png'
 
 
 let postsPerPage = 5;
-const BuyerProductDetails = () => {
+const ProductDetails = () => {
 
     const { id, name } = useParams();
     const [product, setProduct] = useState(null);
@@ -170,4 +170,4 @@ const BuyerProductDetails = () => {
     )
 }
 
-export default BuyerProductDetails
+export default ProductDetails

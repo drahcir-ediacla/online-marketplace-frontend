@@ -17,67 +17,50 @@ const GET_USER_LOGIN = '/auth/check-auth';
 
 function Header() {
 
+  
   const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:8081/auth/check-auth", {
-  //         method: "GET",
-  //         credentials: "include",
-  //         headers: {
-  //           Accept: "application/json",
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Credentials": true,
-  //         },
-  //       });
-
-  //       if (response.status === 200) {
-  //         const resObject = await response.json();
-  //         setUser(resObject.user);
-  //       } else {
-  //         // Handle the case where the user is not authenticated
-  //         setUser(null); // Set user to null or handle the absence of user data
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-
-  //   getUser();
-  // }, []);
 
 
   useEffect(() => {
-    const getUser = () => {
-      axios.get(GET_USER_LOGIN, {
-        withCredentials: true, // Include credentials (cookies) in the request
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) return response.data; // Use response.data to access JSON data
-          throw new Error("Authentication has failed!");
-        })
-        .then((resObject) => {
-          console.log("User data:", resObject.user);
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log(err);
+    const getUser = async () => {
+      try {
+        const response = await axios.get(GET_USER_LOGIN, {
+          withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': true,
+          },
         });
+
+        if (response.status === 200) {
+          const resObject = response.data;
+          console.log('User data:', resObject.user);
+          setUser(resObject.user);
+        } else {
+          throw new Error('Authentication has failed!');
+        }
+      } catch (err) {
+        console.error(err);
+      }
     };
+
     getUser();
-  }, []);
+  }, []); // Ensure that you pass an empty dependency array if you want the effect to run once on mount
 
-
-  // const logout = () => {
-  //   window.open("http://localhost:8081/api/logout", "_self");
-  // };
+  
+  const myProfile = async () => {
+    try {
+      const response = await axios.get(GET_USER_LOGIN);
+      if (response.status === 200) {
+        const resObject = response.data;
+        const userId = resObject.user.id;
+        window.location.href = `/userprofile/${userId}`;
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
 
 
@@ -127,7 +110,7 @@ function Header() {
               <div className='language-selector'>
                 <div className='globe-icon'><GlobeIcon /></div>
                 <span>English</span>
-                <span><i class="arrow down"></i></span>
+                <span><i className="arrow down"></i></span>
                 <div className='language-list'>
                   <ul>
                     <li>English</li>
@@ -154,8 +137,8 @@ function Header() {
                       <div className='triangle-icon'><TriangleIcon /></div>
                       <ul>
                         <li><Link to='/editprofile'>Manage Account</Link></li>
-                        <li><Link to='/myprofile'>My Profile</Link></li>
-                        <li><Link to='/deactivateaccount'>Settings</Link></li>
+                        <li><Link onClick={myProfile}>My Profile</Link></li>
+                        <li><Link to='/settings'>Settings</Link></li>
                         <li>Help & Support</li>
                         <li><Link onClick={logout}>Logout</Link></li>
                       </ul>
