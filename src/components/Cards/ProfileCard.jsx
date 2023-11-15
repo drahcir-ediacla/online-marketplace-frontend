@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../apicalls/axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getUser } from '../../redux/actions/userActions'
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
@@ -18,44 +17,30 @@ const ProfileInfoCard = () => {
 
     const { id } = useParams();
     const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Update with the actual authentication status
-    const [authenticatedUserId, setAuthenticatedUserId] = useState(null); // Update with the actual authenticated user's ID
+    const [authenticatedUserId, setAuthenticatedUserId] = useState(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Set the loader to true when data fetching starts
-        dispatch(Setloader(true));
+        const fetchData = async () => {
+            dispatch(Setloader(true));
 
-        // Fetch the authenticated user's data
-        dispatch(getUser())
-            .then((authenticatedUser) => {
-                // Set the authenticated user's ID
-                setAuthenticatedUserId(authenticatedUser.id);
-                // Set the authentication status
-                setIsAuthenticated(true);
-                // Set the loader to false when data fetching is complete
-                dispatch(Setloader(false));
-            })
-            .catch(error => {
-                // Handle authentication error
-                console.error("Error fetching authenticated user data:", error);
-                // Set the loader to false when data fetching is complete
-                dispatch(Setloader(false));
-            });
-    }, [dispatch]);
-
-
-    useEffect(() => {
-        dispatch(Setloader(true));
-        axios.get(`/api/user/${id}`)
-            .then((response) => {
-                dispatch(Setloader(false));
+            try {
+                // Fetch the user's profile data
+                const response = await axios.get(`/api/user/${id}`);
                 setUser(response.data);
-            })
-            .catch((error) => {
+                
+                // Fetch the authenticated user's data
+                const authResponse = await axios.get('/auth/check-auth');
+                setAuthenticatedUserId(authResponse.data.user);
+
                 dispatch(Setloader(false));
-                console.error('Error fetching user data:', error);
-            });
+            } catch (error) {
+                dispatch(Setloader(false));
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, [id, dispatch]);
 
     // Check if user exists before accessing its properties
@@ -87,7 +72,7 @@ const ProfileInfoCard = () => {
                     <div className='google-icon'><GoogleIcon /></div>
                 </div>
                 <div className="profile-desc"><p>{bio}</p></div>
-                {(isAuthenticated && authenticatedUserId === id) ? null :(
+                {(authenticatedUserId?.id !== user?.id) && (
                     <>
                         <div className="follow-message-buttons">
                             <BtnClear label='Follow' /> <BtnGreen label='Message' />
