@@ -59,7 +59,7 @@ function App() {
           <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
           <Route path='/editprofile' element={<EditProfile />} />
           <Route path='/myprofile' element={<MyProfile />} />
-          <Route path='/userprofile/:id' element={<MyProfile />} />
+          <Route path='/profile/:id' element={<MyProfile />} />
           <Route path='/productdetails/:id/:name' element={<ProductDetails />} />
           <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
           <Route path='/maincategory' element={<MainCategory />} />

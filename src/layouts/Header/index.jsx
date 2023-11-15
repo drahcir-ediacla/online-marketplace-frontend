@@ -55,7 +55,7 @@ function Header() {
       if (response.status === 200) {
         const resObject = response.data;
         const userId = resObject.user.id;
-        window.location.href = `/userprofile/${userId}`;
+        window.location.href = `/profile/${userId}`;
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
