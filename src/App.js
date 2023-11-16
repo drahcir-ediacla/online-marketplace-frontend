@@ -12,7 +12,7 @@ import ResetByPhone from './pages/Auth/ResetPassword/ResetByPhone'
 import RegisterByEmail from './pages/Auth/RegisterAccount/RegisterByEmail'
 import RegisterByPhone from './pages/Auth/RegisterAccount/RegisterByPhone'
 import EditProfile from './pages/Profile/EditProfile'
-import MyProfile from './pages/Profile/MyProfile'
+import ProfilePage from './pages/Profile/ProfilePage'
 import BuyerProductDetails from './pages/ProducDetails/BuyerProductDetails'
 import ProductDetails from './pages/ProducDetails/ProductDetails'
 import MainCategory from './pages/Categories/MainCategory'
@@ -58,8 +58,8 @@ function App() {
           <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
           <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
           <Route path='/editprofile' element={<EditProfile />} />
-          <Route path='/myprofile' element={<MyProfile />} />
-          <Route path='/profile/:id' element={<MyProfile />} />
+          <Route path='/myprofile' element={<ProfilePage />} />
+          <Route path='/profile/:id' element={<ProfilePage />} />
           <Route path='/productdetails/:id/:name' element={<ProductDetails />} />
           <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
           <Route path='/maincategory' element={<MainCategory />} />

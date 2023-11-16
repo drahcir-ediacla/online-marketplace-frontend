@@ -18,7 +18,7 @@ import BtnClear from '../../components/Button/BtnClear'
 
 
 let postsPerPage = 5;
-const MyProfile = () => {
+const ProfilePage = () => {
 
     const { id } = useParams();
     const [user, setUser] = useState(null);
@@ -208,4 +208,4 @@ const MyProfile = () => {
     )
 }
 
-export default MyProfile
+export default ProfilePage
