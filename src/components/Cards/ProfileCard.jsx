@@ -17,7 +17,7 @@ const ProfileInfoCard = () => {
 
     const { id } = useParams();
     const [user, setUser] = useState(null);
-    const [authenticatedUserId, setAuthenticatedUserId] = useState(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const ProfileInfoCard = () => {
                 
                 // Fetch the authenticated user's data
                 const authResponse = await axios.get('/auth/check-auth');
-                setAuthenticatedUserId(authResponse.data.user);
+                setAuthenticatedUser(authResponse.data.user);
 
                 dispatch(Setloader(false));
             } catch (error) {
@@ -72,7 +72,7 @@ const ProfileInfoCard = () => {
                     <div className='google-icon'><GoogleIcon /></div>
                 </div>
                 <div className="profile-desc"><p>{bio}</p></div>
-                {(authenticatedUserId?.id !== user?.id) && (
+                {(authenticatedUser && authenticatedUser?.id !== user?.id) && (
                     <>
                         <div className="follow-message-buttons">
                             <BtnClear label='Follow' /> <BtnGreen label='Message' />

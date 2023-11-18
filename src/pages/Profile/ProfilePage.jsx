@@ -22,7 +22,8 @@ const ProfilePage = () => {
 
     const { id } = useParams();
     const [user, setUser] = useState(null);
-    const [authenticatedUserId, setAuthenticatedUserId] = useState(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState(null);
+    const [err, setErr] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -32,16 +33,26 @@ const ProfilePage = () => {
             try {
                 // Fetch the user's profile data
                 const response = await axios.get(`/api/user/${id}`);
+
                 setUser(response.data);
 
                 // Fetch the authenticated user's data
                 const authResponse = await axios.get('/auth/check-auth');
-                setAuthenticatedUserId(authResponse.data.user);
+                setAuthenticatedUser(authResponse.data.user);
 
                 dispatch(Setloader(false));
             } catch (error) {
                 dispatch(Setloader(false));
                 console.error('Error fetching data:', error);
+            
+                // Check if the error is due to unauthorized access
+                if (error.response && error.response.status === 401) {
+                    console.error('User not authenticated');
+                    // Handle unauthorized access, e.g., redirect to login
+                } else {
+                    // Handle other errors
+                    setErr(true); // Depending on your requirements
+                }
             }
         };
 
@@ -70,140 +81,150 @@ const ProfilePage = () => {
     };
 
     return (
+
         <>
-            <Header />
-            <div className="myprofile-body">
-                <div className="container">
-                    <div className="row1">
-                        {(authenticatedUserId?.id === user?.id) && (
-                            <>
-                                <h3>My Profile</h3>
-                                <BtnClear to="/EditProfile" label="Edit Profile" className='edit-profile-btn' />
-                            </>
-                        )}
-                    </div>
-                    <div className="row2 cover-photo">COVER PHOTO</div>
-                    <div className="row3 box-body">
-                        <div className="col-left"><ProfileCard /></div>
-                        <div className="col-right">
-                            <div className="profile-tab-box">
-                                <div className="profile-tab-header">
-                                    <button className={`tab-name tablink ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>Listings</button>
-                                    <button className={`tab-name tablink ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>Reviews</button>
-                                    <button className={`tab-name tablink ${activeTab === 2 ? 'active' : ''}`} onClick={() => openContent(2)}>Badges</button>
+            <div className="profile-body">
+                <Header />
+                <>
+                    {err ? (
+                        <h2 className='profile-not-found'>Sorry we could not find this profile!</h2>
+                    ) : (
+                        <div className="myprofile-body">
+                            <div className="container">
+                                <div className="row1">
+                                    {(authenticatedUser?.id === user?.id) && (
+                                        <>
+                                            <h3>My Profile</h3>
+                                            <BtnClear to="/EditProfile" label="Edit Profile" className='edit-profile-btn' />
+                                        </>
+                                    )}
                                 </div>
-                                <div className='listing-content' style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-                                    <div className='row1'>
-                                        <div><h5>You have 18 listings</h5></div>
-                                        <div className='col-right'>
-                                            <SearchBox placeholder='Search listings...' />
-                                            <Filters />
-                                        </div>
-                                    </div>
-                                    <div className="prod-listing-container"><ListingCard data={recommendedItemsData} /></div>
-                                </div>
-                                <div className="reviews-content" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                                    <div className='row1'>
-                                        <div className="overall-rating">
-                                            <div className='avg-rate-box'>
-                                                <div className='total-avg-rate'>4.0</div>
-                                                <div className='out-of-5-stars'>Out of 5 Stars</div>
-                                                <div className="seller-rating">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star-half-stroke"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                </div>
+                                <div className="row2 cover-photo">COVER PHOTO</div>
+                                <div className="row3 box-body">
+                                    <div className="col-left"><ProfileCard /></div>
+                                    <div className="col-right">
+                                        <div className="profile-tab-box">
+                                            <div className="profile-tab-header">
+                                                <button className={`tab-name tablink ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>Listings</button>
+                                                <button className={`tab-name tablink ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>Reviews</button>
+                                                <button className={`tab-name tablink ${activeTab === 2 ? 'active' : ''}`} onClick={() => openContent(2)}>Badges</button>
                                             </div>
-                                            <span>Overall rating of 28 reviews/ratings</span>
-                                        </div>
-                                        <div className="vl"></div>
-                                        <div className='progress-rating'>
-                                            <div className='progress-bar-box'>
-                                                <div className="progress-stars">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                </div>
-                                                <div class="progress-bar-container">
-                                                    <div class="five-star-bar"></div>
-                                                </div>
-                                                <span>15</span>
-                                            </div>
-                                            <div className='progress-bar-box'>
-                                                <div className='progress-bar-box'>
-                                                    <div className="progress-stars">
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
+                                            <div className='listing-content' style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+                                                <div className='row1'>
+                                                    <div><h5>You have 18 listings</h5></div>
+                                                    <div className='col-right'>
+                                                        <SearchBox placeholder='Search listings...' />
+                                                        <Filters />
                                                     </div>
-                                                    <div class="progress-bar-container">
-                                                        <div class="four-star-bar"></div>
+                                                </div>
+                                                <div className="prod-listing-container"><ListingCard data={recommendedItemsData} /></div>
+                                            </div>
+                                            <div className="reviews-content" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+                                                <div className='row1'>
+                                                    <div className="overall-rating">
+                                                        <div className='avg-rate-box'>
+                                                            <div className='total-avg-rate'>4.0</div>
+                                                            <div className='out-of-5-stars'>Out of 5 Stars</div>
+                                                            <div className="seller-rating">
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-regular fa-star-half-stroke"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                            </div>
+                                                        </div>
+                                                        <span>Overall rating of 28 reviews/ratings</span>
                                                     </div>
-                                                    <span>10</span>
+                                                    <div className="vl"></div>
+                                                    <div className='progress-rating'>
+                                                        <div className='progress-bar-box'>
+                                                            <div className="progress-stars">
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                            </div>
+                                                            <div class="progress-bar-container">
+                                                                <div class="five-star-bar"></div>
+                                                            </div>
+                                                            <span>15</span>
+                                                        </div>
+                                                        <div className='progress-bar-box'>
+                                                            <div className='progress-bar-box'>
+                                                                <div className="progress-stars">
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                    <i class="fa-regular fa-star"></i>
+                                                                </div>
+                                                                <div class="progress-bar-container">
+                                                                    <div class="four-star-bar"></div>
+                                                                </div>
+                                                                <span>10</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className='progress-bar-box'>
+                                                            <div className="progress-stars">
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                            </div>
+                                                            <div class="progress-bar-container">
+                                                                <div class="three-star-bar"></div>
+                                                            </div>
+                                                            <span>6</span>
+                                                        </div>
+                                                        <div className='progress-bar-box'>
+                                                            <div className="progress-stars">
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                            </div>
+                                                            <div class="progress-bar-container">
+                                                                <div class="two-star-bar"></div>
+                                                            </div>
+                                                            <span>3</span>
+                                                        </div>
+                                                        <div className='progress-bar-box'>
+                                                            <div className="progress-stars">
+                                                                <i class="fa-solid fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                                <i class="fa-regular fa-star"></i>
+                                                            </div>
+                                                            <div class="progress-bar-container">
+                                                                <div class="one-star-bar"></div>
+                                                            </div>
+                                                            <span>1</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row2"></div>
+                                                <div className="row3 profile-review-container">
+                                                    <CustomerReviews posts={currentReviewData} />
+                                                    <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
                                                 </div>
                                             </div>
-                                            <div className='progress-bar-box'>
-                                                <div className="progress-stars">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                </div>
-                                                <div class="progress-bar-container">
-                                                    <div class="three-star-bar"></div>
-                                                </div>
-                                                <span>6</span>
-                                            </div>
-                                            <div className='progress-bar-box'>
-                                                <div className="progress-stars">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                </div>
-                                                <div class="progress-bar-container">
-                                                    <div class="two-star-bar"></div>
-                                                </div>
-                                                <span>3</span>
-                                            </div>
-                                            <div className='progress-bar-box'>
-                                                <div className="progress-stars">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                </div>
-                                                <div class="progress-bar-container">
-                                                    <div class="one-star-bar"></div>
-                                                </div>
-                                                <span>1</span>
+                                            <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
+                                                <h2>Badges</h2>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row2"></div>
-                                    <div className="row3 profile-review-container">
-                                        <CustomerReviews posts={currentReviewData} />
-                                        <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
-                                    </div>
-                                </div>
-                                <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-                                    <h2>Badges</h2>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+
+                    )}
+                </>
+                <Footer />
             </div>
-            <Footer />
         </>
     )
 }
