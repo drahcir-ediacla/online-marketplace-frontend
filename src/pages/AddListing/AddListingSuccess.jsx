@@ -13,7 +13,6 @@ import BtnClear from '../../components/Button/BtnClear';
 
 
 const AddListingSuccess = () => {
-
     const { id, name } = useParams();
     const [product, setProduct] = useState(null);
     const dispatch = useDispatch();
@@ -51,16 +50,17 @@ const AddListingSuccess = () => {
                             <h4>Your product has successfully been published</h4>
                         </div>
                         <div className="success-new-listed-box">
-                            <div className="new-listed-info">
-                                {/* Use the first image in the images array */}
-                                <img src={product.images[0].image_url} alt="" />
-                                <div className='new-listed-info-col-left'>
-                                    <p>"{product.product_name}"</p>
-                                    <span className='listed-price'>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                    <p className='listed-in'>Listed in {product.seller.city}, {product.seller.region}, Philippines</p>
-                                    
+                            {product && product.images && product.images.length > 0 && (
+                                <div className="new-listed-info">
+                                    {/* Use the first image in the images array */}
+                                    <img src={product.images[0].image_url} alt="" />
+                                    <div className='new-listed-info-col-left'>
+                                        <p>"{product.product_name}"</p>
+                                        <span className='listed-price'>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        <p className='listed-in'>Listed in {product.seller.city}, {product.seller.region}, Philippines</p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                             <div className="redirect-buttons">
                                 <BtnClear label="Add New Listing" onClick={addNewListing} /> <BtnGreen label="View Listing" onClick={viewListing} />
                             </div>
@@ -70,9 +70,7 @@ const AddListingSuccess = () => {
             </div>
             <Footer />
         </>
-
     );
 };
-
 
 export default AddListingSuccess;
