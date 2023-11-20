@@ -111,13 +111,13 @@ const ProfilePage = () => {
                                             </div>
                                             <div className='listing-content' style={{ display: activeTab === 0 ? 'block' : 'none' }}>
                                                 <div className='row1'>
-                                                    <div><h5>You have 18 listings</h5></div>
+                                                    <div><h5>You have {user?.products?.length || 0} listings</h5></div>
                                                     <div className='col-right'>
                                                         <SearchBox placeholder='Search listings...' />
                                                         <Filters />
                                                     </div>
                                                 </div>
-                                                <div className="prod-listing-container"><ListingCard data={recommendedItemsData} /></div>
+                                                <div className="prod-listing-container"><ListingCard data={user?.products || []} /></div>
                                             </div>
                                             <div className="reviews-content" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
                                                 <div className='row1'>
