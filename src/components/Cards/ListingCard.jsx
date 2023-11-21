@@ -18,7 +18,7 @@ const ListingCard = ({ data }) => {
     const formattedPrice = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'PHP', // Change to your desired currency code
-      minimumFractionDigits: 0,  // Set to 0 to exclude decimals if the fractional part is zero
+      minimumFractionDigits: 2,  
       maximumFractionDigits: 2,
     }).format(price);
   
