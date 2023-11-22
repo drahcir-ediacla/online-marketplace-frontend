@@ -43,7 +43,7 @@ const ProfilePage = () => {
             } catch (error) {
                 dispatch(Setloader(false));
                 console.error('Error fetching data:', error);
-            
+
                 // Check if the error is due to unauthorized access
                 if (error.response && error.response.status === 401) {
                     console.error('User not authenticated');
@@ -116,7 +116,13 @@ const ProfilePage = () => {
                                                         <Filters />
                                                     </div>
                                                 </div>
-                                                <div className="prod-listing-container"><ListingCard data={user?.products || []} /></div>
+                                                <div className="prod-listing-container">
+                                                    <ListingCard
+                                                        data={user?.products || []}
+                                                        city={user?.city || ''}
+                                                        region={user?.region || ''}
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="reviews-content" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
                                                 <div className='row1'>

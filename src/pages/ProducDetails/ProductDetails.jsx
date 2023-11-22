@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from '../../apicalls/axios';
 import { useParams } from 'react-router-dom';
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
@@ -103,7 +105,7 @@ const ProductDetails = () => {
                     <hr />
                     <div className='product-details'>
                         <div className='col-left'>
-                            <span className='time-posted'><b>Posted:</b> 12 hours ago</span>
+                            <span className='time-posted'><b>Posted:</b> {formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</span>
                             <hr />
                             <div className='prod-details-title-desc'><h2>{product.product_name}</h2></div>
                             <div className='prod-details-spec'><p>{product.description}</p>

@@ -1,4 +1,6 @@
 import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg';
@@ -6,7 +8,7 @@ import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.s
 import BtnGreen from '../Button/BtnGreen';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ListingCard = ({ data }) => {
+const ListingCard = ({ data, city, region }) => {
 
   // Check if data is null or undefined
   if (!data) {
@@ -39,8 +41,8 @@ const ListingCard = ({ data }) => {
           </div>
           <div className='product-info'>
             <p>{product.product_name}</p>
-            <small>{product.location}</small>
-            <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{product.created_at}</small></div>
+            <small>{city}, {region}</small>
+            <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
           </div>
           <div className='prod-condition-price'>
             <div className='col-price'>
