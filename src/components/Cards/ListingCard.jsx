@@ -28,7 +28,7 @@ const ListingCard = ({ data }) => {
   return (
     <>
       {data.map((product, index) => (
-        <Link to={product.path} key={index} className="prod-listing-thumb">
+        <Link to={`/productdetails/${product.id}/${product.product_name}`} key={index} className="prod-listing-thumb">
           <div className='image-holder'>
             {product.images && product.images[0] && (
               <img src={product.images[0].image_url || NoImage } alt={`Product ${index}`} className='product-img' />
