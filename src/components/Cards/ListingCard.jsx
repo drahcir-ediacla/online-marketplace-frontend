@@ -30,17 +30,17 @@ const ListingCard = ({ data, city, region }) => {
   return (
     <>
       {data.map((product, index) => (
-        <Link to={`/productdetails/${product.id}/${product.product_name}`} key={index} className="prod-listing-thumb">
-          <div className='image-holder'>
+        <div key={index} className="prod-listing-thumb">
+          <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
             {product.images && product.images[0] && (
               <img src={product.images[0].image_url || NoImage } alt={`Product ${index}`} className='product-img' />
             )}
             {!product.images && (
               <img src={NoImage} alt={`No Images Available`} className='product-img' />
             )}
-          </div>
+          </Link>
           <div className='product-info'>
-            <p>{product.product_name}</p>
+            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{product.product_name}</p></Link>
             <small>{city}, {region}</small>
             <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
           </div>
@@ -54,7 +54,7 @@ const ListingCard = ({ data, city, region }) => {
             </div>
           </div>
           <div className='promote-btn-box'><BtnGreen label='Promote' className='promote-btn' /></div>
-        </Link>
+        </div>
       ))}
     </>
   );

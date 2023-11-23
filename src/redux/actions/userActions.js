@@ -2,20 +2,13 @@
 import { setUser, setError } from '../reducer/userSlice';
 import axios from '../../apicalls/axios';
 import { Setloader } from '../reducer/loadersSlice';
+import {GetCurrentUser, UpdateCurrentUser} from '../../apicalls/users'
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
 export const getUser = () => async (dispatch) => {
   try {
-
-    const response = await axios.get(GET_USER_LOGIN, {
-      withCredentials: true,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': true,
-      },
-    });
+    const response = await GetCurrentUser(); // Corrected the usage of GetCurrentUser()
 
     if (response.status === 200) {
       const userData = response.data.user;
@@ -44,7 +37,7 @@ export const updateUser = (userData) => async (dispatch) => {
   try {
     dispatch(Setloader(true));
 
-    const response = await axios.put('/verify/api/updateuser', userData);
+    const response = await UpdateCurrentUser(userData);
 
     // Check if the server response indicates a successful update
     if (response.status === 200) {

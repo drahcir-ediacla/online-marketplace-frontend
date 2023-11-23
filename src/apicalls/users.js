@@ -24,8 +24,19 @@ export const LoginUser = async (payload) => {
 export const GetCurrentUser = async () => {
     try{
         const response = await axios.get('/auth/check-auth');
-        return response.data;
+        return response
     } catch (error) {
-        return error.message;
+        return error
+    }
+}
+
+// update user
+
+export const UpdateCurrentUser = async (userData) => {
+    try {
+        const response = await axios.put('/verify/api/updateuser', userData);
+        return response
+    } catch (error) {
+        return error
     }
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
+import { GetCategories } from '../../apicalls/products'
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -43,6 +44,23 @@ const AddListing = () => {
     setIsOpen(!isOpen);
   }
 
+  
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleConditionChange = (event) => {
+    const selectedCondition = event.target.value;
+    setCondition(selectedCondition); // Update the local state
+
+    setProductDetails({
+      ...productDetails,
+      product_condition: selectedCondition, // Set the product_condition in productDetails
+    });
+  };
+
+
   const handleOptionClick = (option) => {
     // Find the category or subcategory object based on the selectedOption
     let selectedCategory = categories.find((category) => category.label === option);
@@ -68,22 +86,7 @@ const AddListing = () => {
     setIsOpen(false);
   };
 
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  }
-
-  const handleConditionChange = (event) => {
-    const selectedCondition = event.target.value;
-    setCondition(selectedCondition); // Update the local state
-
-    setProductDetails({
-      ...productDetails,
-      product_condition: selectedCondition, // Set the product_condition in productDetails
-    });
-  };
-
-
+  
   const handleCategoryClick = (clickedCategory) => {
     setCategories((prevCategories) =>
       prevCategories.map((category) => {
@@ -118,9 +121,16 @@ const AddListing = () => {
 
 
   useEffect(() => {
-    axios.get("/api/getproductcategories")
-      .then((response) => setCategories(response.data))
-      .catch((error) => console.error("Error fetching data:", error));
+    const fetchCategories = async () => {
+      try {
+        const response = await GetCategories();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
 

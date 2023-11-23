@@ -29,6 +29,7 @@
     .product-info {
         padding: 10px 10px;
         margin: 0;
+        color: var(--gray-500);
 
         small {
             font-style: italic;
@@ -171,19 +172,25 @@
     width: 230px;
     background: white;
     border-radius: 5px;
-    cursor: pointer;
     margin-bottom: 20px;
     text-decoration: none;
     color: var(--gray-500);
 
     p {
         margin-bottom: 0;
+        color: var(--gray-500);
+    }
+
+    p:hover {
+        color: var(--green-400);
+        cursor: pointer;
     }
 
     .image-holder {
         margin: 0;
         width: 230px;
         height: 200px;
+        cursor: pointer;
 
         .product-img {
             border-radius: 5px 5px 0 0;
@@ -195,6 +202,10 @@
     .product-info {
         padding: 10px 10px;
         margin: 0;
+
+        p {
+            height: 45px;
+        }
 
         small {
             font-style: italic;
