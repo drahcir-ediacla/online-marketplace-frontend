@@ -4,9 +4,9 @@ import axios from '../../apicalls/axios';
 
 // Get Product Categories
 
-export const getProductCategory = () => async (dispatch) => {
+export const getAllCategory = () => async (dispatch) => {
   try {
-    const response = await axios.get('/api/getProductCategories');
+    const response = await axios.get('/api/getallcategories');
 
     if (response.status === 200) {
       const categoriesData = response.data;

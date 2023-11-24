@@ -1,8 +1,8 @@
 import axios from './axios'
 
-export const GetCategories = async() => {
+export const GetAllCategories = async() => {
     try{
-        const response = await axios.get('/api/getproductcategories')
+        const response = await axios.get('/api/getallcategories')
         return response
     } catch(error) {
         return error

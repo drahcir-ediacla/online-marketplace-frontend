@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../apicalls/axios';
-import CategoryIcon1 from '../../assets/images/category-icon1.png'
-import CategoryIcon2 from '../../assets/images/category-icon2.png'
-import CategoryIcon3 from '../../assets/images/category-icon3.png'
-import CategoryIcon4 from '../../assets/images/category-icon4.png'
-import CategoryIcon5 from '../../assets/images/category-icon5.png'
-import CategoryIcon6 from '../../assets/images/category-icon6.png'
-import CategoryIcon7 from '../../assets/images/category-icon7.png'
-import CategoryIcon8 from '../../assets/images/category-icon8.png'
-import CategoryIcon9 from '../../assets/images/category-icon9.png'
-import CategoryIcon10 from '../../assets/images/category-icon10.png'
+import { GetAllCategories } from '../../apicalls/products'
+
 
 const NavCategories = () => {
 
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/getproductcategories")
-      .then((response) => setCategories(response.data))
-      .catch((error) => console.error("Error fetching data:", error));
+    const fetchCategories = async () => {
+      try {
+        const response = await GetAllCategories();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
 

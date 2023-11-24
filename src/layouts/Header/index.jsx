@@ -132,7 +132,7 @@ function Header() {
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>
-                    <span>My Account</span>
+                  <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
                     <div className='my-account-dropdown'>
                       <div className='triangle-icon'><TriangleIcon /></div>
                       <ul>

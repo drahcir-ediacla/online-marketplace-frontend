@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
+import axios from '../../apicalls/axios'
 import './style.scss'
 import NavCategories from '../SlidingSideNav/NavCategories'
 import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
+
+const GET_USER_LOGIN = '/auth/check-auth';
 
 
 const SlidingSideNav = () => {
@@ -23,6 +26,18 @@ const SlidingSideNav = () => {
     setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
   };
 
+  const myProfile = async () => {
+    try {
+      const response = await axios.get(GET_USER_LOGIN);
+      if (response.status === 200) {
+        const resObject = response.data;
+        const userId = resObject.user.id;
+        window.location.href = `/profile/${userId}`;
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
   
 
   return (
@@ -47,14 +62,14 @@ const SlidingSideNav = () => {
                 <div>
                   {user.profile_pic && user.profile_pic.length > 0 ? (
                     <div className="avatar-icon">
-                      <Link to='/MyProfile'><img src={user.profile_pic} alt="" /></Link>
+                      <Link onClick={myProfile}><img src={user.profile_pic} alt="" /></Link>
                     </div>
                   ) : (
                     <div className="avatar-icon">
-                      <Link to='/MyProfile'><img src={AvatarIcon} alt="" /></Link>
+                      <Link onClick={myProfile}><img src={AvatarIcon} alt="" /></Link>
                     </div>
                   )}
-                  <Link to='/MyProfile'><h5>{user.display_name || 'Anonymous'}</h5></Link>
+                  <Link onClick={myProfile}><h5>{user.display_name || 'Anonymous'}</h5></Link>
                 </div>
               ) : (
                 <div>

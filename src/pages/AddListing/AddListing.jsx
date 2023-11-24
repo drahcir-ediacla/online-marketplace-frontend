@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
-import { GetCategories } from '../../apicalls/products'
+import { GetAllCategories } from '../../apicalls/products'
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -123,7 +123,7 @@ const AddListing = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await GetCategories();
+        const response = await GetAllCategories();
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
