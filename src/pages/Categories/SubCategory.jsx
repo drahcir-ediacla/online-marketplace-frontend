@@ -10,11 +10,10 @@ import { Link } from 'react-router-dom'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import subcategoryItemsData from '../../data/subcategoryItemsData.json'
 import ProductCard from '../../components/Cards/ProductCard'
-import ListingCard from '../../components/Cards/ListingCard'
 
 const SubCategory = () => {
 
-  const { id } = useParams();
+  const { id, label } = useParams();
   const [category, setCategory] = useState([]);
   const [err, setErr] = useState(false);
   const dispatch = useDispatch();
@@ -25,7 +24,7 @@ const SubCategory = () => {
 
       try {
         // Fetch the category's data
-        const response = await axios.get(`/api/getcategory/${id}`);
+        const response = await axios.get(`/api/getcategory/${id}/${label}`);
 
         setCategory(response.data);
         dispatch(Setloader(false));
@@ -45,7 +44,7 @@ const SubCategory = () => {
       }
     }
     fetchData();
-  }, [id, dispatch])
+  }, [id, label, dispatch])
 
   // if (!category) {
   //   // If category is still null, you can render a loading spinner or some other loading indicator.
@@ -82,8 +81,6 @@ const SubCategory = () => {
           <div className='sub-category-newly-listed-row3'>
             <ProductCard
               data={category.products || []}
-              city={category.city || ''}
-              region={category.region || ''}
             /></div>
         </div>
       </div>

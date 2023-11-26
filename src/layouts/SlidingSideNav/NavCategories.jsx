@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GetAllCategories } from '../../apicalls/products'
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
@@ -8,6 +9,7 @@ const NavCategories = () => {
 
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Get the history object
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -45,6 +47,11 @@ const NavCategories = () => {
     });
   };
 
+  const handleLinkClick = (url) => {
+    navigate(url); // Navigate to the specified URL
+    window.location.href = url;
+  };
+
 
   return (
     <>
@@ -54,7 +61,9 @@ const NavCategories = () => {
             <li className='main-category' key={index}>
               <div className='category-icon'>
                 <img src={category.icon} alt='' />
-                {category.label}
+                <span onClick={() => handleLinkClick(`/subcategory/${category.id}/${category.label}`)}>
+                  {category.label}
+                </span>
               </div>
 
               {category.subcategories && category.subcategories.length > 0 && (
@@ -66,7 +75,10 @@ const NavCategories = () => {
                   {activeCollapsible[index] && (
                     <ul className='sub-category'>
                       {category.subcategories.map((subCategory, subIndex) => (
-                        <li key={subIndex}>{subCategory.label}</li>
+                        <li key={subIndex}>
+                          <span onClick={() => handleLinkClick(`/subcategory/${subCategory.id}/${subCategory.label}`)}>
+                            {subCategory.label}
+                          </span></li>
                       ))}
                     </ul>
                   )}

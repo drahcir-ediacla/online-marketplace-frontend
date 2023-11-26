@@ -7,7 +7,7 @@ import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.s
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg'
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCard = ({ data, city, region }) => {
+const ProductCard = ({ data }) => {
 
   // Check if data is null or undefined
   if (!data) {
@@ -26,6 +26,11 @@ const ProductCard = ({ data, city, region }) => {
     return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
   };
 
+  // Function to limit the number of characters
+  const limitCharacters = (text, maxLength) => {
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
+
   return (
     <>
       {data.map((product, index) => (
@@ -39,8 +44,8 @@ const ProductCard = ({ data, city, region }) => {
             )}
           </Link>
           <div className='product-info'>
-            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{product.product_name}</p></Link>
-            <small>{city}, {region}</small>
+            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+            <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
             <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
           </div>
           <div className='prod-condition-price'>

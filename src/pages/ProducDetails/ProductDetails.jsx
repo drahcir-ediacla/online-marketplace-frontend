@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from '../../apicalls/axios';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -14,6 +15,7 @@ import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-icon.svg'
 import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
 import Input from '../../components/FormField/Input'
@@ -29,6 +31,7 @@ const ProductDetails = () => {
 
     const { id, name } = useParams();
     const [product, setProduct] = useState(null);
+    const dispatch = useDispatch();
 
     const [currentPage, setCurrentPage] = useState(1);
     // const [postsPerPage] = useState(5);
@@ -48,18 +51,21 @@ const ProductDetails = () => {
 
     useEffect(() => {
         // Fetch product details from the backend using both ID and name
+        dispatch(Setloader(true))
         axios.get(`/api/getproductdetails/${id}/${name}`)
             .then((response) => {
                 setProduct(response.data);
+                dispatch(Setloader(false))
             })
             .catch((error) => {
+                dispatch(Setloader(false))
                 console.error('Error fetching product details:', error);
             });
-    }, [id, name]);
+    }, [id, name, dispatch]);
 
     if (!product) {
         // Render loading state or handle error
-        return <div>Loading...</div>;
+        return null;
     }
 
     return (
