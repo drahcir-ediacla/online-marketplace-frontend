@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { GetAllCategories } from '../../apicalls/products'
+import { useDispatch } from 'react-redux';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 
 const NavCategories = () => {
 
   const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        dispatch(Setloader(true))
         const response = await GetAllCategories();
         setCategories(response.data);
+        dispatch(Setloader(false))
       } catch (error) {
+        dispatch(Setloader(false))
         console.error("Error fetching data:", error);
       }
     };
 
     fetchCategories();
-  }, []);
+  }, [dispatch]);
 
 
 
