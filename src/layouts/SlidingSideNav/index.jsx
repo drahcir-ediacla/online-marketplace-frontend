@@ -44,7 +44,7 @@ const SlidingSideNav = () => {
   };
 
 
-  // FETCH CATEGORIES //
+  // FETCH ALL CATEGORIES //
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
