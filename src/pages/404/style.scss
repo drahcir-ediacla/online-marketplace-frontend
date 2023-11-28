@@ -1,0 +1,35 @@
+.page-not-found-body {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+
+    .page-not-found-content {
+        width: 921px;
+        display: flex;
+        justify-content: space-between;
+
+        .page-not-found-img {
+            img {
+                width: 270px;
+                height: 286px;
+            }
+        }
+    }
+
+    .page-not-found-text {
+        max-width: 556px;
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .page-not-found-btn {
+            float: none;
+        }
+    }
+}
