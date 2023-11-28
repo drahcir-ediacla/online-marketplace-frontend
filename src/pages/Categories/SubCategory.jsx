@@ -3,7 +3,6 @@ import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
-import LoadingSpinner from '../../components/LoadingSpinner'
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -14,7 +13,7 @@ import ProductCard from '../../components/Cards/ProductCard'
 
 const SubCategory = () => {
 
-  const { id } = useParams();
+  const { id, label } = useParams();
   const [category, setCategory] = useState([]);
   const [err, setErr] = useState(false);
   const dispatch = useDispatch();
@@ -25,7 +24,7 @@ const SubCategory = () => {
 
       try {
         // Fetch the category's data
-        const response = await axios.get(`/api/getcategory/${id}`);
+        const response = await axios.get(`/api/getcategory/${id}/${label}`);
 
         setCategory(response.data);
         dispatch(Setloader(false));
@@ -38,14 +37,14 @@ const SubCategory = () => {
         if (error.response && error.response.status === 500) {
           return error.message
           // Handle unauthorized access, e.g., redirect to login
-      } else {
+        } else {
           // Handle other errors
           setErr(true); // Depending on your requirements
-      }
+        }
       }
     }
     fetchData();
-  }, [id, dispatch])
+  }, [id, label, dispatch])
 
   // if (!category) {
   //   // If category is still null, you can render a loading spinner or some other loading indicator.
@@ -65,21 +64,24 @@ const SubCategory = () => {
       <Header />
       <div className='container sub-category-body'>
         <div className="row1">
-            <ul className='breadcrumb'>
-                <li><Link to='/'>Home</Link></li>
-                <li><Link to='/MainCategory'>Mobiles & Electronics</Link></li>
-                <li>Headphones</li>
-            </ul>
+          <ul className='breadcrumb'>
+            <li><Link to='/'>Home</Link></li>
+            <li><Link to='/MainCategory'>Mobiles & Electronics</Link></li>
+            <li>Headphones</li>
+          </ul>
         </div>
         <div className="row2 sub-category-banner">Your ADS Here</div>
         <div className="row3 sub-category-newly-listed">
-            <div className="sub-category-newly-listed-row1">
-                <div className='product-section-title'>
-                    <h3>{category.label}</h3>
-                </div>
+          <div className="sub-category-newly-listed-row1">
+            <div className='product-section-title'>
+              <h3>{category.label}</h3>
             </div>
-            <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>
-            <div className='sub-category-newly-listed-row3'><ProductCard product={subcategoryItemsData} /></div>
+          </div>
+          <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>
+          <div className='sub-category-newly-listed-row3'>
+            <ProductCard
+              data={category.products || []}
+            /></div>
         </div>
       </div>
       <Footer />

@@ -3,28 +3,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
 import axios from '../../apicalls/axios'
+import { GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import NavCategories from '../SlidingSideNav/NavCategories'
 import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
 
 const SlidingSideNav = () => {
 
+  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
 
-  useEffect (() => {
-    dispatch(getUser())
-  }, [dispatch]);
-
   const toggleMenu = () => {
     setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
   };
+
+  // FETCH AUTHENTICATED USER //
+  useEffect (() => {
+    dispatch(getUser())
+  }, [dispatch]);
 
   const myProfile = async () => {
     try {
@@ -37,6 +41,46 @@ const SlidingSideNav = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
+  };
+
+
+  // FETCH ALL CATEGORIES //
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        dispatch(Setloader(true))
+        const response = await GetAllCategories();
+        setCategories(response.data);
+        dispatch(Setloader(false))
+      } catch (error) {
+        dispatch(Setloader(false))
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [dispatch]);
+
+
+  // SET COLLAPSIBLE //
+  const [activeCollapsible, setActiveCollapsible] = useState([]);
+
+  const handleToggleCollapsible = (index) => {
+    setActiveCollapsible((prevActiveCollapsible) => {
+      const updatedCollapsible = [...prevActiveCollapsible];
+      updatedCollapsible[index] = !updatedCollapsible[index];
+
+      // Close other active collapsibles
+      updatedCollapsible.forEach((value, i) => {
+        if (i !== index) {
+          updatedCollapsible[i] = false;
+        }
+      });
+
+      return updatedCollapsible;
+    });
   };
   
 
@@ -90,7 +134,40 @@ const SlidingSideNav = () => {
               </div>
             </div>
             <div className='row3'>
-              <NavCategories />
+            <div className='nav-categories'>
+        <ul>
+          {categories.map((category, index) => (
+            <li className='main-category' key={index}>
+              <div className='category-icon'>
+                <img src={category.icon} alt='' />
+                <Link to={`/subcategory/${category.id}/${category.label}`} onClick={toggleMenu}>
+                  {category.label}
+                </Link>
+              </div>
+
+              {category.subcategories && category.subcategories.length > 0 && (
+                <>
+                  <div
+                    className={`collapsible ${activeCollapsible[index] ? 'active' : ''}`}
+                    onClick={() => handleToggleCollapsible(index)}
+                  ></div>
+                  {activeCollapsible[index] && (
+                    <ul className='sub-category'>
+                      {category.subcategories.map((subCategory, subIndex) => (
+                        <li key={subIndex}>
+                          <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                            {subCategory.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
             </div>
           </div>
 

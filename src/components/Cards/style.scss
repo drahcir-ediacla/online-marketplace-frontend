@@ -7,13 +7,19 @@
     width: 240px;
     background: white;
     border-radius: 5px;
-    cursor: pointer;
     margin-bottom: 20px;
     text-decoration: none;
     color: var(--gray-500);
 
     p {
         margin-bottom: 0;
+        color: var(--gray-500);
+        height: 68px;
+    }
+
+    p:hover {
+        color: var(--green-400);
+        cursor: pointer;
     }
 
     .image-holder {
@@ -179,6 +185,7 @@
     p {
         margin-bottom: 0;
         color: var(--gray-500);
+        height: 68px;
     }
 
     p:hover {
@@ -202,10 +209,6 @@
     .product-info {
         padding: 10px 10px;
         margin: 0;
-
-        p {
-            height: 45px;
-        }
 
         small {
             font-style: italic;
