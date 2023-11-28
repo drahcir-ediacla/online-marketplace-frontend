@@ -48,20 +48,29 @@ const SlidingSideNav = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        dispatch(Setloader(true))
-        const response = await GetAllCategories();
-        setCategories(response.data);
-        dispatch(Setloader(false))
-      } catch (error) {
-        dispatch(Setloader(false))
-        console.error("Error fetching data:", error);
-      }
-    };
+    // Check if cached data is available in localStorage
+    const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
 
-    fetchCategories();
-  }, [dispatch]);
+    if (cachedCategories) {
+      setCategories(cachedCategories);
+    } else {
+      const fetchCategories = async () => {
+        try {
+          const response = await GetAllCategories();
+          const fetchedCategories = response.data;
+
+          // Cache the fetched data in localStorage
+          localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
+
+          setCategories(fetchedCategories);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchCategories();
+    }
+  }, []);
 
 
   // SET COLLAPSIBLE //

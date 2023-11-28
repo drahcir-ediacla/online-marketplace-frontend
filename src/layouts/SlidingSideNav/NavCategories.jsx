@@ -7,16 +7,28 @@ const NavCategories = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await GetAllCategories();
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    // Check if cached data is available in localStorage
+    const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
 
-    fetchCategories();
+    if (cachedCategories) {
+      setCategories(cachedCategories);
+    } else {
+      const fetchCategories = async () => {
+        try {
+          const response = await GetAllCategories();
+          const fetchedCategories = response.data;
+
+          // Cache the fetched data in localStorage
+          localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
+
+          setCategories(fetchedCategories);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchCategories();
+    }
   }, []);
 
 
