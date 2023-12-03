@@ -1,37 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products';
 import SlidingSideNav from '../SlidingSideNav'
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 const NavMenu = () => {
 
     const [categories, setCategories] = useState([])
+    const dispatch = (useDispatch())
 
     // FETCH ALL CATEGORIES //
     useEffect(() => {
-        // Check if cached data is available in localStorage
-        const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
+        const fetchCategories = async () => {
+          try {
+            dispatch(Setloader(true))
+            const response = await GetAllCategories();
+            setCategories(response.data);
+            dispatch(Setloader(false))
+          } catch (error) {
+            dispatch(Setloader(false))
+            console.error("Error fetching data:", error);
+          }
+        };
     
-        if (cachedCategories) {
-          setCategories(cachedCategories);
-        } else {
-          const fetchCategories = async () => {
-            try {
-              const response = await GetAllCategories();
-              const fetchedCategories = response.data;
-    
-              // Cache the fetched data in localStorage
-              localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
-    
-              setCategories(fetchedCategories);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
-          };
-    
-          fetchCategories();
-        }
-      }, []);
+        fetchCategories();
+      }, [dispatch]);
 
     // Specify the labels you want to include
     const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Furniture", "Games, Hobbies & Crafts", "Jewelry & Watches"];

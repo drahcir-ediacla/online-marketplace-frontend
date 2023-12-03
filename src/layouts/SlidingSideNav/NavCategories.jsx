@@ -1,35 +1,56 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products'
+import { Setloader } from '../../redux/reducer/loadersSlice';
 
 
 const NavCategories = () => {
 
   const [categories, setCategories] = useState([]);
+  const dispatch = (useDispatch())
 
+  // useEffect(() => {
+  //   // Check if cached data is available in localStorage
+  //   const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
+
+  //   if (cachedCategories) {
+  //     setCategories(cachedCategories);
+  //   } else {
+  //     const fetchCategories = async () => {
+  //       try {
+  //         const response = await GetAllCategories();
+  //         const fetchedCategories = response.data;
+
+  //         // Cache the fetched data in localStorage
+  //         localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
+
+  //         setCategories(fetchedCategories);
+  //       } catch (error) {
+  //         console.error('Error fetching data:', error);
+  //       }
+  //     };
+
+  //     fetchCategories();
+  //   }
+  // }, []);
+
+
+  // FETCH ALL CATEGORIES //
   useEffect(() => {
-    // Check if cached data is available in localStorage
-    const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
+    const fetchCategories = async () => {
+      try {
+        dispatch(Setloader(true))
+        const response = await GetAllCategories();
+        setCategories(response.data);
+        dispatch(Setloader(false))
+      } catch (error) {
+        dispatch(Setloader(false))
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    if (cachedCategories) {
-      setCategories(cachedCategories);
-    } else {
-      const fetchCategories = async () => {
-        try {
-          const response = await GetAllCategories();
-          const fetchedCategories = response.data;
-
-          // Cache the fetched data in localStorage
-          localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
-
-          setCategories(fetchedCategories);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-
-      fetchCategories();
-    }
-  }, []);
+    fetchCategories();
+  }, [dispatch]);
 
 
 
