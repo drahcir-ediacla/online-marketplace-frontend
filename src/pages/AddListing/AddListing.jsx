@@ -25,6 +25,7 @@ const AddListing = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
+  const [titleError, setTitleError] = useState('');
   const dropDownCategory = useRef(null);
   const [condition, setCondition] = useState('Brand New');
   const [productDetails, setProductDetails] = useState({
@@ -44,7 +45,7 @@ const AddListing = () => {
     setIsOpen(!isOpen);
   }
 
-  
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -86,7 +87,7 @@ const AddListing = () => {
     setIsOpen(false);
   };
 
-  
+
   const handleCategoryClick = (clickedCategory) => {
     setCategories((prevCategories) =>
       prevCategories.map((category) => {
@@ -200,23 +201,28 @@ const AddListing = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if the title is provided
-  if (!productDetails.product_name) {
-    alert('Please enter a title for your listing.');
-    return;
-  }
+    
 
-  // Check if the price is a positive number
-  if (!productDetails.price || isNaN(productDetails.price) || productDetails.price <= 0) {
-    alert('Please enter a valid price for your listing.');
-    return;
-  }
+    // Check if the title is provided and meets the minimum length requirement
+    if (!productDetails.product_name) {
+      alert('Please enter a title for your listing.');
+      return;
+    } else if (productDetails.product_name.length < 5) {
+      alert('Title must be at least 5 characters long.');
+      return;
+    } 
 
-  // Check if at least one image is uploaded
-  if (selectedImages.length === 0) {
-    alert('Please upload at least one image for your listing.');
-    return;
-  }
+    // Check if the price is a positive number
+    if (!productDetails.price || isNaN(productDetails.price) || productDetails.price <= 0) {
+      alert('Please enter a valid price for your listing.');
+      return;
+    }
+
+    // Check if at least one image is uploaded
+    if (selectedImages.length === 0) {
+      alert('Please upload at least one image for your listing.');
+      return;
+    }
 
     // Create an array to store image URLs
     const imageUrls = [];
@@ -466,6 +472,7 @@ const AddListing = () => {
                         className='listing-input-field'
                         placeholder='Listing Title'
                         onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
+                        
                       />
                     </div>
                     <h3>About the item</h3>
