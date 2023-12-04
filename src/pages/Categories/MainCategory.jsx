@@ -31,8 +31,6 @@ const MainCategory = () => {
   const products = Array.isArray(category.products) ? category.products : [];
   const allProducts = [...subCategoryProducts, ...products];
 
-  <ProductCarousel data={allProducts} />
-
   useEffect(() => {
     const fetchData = async () => {
       dispatch(Setloader(true));

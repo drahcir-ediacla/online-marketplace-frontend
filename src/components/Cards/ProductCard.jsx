@@ -28,41 +28,57 @@ const ProductCard = ({ data }) => {
 
   // Function to limit the number of characters
   const limitCharacters = (text, maxLength) => {
+    if (!text) {
+      return ''; // or return some default value
+    }
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
   return (
     <>
-      {data.map((product, index) => (
-        <div key={index} className="thumbnail-container">
-          <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
-            {product.images && product.images[0] && (
-              <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
-            )}
-            {!product.images && (
-              <img src={NoImage} alt={`No Images Available`} className='product-img' />
-            )}
-          </Link>
-          <div className='product-info'>
-            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
-            <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
-            <div className="date-post">
-              <div className="small-clock"><ClockIcon /></div>
-              <small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small>
+      {data.map((product, index) => {
+
+        // Logging to check the value of product.created_at
+        console.log('Product created_at:', product.created_at);
+
+        // Ensure product.created_at is a valid date before using it
+        const createdAtDate = new Date(product.created_at);
+        if (isNaN(createdAtDate.getTime())) {
+          console.error('Invalid date value:', product.created_at);
+          return null; // or handle the invalid date value in some way
+        }
+
+        return (
+          <div key={index} className="thumbnail-container">
+            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+              {product.images && product.images[0] && (
+                <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+              )}
+              {!product.images && (
+                <img src={NoImage} alt={`No Images Available`} className='product-img' />
+              )}
+            </Link>
+            <div className='product-info'>
+              <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+              <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
+              <div className="date-post">
+                <div className="small-clock"><ClockIcon /></div>
+                <small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small>
+              </div>
+            </div>
+            <div className='prod-condition-price'>
+              <div className='col-price'>
+                <small>{product.product_condition}</small>
+                <div className="price">{formatPrice(product.price)}</div>
+              </div>
+              <div className='col-wishlist'>
+                {product.wishlist}
+                <div className='heart-icon'><HeartIcon /></div>
+              </div>
             </div>
           </div>
-          <div className='prod-condition-price'>
-            <div className='col-price'>
-              <small>{product.product_condition}</small>
-              <div className="price">{formatPrice(product.price)}</div>
-            </div>
-            <div className='col-wishlist'>
-              {product.wishlist}
-              <div className='heart-icon'><HeartIcon /></div>
-            </div>
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </>
   )
 }
