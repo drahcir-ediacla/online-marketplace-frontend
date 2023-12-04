@@ -24,7 +24,7 @@ const NewItems = () => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div>
-        <ProductCarousel product={newItemsData} />
+        <ProductCarousel data={newItemsData} />
         </div>
       </div>
     </>

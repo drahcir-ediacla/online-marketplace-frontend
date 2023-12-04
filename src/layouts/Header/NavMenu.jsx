@@ -42,7 +42,7 @@ const NavMenu = () => {
                         <>
                             <li key={index}>
                                 <div className='btm-border'>
-                                    <Link to={`/subcategory/${category.id}/${category.label}`} className='parent-menu'>
+                                    <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
                                         {category.label}
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (

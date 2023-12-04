@@ -140,7 +140,7 @@ const SlidingSideNav = () => {
             <li className='main-category' key={index}>
               <div className='category-icon'>
                 <img src={category.icon} alt='' />
-                <Link to={`/subcategory/${category.id}/${category.label}`} onClick={toggleMenu}>
+                <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
                   {category.label}
                 </Link>
               </div>

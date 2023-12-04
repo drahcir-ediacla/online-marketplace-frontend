@@ -24,7 +24,7 @@ const PopularItems = () => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div>
-          <ProductCarousel product={popularItemsData} />
+          <ProductCarousel data={popularItemsData} />
         </div>
       </div>
     </>

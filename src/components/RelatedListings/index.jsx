@@ -24,7 +24,7 @@ const RelatedListings = () => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div className='product-cards-container'>
-            <ProductCard product={relatedListingsData} />
+            <ProductCard data={relatedListingsData} />
         </div>
       </div>
     </>
