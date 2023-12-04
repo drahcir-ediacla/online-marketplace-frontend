@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import axios from '../../apicalls/axios'
 import { GetAllCategories } from '../../apicalls/products';
 import './style.scss'
-import NavCategories from '../SlidingSideNav/NavCategories'
 import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/avatar-icon.png'
@@ -19,6 +18,7 @@ const SlidingSideNav = () => {
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.user.data);
+  const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
 
   const toggleMenu = () => {
@@ -44,33 +44,24 @@ const SlidingSideNav = () => {
   };
 
 
+  
   // FETCH ALL CATEGORIES //
-  const [categories, setCategories] = useState([]);
-
   useEffect(() => {
-    // Check if cached data is available in localStorage
-    const cachedCategories = JSON.parse(localStorage.getItem('cachedCategories'));
+    const fetchCategories = async () => {
+      try {
+        dispatch(Setloader(true))
+        const response = await GetAllCategories();
+        setCategories(response.data);
+        dispatch(Setloader(false))
+      } catch (error) {
+        dispatch(Setloader(false))
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    if (cachedCategories) {
-      setCategories(cachedCategories);
-    } else {
-      const fetchCategories = async () => {
-        try {
-          const response = await GetAllCategories();
-          const fetchedCategories = response.data;
+    fetchCategories();
+  }, [dispatch]);
 
-          // Cache the fetched data in localStorage
-          localStorage.setItem('cachedCategories', JSON.stringify(fetchedCategories));
-
-          setCategories(fetchedCategories);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-
-      fetchCategories();
-    }
-  }, []);
 
 
   // SET COLLAPSIBLE //
