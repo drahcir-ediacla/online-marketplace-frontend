@@ -8,8 +8,6 @@ import { Setloader } from '../../redux/reducer/loadersSlice'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
-import newItemsData from '../../data/newItemsData'
-import ProductCarousel from '../../components/Carousel/ProductCarousel'
 import BtnCategory from  '../../components/Button/BtnCategory'
 import BtnSeeMore from  '../../components/Button/BtnSeeMore'
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'

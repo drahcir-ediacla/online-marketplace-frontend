@@ -68,6 +68,11 @@ const ProductDetails = () => {
         return null;
     }
 
+
+    const originalDate = product.seller.createdAt || '';
+    const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+
+
     return (
         <>
             <Header />
@@ -136,11 +141,11 @@ const ProductDetails = () => {
                         </div>
                         <div className='col-right'>
                             <div className="prod-details-inquiry-form">
-                                <div><h5>Seller Information</h5><small>Joined in July 2020</small></div>
+                                <div><h5>Seller Information</h5><small>Joined in {formattedDate}</small></div>
                                 <div className='row2'>
-                                    <div className='col-left'><Link to="#"><img src={CustomerPic} alt="" className='customer-pic' /></Link></div>
+                                    <div className='col-left'><Link to={`/profile/${product.seller.id}`}><img src={product.seller.profile_pic} alt="" className='customer-pic' /></Link></div>
                                     <div className='col-right'>
-                                        <Link to="#" className='seller-name'>Vito Corleon</Link>
+                                        <Link to={`/profile/${product.seller.id}`} className='seller-name'>{product.seller.display_name}</Link>
                                         <div className="seller-rating">
                                             <span>4.0</span>
                                             <i class="fa-solid fa-star"></i>

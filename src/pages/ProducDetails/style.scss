@@ -150,7 +150,6 @@
                 width: 383px;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
                 .prod-details-inquiry-form{
                     display: flex;
                     flex-direction: column;
@@ -174,6 +173,7 @@
                         .col-left{
                             .customer-pic{
                                 width: 60px;
+                                border-radius: 50%;
                             }
                         }
                         .col-right{

@@ -16,6 +16,7 @@ const PageNotFound = () => {
             <img src={SadImage} alt="" />
           </div>
           <div className='page-not-found-text'>
+            <h1 className='error-404'>404</h1>
             <h1>OOPS! PAGE NOT FOUND</h1>
             <p>The page you are looking for might have been removed, had its name changed or is temporarily unavailable.</p>
             <BtnGreen label='BACT TO HOME' className='page-not-found-btn' onClick={HomePage} />
