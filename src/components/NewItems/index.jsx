@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from '../../apicalls/axios'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -8,8 +8,8 @@ import { Setloader } from '../../redux/reducer/loadersSlice'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
-import BtnCategory from  '../../components/Button/BtnCategory'
-import BtnSeeMore from  '../../components/Button/BtnSeeMore'
+import BtnCategory from '../../components/Button/BtnCategory'
+import BtnSeeMore from '../../components/Button/BtnSeeMore'
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
 import NoImage from '../../assets/images/no-image-available.png'
@@ -100,7 +100,7 @@ const NewItems = () => {
     <>
       <div className="product-section-container">
         <div className='product-section-title'>
-            <h3>Newly Listed Items</h3>
+          <h3>Newly Listed Items</h3>
         </div>
         <div className='product-section-btns'>
           <div className='sub-categories-btn'>
@@ -114,50 +114,52 @@ const NewItems = () => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div>
-        <Carousel responsive={responsive} draggable={true}>
-        {products.map((product, index) => {
-          // Logging to check the value of product.created_at
-          console.log('Product created_at:', product.created_at);
+          <Carousel responsive={responsive} draggable={true}>
+            {products.map((product, index) => {
+              // Logging to check the value of product.created_at
+              console.log('Product created_at:', product.created_at);
 
-          // Ensure product.created_at is a valid date before using it
-          const createdAtDate = new Date(product.created_at);
-          if (isNaN(createdAtDate.getTime())) {
-            console.error('Invalid date value:', product.created_at);
-            return null; // or handle the invalid date value in some way
-          }
+              // Ensure product.created_at is a valid date before using it
+              const createdAtDate = new Date(product.created_at);
+              if (isNaN(createdAtDate.getTime())) {
+                console.error('Invalid date value:', product.created_at);
+                return null; // or handle the invalid date value in some way
+              }
 
-          return (
-            <div key={index} className="thumbnail-container">
-              <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
-                {product.images && product.images[0] && (
-                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
-                )}
-                {!product.images && (
-                  <img src={NoImage} alt={`No Images Available`} className='product-img' />
-                )}
-              </Link>
-              <div className='product-info'>
-                <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
-                <small>{product.city || ''}, {(product.region) || ''}</small>
-                <div className="date-post">
-                  <div className="small-clock"><ClockIcon /></div>
-                  <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
+              return (
+                <div key={index} className="thumbnail-container">
+                  <div>
+                    <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+                      {product.images && product.images[0] && (
+                        <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+                      )}
+                      {!product.images && (
+                        <img src={NoImage} alt={`No Images Available`} className='product-img' />
+                      )}
+                    </Link>
+                    <div className='product-info'>
+                      <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+                      <small>{product.city || ''}, {(product.region) || ''}</small>
+                      <div className="date-post">
+                        <div className="small-clock"><ClockIcon /></div>
+                        <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='prod-condition-price'>
+                    <div className='col-price'>
+                      <small>{product.product_condition}</small>
+                      <div className="price">{formatPrice(product.price)}</div>
+                    </div>
+                    <div className='col-wishlist'>
+                      {product.wishlist}
+                      <div className='heart-icon'><HeartIcon /></div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className='prod-condition-price'>
-                <div className='col-price'>
-                  <small>{product.product_condition}</small>
-                  <div className="price">{formatPrice(product.price)}</div>
-                </div>
-                <div className='col-wishlist'>
-                  {product.wishlist}
-                  <div className='heart-icon'><HeartIcon /></div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </Carousel>
+              );
+            })}
+          </Carousel>
         </div>
       </div>
     </>

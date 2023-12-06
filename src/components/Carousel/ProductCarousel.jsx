@@ -81,20 +81,24 @@ const ProductCarousel = ({ data }) => {
 
           return (
             <div key={index} className="thumbnail-container">
-              <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
-                {product.images && product.images[0] && (
-                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
-                )}
-                {!product.images && (
-                  <img src={NoImage} alt={`No Images Available`} className='product-img' />
-                )}
-              </Link>
-              <div className='product-info'>
-                <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
-                <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
-                <div className="date-post">
-                  <div className="small-clock"><ClockIcon /></div>
-                  <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
+              <div>
+                <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+                  {product.images && product.images[0] && (
+                    <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+                  )}
+                  {!product.images && (
+                    <img src={NoImage} alt={`No Images Available`} className='product-img' />
+                  )}
+                </Link>
+                <div className='product-info'>
+                  <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'>
+                    <p>{limitCharacters(product.product_name, 65)}</p>
+                  </Link>
+                  <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
+                  <div className="date-post">
+                    <div className="small-clock"><ClockIcon /></div>
+                    <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
+                  </div>
                 </div>
               </div>
               <div className='prod-condition-price'>

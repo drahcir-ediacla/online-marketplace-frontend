@@ -4,7 +4,11 @@
 }
 
 .thumbnail-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 240px;
+    height: 406px;
     background: white;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -14,7 +18,6 @@
     p {
         margin-bottom: 0;
         color: var(--gray-500);
-        height: 68px;
     }
 
     p:hover {
@@ -175,6 +178,9 @@
 }
 
 .prod-listing-thumb {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 230px;
     background: white;
     border-radius: 5px;
@@ -185,7 +191,6 @@
     p {
         margin-bottom: 0;
         color: var(--gray-500);
-        height: 68px;
     }
 
     p:hover {

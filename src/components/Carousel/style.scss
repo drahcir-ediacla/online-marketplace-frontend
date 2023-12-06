@@ -5,7 +5,11 @@
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
 }
 .thumbnail-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 240px;
+    height: 406px;
     background: white;
     border-radius: 5px;
     margin-bottom: 20px;

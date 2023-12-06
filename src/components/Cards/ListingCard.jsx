@@ -66,39 +66,43 @@ const ListingCard = ({ data, city, region }) => {
   const limitCharacters = (text, maxLength) => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
-  
+
 
   return (
     <>
       {data.map((product, index) => (
         <div key={index} className="prod-listing-thumb">
-          <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
-            {product.images && product.images[0] && (
-              <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
-            )}
-            {!product.images && (
-              <img src={NoImage} alt={`No Images Available`} className='product-img' />
-            )}
-          </Link>
-          <div className='product-info'>
-            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
-            <small>{city}, {region}</small>
-            <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
-          </div>
-          <div className='prod-condition-price'>
-            <div className='col-price'>
-              <small>{product.product_condition}</small>
-              <div className="price">{formatPrice(product.price)}</div>
-            </div>
-            <div className='col-wishlist'>
-              <div className='heart-icon'><HeartIcon /></div>
+          <div style={{height: "333px"}}>
+            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+              {product.images && product.images[0] && (
+                <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+              )}
+              {!product.images && (
+                <img src={NoImage} alt={`No Images Available`} className='product-img' />
+              )}
+            </Link>
+            <div className='product-info'>
+              <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+              <small>{city}, {region}</small>
+              <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
             </div>
           </div>
-          {(authenticatedUser?.id === user?.id) && (
-            <>
-              <div className='promote-btn-box'><BtnGreen label='Promote' className='promote-btn' /></div>
-            </>
-          )}
+          <div>
+            <div className='prod-condition-price'>
+              <div className='col-price'>
+                <small>{product.product_condition}</small>
+                <div className="price">{formatPrice(product.price)}</div>
+              </div>
+              <div className='col-wishlist'>
+                <div className='heart-icon'><HeartIcon /></div>
+              </div>
+            </div>
+            {(authenticatedUser?.id === user?.id) && (
+              <>
+                <div className='promote-btn-box'><BtnGreen label='Promote' className='promote-btn' /></div>
+              </>
+            )}
+          </div>
         </div>
       ))}
     </>
