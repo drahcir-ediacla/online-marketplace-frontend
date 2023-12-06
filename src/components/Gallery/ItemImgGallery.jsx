@@ -44,13 +44,17 @@ const ItemImgGallery = ({ gallery }) => {
   const isAtFirstThumb = thumbIndex === 0;
   const isAtLastThumb = thumbIndex === gallery.length - 1;
 
+  const shouldHideThumbArrows = gallery.length <= 6;
+  const shouldHideSelectedImgArrows = gallery.length <= 1;
+
   return (
     <>
       <div className='prod-img-gallery'>
+      
         <div className='group-prod-img-thumb'>
-          <button className="thumb-carousel-arrow top-arrow" onClick={prevThumbSlide} disabled={isAtFirstThumb}></button>
+          <button className={`thumb-carousel-arrow top-arrow ${shouldHideThumbArrows ? 'hide' : ''}`} onClick={prevThumbSlide} disabled={isAtFirstThumb}></button>
           <div className='thumb-carousel-container' ref={thumbCarouselRef}>
-            {gallery.map((src, index) => (
+          {gallery.map((src, index) => (
               <img
                 key={index}
                 src={src}
@@ -58,13 +62,13 @@ const ItemImgGallery = ({ gallery }) => {
                 className='prod-img-thumb'
                 onClick={() => handleSmallImgClick(index)}
               />
-            ))}
+              ))}
           </div>
-          <button className="thumb-carousel-arrow bottom-arrow" onClick={nextThumbSlide} disabled={isAtLastThumb}></button>
+          <button className={`thumb-carousel-arrow bottom-arrow ${shouldHideThumbArrows ? 'hide' : ''}`} onClick={nextThumbSlide} disabled={isAtLastThumb}></button>
         </div>
-
+          
         <div className='selected-prod-img-container'>
-          <button className="selected-img-arrow left-arrow" onClick={prevSlide} disabled={isAtFirstImage}></button>
+          <button className={`selected-img-arrow left-arrow ${shouldHideSelectedImgArrows ? 'hide' : ''}`} onClick={prevSlide} disabled={isAtFirstImage}></button>
           <div className="carousel-container" style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
             {gallery.map((src, index) => (
               <img
@@ -76,7 +80,7 @@ const ItemImgGallery = ({ gallery }) => {
               />
             ))}
           </div>
-          <button className="selected-img-arrow right-arrow" onClick={nextSlide} disabled={isAtLastImage}></button>
+          <button className={`selected-img-arrow right-arrow ${shouldHideSelectedImgArrows ? 'hide' : ''}`} onClick={nextSlide} disabled={isAtLastImage}></button>
         </div>
       </div>
     </>
