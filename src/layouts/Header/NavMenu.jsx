@@ -13,25 +13,26 @@ const NavMenu = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Simulate data fetching
-        setTimeout(() => {
-            // Replace this with your actual data fetching logic
+    // useEffect(() => {
+    //     // Simulate data fetching
+    //     setTimeout(() => {
+    //         // Replace this with your actual data fetching logic
             
-            setLoading(false);
-        }, 2000); // Simulating a 2-second delay
-    }, []);
+    //         setLoading(true);
+    //     },); // Simulating a 2-second delay
+    // }, []);
 
 
     // FETCH ALL CATEGORIES //
     useEffect(() => {
         const fetchCategories = async () => {
             try {
+                setLoading(true);
                 const response = await GetAllCategories();
                 setCategories(response.data);
-                // setLoading(false);
+                setLoading(false);
             } catch (error) {
-                // setLoading(false);
+                setLoading(false);
                 console.error("Error fetching data:", error);
             }
         };
@@ -50,16 +51,13 @@ const NavMenu = () => {
         <>
             <nav className='nav-menu'>
                 <ul>
+                    {loading && <NavMenuSkeleton menus={7} />}
                     {filteredCategories.map((category, index) => (
                         <>
                             <li key={index}>
                                 <div className='btm-border'>
                                     <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
-                                    {loading ? (
-                                        <NavMenuSkeleton />
-                                    ) : (
-                                        category.label 
-                                    )}
+                                       {category.label }
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (
                                         <div className="drop-menu">
