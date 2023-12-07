@@ -30,6 +30,7 @@
 
         .top-arrow {
             top: 0;
+            display: none;
         }
 
         .top-arrow::before {
@@ -39,6 +40,7 @@
 
         .bottom-arrow {
             bottom: 0;
+            display: none;
         }
 
         .bottom-arrow::before {
@@ -61,6 +63,18 @@
 
     }
 
+    .group-prod-img-thumb:hover {
+        .top-arrow {
+            cursor: pointer;
+            display: block;
+        }
+
+        .bottom-arrow {
+            cursor: pointer;
+            display: block;
+        }
+    }
+
     .selected-prod-img-container {
         display: flex;
         overflow: hidden;
@@ -70,9 +84,21 @@
         .carousel-container {
             display: flex;
             transition: transform 0.5s ease-in-out;
-            
+
         }
 
+    }
+
+    .selected-prod-img-container:hover {
+        .left-arrow {
+            cursor: pointer;
+            display: block;
+        }
+        .right-arrow {
+            cursor: pointer;
+            display: block;
+        }
+        
     }
 
 }
@@ -120,6 +146,7 @@
 
 .left-arrow {
     left: 0;
+    display: none;
 }
 
 .left-arrow::before {
@@ -129,6 +156,7 @@
 
 .right-arrow {
     right: 0;
+    display: none;
 }
 
 .right-arrow::before {
@@ -138,4 +166,4 @@
 
 .hide {
     display: none;
-  }
+}

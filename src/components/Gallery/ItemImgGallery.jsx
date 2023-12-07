@@ -54,7 +54,8 @@ const ItemImgGallery = ({ gallery }) => {
       <div className='prod-img-gallery'>
       
         <div className='group-prod-img-thumb'>
-          <button className={`thumb-carousel-arrow top-arrow ${shouldHideThumbArrows ? 'hide' : ''}`} onClick={prevThumbSlide} disabled={isAtFirstThumb}></button>
+        {!shouldHideThumbArrows &&
+        <button className='thumb-carousel-arrow top-arrow' onClick={prevThumbSlide} disabled={isAtFirstThumb}></button>}
           <div className='thumb-carousel-container' ref={thumbCarouselRef}>
           {gallery.map((src, index) => (
               <img
@@ -66,11 +67,11 @@ const ItemImgGallery = ({ gallery }) => {
               />
               ))}
           </div>
-          <button className={`thumb-carousel-arrow bottom-arrow ${shouldHideThumbArrows ? 'hide' : ''}`} onClick={nextThumbSlide} disabled={isAtLastThumb}></button>
+          {!shouldHideThumbArrows &&<button className='thumb-carousel-arrow bottom-arrow' onClick={nextThumbSlide} disabled={isAtLastThumb}></button>}
         </div>
           
         <div className='selected-prod-img-container'>
-          <button className={`selected-img-arrow left-arrow ${shouldHideSelectedImgArrows ? 'hide' : ''}`} onClick={prevSlide} disabled={isAtFirstImage}></button>
+        {!shouldHideSelectedImgArrows &&<button className='selected-img-arrow left-arrow' onClick={prevSlide} disabled={isAtFirstImage}></button>}
           <div className="carousel-container" style={{ transform: `translateX(${-currentIndex * 444}px)` }}>
             
             {gallery.map((src, index) => (
@@ -83,7 +84,7 @@ const ItemImgGallery = ({ gallery }) => {
               />
             ))}
           </div>
-          <button className={`selected-img-arrow right-arrow ${shouldHideSelectedImgArrows ? 'hide' : ''}`} onClick={nextSlide} disabled={isAtLastImage}></button>
+          {!shouldHideSelectedImgArrows &&<button className='selected-img-arrow right-arrow' onClick={nextSlide} disabled={isAtLastImage}></button>}
         </div>
       </div>
     </>
