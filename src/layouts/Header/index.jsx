@@ -17,7 +17,7 @@ const GET_USER_LOGIN = '/auth/check-auth';
 
 function Header() {
 
-  
+
   const [user, setUser] = useState(null);
 
 
@@ -48,7 +48,7 @@ function Header() {
     getUser();
   }, []); // Ensure that you pass an empty dependency array if you want the effect to run once on mount
 
-  
+
   const myProfile = async () => {
     try {
       const response = await axios.get(GET_USER_LOGIN);
@@ -132,7 +132,7 @@ function Header() {
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>
-                  <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
+                    <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
                     <div className='my-account-dropdown'>
                       <div className='triangle-icon'><TriangleIcon /></div>
                       <ul>
@@ -172,7 +172,9 @@ function Header() {
         </div>
         <div className='row3'>
           <div className='container'>
-            <NavMenu />
+            <div>
+                <NavMenu />
+            </div>
           </div>
         </div>
       </header>

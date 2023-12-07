@@ -4,7 +4,6 @@ import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Carousel from 'react-multi-carousel';
 import { useDispatch } from 'react-redux'
-import { Setloader } from '../../redux/reducer/loadersSlice'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
@@ -22,17 +21,14 @@ const NewItems = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(Setloader(true));
 
       try {
         // Fetch the category's data
         const response = await axios.get('/api/getallproducts');
 
         setProducts(response.data);
-        dispatch(Setloader(false));
 
       } catch (error) {
-        dispatch(Setloader(false));
         console.error('Error fetching category data:', error);
 
         // Check if the error is due to unauthorized access
@@ -46,7 +42,7 @@ const NewItems = () => {
       }
     }
     fetchData();
-  }, [dispatch])
+  }, [])
 
 
   // Check if data is null or undefined

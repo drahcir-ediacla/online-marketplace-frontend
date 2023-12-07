@@ -3,29 +3,38 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products';
 import SlidingSideNav from '../SlidingSideNav'
-import { Setloader } from '../../redux/reducer/loadersSlice';
+import NavMenuSkeleton from '../../components/SkeletonLoader/NavMenuSkeleton';
 
 const NavMenu = () => {
 
     const [categories, setCategories] = useState([])
     const dispatch = (useDispatch())
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Simulate data fetching
+        setTimeout(() => {
+            // Replace this with your actual data fetching logic
+            setData(/* your fetched data */);
+            setLoading(false);
+        }, 2000); // Simulating a 2-second delay
+    }, []);
+
 
     // FETCH ALL CATEGORIES //
     useEffect(() => {
         const fetchCategories = async () => {
-          try {
-            dispatch(Setloader(true))
-            const response = await GetAllCategories();
-            setCategories(response.data);
-            dispatch(Setloader(false))
-          } catch (error) {
-            dispatch(Setloader(false))
-            console.error("Error fetching data:", error);
-          }
+            try {
+                const response = await GetAllCategories();
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
-    
+
         fetchCategories();
-      }, [dispatch]);
+    }, []);
 
     // Specify the labels you want to include
     const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Furniture", "Games, Hobbies & Crafts", "Jewelry & Watches"];
@@ -43,31 +52,34 @@ const NavMenu = () => {
                             <li key={index}>
                                 <div className='btm-border'>
                                     <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
-                                        {category.label}
+                                    {loading ? (
+                                        <NavMenuSkeleton />
+                                    ) : (
+                                        category.label || <NavMenuSkeleton />
+                                    )}
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (
-                                    <div className="drop-menu">
-                                        <ul>
-                                            {category.subcategories.map((subCategory, subIndex) => (
-                                                <>
-                                                    <li key={subIndex}>
-                                                        <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
-                                                            {subCategory.label}
-                                                        </Link>
-                                                    </li>
-                                                </>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                        <div className="drop-menu">
+                                            <ul>
+                                                {category.subcategories.map((subCategory, subIndex) => (
+                                                    <>
+                                                        <li key={subIndex}>
+                                                            <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
+                                                                {subCategory.label}
+                                                            </Link>
+                                                        </li>
+                                                    </>
+                                                ))}
+                                            </ul>
+                                        </div>
                                     )}
                                 </div>
                             </li>
-                            </>
+                        </>
                     ))}
-                            <li>
-                                <SlidingSideNav />
-                            </li>
-                        
+                    <li>
+                        <SlidingSideNav />
+                    </li>
                 </ul>
             </nav>
         </>
