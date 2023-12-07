@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products';
 import SlidingSideNav from '../SlidingSideNav'
-import { Setloader } from '../../redux/reducer/loadersSlice';
 import NavMenuSkeleton from '../../components/SkeletonLoader/NavMenuSkeleton';
 
 const NavMenu = () => {
 
     const [categories, setCategories] = useState([])
-    const dispatch = (useDispatch())
-    const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     // useEffect(() => {

@@ -47,15 +47,15 @@ const SlidingSideNav = () => {
     }
   };
 
-
-
+  
   // FETCH ALL CATEGORIES //
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching data
+        setLoading(true); 
         const response = await GetAllCategories();
         setCategories(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -140,21 +140,15 @@ const SlidingSideNav = () => {
             <div className='row3'>
               <div className='nav-categories'>
                 <ul>
+                  {loading && <SlidingNavSkeleton menus={10} />}
                   {categories.map((category, index) => (
                     <li className='main-category' key={index}>
+
                       <div className='category-icon'>
-                        <>
-                          {loading ? (
-                            <SlidingNavSkeleton />
-                          ) : (
-                            <>
-                              <img src={category.icon} alt='' />
-                              <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
-                                {category.label}
-                              </Link>
-                            </>
-                          )}
-                        </>
+                        <img src={category.icon} alt='' />
+                        <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
+                          {category.label}
+                        </Link>
                       </div>
 
                       {category.subcategories && category.subcategories.length > 0 && (
