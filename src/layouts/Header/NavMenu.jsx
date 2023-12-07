@@ -14,6 +14,7 @@ const NavMenu = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
+                setLoading(true);
                 const response = await GetAllCategories();
                 setCategories(response.data);
                 setLoading(false); // Set loading to false after data is fetched
@@ -26,42 +27,47 @@ const NavMenu = () => {
         fetchCategories();
     }, []);
 
+    // Specify the labels you want to include
     const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Furniture", "Games, Hobbies & Crafts", "Jewelry & Watches"];
-    
-    // Render the skeleton loader while loading
-    if (loading) {
-        return <NavMenuSkeleton />;
-    }
+
+    // Filter the categories based on the included labels
+    const filteredCategories = categories.filter(category => includedLabels.includes(category.label));
 
 
     return (
         <>
             <nav className='nav-menu'>
                 <ul>
-                    {categories
-                        .filter(category => includedLabels.includes(category.label))
-                        .map((category, index) => (
+                    {filteredCategories.map((category, index) => (
+                        <>
                             <li key={index}>
                                 <div className='btm-border'>
                                     <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
-                                        {category.label}
+                                        {loading ? (
+                                            <NavMenuSkeleton />
+                                        ) : (
+                                            category.label || <NavMenuSkeleton />
+                                        )}
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (
                                         <div className="drop-menu">
                                             <ul>
                                                 {category.subcategories.map((subCategory, subIndex) => (
-                                                    <li key={subIndex}>
-                                                        <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
-                                                            {subCategory.label}
-                                                        </Link>
-                                                    </li>
+                                                    <>
+                                                        <li key={subIndex}>
+                                                            <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
+                                                                {subCategory.label}
+                                                            </Link>
+                                                        </li>
+                                                    </>
                                                 ))}
                                             </ul>
                                         </div>
                                     )}
                                 </div>
                             </li>
-                        ))}
+                        </>
+                    ))}
                     <li>
                         <SlidingSideNav />
                     </li>

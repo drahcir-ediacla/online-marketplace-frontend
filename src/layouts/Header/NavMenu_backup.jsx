@@ -1,55 +1,74 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { GetAllCategories } from '../../apicalls/products';
 import SlidingSideNav from '../SlidingSideNav'
+import NavMenuSkeleton from '../../components/SkeletonLoader/NavMenuSkeleton';
 
 const NavMenu = () => {
 
-  return (
-    <>
-        <nav className='nav-menu'>
-            <ul>
-                <li><div className='btm-border'><Link to="/MainCategory" className='parent-menu'>Mobiles & Electronics</Link></div></li>
-                <li><div className='btm-border'><Link to="/MainCategory" className='parent-menu'>Sports & Leisure</Link></div></li>
-                <li>
-                    <div className='btm-border'>
-                        <Link to="/MainCategory" className='parent-menu'>Men’s Fashion</Link>
-                        <div className="drop-menu">
-                            <ul>
-                                <li><Link to="/SubCategory">Clothing</Link></li>
-                                <li><Link to="/SubCategory">Shoes</Link></li>
-                                <li><Link to="/SubCategory">Watches & Accessories</Link></li>
-                                <li><Link to="/SubCategory">Tops & Sets</Link></li>
-                                <li><Link to="/SubCategory">Bottoms</Link></li>
-                                <li><Link to="/SubCategory">Bags</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div className='btm-border'>
-                        <Link to="/MainCategory" className='parent-menu'>Women's Fashion</Link>
-                        <div className="drop-menu">
-                            <ul>
-                                <li><Link to="/SubCategory">Clothing</Link></li>
-                                <li><Link to="/SubCategory">Shoes</Link></li>
-                                <li><Link to="/SubCategory">Watches & Accessories</Link></li>
-                                <li><Link to="/SubCategory">Tops & Sets</Link></li>
-                                <li><Link to="/SubCategory">Bottoms</Link></li>
-                                <li><Link to="/SubCategory">Bags</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-                <li><div className='btm-border'><Link to='/MainCategory' className='parent-menu'>Furniture</Link></div></li>
-                <li><div className='btm-border'><Link to='/MainCategory' className='parent-menu'>Motors</Link></div></li>
-                <li><div className='btm-border'><Link to='/MainCategory' className='parent-menu'>Jewelry & Watches</Link></div></li>
-                <li>
-                    <SlidingSideNav />
-                </li>
-            </ul>
-        </nav>
-    </>
-  )
+    const [categories, setCategories] = useState([]);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await GetAllCategories();
+                setCategories(response.data);
+                setLoading(false); // Set loading to false after data is fetched
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setLoading(false); // Handle error by setting loading to false
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Furniture", "Games, Hobbies & Crafts", "Jewelry & Watches"];
+    
+    // Render the skeleton loader while loading
+    if (loading) {
+        return <NavMenuSkeleton />;
+    }
+
+
+    return (
+        <>
+            <nav className='nav-menu'>
+                <ul>
+                    {categories
+                        .filter(category => includedLabels.includes(category.label))
+                        .map((category, index) => (
+                            <li key={index}>
+                                <div className='btm-border'>
+                                    <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
+                                        {category.label}
+                                    </Link>
+                                    {category.subcategories && category.subcategories.length > 0 && (
+                                        <div className="drop-menu">
+                                            <ul>
+                                                {category.subcategories.map((subCategory, subIndex) => (
+                                                    <li key={subIndex}>
+                                                        <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
+                                                            {subCategory.label}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                    <li>
+                        <SlidingSideNav />
+                    </li>
+                </ul>
+            </nav>
+        </>
+    )
 }
 
 export default NavMenu
