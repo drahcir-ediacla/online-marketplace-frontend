@@ -9,7 +9,7 @@ const NavMenu = () => {
 
     const [categories, setCategories] = useState([]);
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -46,7 +46,13 @@ const NavMenu = () => {
                                         {loading ? (
                                             <NavMenuSkeleton />
                                         ) : (
-                                            category.label || <NavMenuSkeleton />
+                                            <>
+                                                {category.label ? (
+                                                    category.label
+                                                ) : (
+                                                    <NavMenuSkeleton />
+                                                )}
+                                            </>
                                         )}
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (
