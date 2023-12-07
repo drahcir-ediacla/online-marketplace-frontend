@@ -47,6 +47,8 @@ const ItemImgGallery = ({ gallery }) => {
   const shouldHideThumbArrows = gallery.length <= 6;
   const shouldHideSelectedImgArrows = gallery.length <= 1;
 
+  
+
   return (
     <>
       <div className='prod-img-gallery'>
@@ -69,14 +71,15 @@ const ItemImgGallery = ({ gallery }) => {
           
         <div className='selected-prod-img-container'>
           <button className={`selected-img-arrow left-arrow ${shouldHideSelectedImgArrows ? 'hide' : ''}`} onClick={prevSlide} disabled={isAtFirstImage}></button>
-          <div className="carousel-container" style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
+          <div className="carousel-container" style={{ transform: `translateX(${-currentIndex * 444}px)` }}>
+            
             {gallery.map((src, index) => (
               <img
                 key={index}
                 id="ProductImg"
                 src={productImgSrc && src}
                 className='selected-prod-img'
-                alt={`Image ${index + 1}`}
+                alt={`Img ${index + 1}`}
               />
             ))}
           </div>
