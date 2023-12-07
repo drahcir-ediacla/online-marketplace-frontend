@@ -32,7 +32,7 @@ const SlidingSideNav = () => {
       // Replace this with your actual data fetching logic
       setData(/* your fetched data */);
       setLoading(false);
-    }, 2000); // Simulating a 2-second delay
+    }, ); // Simulating a 2-second delay
   }, []);
 
 
