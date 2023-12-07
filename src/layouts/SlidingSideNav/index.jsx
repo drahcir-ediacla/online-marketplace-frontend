@@ -22,19 +22,7 @@ const SlidingSideNav = () => {
   const user = useSelector((state) => state.user.data);
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
-  useEffect(() => {
-    // Simulate data fetching
-    setTimeout(() => {
-      // Replace this with your actual data fetching logic
-      setData(/* your fetched data */);
-      setLoading(false);
-    }, ); // Simulating a 2-second delay
-  }, []);
-
 
 
   const toggleMenu = () => {
@@ -65,10 +53,13 @@ const SlidingSideNav = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setLoading(true); // Set loading to true before fetching data
         const response = await GetAllCategories();
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
       }
     };
 

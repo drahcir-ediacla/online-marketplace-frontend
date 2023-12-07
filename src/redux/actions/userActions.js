@@ -1,6 +1,5 @@
 // userActions.js
 import { setUser, setError } from '../reducer/userSlice';
-import axios from '../../apicalls/axios';
 import { Setloader } from '../reducer/loadersSlice';
 import {GetCurrentUser, UpdateCurrentUser} from '../../apicalls/users'
 
