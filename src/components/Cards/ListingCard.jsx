@@ -84,7 +84,7 @@ const ListingCard = ({ data, city, region }) => {
             <div className='product-info'>
               <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
               <small>{city}, {region}</small>
-              <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small></div>
+              <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</small></div>
             </div>
           </div>
           <div>

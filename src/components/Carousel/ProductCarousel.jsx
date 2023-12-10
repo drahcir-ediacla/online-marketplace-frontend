@@ -70,12 +70,12 @@ const ProductCarousel = ({ data }) => {
       <Carousel responsive={responsive} draggable={true}>
         {data.map((product, index) => {
           // Logging to check the value of product.created_at
-          console.log('Product created_at:', product.created_at);
+          console.log('Product created_at:', product.createdAt);
 
           // Ensure product.created_at is a valid date before using it
-          const createdAtDate = new Date(product.created_at);
+          const createdAtDate = new Date(product.createdAt);
           if (isNaN(createdAtDate.getTime())) {
-            console.error('Invalid date value:', product.created_at);
+            console.error('Invalid date value:', product.createdAt);
             return null; // or handle the invalid date value in some way
           }
 

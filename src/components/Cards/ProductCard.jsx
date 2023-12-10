@@ -38,13 +38,13 @@ const ProductCard = ({ data }) => {
     <>
       {data.map((product, index) => {
 
-        // Logging to check the value of product.created_at
-        console.log('Product created_at:', product.created_at);
+        // Logging to check the value of product.createdAt
+        console.log('Product createdAt:', product.createdAt);
 
-        // Ensure product.created_at is a valid date before using it
-        const createdAtDate = new Date(product.created_at);
+        // Ensure product.createdAt is a valid date before using it
+        const createdAtDate = new Date(product.createdAt);
         if (isNaN(createdAtDate.getTime())) {
-          console.error('Invalid date value:', product.created_at);
+          console.error('Invalid date value:', product.createdAt);
           return null; // or handle the invalid date value in some way
         }
 
@@ -64,7 +64,7 @@ const ProductCard = ({ data }) => {
                 <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
                 <div className="date-post">
                   <div className="small-clock"><ClockIcon /></div>
-                  <small>{formatDistanceToNow(new Date(product.created_at), { addSuffix: true, locale: enUS })}</small>
+                  <small>{formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</small>
                 </div>
               </div>
             </div>
