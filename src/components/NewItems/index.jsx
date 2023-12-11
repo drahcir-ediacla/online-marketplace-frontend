@@ -23,28 +23,28 @@ const NewItems = () => {
   const [isAdded, setAdded] = useState(false);
 
 
-  const addToWishlist = () => {
-    axios.post(`/api/addwishlist/product-${id}`, { withCredentials: true })
+  const addToWishlist = (productId) => {
+    axios.post(`/api/addwishlist/product-${productId}`, {})
       .then(response => {
         console.log(response.data);
-        setAdded((prevAdded) => !prevAdded); // Toggle the state
+        setAdded(true); // Toggle the state
       })
       .catch(error => {
         console.error('Error adding item to wishlist:', error);
       });
   };
 
-  const removeFromWishlist = () => {
-    axios.post(`/api/removewishlist/product-${id}`, { withCredentials: true })
+  const removeFromWishlist = (productId) => {
+    axios.post(`/api/removewishlist/product-${productId}`, {})
       .then(response => {
         console.log(response.data);
-        setAdded((prevAdded) => !prevAdded); // Toggle the state
+        setAdded(false); // Toggle the state
       })
       .catch(error => {
         console.error('Error removing item from wishlist:', error);
       });
   };
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,8 +101,8 @@ const NewItems = () => {
   };
 
 
-  
-  
+
+
 
 
   const responsive = {
@@ -126,7 +126,7 @@ const NewItems = () => {
     }
   };
 
-  
+
 
   return (
     <>
@@ -184,7 +184,13 @@ const NewItems = () => {
                       <div className="price">{formatPrice(product.price)}</div>
                     </div>
                     <div className='col-wishlist'>
-                      <button onClick={isAdded ? removeFromWishlist : addToWishlist} className='heart-icon'>{isAdded ? <HeartSolid /> : <HeartRegular />}</button>
+                      <button
+                        onClick={() => (isAdded ? removeFromWishlist(product.id) : addToWishlist(product.id))}
+                        className='heart-icon'
+                      >
+                        {isAdded ? <HeartSolid /> : <HeartRegular />}
+                      </button>
+
                     </div>
                   </div>
                 </div>
