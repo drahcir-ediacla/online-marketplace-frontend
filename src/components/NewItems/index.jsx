@@ -26,7 +26,10 @@ const NewItems = () => {
         // Fetch the category's data
         const response = await axios.get('/api/getallproducts');
 
-        setProducts(response.data);
+        // Limit the number of items to the first 5
+        const limitedData = response.data.slice(0, 20);
+
+        setProducts(limitedData);
 
       } catch (error) {
         console.error('Error fetching category data:', error);

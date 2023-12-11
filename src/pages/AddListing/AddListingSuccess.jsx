@@ -56,7 +56,7 @@ const AddListingSuccess = () => {
                                     <img src={product.images[0].image_url} alt="" />
                                     <div className='new-listed-info-col-left'>
                                         <p>"{product.product_name}"</p>
-                                        <span className='listed-price'>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        <span className='listed-price'>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                         <p className='listed-in'>Listed in {product.seller.city}, {product.seller.region}, Philippines</p>
                                     </div>
                                 </div>

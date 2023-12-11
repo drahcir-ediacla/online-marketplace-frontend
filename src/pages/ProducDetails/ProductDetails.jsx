@@ -90,7 +90,7 @@ const ProductDetails = () => {
                     </div>
                     <div className='col-right'>
                         <div className='prod-details-title'><span>{product.product_name}</span></div>
-                        <div className='prod-details-price'><span>₱{product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
+                        <div className='prod-details-price'><span>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span></div>
                         <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                         <div className='prod-details-deal-method'>
                             <div className='col1'><b>Deal Method:</b></div>
