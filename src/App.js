@@ -27,6 +27,7 @@ import PageNotFound from './pages/404/PageNotFound';
 import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
+import NewItems from './components/NewItems';
 import ProtectedPage from './components/ProtectedPage';
 
 
@@ -73,6 +74,7 @@ function App() {
           <Route path='/addlistingsuccess/:id/:name' element={<AddListingSuccess />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test' element={<TestPage />} />
+          <Route path="/:id" component={<NewItems />} />
           <Route path='/*' element={<PageNotFound />} />
         </Routes>
       </Router>

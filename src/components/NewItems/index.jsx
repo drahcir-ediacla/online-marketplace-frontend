@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import axios from '../../apicalls/axios'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -10,14 +11,40 @@ import 'react-multi-carousel/lib/styles.css';
 import BtnCategory from '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
-import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
+import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
+import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
 const NewItems = () => {
 
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [err, setErr] = useState(false);
-  const dispatch = useDispatch();
+  const [isAdded, setAdded] = useState(false);
+
+
+  const addToWishlist = () => {
+    axios.post(`/api/addwishlist/product-${id}`, { withCredentials: true })
+      .then(response => {
+        console.log(response.data);
+        setAdded((prevAdded) => !prevAdded); // Toggle the state
+      })
+      .catch(error => {
+        console.error('Error adding item to wishlist:', error);
+      });
+  };
+
+  const removeFromWishlist = () => {
+    axios.post(`/api/removewishlist/product-${id}`, { withCredentials: true })
+      .then(response => {
+        console.log(response.data);
+        setAdded((prevAdded) => !prevAdded); // Toggle the state
+      })
+      .catch(error => {
+        console.error('Error removing item from wishlist:', error);
+      });
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +100,11 @@ const NewItems = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
+
+  
+  
+
+
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -94,6 +126,7 @@ const NewItems = () => {
     }
   };
 
+  
 
   return (
     <>
@@ -151,8 +184,7 @@ const NewItems = () => {
                       <div className="price">{formatPrice(product.price)}</div>
                     </div>
                     <div className='col-wishlist'>
-                      {product.wishlist}
-                      <div className='heart-icon'><HeartIcon /></div>
+                      <button onClick={isAdded ? removeFromWishlist : addToWishlist} className='heart-icon'>{isAdded ? <HeartSolid /> : <HeartRegular />}</button>
                     </div>
                   </div>
                 </div>
