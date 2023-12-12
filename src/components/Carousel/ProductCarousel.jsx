@@ -1,15 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom'
-import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
-import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
 import './style.scss'
+import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
+import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
+import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCarousel = ({ data }) => {
+const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
+
+    const [productStates, setProductStates] = useState({});
+
+  
 
   // Check if data is null or undefined
   if (!data) {
@@ -57,20 +62,14 @@ const ProductCarousel = ({ data }) => {
     }
   };
 
-  // Customize Button Arrow
-  //   const CustomButtonGroup = ({ next, previous }) => (
-  //     <div className="custom-button-group">
-  //       <button onClick={previous}>Previous</button>
-  //       <button onClick={next}>Next</button>
-  //     </div>
-  //   );
+  
 
   return (
     <>
       <Carousel responsive={responsive} draggable={true}>
-        {data.map((product, index) => {
+        {data.map((product, index ) => {
           // Logging to check the value of product.created_at
-          console.log('Product created_at:', product.createdAt);
+          console.log('Product createdAt:', product.createdAt);
 
           // Ensure product.created_at is a valid date before using it
           const createdAtDate = new Date(product.createdAt);
@@ -79,22 +78,35 @@ const ProductCarousel = ({ data }) => {
             return null; // or handle the invalid date value in some way
           }
 
+          const handleWishlistClick = () => {
+            const isAdded = productStates[product.id] || false;
+            if (isAdded) {
+              removeFromWishlist(product.id);
+            } else {
+              addToWishlist(product.id);
+            }
+
+            // Toggle the state for the specific product
+            setProductStates((prevStates) => ({
+              ...prevStates,
+              [product.id]: !isAdded,
+            }));
+          };
+
           return (
-            <div key={index} className="thumbnail-container">
+            <div className="thumbnail-container">
               <div>
                 <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
                   {product.images && product.images[0] && (
-                    <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+                    <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' />
                   )}
                   {!product.images && (
                     <img src={NoImage} alt={`No Images Available`} className='product-img' />
                   )}
                 </Link>
                 <div className='product-info'>
-                  <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'>
-                    <p>{limitCharacters(product.product_name, 65)}</p>
-                  </Link>
-                  <small>{(product.seller && product.seller.city) || ''}, {(product.seller && product.seller.region) || ''}</small>
+                  <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+                  <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
                   <div className="date-post">
                     <div className="small-clock"><ClockIcon /></div>
                     <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
@@ -107,8 +119,10 @@ const ProductCarousel = ({ data }) => {
                   <div className="price">{formatPrice(product.price)}</div>
                 </div>
                 <div className='col-wishlist'>
-                  {product.wishlist}
-                  <div className='heart-icon'><HeartIcon /></div>
+                  {/* <div className='wishlist-counter'>{getCount(product.id)}</div> */}
+                  <button onClick={handleWishlistClick} className='heart-icon'>
+                  {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                  </button>
                 </div>
               </div>
             </div>

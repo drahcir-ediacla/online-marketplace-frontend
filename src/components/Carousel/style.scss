@@ -62,6 +62,9 @@
         .col-wishlist{
             display: flex;
             align-items: flex-end;
+            .wishlist-counter {
+                font-size: 14px;
+            }
             .heart-icon{
                 margin-left: 5px;
                 width: 15px;
@@ -95,6 +98,5 @@
 
 .react-multiple-carousel__arrow--left, .react-multiple-carousel__arrow--right{
     background: white;
-    opacity: 50%;
     border: 1px solid #dcdcdc;
 }
