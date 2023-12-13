@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Carousel from 'react-multi-carousel';
@@ -10,11 +10,12 @@ import { ReactComponent as HeartRegular } from '../../assets/images/heart-regula
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
+const ProductCarousel = ({ data, addToWishlist, removeFromWishlist }) => {
 
-    const [productStates, setProductStates] = useState({});
+  const [productStates, setProductStates] = useState({});
+  const [wishlistCount, setWishlistCount] = useState({});
 
-  
+
 
   // Check if data is null or undefined
   if (!data) {
@@ -62,12 +63,12 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
     }
   };
 
-  
+
 
   return (
     <>
       <Carousel responsive={responsive} draggable={true}>
-        {data.map((product, index ) => {
+        {data.map((product, index) => {
           // Logging to check the value of product.created_at
           console.log('Product createdAt:', product.createdAt);
 
@@ -78,18 +79,28 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
             return null; // or handle the invalid date value in some way
           }
 
-          const handleWishlistClick = () => {
-            const isAdded = productStates[product.id] || false;
+
+
+          const handleWishlistClick = (productId) => {
+            const isAdded = productStates[productId] || false;
+
             if (isAdded) {
-              removeFromWishlist(product.id);
+              removeFromWishlist(productId);
+              setWishlistCount((prevCounts) => ({
+                ...prevCounts,
+                [productId]: (prevCounts[productId] || 0) - 1,
+              }));
             } else {
-              addToWishlist(product.id);
+              addToWishlist(productId);
+              setWishlistCount((prevCounts) => ({
+                ...prevCounts,
+                [productId]: (prevCounts[productId] || 0) + 1,
+              }));
             }
 
-            // Toggle the state for the specific product
             setProductStates((prevStates) => ({
               ...prevStates,
-              [product.id]: !isAdded,
+              [productId]: !isAdded,
             }));
           };
 
@@ -119,9 +130,10 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
                   <div className="price">{formatPrice(product.price)}</div>
                 </div>
                 <div className='col-wishlist'>
-                  <div className='wishlist-counter'>{getCount(product.id)}</div>
-                  <button onClick={handleWishlistClick} className='heart-icon'>
-                  {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                  {/* <div className='wishlist-counter'>{getCount(product.id)}</div> */}
+                  <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
+                  <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
+                    {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
                   </button>
                 </div>
               </div>

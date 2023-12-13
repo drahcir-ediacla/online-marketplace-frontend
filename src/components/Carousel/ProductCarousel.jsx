@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Carousel from 'react-multi-carousel';
@@ -10,11 +10,46 @@ import { ReactComponent as HeartRegular } from '../../assets/images/heart-regula
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
+const ProductCarousel = ({ data, addToWishlist, removeFromWishlist }) => {
 
-    const [productStates, setProductStates] = useState({});
+  const [productStates, setProductStates] = useState({});
+  const [wishlistCount, setWishlistCount] = useState({});
 
+  // Use useCallback to memoize the function
+  const getWishlistCount = useCallback((productId) => {
+    const productData = data.find((product) => product.id === productId);
+    return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
+  }, [data]);
+
+  // Use useEffect to update wishlist count after state changes
+  useEffect(() => {
+    // Update wishlist count for all products
+    const updatedWishlistCounts = {};
+    data.forEach((product) => {
+      updatedWishlistCounts[product.id] = getWishlistCount(product.id);
+    });
+
+    // Set the updated wishlist counts
+    setWishlistCount(updatedWishlistCounts);
+  }, [productStates, data, getWishlistCount]);
   
+
+  const handleWishlistClick = (productId) => {
+    const isAdded = productStates[productId] || false;
+
+    if (isAdded) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist(productId);
+    }
+
+    // Toggle the state for the specific product
+    setProductStates((prevStates) => ({
+      ...prevStates,
+      [productId]: !isAdded,
+    }));
+  };
+
 
   // Check if data is null or undefined
   if (!data) {
@@ -62,36 +97,20 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
     }
   };
 
+
   
+
 
   return (
     <>
       <Carousel responsive={responsive} draggable={true}>
-        {data.map((product, index ) => {
-          // Logging to check the value of product.created_at
-          console.log('Product createdAt:', product.createdAt);
-
-          // Ensure product.created_at is a valid date before using it
+        {data.map((product, index) => {
           const createdAtDate = new Date(product.createdAt);
+
           if (isNaN(createdAtDate.getTime())) {
             console.error('Invalid date value:', product.createdAt);
             return null; // or handle the invalid date value in some way
           }
-
-          const handleWishlistClick = () => {
-            const isAdded = productStates[product.id] || false;
-            if (isAdded) {
-              removeFromWishlist(product.id);
-            } else {
-              addToWishlist(product.id);
-            }
-
-            // Toggle the state for the specific product
-            setProductStates((prevStates) => ({
-              ...prevStates,
-              [product.id]: !isAdded,
-            }));
-          };
 
           return (
             <div className="thumbnail-container">
@@ -106,7 +125,9 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
                 </Link>
                 <div className='product-info'>
                   <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
-                  <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
+                  {product.seller && (
+                    <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
+                  )}
                   <div className="date-post">
                     <div className="small-clock"><ClockIcon /></div>
                     <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
@@ -120,8 +141,9 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist  }) => {
                 </div>
                 <div className='col-wishlist'>
                   {/* <div className='wishlist-counter'>{getCount(product.id)}</div> */}
-                  <button onClick={handleWishlistClick} className='heart-icon'>
-                  {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                  <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
+                  <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
+                    {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
                   </button>
                 </div>
               </div>
