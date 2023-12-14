@@ -3,6 +3,7 @@ import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
+import useAuthentication from '../../hooks/authHook'
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -26,6 +27,7 @@ const MainCategory = () => {
   const [category, setCategory] = useState([]);
   const [setErr] = useState(false);
   const dispatch = useDispatch();
+  const {user} = useAuthentication();
 
 
   const addToWishlist = (productId) => {
@@ -80,7 +82,8 @@ const MainCategory = () => {
       }
     }
     fetchData();
-  }, [id, label, dispatch])
+  }, [id, label, dispatch, setErr])
+
 
 
   return (
@@ -132,7 +135,7 @@ const MainCategory = () => {
             <BtnSeeMore label="See More >>" />
           </div>
           <ProductCarousel data={allProducts} addToWishlist={addToWishlist}
-                removeFromWishlist={removeFromWishlist} />
+                removeFromWishlist={removeFromWishlist} userId={user?.id} />
 
         </div>
         <div className="row5 main-category-center-ads">Your Ads Here</div>
