@@ -21,9 +21,6 @@ const SubCategory = ({ userId }) => {
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
-  // const [data, setData] = useState([]); // Initialize with your data
-
-  
 
 
 

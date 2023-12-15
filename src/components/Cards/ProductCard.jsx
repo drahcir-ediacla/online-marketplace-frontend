@@ -8,11 +8,10 @@ import { ReactComponent as HeartRegular } from '../../assets/images/heart-regula
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, productStates, setProductStates, wishlistCount, setWishlistCount }) => {
-  console.log('ProductStates:', productStates);
+const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlistCount, setWishlistCount }) => {
+  
 
-
-
+  const [productStates, setProductStates] = useState({});
 
 
   // Use useCallback to memoize the function
@@ -23,35 +22,28 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, productS
 
 
 
-    // Initialize productStates based on initial wishlist data
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // ... (fetching data logic)
-  
-          // Set productStates after fetching data
-          const initialProductStates = {};
-          data.forEach((product) => {
-            const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
-            initialProductStates[product.id] = isProductInWishlist;
-          });
-  
-          setProductStates(initialProductStates);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-  
-      fetchData();
-    }, [data, userId, setProductStates]);
-  
-    // Maintain initial product state in the component's state
-    const [initialProductState, setInitialProductState] = useState({});
-  
-    useEffect(() => {
-      // Update initial product state when productStates change
-      setInitialProductState(productStates);
-    }, [productStates]);
+  // Initialize productStates based on initial wishlist data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // ... (fetching data logic)
+
+        // Set productStates after fetching data
+        const initialProductStates = {};
+        data.forEach((product) => {
+          const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+          initialProductStates[product.id] = isProductInWishlist;
+        });
+
+        setProductStates(initialProductStates);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [data, userId]);
+
 
 
   // Inside both ProductCarousel and ProductCard components
@@ -91,12 +83,7 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, productS
           return null; // or handle the invalid date value in some way
         }
 
-
-        // Check if the authenticated user's user_id is in the wishlist for the current product
-        const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
-        
-        // Initialize productStates based on initial wishlist data
-        const initialProductState = isProductInWishlist;
+       
 
         const handleWishlistClick = async (productId) => {
           try {
@@ -107,9 +94,6 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, productS
             } else {
               await addToWishlist(productId);
             }
-
-            // Update wishlist count for the specific product after state changes
-            const updatedWishlistCount = getWishlistCount(productId);
 
             // Update the local state immediately after the action is dispatched
             setProductStates((prevStates) => ({
@@ -162,7 +146,7 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, productS
               <div className='col-wishlist'>
                 <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                 <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
-                {initialProductState || productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                  {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
                 </button>
               </div>
             </div>
