@@ -11,7 +11,7 @@ import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.sv
 import NoImage from '../../assets/images/no-image-available.png'
 
 const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) => {
-  console.log('userId:', userId);
+  
 
 
   const [productStates, setProductStates] = useState({});
@@ -52,23 +52,6 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
   }, [data, userId]);
 
 
-  
-  const handleWishlistClick = async (productId) => {
-    const isAdded = productStates[productId] || false;
-  
-    if (isAdded) {
-      await removeFromWishlist(productId);
-    } else {
-      await addToWishlist(productId);
-    }
-  
-    // Update the local state immediately after the action is dispatched
-    setProductStates((prevStates) => ({
-      ...prevStates,
-      [productId]: !isAdded,
-    }));
-  };
-  
 
 
   // Check if data is null or undefined
@@ -138,6 +121,37 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           console.log('isProductInWishlist:', isProductInWishlist);
           console.log('product.wishlist:', product.wishlist);
           
+          const handleWishlistClick = async (productId) => {
+            try {
+              const isAdded = productStates[productId] || false;
+          
+              if (isAdded) {
+                await removeFromWishlist(productId);
+              } else {
+                await addToWishlist(productId);
+              }
+          
+              
+              
+              // Update the local state immediately after the action is dispatched
+              setProductStates((prevStates) => ({
+                ...prevStates,
+                [productId]: !isAdded,
+              }));
+              
+              // Update wishlist count for all products after state changes
+              const updatedWishlistCounts = {};
+              data.forEach((prod) => {
+                updatedWishlistCounts[prod.id] = getWishlistCount(prod.id);
+              });
+              
+              // Set the updated wishlist counts
+              setWishlistCount(updatedWishlistCounts);
+            } catch (error) {
+              console.error('Error updating wishlist:', error);
+            }
+          };
+
           return (
             <div className="thumbnail-container">
               <div>
@@ -169,7 +183,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                   {/* <div className='wishlist-counter'>{getCount(product.id)}</div> */}
                   <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                   <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
-                    {productStates[product.id] || isProductInWishlist ? <HeartSolid /> : <HeartRegular />}
+                    {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
                   </button>
                 </div>
               </div>

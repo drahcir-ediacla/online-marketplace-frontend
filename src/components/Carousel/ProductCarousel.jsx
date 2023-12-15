@@ -11,7 +11,7 @@ import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.sv
 import NoImage from '../../assets/images/no-image-available.png'
 
 const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) => {
-  console.log('userId:', userId);
+  
 
 
   const [productStates, setProductStates] = useState({});

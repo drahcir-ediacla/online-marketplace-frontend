@@ -1,22 +1,52 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
+import useAuthentication from '../../hooks/authHook'
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
-import subcategoryItemsData from '../../data/subcategoryItemsData.json'
 import ProductCard from '../../components/Cards/ProductCard'
 
-const SubCategory = () => {
+const SubCategory = ({ userId }) => {
 
   const { id, label } = useParams();
   const [category, setCategory] = useState([]);
   const [err, setErr] = useState(false);
   const dispatch = useDispatch();
+  const { user } = useAuthentication();
+
+  const [productStates, setProductStates] = useState({});
+  const [wishlistCount, setWishlistCount] = useState({});
+  // const [data, setData] = useState([]); // Initialize with your data
+
+  
+
+
+
+  const addToWishlist = (productId) => {
+    axios.post(`/api/addwishlist/product-${productId}`, {})
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error adding item to wishlist:', error);
+      });
+  };
+
+  const removeFromWishlist = (productId) => {
+    axios.post(`/api/removewishlist/product-${productId}`, {})
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error removing item from wishlist:', error);
+      });
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +55,7 @@ const SubCategory = () => {
       try {
         // Fetch the category's data
         const response = await axios.get(`/api/getcategory/${id}/${label}`);
-
+        console.log('Sub API Response:', response.data);
         setCategory(response.data);
         dispatch(Setloader(false));
 
@@ -46,18 +76,45 @@ const SubCategory = () => {
     fetchData();
   }, [id, label, dispatch])
 
-  // if (!category) {
-  //   // If category is still null, you can render a loading spinner or some other loading indicator.
-  //   return (
-  //     <>
-  //       <Header />
-  //       <div>
-  //         <LoadingSpinner />
-  //       </div>
-  //       <Footer />
-  //     </>
-  //   );
-  // }
+  console.log('Sub Category Data:', category);
+
+  const products = useMemo(() => Array.isArray(category.products) ? category.products : [], [category.products]);
+
+
+ 
+  // Use useCallback to memoize the function
+  const getWishlistCount = useCallback((productId) => {
+    const productData = products.find((product) => product.id === productId);
+    return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
+  }, [products]);
+
+  // Use useEffect to update wishlist count after state changes
+  useEffect(() => {
+    // Update wishlist count for all products
+    const updatedWishlistCounts = {};
+    products.forEach((product) => {
+      updatedWishlistCounts[product.id] = getWishlistCount(product.id);
+    });
+  
+    // Set the updated wishlist counts
+    setWishlistCount(updatedWishlistCounts);
+  
+    console.log('Wishlist count updated:', updatedWishlistCounts);
+  }, [productStates, products, getWishlistCount]);
+  
+  
+
+  // Initialize productStates based on initial wishlist data
+  useEffect(() => {
+    const initialProductStates = {};
+    products.forEach((product) => {
+      const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+      initialProductStates[product.id] = isProductInWishlist;
+    });
+    console.log('Initial Product States:', initialProductStates);
+    setProductStates(initialProductStates);
+  }, [products, userId]);
+
 
   return (
     <>
@@ -80,7 +137,14 @@ const SubCategory = () => {
           <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>
           <div className='sub-category-newly-listed-row3'>
             <ProductCard
-              data={category.products || []}
+              data={products || []}
+              addToWishlist={addToWishlist}
+              removeFromWishlist={removeFromWishlist}
+              userId={user?.id}
+              productStates={productStates}
+              setProductStates={setProductStates}
+              wishlistCount={wishlistCount}
+              setWishlistCount={setWishlistCount}
             /></div>
         </div>
       </div>
