@@ -64,10 +64,9 @@ function App() {
           <Route path='/profile/:id' element={<ProfilePage />} />
           <Route path='/productdetails/:id/:name' element={<ProductDetails />} />
           <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
-          <Route path='/maincategory' element={<MainCategory />} />
           <Route path='/maincategory/:id/:label' element={<MainCategory />} />
           <Route path='/subcategory/:id/:label' element={<SubCategory />} />
-          <Route path='/wishlist' element={<Wishlist />} />
+          <Route path='/wishlist/:id' element={<Wishlist />} />
           <Route path='/deactivateaccount' element={<DeactivateAccount />} />
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />

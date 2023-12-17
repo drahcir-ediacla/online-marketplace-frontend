@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as MessageIcon } from '../../assets/images/message-regular.svg';
@@ -33,7 +34,7 @@ function Header() {
           },
         });
 
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.success) {
           const resObject = response.data;
           console.log('User data:', resObject.user);
           setUser(resObject.user);
@@ -49,20 +50,21 @@ function Header() {
   }, []); // Ensure that you pass an empty dependency array if you want the effect to run once on mount
 
 
-  const myProfile = async () => {
-    try {
-      const response = await axios.get(GET_USER_LOGIN);
-      if (response.status === 200) {
-        const resObject = response.data;
-        const userId = resObject.user.id;
-        window.location.href = `/profile/${userId}`;
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+  const myProfile = () => {
+    if (user) {
+      const userId = user.id;
+      window.location.href = `/profile/${userId}`;
     }
   };
 
+  
 
+     const mywishlist = () => {
+      if (user) {
+        const userId = user?.id;
+        window.location.href = `/wishlist/${userId}`;
+      }
+    };
 
   const logout = () => {
     const localBaseUrl = process.env.REACT_APP_BASE_URL;
@@ -100,6 +102,10 @@ function Header() {
   }, []);
 
 
+
+
+
+
   return (
     <>
       <header>
@@ -128,7 +134,7 @@ function Header() {
                   <div className='nav-tools'>
                     <div className='message-icon'><MessageIcon /></div>
                     <div className='bell-icon'><BellIcon /></div>
-                    <Link to='/wishlist' className='heart-icon'><HeartIcon /></Link>
+                    <Link onClick={mywishlist} className='heart-icon'><HeartIcon /></Link>
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>
@@ -173,7 +179,7 @@ function Header() {
         <div className='row3'>
           <div className='container'>
             <div>
-                <NavMenu />
+              <NavMenu />
             </div>
           </div>
         </div>

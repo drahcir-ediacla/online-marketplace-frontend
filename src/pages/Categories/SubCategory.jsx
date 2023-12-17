@@ -142,6 +142,7 @@ const SubCategory = ({ userId }) => {
               setProductStates={setProductStates}
               wishlistCount={wishlistCount}
               setWishlistCount={setWishlistCount}
+              getWishlistCount={getWishlistCount}
             /></div>
         </div>
       </div>

@@ -8,18 +8,10 @@ import { ReactComponent as HeartRegular } from '../../assets/images/heart-regula
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlistCount, setWishlistCount }) => {
+const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlistCount, setWishlistCount, getWishlistCount }) => {
   
 
   const [productStates, setProductStates] = useState({});
-
-
-  // Use useCallback to memoize the function
-  const getWishlistCount = useCallback((productId) => {
-    const productData = data.find((product) => product.id === productId);
-    return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
-  }, [data]);
-
 
 
   // Initialize productStates based on initial wishlist data
@@ -46,7 +38,6 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
 
 
 
-  // Inside both ProductCarousel and ProductCard components
   // Check if data is null or undefined or not an array
   if (!data || !Array.isArray(data) || data.length === 0) {
     return null; // or return some default content or loading indicator

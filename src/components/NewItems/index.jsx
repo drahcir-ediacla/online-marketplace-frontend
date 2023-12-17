@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react'
-// import { useParams } from 'react-router-dom';
 import axios from '../../apicalls/axios'
 import useAuthentication from '../../hooks/authHook';
-// import { formatDistanceToNow } from 'date-fns';
-// import { enUS } from 'date-fns/locale';
-// import Carousel from 'react-multi-carousel';
-// import { useDispatch } from 'react-redux'
-// import { Link } from 'react-router-dom'
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
 import BtnCategory from '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
-// import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
-// import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
-// import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
-// import NoImage from '../../assets/images/no-image-available.png'
+
 
 const NewItems = () => {
 
@@ -79,51 +70,6 @@ const NewItems = () => {
     return null; // or return some default content or loading indicator
   }
 
-  // Function to format price with commas and decimals
-  // const formatPrice = (price) => {
-  //   const formattedPrice = new Intl.NumberFormat('en-US', {
-  //     style: 'currency',
-  //     currency: 'PHP', // Change to your desired currency code
-  //     minimumFractionDigits: 2,
-  //     maximumFractionDigits: 2,
-  //   }).format(price);
-
-  //   return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
-  // };
-
-  // Function to limit the number of characters
-  // const limitCharacters = (text, maxLength) => {
-  //   if (!text) {
-  //     return ''; // or return some default value
-  //   }
-  //   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-  // };
-
-
-
-
-
-
-  // const responsive = {
-  //   superLargeDesktop: {
-  //     // the naming can be any, depends on you.
-  //     breakpoint: { max: 4000, min: 3000 },
-  //     items: 5
-  //   },
-  //   desktop: {
-  //     breakpoint: { max: 3000, min: 1024 },
-  //     items: 5,
-  //     slidesToSlide: 5
-  //   },
-  //   tablet: {
-  //     breakpoint: { max: 1024, min: 464 },
-  //     items: 4
-  //   },
-  //   mobile: {
-  //     breakpoint: { max: 464, min: 0 },
-  //     items: 1
-  //   }
-  // };
 
 
 
