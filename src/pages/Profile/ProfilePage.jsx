@@ -100,7 +100,13 @@ const ProfilePage = () => {
                                 </div>
                                 <div className="row2 cover-photo">COVER PHOTO</div>
                                 <div className="row3 box-body">
-                                    <div className="col-left"><ProfileCard /></div>
+                                    <div className="col-left">
+                                        <ProfileCard
+                                            data={user}
+                                            authenticatedUser={authenticatedUser}
+                                            setAuthenticatedUser={setAuthenticatedUser}
+                                        />
+                                    </div>
                                     <div className="col-right">
                                         <div className="profile-tab-box">
                                             <div className="profile-tab-header">
@@ -121,6 +127,10 @@ const ProfilePage = () => {
                                                         data={user?.products || []}
                                                         city={user?.city || ''}
                                                         region={user?.region || ''}
+                                                        authenticatedUser={authenticatedUser}
+                                                        setAuthenticatedUser={setAuthenticatedUser}
+                                                        user={user}
+                                                        setUser={setUser}
                                                     />
                                                 </div>
                                             </div>

@@ -12,38 +12,38 @@ import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.s
 import BtnGreen from '../Button/BtnGreen';
 import NoImage from '../../assets/images/no-image-available.png'
 
-const ListingCard = ({ data, city, region }) => {
+const ListingCard = ({ data, city, region, authenticatedUser, setAuthenticatedUser, user, setUser }) => {
 
-  const { id } = useParams();
-  const [user, setUser] = useState(null);
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
-  const dispatch = useDispatch();
+  // const { id } = useParams();
+  // const [user, setUser] = useState(null);
+  // const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(Setloader(true))
-        // Fetch the user's profile data
-        const response = await axios.get(`/api/user/${id}`);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       dispatch(Setloader(true))
+  //       // Fetch the user's profile data
+  //       const response = await axios.get(`/api/user/${id}`);
 
-        setUser(response.data);
+  //       setUser(response.data);
 
-        // Fetch the authenticated user's data
-        const authResponse = await axios.get('/auth/check-auth');
-        setAuthenticatedUser(authResponse.data.user)
-        dispatch(Setloader(false))
-      } catch (error) {
-        dispatch(Setloader(false))
+  //       // Fetch the authenticated user's data
+  //       const authResponse = await axios.get('/auth/check-auth');
+  //       setAuthenticatedUser(authResponse.data.user)
+  //       dispatch(Setloader(false))
+  //     } catch (error) {
+  //       dispatch(Setloader(false))
 
-        if (error.response && error.response.status === 401) {
-          console.error('User is not authenticated');
-        } else {
-          console.error('Request Error:', error.message);
-        }
-      }
-    }
-    fetchData()
-  }, [id, dispatch])
+  //       if (error.response && error.response.status === 401) {
+  //         console.error('User is not authenticated');
+  //       } else {
+  //         console.error('Request Error:', error.message);
+  //       }
+  //     }
+  //   }
+  //   fetchData()
+  // }, [id, dispatch])
 
   // Check if data is null or undefined
   if (!data) {
@@ -97,7 +97,7 @@ const ListingCard = ({ data, city, region }) => {
                 <div className='heart-icon'><HeartIcon /></div>
               </div>
             </div>
-            {(authenticatedUser?.id === user?.id) && (
+            {(authenticatedUser?.id) && (
               <>
                 <div className='promote-btn-box'><BtnGreen label='Promote' className='promote-btn' /></div>
               </>

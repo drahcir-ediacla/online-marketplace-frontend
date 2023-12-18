@@ -101,31 +101,31 @@ const MainCategory = () => {
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
         <div className="row3 sub-categories-container">
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory1} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Iphone & Smartphones</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory2} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Computers, Tablets & Network Hardware</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory3} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Cameras</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory4} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">TV, Video & Home Audio</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory5} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Headphones</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory6} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Vehicle Electronics</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory7} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Surveillance & Smart Home Devices</div>
           </Link>

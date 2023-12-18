@@ -144,7 +144,7 @@ function Header() {
                       <ul>
                         <li><Link to='/editprofile'>Manage Account</Link></li>
                         <li><Link onClick={myProfile}>My Profile</Link></li>
-                        <li><Link to='/settings'>Settings</Link></li>
+                        <li><Link to='/settings/1'>Settings</Link></li>
                         <li>Help & Support</li>
                         <li><Link onClick={logout}>Logout</Link></li>
                       </ul>

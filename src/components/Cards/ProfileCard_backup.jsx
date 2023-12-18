@@ -13,56 +13,49 @@ import BtnGreen from '../Button/BtnGreen';
 
 
 
-const ProfileInfoCard = ({ data, authenticatedUser }) => {
-    console.log('user data1:', data);
+const ProfileInfoCard = () => {
 
-    // const { id } = useParams();
-    // const [user, setUser] = useState(null);
-    // const [authenticatedUser, setAuthenticatedUser] = useState(null);
-    // const dispatch = useDispatch();
+    const { id } = useParams();
+    const [user, setUser] = useState(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState(null);
+    const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         dispatch(Setloader(true));
+    useEffect(() => {
+        const fetchData = async () => {
+            dispatch(Setloader(true));
 
-    //         try {
-    //             // Fetch the user's profile data
-    //             const response = await axios.get(`/api/user/${id}`);
-    //             setUser(response.data);
+            try {
+                // Fetch the user's profile data
+                const response = await axios.get(`/api/user/${id}`);
+                setUser(response.data);
+                
+                // Fetch the authenticated user's data
+                const authResponse = await axios.get('/auth/check-auth');
+                setAuthenticatedUser(authResponse.data.user);
 
-    //             // Fetch the authenticated user's data
-    //             const authResponse = await axios.get('/auth/check-auth');
-    //             setAuthenticatedUser(authResponse.data.user);
+                dispatch(Setloader(false));
+            } catch (error) {
+                dispatch(Setloader(false));
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    //             dispatch(Setloader(false));
-    //         } catch (error) {
-    //             dispatch(Setloader(false));
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [id, dispatch]);
+        fetchData();
+    }, [id, dispatch]);
 
     // Check if user exists before accessing its properties
-    // const profilePic = user?.profile_pic || DefaultProfilePic;
-    // const displayName = user?.display_name || "Anonymous";
-    // const bio = user?.bio || '';
-    // const city = user?.city || '';
-
-    const originalDate = data?.createdAt || '';
+    const profilePic = user?.profile_pic || DefaultProfilePic;
+    const displayName = user?.display_name || "Anonymous";
+    const bio = user?.bio || '';
+    const city = user?.city || '';
+    const originalDate = user?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-
-    // Check if data is null or undefined
-    if (!data) {
-        return null; // or return some default content or loading indicator
-    }
 
     return (
         <>
             <div className='profile-info-box'>
-                <img src={data?.profile_pic || DefaultProfilePic} alt="" className="profile-pic" />
-                <span className='profile-name'>{data?.display_name}</span>
+                <img src={profilePic} alt="" className="profile-pic" />
+                <span className='profile-name'>{displayName}</span>
                 <div className="seller-rating">
                     <span>4.0</span>
                     <i class="fa-solid fa-star"></i>
@@ -72,14 +65,14 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
                     <i class="fa-regular fa-star"></i>
                     <span> | </span><span>5 Review(s)</span>
                 </div>
-                <div className='joined-date-loc'><span>{data?.city}</span> · <span>{formattedDate}</span></div>
+                <div className='joined-date-loc'><span>{city}</span> · <span>{formattedDate}</span></div>
                 <div className="profile-social-media">
                     <span>Social Media:</span>
                     <div className='fb-icon'><FBIcon /></div>
                     <div className='google-icon'><GoogleIcon /></div>
                 </div>
-                <div className="profile-desc"><p>{data?.bio}</p></div>
-                {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
+                <div className="profile-desc"><p>{bio}</p></div>
+                {(authenticatedUser && authenticatedUser?.id !== user?.id) && (
                     <>
                         <div className="follow-message-buttons">
                             <BtnClear label='Follow' /> <BtnGreen label='Message' />
