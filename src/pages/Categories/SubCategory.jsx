@@ -23,7 +23,7 @@ const SubCategory = ({ userId }) => {
   const [wishlistCount, setWishlistCount] = useState({});
 
 
-
+// Add and remove wishlist function
   const addToWishlist = (productId) => {
     axios.post(`/api/addwishlist/product-${productId}`, {})
       .then(response => {
@@ -73,12 +73,11 @@ const SubCategory = ({ userId }) => {
     fetchData();
   }, [id, label, dispatch])
 
-  console.log('Sub Category Data:', category);
 
   const products = useMemo(() => Array.isArray(category.products) ? category.products : [], [category.products]);
 
 
- 
+
   // Use useCallback to memoize the function
   const getWishlistCount = useCallback((productId) => {
     const productData = products.find((product) => product.id === productId);
@@ -92,14 +91,14 @@ const SubCategory = ({ userId }) => {
     products.forEach((product) => {
       updatedWishlistCounts[product.id] = getWishlistCount(product.id);
     });
-  
+
     // Set the updated wishlist counts
     setWishlistCount(updatedWishlistCounts);
-  
+
     console.log('Wishlist count updated:', updatedWishlistCounts);
   }, [productStates, products, getWishlistCount]);
-  
-  
+
+
 
   // Initialize productStates based on initial wishlist data
   useEffect(() => {
@@ -138,8 +137,6 @@ const SubCategory = ({ userId }) => {
               addToWishlist={addToWishlist}
               removeFromWishlist={removeFromWishlist}
               userId={user?.id}
-              productStates={productStates}
-              setProductStates={setProductStates}
               wishlistCount={wishlistCount}
               setWishlistCount={setWishlistCount}
               getWishlistCount={getWishlistCount}

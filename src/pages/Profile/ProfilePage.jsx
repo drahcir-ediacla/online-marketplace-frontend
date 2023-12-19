@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -17,13 +17,38 @@ import BtnClear from '../../components/Button/BtnClear'
 
 
 let postsPerPage = 5;
-const ProfilePage = () => {
+const ProfilePage = ({ userId }) => {
 
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [authenticatedUser, setAuthenticatedUser] = useState(null);
     const [err, setErr] = useState(false);
     const dispatch = useDispatch();
+
+    const [productStates, setProductStates] = useState({});
+    const [wishlistCount, setWishlistCount] = useState({});
+
+
+    const addToWishlist = (productId) => {
+        axios.post(`/api/addwishlist/product-${productId}`, {})
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error adding item to wishlist:', error);
+            });
+    };
+
+    const removeFromWishlist = (productId) => {
+        axios.post(`/api/removewishlist/product-${productId}`, {})
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error removing item from wishlist:', error);
+            });
+    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,6 +82,47 @@ const ProfilePage = () => {
 
         fetchData();
     }, [id, dispatch]);
+
+
+    const products = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
+
+
+
+    // Use useCallback to memoize the function
+    const getWishlistCount = useCallback((productId) => {
+        const productData = products.find((product) => product.id === productId);
+        return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
+    }, [products]);
+
+
+    // Use useEffect to update wishlist count after state changes
+    useEffect(() => {
+        // Update wishlist count for all products
+        const updatedWishlistCounts = {};
+        products.forEach((product) => {
+            updatedWishlistCounts[product.id] = getWishlistCount(product.id);
+        });
+
+        // Set the updated wishlist counts
+        setWishlistCount(updatedWishlistCounts);
+
+        console.log('Wishlist count updated:', updatedWishlistCounts);
+    }, [productStates, products, getWishlistCount]);
+
+
+
+    // Initialize productStates based on initial wishlist data
+    useEffect(() => {
+        const initialProductStates = {};
+        products.forEach((product) => {
+            const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+            initialProductStates[product.id] = isProductInWishlist;
+        });
+        console.log('Initial Product States:', initialProductStates);
+        setProductStates(initialProductStates);
+    }, [products, userId]);
+
+
 
     const [currentPage, setCurrentPage] = useState(1);
     // const [postsPerPage] = useState(5); 
@@ -124,13 +190,16 @@ const ProfilePage = () => {
                                                 </div>
                                                 <div className="prod-listing-container">
                                                     <ListingCard
-                                                        data={user?.products || []}
+                                                        data={products || []}
                                                         city={user?.city || ''}
                                                         region={user?.region || ''}
                                                         authenticatedUser={authenticatedUser}
-                                                        setAuthenticatedUser={setAuthenticatedUser}
-                                                        user={user}
-                                                        setUser={setUser}
+                                                        addToWishlist={addToWishlist}
+                                                        removeFromWishlist={removeFromWishlist}
+                                                        userId={user?.id}
+                                                        wishlistCount={wishlistCount}
+                                                        setWishlistCount={setWishlistCount}
+                                                        getWishlistCount={getWishlistCount}
                                                     />
                                                 </div>
                                             </div>

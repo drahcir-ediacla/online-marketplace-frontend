@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import axios from '../../apicalls/axios';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { Setloader } from '../../redux/reducer/loadersSlice';
+import React from 'react'
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
@@ -15,40 +11,6 @@ import BtnGreen from '../Button/BtnGreen';
 
 const ProfileInfoCard = ({ data, authenticatedUser }) => {
     console.log('user data1:', data);
-
-    // const { id } = useParams();
-    // const [user, setUser] = useState(null);
-    // const [authenticatedUser, setAuthenticatedUser] = useState(null);
-    // const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         dispatch(Setloader(true));
-
-    //         try {
-    //             // Fetch the user's profile data
-    //             const response = await axios.get(`/api/user/${id}`);
-    //             setUser(response.data);
-
-    //             // Fetch the authenticated user's data
-    //             const authResponse = await axios.get('/auth/check-auth');
-    //             setAuthenticatedUser(authResponse.data.user);
-
-    //             dispatch(Setloader(false));
-    //         } catch (error) {
-    //             dispatch(Setloader(false));
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [id, dispatch]);
-
-    // Check if user exists before accessing its properties
-    // const profilePic = user?.profile_pic || DefaultProfilePic;
-    // const displayName = user?.display_name || "Anonymous";
-    // const bio = user?.bio || '';
-    // const city = user?.city || '';
 
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });

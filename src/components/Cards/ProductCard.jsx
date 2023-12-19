@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { Link } from 'react-router-dom'
@@ -63,6 +63,8 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
+
+
   return (
     <>
       {data.map((product, index) => {
@@ -73,8 +75,6 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
           console.error('Invalid date value:', product.createdAt);
           return null; // or handle the invalid date value in some way
         }
-
-       
 
         const handleWishlistClick = async (productId) => {
           try {

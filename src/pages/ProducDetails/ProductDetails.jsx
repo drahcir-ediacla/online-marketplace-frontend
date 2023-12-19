@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from '../../apicalls/axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
+import useAuthentication from '../../hooks/authHook';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
@@ -15,6 +16,7 @@ import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-icon.svg'
 import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
+import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -23,18 +25,18 @@ import MoreFromSeller from '../../components/MoreFromSeller'
 import RelatedListings from '../../components/RelatedListings'
 import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import ListedInMap from '../../assets/images/pro-details-map.png'
-import CustomerPic from '../../assets/images/profile-pic_1.png'
 
 
 let postsPerPage = 5;
-const ProductDetails = () => {
+const ProductDetails = ({ userId }) => {
 
     const { id, name } = useParams();
     const [product, setProduct] = useState(null);
     const dispatch = useDispatch();
-
+    const { user } = useAuthentication();
     const [currentPage, setCurrentPage] = useState(1);
-    // const [postsPerPage] = useState(5);
+    const [productStates, setProductStates] = useState({});
+    const [wishlistCount, setWishlistCount] = useState({});
 
 
 
@@ -49,19 +51,112 @@ const ProductDetails = () => {
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    useEffect(() => {
-        // Fetch product details from the backend using both ID and name
-        dispatch(Setloader(true))
-        axios.get(`/api/getproductdetails/${id}/${name}`)
-            .then((response) => {
-                setProduct(response.data);
-                dispatch(Setloader(false))
+
+    // Add and remove wishlist function
+    const addToWishlist = (productId) => {
+        axios.post(`/api/addwishlist/product-${productId}`, {})
+            .then(response => {
+                console.log(response.data);
             })
-            .catch((error) => {
-                dispatch(Setloader(false))
-                console.error('Error fetching product details:', error);
+            .catch(error => {
+                console.error('Error adding item to wishlist:', error);
             });
+    };
+
+    const removeFromWishlist = (productId) => {
+        axios.post(`/api/removewishlist/product-${productId}`, {})
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error removing item from wishlist:', error);
+            });
+    };
+
+
+    //Fetch product data
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                dispatch(Setloader(true));
+                const response = await axios.get(`/api/getproductdetails/${id}/${name}`);
+
+                // Check if the response data has images array
+                if (response.data.images && Array.isArray(response.data.images)) {
+                    setProduct(response.data);
+                } else {
+                    console.error('Invalid product data:', response.data);
+                }
+
+                dispatch(Setloader(false));
+            } catch (error) {
+                dispatch(Setloader(false));
+                console.error('Error fetching product details:', error);
+            }
+        };
+
+        fetchData();
     }, [id, name, dispatch]);
+
+
+
+    console.log('Product Data1:', product);
+
+
+    // Use useCallback to memoize the function
+    const getWishlistCount = useCallback((productId) => {
+        return product.wishlist ? product.wishlist.filter(entry => entry.product_id === productId).length : 0;
+    }, [product]);
+
+
+
+    // Use useEffect to update wishlist count after state changes
+    useEffect(() => {
+        if (!product || typeof product !== 'object') {
+            return; // Exit early if product is null or not an object
+        }
+    
+        // Check if product has a wishlist property
+        if (product.wishlist && Array.isArray(product.wishlist)) {
+            // Update wishlist count for the specific product
+            const updatedWishlistCount = getWishlistCount(product.id);
+    
+            // Set the updated wishlist count
+            setWishlistCount({ [product.id]: updatedWishlistCount });
+    
+            console.log('Wishlist count updated:', updatedWishlistCount);
+        } else {
+            console.error('Invalid product data. Expected a wishlist array:', product);
+        }
+    }, [product, getWishlistCount]);
+
+
+
+    // Initialize productStates based on initial wishlist data
+    useEffect(() => {
+        if (!product) {
+            return; // Exit early if product is null
+        }
+
+        // Check if product is iterable (array or array-like)
+        if (typeof product[Symbol.iterator] === 'function') {
+            // Update initial product states for all products
+            const initialProductStates = {};
+            product.forEach((productItem) => {
+                const isProductInWishlist = Array.isArray(productItem.wishlist) && productItem.wishlist.some((entry) => String(entry.user_id) === String(userId));
+                initialProductStates[productItem.id] = isProductInWishlist;
+            });
+
+            // Set the initial product states
+            setProductStates(initialProductStates);
+
+            console.log('Initial Product States:', initialProductStates);
+        } else {
+            console.error('Invalid product data. Expected an iterable (array or array-like):', product);
+        }
+    }, [product, userId]);
+
+
 
     if (!product) {
         // Render loading state or handle error
@@ -69,7 +164,7 @@ const ProductDetails = () => {
     }
 
 
-    const originalDate = product.seller.createdAt || '';
+    const originalDate = product.seller?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
 
@@ -86,7 +181,7 @@ const ProductDetails = () => {
                 </div>
                 <div className='row2'>
                     <div className='col-left'>
-                        <ItemImgGallery gallery={product.images.map(image => image.image_url)} />
+                        <ItemImgGallery gallery={product.images?.map(image => image.image_url)} />
                     </div>
                     <div className='col-right'>
                         <div className='prod-details-title'><span>{product.product_name}</span></div>
@@ -99,11 +194,21 @@ const ProductDetails = () => {
                                 <div><span>Delivery - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> 186 Blumentritt Tondo Manila</span></div>
                             </div>
                         </div>
-                        <div className='prod-details-listed-in'><small>Listed in {product.seller.city}, {product.seller.region}, Philippines</small></div>
+                        <div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
                         <div><img src={ListedInMap} alt="" /></div>
                         <div>
                             <div className='prod-details-icon-btn'>
-                                <div className='heart-icon'><HeartIcon /></div>
+                                <div>
+                                    <WishlistButton
+                                        data={product}
+                                        addToWishlist={addToWishlist}
+                                        removeFromWishlist={removeFromWishlist}
+                                        userId={user?.id}
+                                        wishlistCount={wishlistCount}
+                                        setWishlistCount={setWishlistCount}
+                                        getWishlistCount={getWishlistCount}
+                                    />
+                                </div>
                                 <div className='share-icon'><ShareIcon /></div>
                                 <div className='flag-icon'><FlagIcon /></div>
                             </div>
@@ -143,9 +248,9 @@ const ProductDetails = () => {
                             <div className="prod-details-inquiry-form">
                                 <div><h5>Seller Information</h5><small>Joined in {formattedDate}</small></div>
                                 <div className='row2'>
-                                    <div className='col-left'><Link to={`/profile/${product.seller.id}`}><img src={product.seller.profile_pic} alt="" className='customer-pic' /></Link></div>
+                                    <div className='col-left'><Link to={`/profile/${product.seller?.id}`}><img src={product.seller?.profile_pic} alt="" className='customer-pic' /></Link></div>
                                     <div className='col-right'>
-                                        <Link to={`/profile/${product.seller.id}`} className='seller-name'>{product.seller.display_name}</Link>
+                                        <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
                                         <div className="seller-rating">
                                             <span>4.0</span>
                                             <i class="fa-solid fa-star"></i>
