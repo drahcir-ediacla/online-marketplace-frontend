@@ -13,7 +13,6 @@ import customerReviewsData from '../../data/customerReviewsData.json'
 import ItemImgGallery from '../../components/Gallery/ItemImgGallery'
 import Pagination from '../../components/Pagination/Pagination'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
-import { ReactComponent as HeartIcon } from '../../assets/images/heart-icon.svg'
 import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
 import WishlistButton from '../../components/WishlistButton';
