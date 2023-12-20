@@ -5,3 +5,21 @@
     gap: 10px;
     align-items: center;
 }
+
+
+
+//ProductCardSkeleton
+
+.product-card-skeleton-container {
+    .product-skeleton-image{
+        margin-bottom: 10px;
+    }
+    .skeleton-condition{
+        margin-top: 50px;
+    }
+    .skeleton-price{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+}

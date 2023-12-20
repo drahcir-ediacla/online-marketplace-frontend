@@ -4,6 +4,7 @@ import useAuthentication from '../../hooks/authHook';
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
+import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
 import BtnCategory from '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
 
@@ -12,7 +13,8 @@ const NewItems = () => {
 
   const [products, setProducts] = useState([]);
   const [err, setErr] = useState(false);
-  const {user} = useAuthentication();
+  const { user } = useAuthentication();
+  const [loading, setLoading] = useState(true);
 
 
   const addToWishlist = (productId) => {
@@ -47,8 +49,10 @@ const NewItems = () => {
         const limitedData = response.data.slice(0, 20);
 
         setProducts(limitedData);
+        setLoading(false)
 
       } catch (error) {
+        setLoading(false)
         console.error('Error fetching category data:', error);
 
         // Check if the error is due to unauthorized access
@@ -91,8 +95,13 @@ const NewItems = () => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div>
-        <ProductCarousel data={products} addToWishlist={addToWishlist}
-                removeFromWishlist={removeFromWishlist} userId={user?.id || ''} />
+          {loading &&
+            <div className='skeleton-card-container'>
+              <ProductCardSkeleton card={5} />
+            </div>
+          }
+          <ProductCarousel data={products} addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist} userId={user?.id || ''} />
         </div>
       </div>
     </>

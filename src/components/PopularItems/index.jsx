@@ -4,6 +4,7 @@ import BtnCategory from  '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
 import popularItemsData from '../../data/popularItemsData'
+import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton'
 
 const PopularItems = () => {
   return (
