@@ -42,7 +42,7 @@ const NewItems = () => {
     const fetchData = async () => {
 
       try {
-        // Fetch the category's data
+        // Fetch the all product's data
         const response = await axios.get('/api/getallproducts');
 
         // Limit the number of items to the first 5
@@ -53,7 +53,7 @@ const NewItems = () => {
 
       } catch (error) {
         setLoading(false)
-        console.error('Error fetching category data:', error);
+        console.error('Error fetching product data:', error);
 
         // Check if the error is due to unauthorized access
         if (error.response && error.response.status === 500) {
