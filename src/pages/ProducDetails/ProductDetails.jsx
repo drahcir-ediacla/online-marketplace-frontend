@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import axios from '../../apicalls/axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import useAuthentication from '../../hooks/authHook';
+import { trackProductView } from '../../apicalls/products';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
@@ -36,7 +37,16 @@ const ProductDetails = ({ userId }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
+    const didTrackProductView = useRef(false);
 
+    
+
+    useEffect(() => {
+        if (!didTrackProductView.current) {
+            trackProductView(id);
+            didTrackProductView.current = true;
+        }
+    }, [id]);
 
 
     // Get current posts
@@ -79,10 +89,11 @@ const ProductDetails = ({ userId }) => {
             try {
                 dispatch(Setloader(true));
                 const response = await axios.get(`/api/getproductdetails/${id}/${name}`);
-
+                
                 // Check if the response data has images array
                 if (response.data.images && Array.isArray(response.data.images)) {
                     setProduct(response.data);
+                    
                 } else {
                     console.error('Invalid product data:', response.data);
                 }
