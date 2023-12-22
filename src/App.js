@@ -28,6 +28,7 @@ import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 import NewItems from './components/NewItems';
+import SearchResult from './pages/SearchResult';
 import ProtectedPage from './components/ProtectedPage';
 
 
@@ -71,6 +72,7 @@ function App() {
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />
           <Route path='/addlistingsuccess/:id/:name' element={<AddListingSuccess />} />
+          <Route path='/search-results' element={<SearchResult />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test' element={<TestPage />} />
           <Route path="/:id" component={<NewItems />} />
