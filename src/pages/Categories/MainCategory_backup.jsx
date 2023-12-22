@@ -3,6 +3,7 @@ import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
+import useAuthentication from '../../hooks/authHook'
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -23,9 +24,10 @@ import SubCategory7 from '../../assets/images/sub-category-7.png'
 const MainCategory = () => {
 
   const { id, label } = useParams();
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState({});
   const [setErr] = useState(false);
   const dispatch = useDispatch();
+  const { user } = useAuthentication();
 
 
   const addToWishlist = (productId) => {
@@ -49,10 +51,13 @@ const MainCategory = () => {
   };
 
 
-
   const subCategoryProducts = Array.isArray(category.subCategoryProducts) ? category.subCategoryProducts : [];
   const products = Array.isArray(category.products) ? category.products : [];
   const allProducts = [...subCategoryProducts, ...products];
+
+  // Log the allProducts array for debugging
+  console.log('All Products:', allProducts);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,9 +66,10 @@ const MainCategory = () => {
       try {
         // Fetch the category's data
         const response = await axios.get(`/api/getcategory/${id}/${label}`);
-
+        
         setCategory(response.data);
         dispatch(Setloader(false));
+
 
       } catch (error) {
         dispatch(Setloader(false));
@@ -71,16 +77,16 @@ const MainCategory = () => {
 
         // Check if the error is due to unauthorized access
         if (error.response && error.response.status === 500) {
-          return error.message
+          return error.message;
           // Handle unauthorized access, e.g., redirect to login
         } else {
           // Handle other errors
           setErr(true); // Depending on your requirements
         }
       }
-    }
+    };
     fetchData();
-  }, [id, label, dispatch])
+  }, [id, label, dispatch, setErr]);
 
 
   return (
@@ -95,31 +101,31 @@ const MainCategory = () => {
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
         <div className="row3 sub-categories-container">
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory1} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Iphone & Smartphones</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory2} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Computers, Tablets & Network Hardware</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory3} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Cameras</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory4} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">TV, Video & Home Audio</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory5} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Headphones</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory6} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Vehicle Electronics</div>
           </Link>
-          <Link to='/SubCategory' className="sub-category-thumbnail">
+          <Link to='/SubCategory/1' className="sub-category-thumbnail">
             <img src={SubCategory7} alt="" className="sub-category-img" />
             <div className="sub-category-thumbnail-name">Surveillance & Smart Home Devices</div>
           </Link>
@@ -131,8 +137,12 @@ const MainCategory = () => {
             </div>
             <BtnSeeMore label="See More >>" />
           </div>
-          <ProductCarousel data={allProducts} addToWishlist={addToWishlist}
-                removeFromWishlist={removeFromWishlist} />
+            <ProductCarousel
+              data={allProducts || []}
+              addToWishlist={addToWishlist}
+              removeFromWishlist={removeFromWishlist}
+              userId={user?.id}
+            />
 
         </div>
         <div className="row5 main-category-center-ads">Your Ads Here</div>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
+import { GetCategoryByID, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -24,25 +24,23 @@ const SubCategory = ({ userId }) => {
 
 
 // Add and remove wishlist function
-  const addToWishlist = (productId) => {
-    axios.post(`/api/addwishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error adding item to wishlist:', error);
-      });
-  };
+const addToWishlist = async (productId) => {
+  try {
+    const response = await AddWishlist(productId, {});
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error adding item to wishlist:', error);
+  }
+};
 
-  const removeFromWishlist = (productId) => {
-    axios.post(`/api/removewishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error removing item from wishlist:', error);
-      });
-  };
+const removeFromWishlist = async (productId) => {
+  try {
+    const response = await RemoveWishlist(productId, {});
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error removing item from wishlist:', error);
+  }
+};
 
 
   useEffect(() => {
@@ -51,7 +49,7 @@ const SubCategory = ({ userId }) => {
 
       try {
         // Fetch the category's data
-        const response = await axios.get(`/api/getcategory/${id}/${label}`);
+        const response = await GetCategoryByID(id, label);
         console.log('Sub API Response:', response.data);
         setCategory(response.data);
         dispatch(Setloader(false));

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
+import { GetAllProducts, GetUserWishlist, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import { Link } from 'react-router-dom'
 import Header from '../../layouts/Header'
@@ -24,25 +24,25 @@ const Wishlist = ({ userId }) => {
 
 
 
-    const addToWishlist = (productId) => {
-        axios.post(`/api/addwishlist/product-${productId}`, {})
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error adding item to wishlist:', error);
-            });
-    };
-
-    const removeFromWishlist = (productId) => {
-        axios.post(`/api/removewishlist/product-${productId}`, {})
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error removing item from wishlist:', error);
-            });
-    };
+    // Add and remove wishlist function
+    const addToWishlist = async (productId) => {
+        try {
+          const response = await AddWishlist(productId, {});
+          console.log(response.data);
+        } catch (error) {
+          console.error('Error adding item to wishlist:', error);
+        }
+      };
+    
+      const removeFromWishlist = async (productId) => {
+        try {
+          const response = await RemoveWishlist(productId, {});
+          console.log(response.data);
+        } catch (error) {
+          console.error('Error removing item from wishlist:', error);
+        }
+      };
+    
 
     
     useEffect(() => {
@@ -51,12 +51,12 @@ const Wishlist = ({ userId }) => {
 
             try {
                 // Fetch the user's wishlist
-                const response = await axios.get(`/api/getuserwishlist/${id}`);
+                const response = await GetUserWishlist(id);
                 setwishlist(response.data);
 
 
                 // Fetch all products
-                const prodResponse = await axios.get('/api/getallproducts');
+                const prodResponse = await GetAllProducts();
                 setData(prodResponse.data)
                 dispatch(Setloader(false));
 

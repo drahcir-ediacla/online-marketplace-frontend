@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import axios from '../../apicalls/axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import useAuthentication from '../../hooks/authHook';
-import { trackProductView } from '../../apicalls/products';
+import { trackProductView, GetProductsById, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
@@ -62,25 +61,24 @@ const ProductDetails = ({ userId }) => {
 
 
     // Add and remove wishlist function
-    const addToWishlist = (productId) => {
-        axios.post(`/api/addwishlist/product-${productId}`, {})
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error adding item to wishlist:', error);
-            });
+    const addToWishlist = async (productId) => {
+        try {
+            const response = await AddWishlist(productId, {});
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error adding item to wishlist:', error);
+        }
     };
-
-    const removeFromWishlist = (productId) => {
-        axios.post(`/api/removewishlist/product-${productId}`, {})
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error('Error removing item from wishlist:', error);
-            });
+    
+    const removeFromWishlist = async (productId) => {
+        try {
+            const response = await RemoveWishlist(productId, {});
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error removing item from wishlist:', error);
+        }
     };
+    
 
 
     //Fetch product data
@@ -88,7 +86,7 @@ const ProductDetails = ({ userId }) => {
         const fetchData = async () => {
             try {
                 dispatch(Setloader(true));
-                const response = await axios.get(`/api/getproductdetails/${id}/${name}`);
+                const response = await GetProductsById(id, name);
                 
                 // Check if the response data has images array
                 if (response.data.images && Array.isArray(response.data.images)) {

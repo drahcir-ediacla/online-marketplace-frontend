@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import axios from '../../apicalls/axios'
 import useAuthentication from '../../hooks/authHook';
+import { GetRandomProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import ProductCard from '../Cards/ProductCard'
 import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
@@ -18,24 +19,23 @@ const RecommendedItems = ({ userId }) => {
   const [wishlistCount, setWishlistCount] = useState({});
 
 
-  const addToWishlist = (productId) => {
-    axios.post(`/api/addwishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error adding item to wishlist:', error);
-      });
+  // Add and remove wishlist function
+  const addToWishlist = async (productId) => {
+    try {
+      const response = await AddWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding item to wishlist:', error);
+    }
   };
 
-  const removeFromWishlist = (productId) => {
-    axios.post(`/api/removewishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error removing item from wishlist:', error);
-      });
+  const removeFromWishlist = async (productId) => {
+    try {
+      const response = await RemoveWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    }
   };
 
 
@@ -44,7 +44,7 @@ const RecommendedItems = ({ userId }) => {
 
       try {
         // Fetch the all product's data
-        const response = await axios.get('/api/products/getrandom');
+        const response = await GetRandomProducts();
 
         setProducts(response.data);
         setLoading(false)

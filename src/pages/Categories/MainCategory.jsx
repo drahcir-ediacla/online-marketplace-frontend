@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
+import { GetCategoryByID, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -30,24 +30,23 @@ const MainCategory = () => {
   const { user } = useAuthentication();
 
 
-  const addToWishlist = (productId) => {
-    axios.post(`/api/addwishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error adding item to wishlist:', error);
-      });
+  // Add and remove wishlist function
+  const addToWishlist = async (productId) => {
+    try {
+      const response = await AddWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding item to wishlist:', error);
+    }
   };
 
-  const removeFromWishlist = (productId) => {
-    axios.post(`/api/removewishlist/product-${productId}`, {})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('Error removing item from wishlist:', error);
-      });
+  const removeFromWishlist = async (productId) => {
+    try {
+      const response = await RemoveWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    }
   };
 
 
@@ -65,8 +64,8 @@ const MainCategory = () => {
 
       try {
         // Fetch the category's data
-        const response = await axios.get(`/api/getcategory/${id}/${label}`);
-        
+        const response = await GetCategoryByID(id, label);
+
         setCategory(response.data);
         dispatch(Setloader(false));
 
@@ -137,12 +136,12 @@ const MainCategory = () => {
             </div>
             <BtnSeeMore label="See More >>" />
           </div>
-            <ProductCarousel
-              data={allProducts || []}
-              addToWishlist={addToWishlist}
-              removeFromWishlist={removeFromWishlist}
-              userId={user?.id}
-            />
+          <ProductCarousel
+            data={allProducts || []}
+            addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist}
+            userId={user?.id}
+          />
 
         </div>
         <div className="row5 main-category-center-ads">Your Ads Here</div>
