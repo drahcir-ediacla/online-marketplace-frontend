@@ -24,16 +24,16 @@ const SearchResult = ({ userId }) => {
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
+  const searchTerm = new URLSearchParams(location.search).get('name');
 
   useEffect(() => {
-    const searchTerm = new URLSearchParams(location.search).get('name');
 
   const fetchSearchResults = async () => {
 
-    const product_name = searchTerm; // Replace with the actual search term entered by the user
+    // const product_name = searchTerm; // Replace with the actual search term entered by the user
     
     try {
-      const response = await axios.get(`/api/search?name=${product_name}`);
+      const response = await axios.get(`/api/search?name=${searchTerm}`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error searching items:', error);
@@ -116,7 +116,8 @@ const removeFromWishlist = async (productId) => {
         <div className="row3 sub-category-newly-listed">
           <div className="sub-category-newly-listed-row1">
             <div className='product-section-title'>
-              <h3>{products.product_name}</h3>
+              <h4>Search Results for "{searchTerm}"</h4>
+              <h5>Total Results: {products.length > 50 ? `${products.length}+` : products.length}</h5>
             </div>
           </div>
           <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>

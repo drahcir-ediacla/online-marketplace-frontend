@@ -11,9 +11,9 @@ export const AddNewProduct = async (payload) => {
   }
 }
 
-export const GetProductsById = async (id, ame) => {
+export const GetProductsById = async (id, name) => {
   try {
-    const response = await axios.get(`/api/getproductdetails/${id}/${ame}`)
+    const response = await axios.get(`/api/getproductdetails/${id}/${name}`)
     return response
   } catch (error) {
     console.error('Error fetching product details:', error);
