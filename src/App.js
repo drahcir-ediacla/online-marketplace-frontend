@@ -29,6 +29,7 @@ import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 import NewItems from './components/NewItems';
 import SearchResult from './pages/SearchResult';
+import TokenRefreshWrapper from './components/TokenRefreshWrapper';
 import ProtectedPage from './components/ProtectedPage';
 
 
