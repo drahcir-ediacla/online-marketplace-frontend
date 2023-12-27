@@ -24,7 +24,7 @@ const SearchResult = ({ userId }) => {
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
-  const searchTerm = new URLSearchParams(location.search).get('name');
+  const searchTerm = new URLSearchParams(location.search).get('keyword');
 
   useEffect(() => {
 
@@ -33,7 +33,7 @@ const SearchResult = ({ userId }) => {
     // const product_name = searchTerm; // Replace with the actual search term entered by the user
     
     try {
-      const response = await axios.get(`/api/search?name=${searchTerm}`);
+      const response = await axios.get(`/api/search?keyword=${searchTerm}`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error searching items:', error);

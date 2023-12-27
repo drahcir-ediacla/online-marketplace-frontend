@@ -18,7 +18,7 @@ const HeaderSearchBox = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    navigate(`/search-results?name=${searchTerm}`);
+    navigate(`/search-results?keyword=${searchTerm}`);
   };
 
   const handleKeyPress = (e) => {
