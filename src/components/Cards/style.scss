@@ -78,8 +78,31 @@
         }
 
         .col-wishlist {
+            position: relative;
             display: flex;
             align-items: flex-end;
+
+            .add-wishlist-sign-in {
+                width: 320px;
+                top: 50px;
+                padding: 10px;
+                position: absolute;
+                background: white;
+                box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
+
+                p {
+                    margin: 20px 0 40px 0;
+                }
+
+                p:hover {
+                    color: var(--gray-500);
+                    cursor: default;
+                }
+
+                a {
+                    font-weight: 600;
+                }
+            }
 
             .heart-icon {
                 margin-left: 5px;

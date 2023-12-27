@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import axios from '../../apicalls/axios'
-import { useParams, useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { Setloader } from '../../redux/reducer/loadersSlice'
+import { useLocation } from 'react-router-dom'
 import useAuthentication from '../../hooks/authHook'
-import { GetCategoryByID, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -14,11 +12,8 @@ import ProductCard from '../../components/Cards/ProductCard'
 
 const SearchResult = ({ userId }) => {
 
-  const { id, label } = useParams();
   const location = useLocation();
   const [products, setProducts] = useState([]);
-  const [err, setErr] = useState(false);
-  const dispatch = useDispatch();
   const { user } = useAuthentication();
 
   const [productStates, setProductStates] = useState({});
@@ -41,7 +36,7 @@ const SearchResult = ({ userId }) => {
   };
 
   fetchSearchResults();
-  }, [location.search]);
+  }, [location.search, searchTerm]);
 
 
   

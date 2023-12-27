@@ -1,10 +1,9 @@
-
-
-.thumbnail-container:hover{
+.thumbnail-container:hover {
     color: var(--gray-500);
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
 }
-.thumbnail-container{
+
+.thumbnail-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -15,57 +14,93 @@
     margin-bottom: 20px;
     text-decoration: none;
     color: var(--gray-500);
-    p{
+
+    p {
         margin-bottom: 0;
     }
-    .image-holder{
+
+    .image-holder {
         margin: 0;
-        .carousel-prod-img{
+
+        .carousel-prod-img {
             width: 240px;
             height: 200px;
             border-radius: 5px 5px 0 0;
         }
     }
-    .product-info{
+
+    .product-info {
         padding: 10px 10px;
         margin: 0;
-        small{
+
+        small {
             font-style: italic;
         }
-        .date-post{
+
+        .date-post {
             display: flex;
             align-items: center;
-            .small-clock{
+
+            .small-clock {
                 width: 12px;
                 fill: var(--gray-500);
                 margin-right: 5px;
             }
-            small{
+
+            small {
                 font-style: normal;
-            }    
+            }
         }
     }
-    .prod-condition-price{
+
+    .prod-condition-price {
         display: flex;
         justify-content: space-between;
         padding: 15px 10px 10px 10px;
         margin: 0;
-        .col-price{
+
+        .col-price {
             display: flex;
             flex-direction: column;
-            .price{
-                    color: black;
-                    margin-bottom: 0;
-                    font-size: 20px;
+
+            .price {
+                color: black;
+                margin-bottom: 0;
+                font-size: 20px;
             }
         }
-        .col-wishlist{
+
+        .col-wishlist {
+            position: relative;
             display: flex;
             align-items: flex-end;
+
+            .add-wishlist-sign-in {
+                width: 320px;
+                top: 50px;
+                padding: 10px;
+                position: absolute;
+                background: white;
+                box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
+
+                p {
+                    margin: 20px 0 40px 0;
+                }
+
+                p:hover {
+                    color: var(--gray-500);
+                }
+
+                a {
+                    font-weight: 600;
+                }
+            }
+
             .wishlist-counter {
                 font-size: 14px;
             }
-            .heart-icon{
+
+            .heart-icon {
                 margin-left: 5px;
                 width: 15px;
                 fill: var(--gray-500);
@@ -75,28 +110,31 @@
 }
 
 // CAROUSEL BUTTON ARROW
-.custom-button-group{
+.custom-button-group {
     background-color: white;
     color: black;
 }
 
-.react-multiple-carousel__arrow--left{
+.react-multiple-carousel__arrow--left {
     left: 0;
 }
 
-.react-multiple-carousel__arrow--right{
+.react-multiple-carousel__arrow--right {
     right: 0;
 }
 
-.react-multiple-carousel__arrow--left:before, .react-multiple-carousel__arrow--right:before{
+.react-multiple-carousel__arrow--left:before,
+.react-multiple-carousel__arrow--right:before {
     color: black;
 }
 
-.react-multiple-carousel__arrow--left:hover, .react-multiple-carousel__arrow--right:hover{
+.react-multiple-carousel__arrow--left:hover,
+.react-multiple-carousel__arrow--right:hover {
     background: white;
 }
 
-.react-multiple-carousel__arrow--left, .react-multiple-carousel__arrow--right{
+.react-multiple-carousel__arrow--left,
+.react-multiple-carousel__arrow--right {
     background: white;
     border: 1px solid #dcdcdc;
 }
