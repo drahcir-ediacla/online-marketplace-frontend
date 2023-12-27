@@ -1,34 +1,40 @@
-.wishlist-body{
+.wishlist-body {
     display: block;
     margin-bottom: 100px;
-    height: 60vh;
-    .wishlist-row1{
+
+    .wishlist-row1 {
         flex-grow: 1;
         display: flex;
         height: 40px;
         align-items: center;
-        .breadcrumb{
+
+        .breadcrumb {
             margin: 0;
             font-size: 14px;
-            li{
-                a{
+
+            li {
+                a {
                     color: var(--gray-500);
                 }
-                a:hover{
+
+                a:hover {
                     text-decoration: underline;
                 }
             }
+
             li+li:before {
                 padding: 8px;
                 color: black;
                 content: "/\00a0";
             }
-            li:last-child{
+
+            li:last-child {
                 color: var(--gray-400);
             }
         }
     }
-    .wishlist-row2{
+
+    .wishlist-row2 {
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -36,13 +42,34 @@
         margin: 20px auto 25px auto;
         padding: 30px 20px 0px 20px;
         border: 1px solid var(--gray-200);
-        .wishlist-title{
+
+        .wishlist-title {
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             font-weight: 400;
             font-size: 28px;
             margin-bottom: 20px;
         }
-        .wishlist-items{
+
+        .wishlist-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+
+            img {
+                width: 150px;
+                filter: grayscale(100%);
+                opacity: 50%;
+                padding: 20px 0 20px 0;
+            }
+            h4 {
+                color: var(--gray-400);
+                padding-bottom: 20px;
+            }
+        }
+
+        .wishlist-items {
             display: flex;
             flex-wrap: wrap;
             gap: 19px;

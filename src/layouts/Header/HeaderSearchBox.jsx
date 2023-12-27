@@ -73,7 +73,7 @@ const HeaderSearchBox = () => {
           />
         </div>
         <div className='filter-box' ref={filterBoxRef}>
-          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedRegions.length > 0 ? selectedRegions.join(', ') : selectedFilter} onFocus={handleInputFocus} readOnly />
+          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedRegions.length > 0 ? selectedRegions.join(' | ') : selectedFilter} onFocus={handleInputFocus} readOnly />
           <div className='location-icon'><LocationIcon /></div>
           <button onClick={handleSearch}><div className='magnifying-glass'><MagnifyingGlass /></div></button>
           {showFilterOptions && (
@@ -82,7 +82,7 @@ const HeaderSearchBox = () => {
               <ul>
                 <li onClick={() => handleFilterItemClick('Listing Near Me')}><div className='icon'><img src={NearLocIcon} alt="" />Listing Near Me</div></li>
                 <li onClick={() => handleFilterItemClick('All of the Philippines')}><div className='icon'><img src={AllPhIcon} alt="" />All of the Philippines</div></li>
-                <li className='region'><div className='icon'><img src={RegionIcon} alt="" />Region</div><i className='fa fa-angle-right'></i>
+                <li className='region'><div className='icon'><img src={RegionIcon} alt="" />Popular Area</div><i className='fa fa-angle-right'></i>
                   <ul className='region-list'>
                     <li checked={selectedRegions.includes('ILOCOS')} onChange={() => handleFilterItemClick('ILOCOS')}><CheckBox label='Ilocos Region' value='ilocos' /></li>
                     <li checked={selectedRegions.includes('Cagayan')} onChange={() => handleFilterItemClick('Cagayan')}><CheckBox label='Cagayan Valley' value='Cagayan' /></li>
@@ -103,9 +103,9 @@ const HeaderSearchBox = () => {
                     <li checked={selectedRegions.includes('BARMM')} onChange={() => handleFilterItemClick('BARMM')}><CheckBox label='BARMM' value='BARMM' /></li>
                   </ul>
                 </li>
-                <li>
+                {/* <li>
                   <div className='icon'><img src={CityIcon} alt="" />City</div><i className='fa fa-angle-right'></i>
-                </li>
+                </li> */}
               </ul>
             </div>
           )}

@@ -1,7 +1,31 @@
 .wishlist-container {
+    position: relative;
     display: flex;
     gap: 3px;
     height: auto;
+
+    .add-wishlist-sign-in {
+        width: 320px;
+        top: 30px;
+        padding: 10px;
+        position: absolute;
+        background: white;
+        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
+        z-index: 1;
+
+        p {
+            margin: 20px 0 40px 0;
+        }
+
+        p:hover {
+            color: var(--gray-500);
+        }
+
+        a {
+            font-weight: 600;
+        }
+    }
+
     .heart-icon {
         width: 23px;
         fill: var(--gray-500);

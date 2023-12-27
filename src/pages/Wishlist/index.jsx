@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import ProductCard from '../../components/Cards/ProductCard'
+import SadImage from '../../assets/images/page-not-found-image.png'
 
 const Wishlist = ({ userId }) => {
 
@@ -21,30 +22,32 @@ const Wishlist = ({ userId }) => {
 
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
+    const [wishListEmpty, setwishlistEmpty] = useState([])
 
 
+    
 
     // Add and remove wishlist function
     const addToWishlist = async (productId) => {
         try {
-          const response = await AddWishlist(productId, {});
-          console.log(response.data);
+            const response = await AddWishlist(productId, {});
+            console.log(response.data);
         } catch (error) {
-          console.error('Error adding item to wishlist:', error);
+            console.error('Error adding item to wishlist:', error);
         }
-      };
-    
-      const removeFromWishlist = async (productId) => {
-        try {
-          const response = await RemoveWishlist(productId, {});
-          console.log(response.data);
-        } catch (error) {
-          console.error('Error removing item from wishlist:', error);
-        }
-      };
-    
+    };
 
-    
+    const removeFromWishlist = async (productId) => {
+        try {
+            const response = await RemoveWishlist(productId, {});
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error removing item from wishlist:', error);
+        }
+    };
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             dispatch(Setloader(true));
@@ -52,7 +55,13 @@ const Wishlist = ({ userId }) => {
             try {
                 // Fetch the user's wishlist
                 const response = await GetUserWishlist(id);
-                setwishlist(response.data);
+                if (response.data && Array.isArray(response.data)) {
+                    setwishlist(response.data);
+                    setwishlistEmpty(response.data.length === 0);
+                } else {
+                    // Handle the case where the data is not an array
+                    console.error('Received invalid wishlist data:', response.data);
+                }
 
 
                 // Fetch all products
@@ -116,6 +125,8 @@ const Wishlist = ({ userId }) => {
         setProductStates(initialProductStates);
     }, [mywishlist, userId]);
 
+   
+
     return (
         <>
             <Header />
@@ -129,7 +140,15 @@ const Wishlist = ({ userId }) => {
                 <div className="wishlist-row2">
                     <div className='wishlist-title'>
                         <h3>My Wishlist</h3>
+                        <h5>You have {wishlist.length} item(s) on your wishlist</h5>
                     </div>
+                    {wishListEmpty ? (<div className='wishlist-empty'>
+                        <div>
+                            <img src={SadImage} alt="" />
+                        </div>
+                        <h4>Your Wishlist is Empty</h4>
+                    </div>
+                    ) : (
                     <div className='wishlist-items'>
                         <ProductCard
                             data={mywishlist || []}
@@ -143,6 +162,7 @@ const Wishlist = ({ userId }) => {
                             getWishlistCount={getWishlistCount}
                         />
                     </div>
+                    )}
                 </div>
             </div>
             <Footer />
