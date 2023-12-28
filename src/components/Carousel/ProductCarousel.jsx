@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Carousel from 'react-multi-carousel';
@@ -16,27 +16,9 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
-  const [showSignInMessage, setShowSignInMessage] = useState({});
-  const signInRef = useRef(null);
 
   
-  useEffect(() => {
-    // Function to handle clicks outside the add-wishlist-sign-in element
-    const handleClickOutside = (event) => {
-      if (signInRef.current && !signInRef.current.contains(event.target)) {
-        // Hide the sign-in message for all products when clicked outside
-        setShowSignInMessage({});
-      }
-    };
 
-    // Add event listener to detect clicks on the document
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup: Remove event listener when component unmounts
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
 
 
@@ -145,14 +127,6 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           const handleWishlistClick = async (productId) => {
             try {
               const isAdded = productStates[productId] || false;
-
-              if (!userId) { // If user is not authenticated
-                setShowSignInMessage(prevState => ({
-                  ...prevState,
-                  [productId]: !prevState[productId], // Toggle the sign-in message for this specific product
-                }));
-                return; // Exit the function without adding/removing from wishlist
-              }
           
               if (isAdded) {
                 await removeFromWishlist(productId);
@@ -209,13 +183,6 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                   <div className="price">{formatPrice(product.price)}</div>
                 </div>
                 <div className='col-wishlist'>
-                {showSignInMessage[product.id] && !userId && (
-                <div ref={signInRef} className='add-wishlist-sign-in'>
-                  <h6>You like this item?</h6>
-                  <p>Sign in to add this item to your wishlist</p>
-                  <Link to={'/loginemail'}>Sign in</Link>
-                </div>
-                )}
                   <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                   <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
                     {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}

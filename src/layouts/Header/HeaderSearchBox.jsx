@@ -7,12 +7,15 @@ import NearLocIcon from '../../assets/images/near-loc-icon.png'
 import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import RegionIcon from '../../assets/images/region-icon.png'
 import CityIcon from '../../assets/images/city-icon.png'
+import userLocationData from '../../data/userLocationData.json'
 
 const HeaderSearchBox = () => {
 
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('All of the Philippines');
-  const [selectedRegions, setSelectedRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState([]);
+  const [selectedCity, setSelectedCity] = useState([]);
+  const [cityCheckedState, setCityCheckedState] = useState({});
   const filterBoxRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -32,18 +35,48 @@ const HeaderSearchBox = () => {
     setShowFilterOptions(true);
   };
 
-  const handleFilterItemClick = (filterText) => {
+
+  const handleFilterItemClick = (filterText, cityName) => {
+  
+    setCityCheckedState(prevState => ({
+      ...prevState,
+      [cityName]: !prevState[cityName]
+    }));
+  
+    // Resetting selectedRegion and selectedCity if either 'Listing Near Me' or 'All of the Philippines' is selected
     if (filterText === 'Listing Near Me' || filterText === 'All of the Philippines') {
+      setSelectedRegion([]);  // Reset selectedRegion
+      setSelectedCity([]);    // Reset selectedCity
       setSelectedFilter(filterText);
+      setCityCheckedState({}); // Reset checkbox for all cities
     } else {
-      if (selectedRegions.includes(filterText)) {
-        setSelectedRegions(selectedRegions.filter(item => item !== filterText));
+      if (selectedCity.includes(filterText)) {
+        setSelectedCity(selectedCity.filter(item => item !== filterText));
       } else {
-        setSelectedRegions([...selectedRegions, filterText]);
+        setSelectedCity([...selectedCity, filterText]);
       }
     }
+  
     setShowFilterOptions(true);
   };
+
+  const handleRegionClick = (selectedRegion) => {
+    setSelectedRegion(selectedRegion);
+    setSelectedCity([]);
+    setCityCheckedState({});
+  }
+
+  const handleRegionChange = (event) => {
+    const selectedRegion = event.target.value;
+    setSelectedRegion(selectedRegion);
+    setSelectedCity('');
+  };
+
+  const handleCityChange = (event) => {
+    const selectedCity = event.target.value;
+    setSelectedCity(selectedCity);
+  };
+
 
 
   useEffect(() => {
@@ -73,39 +106,67 @@ const HeaderSearchBox = () => {
           />
         </div>
         <div className='filter-box' ref={filterBoxRef}>
-          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedRegions.length > 0 ? selectedRegions.join(' | ') : selectedFilter} onFocus={handleInputFocus} readOnly />
+          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedCity.length > 0 ? selectedCity.join(' | ') : selectedFilter} onFocus={handleInputFocus} readOnly />
           <div className='location-icon'><LocationIcon /></div>
           <button onClick={handleSearch}><div className='magnifying-glass'><MagnifyingGlass /></div></button>
           {showFilterOptions && (
             <div className='filter-list-option'>
               <small>Search by:</small>
+              <p className='selected-region'>{selectedRegion}</p>
+              {selectedRegion.length > 0 &&
+                <div className='selected-city-container'>
+                  {selectedCity.length > 0 ? (
+                    selectedCity.map((region, index) => (
+                      <div key={index} className='selected-city'>
+                        {region}
+                        <div className='close-btn'>
+                          <i className="fa fa-times"></i>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className='please-choose-city'>Please choose city</p>
+                  )}
+                </div>
+              }
               <ul>
                 <li onClick={() => handleFilterItemClick('Listing Near Me')}><div className='icon'><img src={NearLocIcon} alt="" />Listing Near Me</div></li>
                 <li onClick={() => handleFilterItemClick('All of the Philippines')}><div className='icon'><img src={AllPhIcon} alt="" />All of the Philippines</div></li>
-                <li className='region'><div className='icon'><img src={RegionIcon} alt="" />Popular Area</div><i className='fa fa-angle-right'></i>
+                <li className='region'>
+                  <div className='icon'><img src={RegionIcon} alt="" />Region</div><i className='fa fa-angle-right'></i>
                   <ul className='region-list'>
-                    <li checked={selectedRegions.includes('ILOCOS')} onChange={() => handleFilterItemClick('ILOCOS')}><CheckBox label='Ilocos Region' value='ilocos' /></li>
-                    <li checked={selectedRegions.includes('Cagayan')} onChange={() => handleFilterItemClick('Cagayan')}><CheckBox label='Cagayan Valley' value='Cagayan' /></li>
-                    <li checked={selectedRegions.includes('Central Luzon')} onChange={() => handleFilterItemClick('Central Luzon')}><CheckBox label='Central Luzon' value='Central Luzon' /></li>
-                    <li checked={selectedRegions.includes('Metro Manila')} onChange={() => handleFilterItemClick('Metro Manila')}><CheckBox label='Metro Manila' value='Metro Manila' /></li>
-                    <li checked={selectedRegions.includes('CALABARZON')} onChange={() => handleFilterItemClick('CALABARZON')}><CheckBox label='CALABARZON' value='CALABARZON' /></li>
-                    <li checked={selectedRegions.includes('MIMAROPA')} onChange={() => handleFilterItemClick('MIMAROPA')}><CheckBox label='MIMAROPA' value='MIMAROPA' /></li>
-                    <li checked={selectedRegions.includes('Bicol Region')} onChange={() => handleFilterItemClick('Bicol Region')}><CheckBox label='Bicol Region' value='Bicol Region' /></li>
-                    <li checked={selectedRegions.includes('Western Visayas')} onChange={() => handleFilterItemClick('Western Visayas')}><CheckBox label='Western Visayas' value='Western Visayas' /></li>
-                    <li checked={selectedRegions.includes('Central Visayas')} onChange={() => handleFilterItemClick('Central Visayas')}><CheckBox label='Central Visayas' value='Central Visayas' /></li>
-                    <li checked={selectedRegions.includes('Eastern Visayas')} onChange={() => handleFilterItemClick('Eastern Visayas')}><CheckBox label='Eastern Visayas' value='Eastern Visayas' /></li>
-                    <li checked={selectedRegions.includes('Zamboanga Peninsula')} onChange={() => handleFilterItemClick('Zamboanga Peninsula')}><CheckBox label='Zamboanga Peninsula' value='Zamboanga Peninsula' /></li>
-                    <li checked={selectedRegions.includes('Northern Mindanao')} onChange={() => handleFilterItemClick('Northern Mindanao')}><CheckBox label='Northern Mindanao' value='Northern Mindanao' /></li>
-                    <li checked={selectedRegions.includes('Davao Region')} onChange={() => handleFilterItemClick('Davao Region')}><CheckBox label='Davao Region' value='Davao Region' /></li>
-                    <li checked={selectedRegions.includes('SOCCSKSARGEN')} onChange={() => handleFilterItemClick('SOCCSKSARGEN')}><CheckBox label='SOCCSKSARGEN' value='SOCCSKSARGEN' /></li>
-                    <li checked={selectedRegions.includes('Caraga')} onChange={() => handleFilterItemClick('Caraga')}><CheckBox label='Caraga' value='Caraga' /></li>
-                    <li checked={selectedRegions.includes('CAR')} onChange={() => handleFilterItemClick('CAR')}><CheckBox label='CAR' value='CAR' /></li>
-                    <li checked={selectedRegions.includes('BARMM')} onChange={() => handleFilterItemClick('BARMM')}><CheckBox label='BARMM' value='BARMM' /></li>
+                    {Object.keys(userLocationData).map((region) => (
+                      <li
+                        key={region}
+                        value={region}
+                        onClick={() => handleRegionClick(region)}
+                        onChange={handleRegionChange}
+                        style={{ background: selectedRegion === region ? 'var(--gray-200)' : 'initial' }}
+                      >
+                        {region}
+                      </li>
+                    ))}
                   </ul>
                 </li>
-                {/* <li>
-                  <div className='icon'><img src={CityIcon} alt="" />City</div><i className='fa fa-angle-right'></i>
-                </li> */}
+                {selectedRegion.length > 0 &&
+                  <li className='city'>
+                    <div className='icon'><img src={CityIcon} alt="" />City</div><i className='fa fa-angle-right'></i>
+                    <ul className='city-list'>
+                      {selectedRegion && Array.isArray(userLocationData[selectedRegion]) && (
+                        userLocationData[selectedRegion].map((city) => (
+                          <li key={city}>
+                            <CheckBox
+                              label={city}
+                              value={city}
+                              checked={cityCheckedState[city] || false}
+                              onChange={() => handleFilterItemClick(city, city)}
+                            />
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </li>
+                }
               </ul>
             </div>
           )}
