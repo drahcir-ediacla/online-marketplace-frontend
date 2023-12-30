@@ -296,7 +296,7 @@ header {
 
                                 .please-choose-city {
                                     padding: 5px 0 5px 0;
-                                    color: red;
+                                    color: var(--gray-300);
                                     margin: 0;
                                 }
 
@@ -308,6 +308,17 @@ header {
                                     padding: 5px 10px;
                                     background: #f5f5f5;
                                     border-radius: 50px;
+                                }
+
+                                .close-btn {
+                                    cursor: pointer;
+                                }
+
+                                .reset-selected-cities {
+                                    font-weight: 500;
+                                    padding: 5px 10px;
+                                    color: var(--green-400);
+                                    cursor: pointer;
                                 }
                             }
 
@@ -683,7 +694,7 @@ header {
 
                                 .please-choose-city {
                                     padding: 5px 0 5px 0;
-                                    color: red;
+                                    color: var(--gray-300);
                                     margin: 0;
                                 }
 
@@ -695,6 +706,10 @@ header {
                                     padding: 5px 10px;
                                     background: #f5f5f5;
                                     border-radius: 50px;
+
+                                    .close-btn {
+                                        cursor: pointer;
+                                    }
                                 }
                             }
 

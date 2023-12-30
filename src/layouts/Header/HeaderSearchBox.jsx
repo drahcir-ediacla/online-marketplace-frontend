@@ -37,12 +37,12 @@ const HeaderSearchBox = () => {
 
 
   const handleFilterItemClick = (filterText, cityName) => {
-  
+
     setCityCheckedState(prevState => ({
       ...prevState,
       [cityName]: !prevState[cityName]
     }));
-  
+
     // Resetting selectedRegion and selectedCity if either 'Listing Near Me' or 'All of the Philippines' is selected
     if (filterText === 'Listing Near Me' || filterText === 'All of the Philippines') {
       setSelectedRegion([]);  // Reset selectedRegion
@@ -56,9 +56,34 @@ const HeaderSearchBox = () => {
         setSelectedCity([...selectedCity, filterText]);
       }
     }
-  
+
     setShowFilterOptions(true);
   };
+
+  // Function to remove a selected city based on its index
+  const removeSelectedCity = (indexToRemove, cityToRemove) => {
+    // Update the cityCheckedState to uncheck the checkbox associated with the removed city
+    setCityCheckedState(prevState => {
+      return {
+        ...prevState,
+        [cityToRemove]: false  // Set the value to false for the removed city
+      };
+    });
+
+    // Filter out the city at the specified index from the selectedCity state
+    setSelectedCity(prevSelectedCity => {
+      return prevSelectedCity.filter((_, index) => index !== indexToRemove);
+    });
+    setShowFilterOptions(true);
+  };
+
+
+  const removeAllSelectedCity = () => {
+    setSelectedCity([]);
+    setCityCheckedState({});
+    setShowFilterOptions(true);
+  }
+
 
   const handleRegionClick = (selectedRegion) => {
     setSelectedRegion(selectedRegion);
@@ -106,7 +131,10 @@ const HeaderSearchBox = () => {
           />
         </div>
         <div className='filter-box' ref={filterBoxRef}>
-          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedCity.length > 0 ? selectedCity.join(' | ') : selectedFilter} onFocus={handleInputFocus} readOnly />
+          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedCity.length > 0 ? selectedCity.join(' | ') : (selectedRegion.length > 0 ? selectedRegion : selectedFilter)}
+
+
+ onFocus={handleInputFocus} readOnly />
           <div className='location-icon'><LocationIcon /></div>
           <button onClick={handleSearch}><div className='magnifying-glass'><MagnifyingGlass /></div></button>
           {showFilterOptions && (
@@ -116,16 +144,21 @@ const HeaderSearchBox = () => {
               {selectedRegion.length > 0 &&
                 <div className='selected-city-container'>
                   {selectedCity.length > 0 ? (
-                    selectedCity.map((region, index) => (
-                      <div key={index} className='selected-city'>
-                        {region}
-                        <div className='close-btn'>
-                          <i className="fa fa-times"></i>
+                    selectedCity.map((city, index) => (
+                      <>
+                        <div key={index} className='selected-city'>
+                          {city}
+                          <div className='close-btn' onClick={() => removeSelectedCity(index, city)}>
+                            <i className="fa fa-times"></i>
+                          </div>
                         </div>
-                      </div>
+                        {selectedCity.length > 1 && index === selectedCity.length - 1 && (
+                          <div className='reset-selected-cities' onClick={() => removeAllSelectedCity()}>Reset</div>
+                        )}
+                      </>
                     ))
                   ) : (
-                    <p className='please-choose-city'>Please choose city</p>
+                    <p className='please-choose-city'>No selected city</p>
                   )}
                 </div>
               }
