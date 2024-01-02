@@ -287,7 +287,7 @@ const EditProfile = () => {
                       type='text'
                       id='countryID'
                       name='country'
-                      value={updatedUserData.country || 'Philippines'}
+                      value='Philippines'
                       className='profile-data-input'
                       onChange={handleInputChange}
                       readOnly

@@ -18,10 +18,11 @@ const HeaderSearchBox = () => {
   const [cityCheckedState, setCityCheckedState] = useState({});
   const filterBoxRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchFilterLocation, setSearchFilterLocation] = useState('');
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    navigate(`/search-results?keyword=${searchTerm}`);
+    navigate(`/search-results?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}`);
   };
 
   const handleKeyPress = (e) => {
@@ -50,13 +51,13 @@ const HeaderSearchBox = () => {
       setSelectedFilter(filterText);
       setCityCheckedState({}); // Reset checkbox for all cities
     } else {
-      if (selectedCity.includes(filterText)) {
-        setSelectedCity(selectedCity.filter(item => item !== filterText));
+      if (selectedCity.includes(cityName)) {
+        setSelectedCity(prevSelectedCity => prevSelectedCity.filter(city => city !== cityName));
       } else {
-        setSelectedCity([...selectedCity, filterText]);
+        setSelectedCity(prevSelectedCity => [...prevSelectedCity, cityName]);
       }
     }
-
+    // setSearchFilterLocation(filterText === 'Listing Near Me' || filterText === 'All of the Philippines' ? filterText : cityName);
     setShowFilterOptions(true);
   };
 
@@ -97,12 +98,6 @@ const HeaderSearchBox = () => {
     setSelectedCity('');
   };
 
-  const handleCityChange = (event) => {
-    const selectedCity = event.target.value;
-    setSelectedCity(selectedCity);
-  };
-
-
 
   useEffect(() => {
     const handleGlobalClick = event => {
@@ -118,6 +113,19 @@ const HeaderSearchBox = () => {
     };
   }, []);
 
+
+  useEffect(() => {
+    setSearchFilterLocation(
+      selectedCity.length > 0
+        ? selectedCity.join(' | ')
+        : selectedRegion.length > 0
+          ? selectedRegion
+          : selectedFilter
+    );
+  }, [selectedCity, selectedRegion, selectedFilter]);
+
+
+
   return (
     <>
       <div className='search-container'>
@@ -131,10 +139,15 @@ const HeaderSearchBox = () => {
           />
         </div>
         <div className='filter-box' ref={filterBoxRef}>
-          <input type="text" id='filterBox' placeholder='All of the Philippines' value={selectedCity.length > 0 ? selectedCity.join(' | ') : (selectedRegion.length > 0 ? selectedRegion : selectedFilter)}
-
-
- onFocus={handleInputFocus} readOnly />
+          <input
+            type="text"
+            id='filterBox'
+            placeholder='All of the Philippines'
+            value={searchFilterLocation}
+            onFocus={handleInputFocus}
+            onChange={(e) => setSearchFilterLocation(e.target.value)}
+            readOnly
+          />
           <div className='location-icon'><LocationIcon /></div>
           <button onClick={handleSearch}><div className='magnifying-glass'><MagnifyingGlass /></div></button>
           {showFilterOptions && (
@@ -158,7 +171,7 @@ const HeaderSearchBox = () => {
                       </>
                     ))
                   ) : (
-                    <p className='please-choose-city'>No selected city</p>
+                    <p className='please-choose-city'>No city selected</p>
                   )}
                 </div>
               }

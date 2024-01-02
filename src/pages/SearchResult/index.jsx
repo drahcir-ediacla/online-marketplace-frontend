@@ -20,6 +20,7 @@ const SearchResult = ({ userId }) => {
   const [wishlistCount, setWishlistCount] = useState({});
 
   const searchTerm = new URLSearchParams(location.search).get('keyword');
+  const searchFilterLocation = new URLSearchParams(location.search).get('location');
 
   useEffect(() => {
 
@@ -28,7 +29,7 @@ const SearchResult = ({ userId }) => {
     // const product_name = searchTerm; // Replace with the actual search term entered by the user
     
     try {
-      const response = await axios.get(`/api/search?keyword=${searchTerm}`);
+      const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error searching items:', error);
@@ -36,7 +37,7 @@ const SearchResult = ({ userId }) => {
   };
 
   fetchSearchResults();
-  }, [location.search, searchTerm]);
+  }, [location.search, searchTerm, searchFilterLocation]);
 
 
   
@@ -111,7 +112,7 @@ const removeFromWishlist = async (productId) => {
         <div className="row3 sub-category-newly-listed">
           <div className="sub-category-newly-listed-row1">
             <div className='product-section-title'>
-              <h4>Search Results for "{searchTerm}"</h4>
+              <h4>Search Results for "{searchTerm}" in {searchFilterLocation}</h4>
               <h5>Total Results: {products.length > 50 ? `${products.length}+` : products.length}</h5>
             </div>
           </div>
