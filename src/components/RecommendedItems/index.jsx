@@ -11,8 +11,7 @@ const RecommendedItems = ({ userId }) => {
 
   const [products, setProducts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [err, setErr] = useState(false);
+  const [pageSize, setPageSize] = useState(30);
   const { user } = useAuthentication();
   const [loading, setLoading] = useState(true);
 

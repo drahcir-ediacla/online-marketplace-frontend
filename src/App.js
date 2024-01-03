@@ -64,7 +64,7 @@ function App() {
           <Route path='/editprofile' element={<EditProfile />} />
           <Route path='/myprofile' element={<ProfilePage />} />
           <Route path='/profile/:id' element={<ProfilePage />} />
-          <Route path='/productdetails/:id/:name' element={<ProductDetails />} />
+          <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
           <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
           <Route path='/maincategory/:id/:label' element={<MainCategory />} />
           <Route path='/subcategory/:id/:label' element={<SubCategory />} />
@@ -72,7 +72,7 @@ function App() {
           <Route path='/deactivateaccount' element={<DeactivateAccount />} />
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />
-          <Route path='/addlistingsuccess/:id/:name' element={<AddListingSuccess />} />
+          <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
           <Route path='/search-results' element={<SearchResult />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test' element={<TestPage />} />

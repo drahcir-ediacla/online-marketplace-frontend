@@ -276,7 +276,7 @@ const AddListing = () => {
 
         const productId = response.data.id;
         const productName = response.data.product_name;
-        window.location.href = `/addlistingsuccess/${productId}/${productName}`;
+        window.location.href = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
       })
       .catch((error) => {
         dispatch(Setloader(false))

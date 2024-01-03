@@ -158,7 +158,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           return (
             <div className="thumbnail-container">
               <div>
-                <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+                <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='image-holder'>
                   {product.images && product.images[0] && (
                     <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' />
                   )}
@@ -167,7 +167,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                   )}
                 </Link>
                 <div className='product-info'>
-                  <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+                  <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
                   {product.seller && (
                     <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
                   )}

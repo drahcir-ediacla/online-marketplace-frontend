@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from '../../apicalls/axios'
 import useAuthentication from '../../hooks/authHook';
 import { MostViewedProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'

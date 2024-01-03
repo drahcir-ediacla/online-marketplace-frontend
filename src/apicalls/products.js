@@ -11,9 +11,11 @@ export const AddNewProduct = async (payload) => {
   }
 }
 
-export const GetProductsById = async (id, name) => {
+export const GetProductsById = async (id, product_name) => {
+  const encodedProductName = encodeURIComponent(product_name);
+
   try {
-    const response = await axios.get(`/api/getproductdetails/${id}/${name}`)
+    const response = await axios.get(`/api/getproductdetails/${id}/${encodedProductName}`)
     return response
   } catch (error) {
     console.error('Error fetching product details:', error);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from '../../apicalls/axios';
+import {GetProductsById} from '../../apicalls/products';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
@@ -13,26 +13,29 @@ import BtnClear from '../../components/Button/BtnClear';
 
 
 const AddListingSuccess = () => {
-    const { id, name } = useParams();
+    const { id, product_name } = useParams();
     const [product, setProduct] = useState(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Fetch product details from the backend using both ID and name
-        dispatch(Setloader(true));
-        axios.get(`/api/getproductdetails/${id}/${name}`)
-            .then((response) => {
-                dispatch(Setloader(false))
-                setProduct(response.data);
-            })
-            .catch((error) => {
-                dispatch(Setloader(false))
-                console.error('Error fetching product details:', error);
-            });
-    }, [id, name, dispatch]);
+        const fetchProductDetails = async () => {
+          dispatch(Setloader(true)); // Set loader to true before making the request
+    
+          try {
+            const response = await GetProductsById(id, product_name);
+            dispatch(Setloader(false)); // Set loader to false after receiving the response
+            setProduct(response.data); // Assuming you have a setProduct function to update the state
+          } catch (error) {
+            dispatch(Setloader(false)); // Set loader to false in case of an error as well
+            console.error('Error fetching product details:', error);
+          }
+        };
+    
+        fetchProductDetails(); // Call the async function within useEffect
+      }, [id, product_name, dispatch]);
 
     const viewListing = () => {
-        window.location.href = `/productdetails/${id}/${name}`;
+        window.location.href = `/productdetails/${id}/${encodeURIComponent(product_name)}`;
     }
 
     const addNewListing = () => {

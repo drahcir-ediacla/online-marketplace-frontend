@@ -29,7 +29,7 @@ import ListedInMap from '../../assets/images/pro-details-map.png'
 let postsPerPage = 5;
 const ProductDetails = ({ userId }) => {
 
-    const { id, name } = useParams();
+    const { id, product_name } = useParams();
     const [product, setProduct] = useState(null);
     const dispatch = useDispatch();
     const { user } = useAuthentication();
@@ -86,7 +86,7 @@ const ProductDetails = ({ userId }) => {
         const fetchData = async () => {
             try {
                 dispatch(Setloader(true));
-                const response = await GetProductsById(id, name);
+                const response = await GetProductsById(id, product_name);
                 
                 // Check if the response data has images array
                 if (response.data.images && Array.isArray(response.data.images)) {
@@ -104,7 +104,7 @@ const ProductDetails = ({ userId }) => {
         };
 
         fetchData();
-    }, [id, name, dispatch]);
+    }, [id, product_name, dispatch]);
 
 
 
