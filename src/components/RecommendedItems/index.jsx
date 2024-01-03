@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import axios from '../../apicalls/axios'
 import useAuthentication from '../../hooks/authHook';
 import { GetRandomProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
@@ -61,8 +60,8 @@ const RecommendedItems = ({ userId }) => {
   }, []); // Empty dependency array means it will run once when the component mounts
 
 
-   // Function to handle "Load More" button click
-   const handleLoadMoreClick = () => {
+  // Function to handle "Load More" button click
+  const handleLoadMoreClick = () => {
     setPageNumber(prevPageNumber => prevPageNumber + 1); // Increment the page number
   };
 
@@ -146,10 +145,10 @@ const RecommendedItems = ({ userId }) => {
           />
         </div>
         <div className="load-more-button-container">
-        <button onClick={handleLoadMoreClick} className="load-more-button">
-          Load More
-        </button>
-      </div>
+          <button onClick={handleLoadMoreClick} className="load-more-button">
+            Load More Items
+          </button>
+        </div>
       </div>
     </>
   )

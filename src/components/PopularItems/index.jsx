@@ -82,12 +82,12 @@ const PopularItems = () => {
         </div>
         <div className='product-section-btns'>
           <div className='sub-categories-btn'>
-            <BtnCategory label="Shoes" className='active' />
-            <BtnCategory label="Mobile" />
+            <BtnCategory label="Men's Footwear" className='active' />
+            <BtnCategory label="Women's Footwear" />
             <BtnCategory label="iPhone Accessories" />
-            <BtnCategory label="Switch Games" />
-            <BtnCategory label="Bicycles" />
-            <BtnCategory label="Chanel" />
+            <BtnCategory label="Mobile Phones" />
+            <BtnCategory label="Furniture" />
+            <BtnCategory label="Computers" />
           </div>
           <BtnSeeMore label="See More Shoes >>" />
         </div>
