@@ -11,12 +11,15 @@ import BtnSeeMore from '../../components/Button/BtnSeeMore'
 const RecommendedItems = ({ userId }) => {
 
   const [products, setProducts] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [err, setErr] = useState(false);
   const { user } = useAuthentication();
   const [loading, setLoading] = useState(true);
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
+
 
 
   // Add and remove wishlist function
@@ -39,34 +42,34 @@ const RecommendedItems = ({ userId }) => {
   };
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-
-      try {
-        // Fetch the all product's data
-        const response = await GetRandomProducts();
-
-        setProducts(response.data);
-        setLoading(false)
-
-      } catch (error) {
-        setLoading(false)
-        console.error('Error fetching category data:', error);
-
-        // Check if the error is due to unauthorized access
-        if (error.response && error.response.status === 500) {
-          return error.message
-          // Handle unauthorized access, e.g., redirect to login
-        } else {
-          // Handle other errors
-          setErr(true); // Depending on your requirements
-        }
-      }
+  const fetchData = async (pageNumber, pageSize) => {
+    try {
+      const response = await GetRandomProducts(pageNumber, pageSize);
+      setProducts(prevProducts => [...prevProducts, ...response.data]);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error('Error fetching category data:', error);
+      // Handle errors as per your requirement
     }
-    fetchData();
-  }, [])
+  };
 
 
+  useEffect(() => {
+    // Fetch initial data when the component mounts
+    fetchData(pageNumber, pageSize);
+  }, []); // Empty dependency array means it will run once when the component mounts
+
+
+   // Function to handle "Load More" button click
+   const handleLoadMoreClick = () => {
+    setPageNumber(prevPageNumber => prevPageNumber + 1); // Increment the page number
+  };
+
+  useEffect(() => {
+    // Fetch data when pageNumber changes
+    fetchData(pageNumber, pageSize);
+  }, [pageNumber, pageSize]);
 
 
   // Use useCallback to memoize the function
@@ -127,7 +130,7 @@ const RecommendedItems = ({ userId }) => {
           <BtnSeeMore label="See More Shoes >>" />
         </div>
         <div className='product-cards-container'>
-        {loading &&
+          {loading &&
             <div className='skeleton-card-container'>
               <ProductCardSkeleton card={30} />
             </div>
@@ -142,6 +145,11 @@ const RecommendedItems = ({ userId }) => {
             getWishlistCount={getWishlistCount}
           />
         </div>
+        <div className="load-more-button-container">
+        <button onClick={handleLoadMoreClick} className="load-more-button">
+          Load More
+        </button>
+      </div>
       </div>
     </>
   )
