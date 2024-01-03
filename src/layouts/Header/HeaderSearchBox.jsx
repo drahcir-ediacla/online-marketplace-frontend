@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import { ReactComponent as LocationIcon } from '../../assets/images/location-icon.svg'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
@@ -11,14 +11,18 @@ import userLocationData from '../../data/userLocationData.json'
 
 const HeaderSearchBox = () => {
 
+  const location = useLocation(); // <-- Use the useLocation hook
+  const queryParams = new URLSearchParams(location.search);
+  // const [initialLocation, setInitialLocation] = useState(queryParams.get('location')); // <-- Extract location from query params
   const [showFilterOptions, setShowFilterOptions] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState('All of the Philippines');
+  const [selectedFilter, setSelectedFilter] = useState(queryParams.get('location') || 'All of the Philippines');
   const [selectedRegion, setSelectedRegion] = useState([]);
   const [selectedCity, setSelectedCity] = useState([]);
   const [cityCheckedState, setCityCheckedState] = useState({});
   const filterBoxRef = useRef(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
   const [searchFilterLocation, setSearchFilterLocation] = useState('');
+  
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -50,6 +54,7 @@ const HeaderSearchBox = () => {
       setSelectedCity([]);    // Reset selectedCity
       setSelectedFilter(filterText);
       setCityCheckedState({}); // Reset checkbox for all cities
+      
     } else {
       if (selectedCity.includes(cityName)) {
         setSelectedCity(prevSelectedCity => prevSelectedCity.filter(city => city !== cityName));
@@ -57,7 +62,6 @@ const HeaderSearchBox = () => {
         setSelectedCity(prevSelectedCity => [...prevSelectedCity, cityName]);
       }
     }
-    // setSearchFilterLocation(filterText === 'Listing Near Me' || filterText === 'All of the Philippines' ? filterText : cityName);
     setShowFilterOptions(true);
   };
 
@@ -90,6 +94,7 @@ const HeaderSearchBox = () => {
     setSelectedRegion(selectedRegion);
     setSelectedCity([]);
     setCityCheckedState({});
+    
   }
 
   const handleRegionChange = (event) => {
