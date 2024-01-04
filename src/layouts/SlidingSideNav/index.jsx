@@ -23,6 +23,8 @@ const SlidingSideNav = () => {
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredCategories, setFilteredCategories] = useState(categories);
 
 
   const toggleMenu = () => {
@@ -47,14 +49,15 @@ const SlidingSideNav = () => {
     }
   };
 
-  
+
   // FETCH ALL CATEGORIES //
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        setLoading(true); 
+        setLoading(true);
         const response = await GetAllCategories();
         setCategories(response.data);
+        setFilteredCategories(response.data); // Initialize filteredCategories here
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -65,6 +68,26 @@ const SlidingSideNav = () => {
 
     fetchCategories();
   }, []);
+
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+
+    if (searchTerm === '') {
+      setFilteredCategories(categories); // Reset to all categories when searchTerm is empty
+      return;
+    }
+
+    const filtered = categories.filter(category => {
+      return category.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.subcategories.some(sub => sub.label.toLowerCase().includes(searchTerm.toLowerCase()));
+    });
+
+    setFilteredCategories(filtered);
+  };
+
+
 
 
 
@@ -132,7 +155,12 @@ const SlidingSideNav = () => {
               <div>
                 <h5>All Categories</h5>
                 <div className='search-container'>
-                  <input type="text" placeholder='Search Categories' />
+                  <input
+                    type="text"
+                    placeholder='Search Categories'
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
                   <button><div className='magnifying-glass'><MagnifyingGlass /></div></button>
                 </div>
               </div>
@@ -141,37 +169,40 @@ const SlidingSideNav = () => {
               <div className='nav-categories'>
                 <ul>
                   {loading && <SlidingNavSkeleton menus={10} />}
-                  {categories.map((category, index) => (
-                    <li className='main-category' key={index}>
+                  {filteredCategories.map((category, index) => {
+                    return (
+                      <li className='main-category' key={index}>
+                        <div className={`category-icon`}>
+                          <img src={category.icon} alt='' />
+                          <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
+                            {category.label}
+                          </Link>
+                        </div>
+                        {category.subcategories && category.subcategories.length > 0 && (
+                          <>
+                            <div
+                              className={`collapsible ${activeCollapsible[index] ? 'active' : '' || searchTerm ? 'hide-arrow' : ''}`}
+                              onClick={() => handleToggleCollapsible(index)}
+                            ></div>
+                            {(activeCollapsible[index] || searchTerm) && (
+                              <ul className='sub-category'>
+                                {category.subcategories.map((subCategory, subIndex) => (
+                                  subCategory.label.toLowerCase().includes(searchTerm.toLowerCase()) && (
+                                    <li key={subIndex}>
+                                      <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                                        {subCategory.label}
+                                      </Link>
+                                    </li>
+                                  )
+                                ))}
+                              </ul>
+                            )}
+                          </>
+                        )}
+                      </li>
+                    );
+                  })}
 
-                      <div className='category-icon'>
-                        <img src={category.icon} alt='' />
-                        <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
-                          {category.label}
-                        </Link>
-                      </div>
-
-                      {category.subcategories && category.subcategories.length > 0 && (
-                        <>
-                          <div
-                            className={`collapsible ${activeCollapsible[index] ? 'active' : ''}`}
-                            onClick={() => handleToggleCollapsible(index)}
-                          ></div>
-                          {activeCollapsible[index] && (
-                            <ul className='sub-category'>
-                              {category.subcategories.map((subCategory, subIndex) => (
-                                <li key={subIndex}>
-                                  <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
-                                    {subCategory.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </>
-                      )}
-                    </li>
-                  ))}
                 </ul>
               </div>
             </div>

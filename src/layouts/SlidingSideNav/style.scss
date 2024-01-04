@@ -239,6 +239,10 @@
                                 content: "\f077";
                                 font-family: FontAwesome;
                             }
+
+                            .hide-arrow:after {
+                                display: none;
+                            }
                         }
 
                         .main-category:hover {
