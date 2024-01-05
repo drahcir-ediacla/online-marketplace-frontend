@@ -22,6 +22,7 @@ import SetPassword from './pages/Settings/SetPassword'
 import Wishlist from './pages/Wishlist'
 import AddListing from './pages/AddListing/AddListing'
 import AddListingSuccess from './pages/AddListing/AddListingSuccess'
+import ChatMessages from './pages/ChatMessages'
 import Dashboard from './pages/AdminPanel/Dashboard'
 import PageNotFound from './pages/404/PageNotFound';
 import TestPage from './pages/TestPage'
@@ -74,8 +75,9 @@ function App() {
           <Route path='/addlisting' element={<AddListing />} />
           <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
           <Route path='/search-results' element={<SearchResult />} />
+          <Route path='/messages' element={<ChatMessages />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/test' element={<TestPage />} />
+          <Route path='/test/:sender/:receiver' element={<TestPage />} />
           <Route path="/:id" component={<NewItems />} />
           <Route path='/*' element={<PageNotFound />} />
         </Routes>

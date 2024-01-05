@@ -1,0 +1,215 @@
+.container {
+    .chat-container {
+        display: flex;
+        width: 100%;
+        height: 80vh;
+
+        .chat-left {
+            width: 427px;
+            height: 100%;
+            border-right: 1px solid var(--gray-300);
+
+            .chat-left-row1 {
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border-bottom: 1px solid var(--gray-300);
+
+                .chat-left-row1-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    h3 {
+                        font-weight: 500;
+                        margin: 0;
+                    }
+
+                    .message-collections-btn {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 116px;
+                        height: 30px;
+                        border-radius: 5px;
+                        padding: 0 10px;
+                    }
+                }
+
+                .chat-search-box-container {
+                    .chat-search-box {
+                        border: none;
+                        width: 100%;
+                        background-color: var(--gray-100);
+                    }
+                }
+            }
+
+            .chat-left-row2 {
+                .select-user-conversation {
+                    display: flex;
+                    justify-content: space-between;
+                    height: 80px;
+                    width: 100%;
+                    padding: 10px;
+
+                    .user-chat-info-container {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        gap: 11px;
+
+                        img {
+                            width: 50px;
+                            height: 50px;
+                        }
+
+                        .chat-user-name-messages {
+                            display: flex;
+                            flex-direction: column;
+                            max-width: 265px;
+
+                            .chat-user-name {
+                                font-weight: 600;
+                            }
+                        }
+                    }
+
+                    .last-message-time {
+                        padding-top: 10px;
+                        width: 53px;
+                    }
+                }
+            }
+
+            .green-bkgrnd {
+                background-color: var(--green-100);
+            }
+        }
+
+        .chat-right {
+            width: 893px;
+
+            .chat-right-row1 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                height: 68px;
+                padding: 10px;
+                border-bottom: 1px solid var(--gray-300);
+
+                .user-chat-info-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 11px;
+
+                    img {
+                        width: 50px;
+                        height: 50px;
+                    }
+
+                    .chat-user-name-messages {
+                        display: flex;
+                        flex-direction: column;
+
+                        .chat-user-name {
+                            font-weight: 600;
+                        }
+
+                        .chat-user-status {
+                            color: var(--green-400);
+                            font-weight: 500;
+                        }
+                    }
+                }
+
+                .three-dots-chat {
+                    width: 5px;
+                    fill: var(--green-400);
+                }
+            }
+
+            .chat-right-row2 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                height: 80px;
+                padding: 5px;
+                box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.05);
+
+                .selling-item-container {
+                    display: flex;
+                    gap: 11px;
+
+                    img {
+                        width: 75px;
+                        height: 75px;
+                    }
+
+                    .chat-item-info {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        .chat-item-name {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+
+            .chat-right-row3 {
+                padding: 0 10px 10px 10px;
+
+                .chat-sent-messages {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: end;
+                    padding: 20px 0 20px 0;
+                    width: 100%;
+
+                    .chat-sent-message-box {
+                        border-radius: 10px;
+                        padding: 10px;
+                        margin-bottom: 5px;
+                        background-color: var(--green-100);
+                    }
+                }
+
+                .date-messages {
+                    position: relative;
+                    text-align: center;
+                    color: var(--gray-300);
+
+                    span {
+                        font-weight: 500;
+                        font-size: 12px;
+                    }
+
+                    span:before {
+                        content: "";
+                        position: absolute;
+                        width: 200px;
+                        height: 1px;
+                        top: 10px;
+                        right: 60%;
+                        background: var(--gray-300);
+                    }
+                    span:after {
+                        content: "";
+                        position: absolute;
+                        width: 200px;
+                        height: 1px;
+                        top: 10px;
+                        left: 60%;
+                        background: var(--gray-300);
+                    }
+                }
+
+
+            }
+        }
+    }
+}
