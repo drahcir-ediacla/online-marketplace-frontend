@@ -109,7 +109,7 @@ function Header() {
   return (
     <>
       <header>
-        <div><StickyHeader /></div>
+        <div><StickyHeader authenticated={user} /></div>
         <div className='row1'>
           <div className='container'>
             <div className='col-left'>

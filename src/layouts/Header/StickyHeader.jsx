@@ -7,7 +7,7 @@ import SlidingSideNav from '../SlidingSideNav'
 
 
 
-const StickyHeader = () => {
+const StickyHeader = ({ authenticated }) => {
 
     const [isSticky, setIsSticky] = useState(false);
 
@@ -44,9 +44,16 @@ const StickyHeader = () => {
                             <div>
                                 <SlidingSideNav />
                             </div>
-                            <div>
-                                <BtnGreen to="/addlisting" label="Sell" className="sticky-header-sell-btn" />
-                            </div>
+                            {authenticated ? (
+                                <div>
+                                    <BtnGreen to="/addlisting" label="Sell" className="sticky-header-sell-btn" />
+                                </div>
+                            ) : (
+                                <div>
+                                    <BtnGreen to="/loginemail" label="Sell" className="sticky-header-sell-btn" />
+                                </div>
+                            )}
+
                         </div>
                     </div>
 
