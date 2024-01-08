@@ -180,25 +180,29 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from '../../apicalls/axios';
+import useAuthentication from '../../hooks/authHook'
 
 function App() {
+  const { user } = useAuthentication();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const sender = '2';
+  const sender = user?.id.toString();
   const receiver = '1';
-  
+
+
+
   useEffect(() => {
     const socket = io('http://localhost:8081'); // Connect to your WebSocket server
 
     socket.on('receive_message', (data) => {
       // Check if the message already exists in the state to prevent duplicates
       const isMessageExists = messages.some(msg => msg.id === data.id); // Assuming each message has a unique 'id' property
-      
+
       if (!isMessageExists) {
         setMessages(prevMessages => [...prevMessages, data]); // Update messages state with received message
       }
     });
-    
+
 
     return () => {
       socket.disconnect(); // Cleanup on component unmount
@@ -207,11 +211,11 @@ function App() {
 
 
 
-    // Fetch messages on component mount
+  // Fetch messages on component mount or when sender or receiver changes
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`/api/messages/${sender}/${receiver}`);
+        const response = await axios.get(`/api/get/messages?receiverId=${receiver}`);
         setMessages(response.data);
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -219,13 +223,14 @@ function App() {
     };
 
     fetchMessages();
-  }, []); // Dependency array to re-fetch messages when sender or receiver changes
+  }, []);
+
 
 
 
 
   const sendMessage = async () => {
-    await axios.post('/api/messages', {
+    await axios.post('/api/send/messages', {
       sender,
       receiver,
       message: input
@@ -236,7 +241,7 @@ function App() {
       receiver,
       message: input
     };
-    
+
     setMessages([...messages, newMessage]); // Update messages state with new message
     setInput('');
   };
@@ -244,14 +249,34 @@ function App() {
   return (
     <div className="App">
       <h1>Chat Messenger</h1>
-      <div>
+
+      {/* Messages from the authenticated user */}
+      <div className="sender-column">
+        <h2>Your Messages</h2>
         {messages.map((message, index) => (
-          <div key={index}>
-            <strong>{message.sender}: </strong>
-            {message.message}
-          </div>
+          message.sender === sender && (
+            <div key={index}>
+              <strong>You: </strong>
+              {message.message}
+            </div>
+          )
         ))}
       </div>
+
+      {/* Messages from the specific receiver */}
+      <div className="receiver-column">
+        <h2>Receiver's Messages</h2>
+        {messages.map((message, index) => (
+          message.sender === receiver && (
+            <div key={index}>
+              <strong>{receiver}: </strong>
+              {message.message}
+            </div>
+          )
+        ))}
+      </div>
+
+      {/* Input field and send button */}
       <div>
         <input
           type="text"

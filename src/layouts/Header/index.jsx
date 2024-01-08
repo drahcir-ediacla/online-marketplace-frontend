@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as MessageIcon } from '../../assets/images/message-regular.svg';

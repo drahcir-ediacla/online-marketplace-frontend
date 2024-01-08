@@ -77,7 +77,7 @@ function App() {
           <Route path='/search-results' element={<SearchResult />} />
           <Route path='/messages' element={<ChatMessages />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/test/:sender/:receiver' element={<TestPage />} />
+          <Route path='/test' element={<TestPage />} />
           <Route path="/:id" component={<NewItems />} />
           <Route path='/*' element={<PageNotFound />} />
         </Routes>

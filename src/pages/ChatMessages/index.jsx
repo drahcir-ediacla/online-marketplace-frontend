@@ -1,15 +1,19 @@
 import React from 'react'
 import './style.scss'
 import Header from '../../layouts/Header'
-import Footer from '../../layouts/Footer'
 import BtnGreen from '../../components/Button/BtnGreen'
 import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
 import UserChatImage from '../../assets/images/review-1_icon.png';
 import ItemThumbnail from '../../assets/images/cap-5.jpg'
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
+import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
+import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
+import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
 
-function Home() {
+
+
+const ChatMessages = () => {
 
     return (
         <>
@@ -102,16 +106,55 @@ function Home() {
                         </div>
                         <div className="chat-right-row3">
                             <div className="chat-sent-messages">
-                                <span className="chat-sent-message-box">
-                                    Hi, I’m Interested
-                                </span>
-                                <span className="chat-sent-message-box">
-                                    Are there pictures from other angles?
-                                </span>
+                                <div className='chat-sent-message-info-container'>
+                                    <div className="chat-sent-message-box">
+                                        Hi, I’m Interested
+                                    </div>
+                                    <small className='chat-time-sent-message'>9:45 AM</small>
+                                </div>
+
+                                <div className='chat-sent-message-info-container'>
+                                    <div className="chat-sent-message-box">
+                                        <span>Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles?</span>
+                                    </div>
+                                    <small className='chat-time-sent-message'>9:45 AM</small>
+                                </div>
                             </div>
                             <div className="date-messages">
                                 <span>22/05 9:45 AM</span>
                             </div>
+                            <div className="chat-received-messages">
+                                <div className='chat-received-message-info-container'>
+                                    <div className="chat-received-message-box">
+                                        Hi, I’m Interested
+                                    </div>
+                                    <small className='chat-time-received-message'>9:45 AM</small>
+                                </div>
+
+                                <div className='chat-received-message-info-container'>
+                                    <div className="chat-received-message-box">
+                                        <span>Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles?</span>
+                                    </div>
+                                    <small className='chat-time-received-message'>9:45 AM</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="chat-right-row4">
+                            <div className='chat-icon-buttons'>
+                                <div className='chat-upload-img-btn'>
+                                    <UploadImgIcon />
+                                </div>
+                                <div className='chat-emote-btn'>
+                                    <SmileyIcon />
+                                </div>
+                            </div>
+                            <Input className='chat-input-message-box' placeholder='Type your message' />
+                            <button className='chat-send-icon-btn'>
+                                <div className='chat-send-icon'>
+                                    <SendIcon />
+                                </div>
+                            </button>
+
                         </div>
                     </div>
                 </div>
@@ -120,4 +163,4 @@ function Home() {
     )
 }
 
-export default Home
+export default ChatMessages
