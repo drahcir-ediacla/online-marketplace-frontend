@@ -75,7 +75,7 @@ function App() {
           <Route path='/addlisting' element={<AddListing />} />
           <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
           <Route path='/search-results' element={<SearchResult />} />
-          <Route path='/messages' element={<ChatMessages />} />
+          <Route path='/messages/:chat_id' element={<ChatMessages />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test/:chat_id' element={<TestPage />} />
           <Route path="/:id" component={<NewItems />} />

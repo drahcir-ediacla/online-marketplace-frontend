@@ -63,6 +63,7 @@
                         img {
                             width: 50px;
                             height: 50px;
+                            border-radius: 50%;
                         }
 
                         .chat-user-name-messages {
@@ -84,7 +85,7 @@
             }
 
             .green-bkgrnd {
-                background-color: var(--green-100);
+                background-color: var(--gray-100);
             }
         }
 
@@ -110,6 +111,7 @@
                     img {
                         width: 50px;
                         height: 50px;
+                        border-radius: 50%;
                     }
 
                     .chat-user-name-messages {
@@ -173,17 +175,29 @@
                     display: flex;
                     flex-direction: column;
                     align-items: end;
-                    padding: 20px 0 20px 0;
+                    padding: 10px 0 10px 0;
                     width: 100%;
 
                     .chat-sent-message-info-container {
                         max-width: 50%;
                         margin-bottom: 5px;
 
-                        .chat-sent-message-box {
-                            border-radius: 10px;
-                            padding: 10px;
-                            background-color: var(--green-100);
+                        .row1 {
+                            display: flex;
+                            gap: 5px;
+
+                            .chat-sent-message-box {
+                                border-radius: 10px;
+                                padding: 10px;
+                                background-color: var(--green-200);
+                            }
+
+                            img {
+                                align-self: flex-end;
+                                width: 25px;
+                                height: 25px;
+                                border-radius: 50%;
+                            }
                         }
 
                         .chat-time-sent-message {
@@ -196,7 +210,7 @@
                     display: flex;
                     flex-direction: column;
                     align-items: start;
-                    padding: 20px 0 20px 0;
+                    padding: 10px 0 10px 0;
                     width: 100%;
 
                     .chat-received-message-info-container {
@@ -205,10 +219,22 @@
                         max-width: 50%;
                         margin-bottom: 5px;
 
-                        .chat-received-message-box {
-                            border-radius: 10px;
-                            padding: 10px;
-                            background-color: var(--gray-100);
+                        .row1 {
+                            display: flex;
+                            gap: 5px;
+
+                            .chat-received-message-box {
+                                border-radius: 10px;
+                                padding: 10px;
+                                background-color: var(--gray-100);
+                            }
+
+                            img {
+                                align-self: flex-end;
+                                width: 25px;
+                                height: 25px;
+                                border-radius: 50%;
+                            }
                         }
 
                         .chat-time-received-message {

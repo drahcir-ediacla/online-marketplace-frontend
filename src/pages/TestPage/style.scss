@@ -88,3 +88,24 @@ p {
   position: relative;
   padding-bottom: 100%;
 }
+
+
+
+/* Add this to your CSS file */
+.sent-message {
+  text-align: right;
+  color: #fff; /* For visibility, you can change this as per your design */
+  background-color: #007bff; /* Blue color as an example */
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.received-message {
+  text-align: left;
+  color: #000; /* Black color for visibility */
+  background-color: #f1f1f1; /* Light gray color as an example */
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client'
 import axios from '../../apicalls/axios';
@@ -14,7 +14,6 @@ import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
 import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
-import AvatarIcon from '../../assets/images/profile-avatar.png'
 
 
 
@@ -27,23 +26,6 @@ const ChatMessages = () => {
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id.toString();
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
-    const scrollRef = useRef(null);
-
-
-    const handleKeyPress = (e) => {
-        // Check if the pressed key is Enter
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    };
-
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-    }, [messages]); // Add other dependencies as needed
-
-
 
 
     useEffect(() => {
@@ -52,10 +34,10 @@ const ChatMessages = () => {
 
         // Listen for the 'receive_message' event
         socket.on('receive_message', (data) => {
+            console.log('Received message:', data);
             const isMessageExists = messages.some(msg => msg.id === data.id);
 
             if (!isMessageExists) {
-                data.timestamp = new Date().toISOString();
                 setMessages(prevMessages => [...prevMessages, data]);
             }
         });
@@ -142,31 +124,6 @@ const ChatMessages = () => {
     };
 
 
-    // Function to format the timestamp to '0:00 PM' format
-    function formatTime(timestamp) {
-        // Check if timestamp is valid
-        if (!timestamp) {
-          return 'Invalid Timestamp';
-        }
-      
-        const date = new Date(timestamp);
-        
-        // Check if date is valid
-        if (isNaN(date.getTime())) {
-          return 'Invalid Date';
-        }
-      
-        // Extract hours, minutes, and AM/PM
-        const hours = date.getHours();
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const period = hours >= 12 ? 'PM' : 'AM';
-        
-        // Convert hours to 12-hour format
-        const formattedHours = hours % 12 || 12;
-      
-        return `${formattedHours}:${minutes} ${period}`;
-      }
-      
 
     return (
         <>
@@ -235,9 +192,9 @@ const ChatMessages = () => {
                     <div className="chat-right">
                         <div className="chat-right-row1">
                             <div className='user-chat-info-container'>
-                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                <img src={UserChatImage} alt="" />
                                 <div className='chat-user-name-messages'>
-                                    <span className='chat-user-name'>{receiverInfo?.display_name}</span>
+                                    <span className='chat-user-name'>Asi Paolo</span>
                                     <span className='chat-user-status'>Online</span>
                                 </div>
                             </div>
@@ -257,41 +214,54 @@ const ChatMessages = () => {
                                 <BtnGreen label='Make Offer' />
                             </div>
                         </div>
-                        <div className="chat-right-row3" ref={scrollRef}>
+                        <div className="chat-right-row3">
+                            <div className="chat-sent-messages">
+                                <div className='chat-sent-message-info-container'>
+                                    <div className='row1'>
+                                        <div className="chat-sent-message-box">
+                                            <span>Hi, I’m Interested</span>
+                                        </div>
+                                        <img src={UserChatImage} alt="" />
+                                    </div>
+
+                                    <small className='chat-time-sent-message'>9:45 AM</small>
+                                </div>
+
+                                <div className='chat-sent-message-info-container'>
+                                    <div className='row1'>
+                                        <div className="chat-sent-message-box">
+                                            <span>Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles?</span>
+                                        </div>
+                                        <img src={UserChatImage} alt="" />
+                                    </div>
+
+                                    <small className='chat-time-sent-message'>9:45 AM</small>
+                                </div>
+                            </div>
                             <div className="date-messages">
                                 <span>22/05 9:45 AM</span>
                             </div>
-                            {messages.map((message, index) => {
-                                // Format the timestamp for each message
-                                const formattedTime = formatTime(message.timestamp);
-
-                                return message.sender_id === sender_id ? (
-                                    <div className="chat-sent-messages" key={index}>
-                                        <div className='chat-sent-message-info-container'>
-                                            <div className='row1'>
-                                                <div className="chat-sent-message-box">
-                                                    {message.content}
-                                                </div>
-                                                <img src={user?.profile_pic || AvatarIcon} alt="" />
-                                            </div>
-                                            <small className='chat-time-sent-message'>{formattedTime}</small>
+                            <div className="chat-received-messages">
+                                <div className='chat-received-message-info-container'>
+                                    <div className='row1'>
+                                        <img src={UserChatImage} alt="" />
+                                        <div className="chat-received-message-box">
+                                            <span>Hi, I’m Interested</span>
                                         </div>
                                     </div>
-                                ) : (
-                                    <div className="chat-received-messages" key={index}>
-                                        <div className='chat-received-message-info-container'>
-                                            <div className='row1'>
-                                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                <div className="chat-received-message-box">
-                                                    {message.content}
-                                                </div>
-                                            </div>
-                                            <small className='chat-time-received-message'>{formattedTime}</small>
+                                    <small className='chat-time-received-message'>9:45 AM</small>
+                                </div>
+
+                                <div className='chat-received-message-info-container'>
+                                    <div className='row1'>
+                                        <img src={UserChatImage} alt="" />
+                                        <div className="chat-received-message-box">
+                                            <span>Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles? Are there pictures from other angles?</span>
                                         </div>
                                     </div>
-                                );
-                            })}
-
+                                    <small className='chat-time-received-message'>9:45 AM</small>
+                                </div>
+                            </div>
                         </div>
                         <div className="chat-right-row4">
                             <div className='chat-icon-buttons'>
@@ -302,15 +272,8 @@ const ChatMessages = () => {
                                     <SmileyIcon />
                                 </div>
                             </div>
-                            <Input
-                                type="text"
-                                className='chat-input-message-box'
-                                placeholder='Type your message'
-                                value={input}
-                                onKeyDown={handleKeyPress}
-                                onChange={(e) => setInput(e.target.value)}
-                            />
-                            <button onClick={sendMessage} className='chat-send-icon-btn'>
+                            <Input className='chat-input-message-box' placeholder='Type your message' />
+                            <button className='chat-send-icon-btn'>
                                 <div className='chat-send-icon'>
                                     <SendIcon />
                                 </div>

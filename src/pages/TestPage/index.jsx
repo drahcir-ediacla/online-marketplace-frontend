@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import io from 'socket.io-client';
 import axios from '../../apicalls/axios';
 import useAuthentication from '../../hooks/authHook'
+import './style.scss'
 
 function App() {
   const { chat_id } = useParams();
@@ -17,22 +18,27 @@ function App() {
 
 
   useEffect(() => {
-    const socket = io('http://localhost:8081'); // Connect to your WebSocket server
+    // Connect to the WebSocket server
+    const socket = io(process.env.REACT_APP_BASE_URL);
 
+    // Listen for the 'receive_message' event
     socket.on('receive_message', (data) => {
-      // Check if the message already exists in the state to prevent duplicates
-      const isMessageExists = messages.some(msg => msg.id === data.id); // Assuming each message has a unique 'id' property
+      console.log('Received message:', data);
+      const isMessageExists = messages.some(msg => msg.id === data.id);
 
       if (!isMessageExists) {
-        setMessages(prevMessages => [...prevMessages, data]); // Update messages state with received message
+        setMessages(prevMessages => [...prevMessages, data]);
       }
     });
 
-
+    // Cleanup: Disconnect the socket when the component unmounts
     return () => {
-      socket.disconnect(); // Cleanup on component unmount
+      socket.disconnect();
     };
-  }, [messages]);
+  }, []); // Empty dependency array to run the effect only once
+
+
+
 
 
 
@@ -60,57 +66,81 @@ function App() {
       try {
         const response = await axios.get(`/api/get/messages/${chat_id}`);
         setMessages(response.data);
-        
+
         // Find the first message
-        const firstMessage = response.data[0];
-        
+        const chatMessage = response.data[0];
+
         // Check conditions and set receiver_id accordingly
-        if (firstMessage) {
-          if (firstMessage.sender_id !== sender_id) {
+        if (chatMessage) {
+          if (chatMessage.sender_id !== sender_id) {
             // If sender_id is not equal to user?.id.toString()
-            setReceiverId(firstMessage.sender_id);
+            setReceiverId(chatMessage.sender_id);
           } else {
             // If sender_id is equal to user?.id.toString()
-            setReceiverId(firstMessage.receiver_id);
+            setReceiverId(chatMessage.receiver_id);
           }
         }
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
     };
-  
+
     fetchMessagesAndSetReceiver();
   }, [chat_id, sender_id]);
-  
+
+
 
 
 
 
 
   const sendMessage = async () => {
+    const socket = io(process.env.REACT_APP_BASE_URL); // Initialize the socket connection
+
+    // Emit the send_message event with the message details
+    socket.emit('send_message', {
+      sender_id,
+      receiver_id,
+      content: input
+    });
+
+    // Send the message to the server using Axios
     await axios.post('/api/send/messages', {
       sender_id,
       receiver_id,
       content: input
     });
 
-    const newMessage = {
-      sender_id,
-      receiver_id,
-      content: input
-    };
-
-    setMessages([...messages, newMessage]); // Update messages state with new message
+    // Clear the input field after sending the message
     setInput('');
   };
+
+
+
+  // const sendMessage = async () => {
+  //   const socket = io('http://localhost:8081'); // Initialize the socket connection
+
+  //   // Emit the send_message event with the message details
+  //   socket.emit('send_message', {
+  //     sender_id,
+  //     receiver_id,
+  //     content: input
+  //   });
+
+  //   setInput(''); // Clear the input field after sending the message
+  // };
+
 
   return (
     <div className="App">
       <h1>Chat Messenger</h1>
       <div className="chat-container">
         {messages.map((message, index) => (
-          <div key={index}>
-            <strong>{message.sender_id === sender_id ? 'You' : receiverInfo?.display_name }: </strong>
+          <div
+            key={index}
+            className={message.sender_id === sender_id ? 'sent-message' : 'received-message'}
+          >
+            <strong>{message.sender_id === sender_id ? 'You' : receiverInfo?.display_name}: </strong>
             {message.content}
           </div>
         ))}
@@ -126,6 +156,7 @@ function App() {
       </div>
     </div>
   );
+
 }
 
 export default App;
