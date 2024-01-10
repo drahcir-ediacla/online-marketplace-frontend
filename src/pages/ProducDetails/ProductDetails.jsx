@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import axios from '../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import useAuthentication from '../../hooks/authHook';
@@ -37,8 +38,11 @@ const ProductDetails = ({ userId }) => {
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
     const didTrackProductView = useRef(false);
+    const [input, setInput] = useState('');
+    const sender_id = user?.id.toString();
+    const receiver_id = product?.seller.id.toString();
 
-    
+
 
     useEffect(() => {
         if (!didTrackProductView.current) {
@@ -69,7 +73,7 @@ const ProductDetails = ({ userId }) => {
             console.error('Error adding item to wishlist:', error);
         }
     };
-    
+
     const removeFromWishlist = async (productId) => {
         try {
             const response = await RemoveWishlist(productId, {});
@@ -78,7 +82,7 @@ const ProductDetails = ({ userId }) => {
             console.error('Error removing item from wishlist:', error);
         }
     };
-    
+
 
 
     //Fetch product data
@@ -87,11 +91,11 @@ const ProductDetails = ({ userId }) => {
             try {
                 dispatch(Setloader(true));
                 const response = await GetProductsById(id, product_name);
-                
+
                 // Check if the response data has images array
                 if (response.data.images && Array.isArray(response.data.images)) {
                     setProduct(response.data);
-                    
+
                 } else {
                     console.error('Invalid product data:', response.data);
                 }
@@ -123,15 +127,15 @@ const ProductDetails = ({ userId }) => {
         if (!product || typeof product !== 'object') {
             return; // Exit early if product is null or not an object
         }
-    
+
         // Check if product has a wishlist property
         if (product.wishlist && Array.isArray(product.wishlist)) {
             // Update wishlist count for the specific product
             const updatedWishlistCount = getWishlistCount(product.id);
-    
+
             // Set the updated wishlist count
             setWishlistCount({ [product.id]: updatedWishlistCount });
-    
+
             console.log('Wishlist count updated:', updatedWishlistCount);
         } else {
             console.error('Invalid product data. Expected a wishlist array:', product);
@@ -174,6 +178,23 @@ const ProductDetails = ({ userId }) => {
 
     const originalDate = product.seller?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+
+
+    const sendMessage = async () => {
+
+        try{
+            // Send the message to the server using Axios
+        await axios.post('/api/send/messages', {
+            sender_id,
+            receiver_id,
+            content: input
+        });
+        } catch(error) {
+            return error.message
+        }
+        // Clear the input field after sending the message
+        setInput('');
+    };
 
 
     return (
@@ -271,13 +292,19 @@ const ProductDetails = ({ userId }) => {
                                     </div>
                                 </div>
                                 <div className='row3'>
-                                    <textarea cols="44" rows="5" placeholder='Write a custom message...' className='custom-message'></textarea>
+                                    <textarea
+                                        cols="44"
+                                        rows="5"
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        placeholder='Write a custom message...'
+                                        className='custom-message'></textarea>
                                 </div>
                                 <div className='row4'>
                                     <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' />
                                     <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' />
                                     <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' />
-                                    <BtnGreen label="Send Message" className='send-message' />
+                                    <BtnGreen label="Send Message" className='send-message' onClick={sendMessage} />
                                     <Link to="/LoginEmail" className='signin-make-offer'>Sign in to make offer</Link>
                                     <div className='input-make-offer-container'><span className='php-symbol'>₱</span><Input type='number' className='input-make-offer' /><BtnGreen label="Make Offer" className='make-offer-btn' /></div>
                                 </div>

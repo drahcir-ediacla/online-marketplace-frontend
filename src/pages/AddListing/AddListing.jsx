@@ -25,7 +25,6 @@ const AddListing = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
-  const [titleError, setTitleError] = useState('');
   const dropDownCategory = useRef(null);
   const [condition, setCondition] = useState('Brand New');
   const [productDetails, setProductDetails] = useState({
