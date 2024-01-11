@@ -25,6 +25,7 @@ import MoreFromSeller from '../../components/MoreFromSeller'
 import RelatedListings from '../../components/RelatedListings'
 import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import ListedInMap from '../../assets/images/pro-details-map.png'
+import AvatarIcon from '../../assets/images/profile-avatar.png'
 
 
 let postsPerPage = 5;
@@ -41,6 +42,38 @@ const ProductDetails = ({ userId }) => {
     const [input, setInput] = useState('');
     const sender_id = user?.id.toString();
     const receiver_id = product?.seller.id.toString();
+    const product_id = product?.id.toString();
+    const [chatId, setChatId] = useState(null);
+    console.log('product_id:', product_id)
+
+
+    useEffect(() => {
+        // Function to check if chat exists and set the chat_id state
+        const checkChatExists = async () => {
+            try {
+                const response = await axios.get(`/api/check/chatid`, {
+                    params: {
+                        sender_id,
+                        receiver_id,
+                        product_id,
+                    },
+                });
+
+                if (response.data && response.data.chat_id) {
+                    setChatId(response.data.chat_id);
+                }
+            } catch (error) {
+                console.error('Error checking chat:', error);
+            }
+        };
+
+        // Call the function when component mounts or when sender_id, receiver_id, or product_id changes
+        if (sender_id && receiver_id && product_id) {
+            checkChatExists();
+        }
+    }, [sender_id, receiver_id, product_id]); // Dependencies
+
+    console.log('Chat ID:', chatId)
 
 
 
@@ -180,21 +213,31 @@ const ProductDetails = ({ userId }) => {
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
 
-    const sendMessage = async () => {
 
-        try{
-            // Send the message to the server using Axios
-        await axios.post('/api/send/messages', {
-            sender_id,
-            receiver_id,
-            content: input
-        });
+    //------------------ SEND MESSAGE --------------------------//
+    const sendMessage = async () => {
+        try {
+            const response = await axios.post('/api/send/messages', {
+                chat_id: chatId,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: input
+            });
+
+            const chatID = response.data.chat_id;
+            window.location.href = `/messages/${chatID}`;
+            // Clear the input field after sending the message
+            setInput('');
         } catch(error) {
-            return error.message
+            console.error('Error sending message:', error)
         }
-        // Clear the input field after sending the message
-        setInput('');
     };
+
+
+    const handleBtnClearClick = (label) => {
+        setInput(label); // Set input value to the clicked button's label
+      };
 
 
     return (
@@ -277,7 +320,7 @@ const ProductDetails = ({ userId }) => {
                             <div className="prod-details-inquiry-form">
                                 <div><h5>Seller Information</h5><small>Joined in {formattedDate}</small></div>
                                 <div className='row2'>
-                                    <div className='col-left'><Link to={`/profile/${product.seller?.id}`}><img src={product.seller?.profile_pic} alt="" className='customer-pic' /></Link></div>
+                                    <div className='col-left'><Link to={`/profile/${product.seller?.id}`}><img src={product.seller?.profile_pic || AvatarIcon} alt="" className='customer-pic' /></Link></div>
                                     <div className='col-right'>
                                         <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
                                         <div className="seller-rating">
@@ -291,23 +334,38 @@ const ProductDetails = ({ userId }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='row3'>
-                                    <textarea
-                                        cols="44"
-                                        rows="5"
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        placeholder='Write a custom message...'
-                                        className='custom-message'></textarea>
-                                </div>
-                                <div className='row4'>
-                                    <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' />
-                                    <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' />
-                                    <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' />
-                                    <BtnGreen label="Send Message" className='send-message' onClick={sendMessage} />
-                                    <Link to="/LoginEmail" className='signin-make-offer'>Sign in to make offer</Link>
-                                    <div className='input-make-offer-container'><span className='php-symbol'>₱</span><Input type='number' className='input-make-offer' /><BtnGreen label="Make Offer" className='make-offer-btn' /></div>
-                                </div>
+                                {chatId ? (
+                                    <>
+                                        <div>View Chat</div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className='row3'>
+                                            <textarea
+                                                cols="44"
+                                                rows="5"
+                                                value={input}
+                                                onChange={(e) => setInput(e.target.value)}
+                                                placeholder='Write a custom message...'
+                                                className='custom-message'></textarea>
+                                        </div>
+                                        <div className='row4'>
+                                            <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
+                                            <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
+                                            <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
+                                            <BtnGreen label="Send Message" className='send-message' onClick={sendMessage} />
+                                            <Link to="/LoginEmail" className='signin-make-offer'>Sign in to make offer</Link>
+                                            <div className='input-make-offer-container'>
+                                                <span className='php-symbol'>₱</span>
+                                                <Input
+                                                    type='number'
+                                                    className='input-make-offer'
+                                                />
+                                                <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             <div className="prod-details-ads">
                                 YOUR ADS HERE

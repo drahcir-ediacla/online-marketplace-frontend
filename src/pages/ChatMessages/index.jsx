@@ -24,9 +24,13 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [chatInfo, setChatInfo] = useState(null);
+    const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id.toString();
+    const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
+
     const scrollRef = useRef(null);
 
 
@@ -68,6 +72,37 @@ const ChatMessages = () => {
 
 
 
+    useEffect(() => {
+        const fetchChatById = async () => {
+            try {
+                const response = await axios.get(`/api/get/chat/${chat_id}`);
+                setChatInfo(response.data); // Update receiverInfo state with fetched data
+            } catch (error) {
+                console.error('Error fetching chat information:', error);
+            }
+        };
+
+        if (chat_id) {
+            fetchChatById(); // Fetch receiver information only if receiver_id is available
+        }
+    }, [chat_id]);
+
+
+
+    useEffect(() => {
+        const fetchProductInfo = async () => {
+            try {
+                const response = await axios.get(`/api/getproductbyid/${product_id}`);
+                setProductInfo(response.data); // Update receiverInfo state with fetched data
+            } catch (error) {
+                console.error('Error fetching receiver information:', error);
+            }
+        };
+
+        if (product_id) {
+            fetchProductInfo(); // Fetch receiver information only if receiver_id is available
+        }
+    }, [product_id]);
 
 
 
@@ -120,20 +155,26 @@ const ChatMessages = () => {
 
 
 
+
+
     const sendMessage = async () => {
         const socket = io(process.env.REACT_APP_BASE_URL); // Initialize the socket connection
 
         // Emit the send_message event with the message details
         socket.emit('send_message', {
+            chat_id,
             sender_id,
             receiver_id,
+            product_id,
             content: input
         });
 
         // Send the message to the server using Axios
         await axios.post('/api/send/messages', {
+            chat_id,
             sender_id,
             receiver_id,
+            product_id,
             content: input
         });
 
@@ -146,27 +187,27 @@ const ChatMessages = () => {
     function formatTime(timestamp) {
         // Check if timestamp is valid
         if (!timestamp) {
-          return 'Invalid Timestamp';
+            return 'Invalid Timestamp';
         }
-      
+
         const date = new Date(timestamp);
-        
+
         // Check if date is valid
         if (isNaN(date.getTime())) {
-          return 'Invalid Date';
+            return 'Invalid Date';
         }
-      
+
         // Extract hours, minutes, and AM/PM
         const hours = date.getHours();
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const period = hours >= 12 ? 'PM' : 'AM';
-        
+
         // Convert hours to 12-hour format
         const formattedHours = hours % 12 || 12;
-      
+
         return `${formattedHours}:${minutes} ${period}`;
-      }
-      
+    }
+
 
     return (
         <>
@@ -247,12 +288,13 @@ const ChatMessages = () => {
                         </div>
                         <div className="chat-right-row2">
                             <div className='selling-item-container'>
-                                <img src={ItemThumbnail} alt="" />
+                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
                                 <div className='chat-item-info'>
-                                    <span className='chat-item-name'>Plain Black Cap</span>
+                                    <span className='chat-item-name'>{productInfo?.product_name}</span>
                                     <span className='chat-item-price'>$200</span>
                                 </div>
                             </div>
+
                             <div className='three-dots-chat'>
                                 <BtnGreen label='Make Offer' />
                             </div>
