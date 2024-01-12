@@ -21,6 +21,7 @@ import AvatarIcon from '../../assets/images/profile-avatar.png'
 const ChatMessages = () => {
 
     const { chat_id } = useParams();
+    const socketRef = useRef(null);
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
@@ -48,27 +49,44 @@ const ChatMessages = () => {
     }, [messages]); // Add other dependencies as needed
 
 
+    // Function to format price with commas and decimals
+    const formatPrice = (price) => {
+        const formattedPrice = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP', // Change to your desired currency code
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(price);
 
+        return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
+    };
 
     useEffect(() => {
         // Connect to the WebSocket server
-        const socket = io(process.env.REACT_APP_BASE_URL);
-
+        socketRef.current = io(process.env.REACT_APP_BASE_URL);
+    
+        // Join the chat room based on chat_id when component mounts
+        socketRef.current.emit('joinChat', chat_id);
+    
         // Listen for the 'receive_message' event
-        socket.on('receive_message', (data) => {
-            const isMessageExists = messages.some(msg => msg.id === data.id);
-
-            if (!isMessageExists) {
-                data.timestamp = new Date().toISOString();
-                setMessages(prevMessages => [...prevMessages, data]);
+        socketRef.current.on('receive_message', (data) => {
+            // Ensure that the message is from the specific chat room by checking chat_id
+            if (data.chat_id === chat_id) {
+                const isMessageExists = messages.some(msg => msg.id === data.id);
+                if (!isMessageExists) {
+                    data.timestamp = new Date().toISOString();
+                    setMessages(prevMessages => [...prevMessages, data]);
+                }
             }
         });
-
-        // Cleanup: Disconnect the socket when the component unmounts
+    
         return () => {
-            socket.disconnect();
+            // Disconnect the socket when the component unmounts
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
         };
-    }, []); // Empty dependency array to run the effect only once
+    }, [chat_id]); // Dependencies updated to include chat_id
 
 
 
@@ -158,10 +176,8 @@ const ChatMessages = () => {
 
 
     const sendMessage = async () => {
-        const socket = io(process.env.REACT_APP_BASE_URL); // Initialize the socket connection
-
         // Emit the send_message event with the message details
-        socket.emit('send_message', {
+        socketRef.current.emit('send_message', {
             chat_id,
             sender_id,
             receiver_id,
@@ -288,10 +304,10 @@ const ChatMessages = () => {
                         </div>
                         <div className="chat-right-row2">
                             <div className='selling-item-container'>
-                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
                                 <div className='chat-item-info'>
                                     <span className='chat-item-name'>{productInfo?.product_name}</span>
-                                    <span className='chat-item-price'>$200</span>
+                                    <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
                                 </div>
                             </div>
 
