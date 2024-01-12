@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import io from 'socket.io-client'
 import axios from '../../apicalls/axios';
 import useAuthentication from '../../hooks/authHook'
+import { NavLink } from 'react-router-dom'
 import './style.scss'
 import Header from '../../layouts/Header'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -26,10 +27,11 @@ const ChatMessages = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [chatInfo, setChatInfo] = useState(null);
+    const [allChats, setAllChats] = useState(null);
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id.toString();
-    const product_id = chatInfo?.product_id.toString();
+    const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
 
     const scrollRef = useRef(null);
@@ -64,10 +66,10 @@ const ChatMessages = () => {
     useEffect(() => {
         // Connect to the WebSocket server
         socketRef.current = io(process.env.REACT_APP_BASE_URL);
-    
+
         // Join the chat room based on chat_id when component mounts
         socketRef.current.emit('joinChat', chat_id);
-    
+
         // Listen for the 'receive_message' event
         socketRef.current.on('receive_message', (data) => {
             // Ensure that the message is from the specific chat room by checking chat_id
@@ -79,7 +81,7 @@ const ChatMessages = () => {
                 }
             }
         });
-    
+
         return () => {
             // Disconnect the socket when the component unmounts
             if (socketRef.current) {
@@ -87,6 +89,20 @@ const ChatMessages = () => {
             }
         };
     }, [chat_id]); // Dependencies updated to include chat_id
+
+
+    useEffect(() => {
+        const fetchAllUserChat = async () => {
+            try {
+                const response = await axios.get('/api/get-all/user-chat');
+                setAllChats(response.data)
+            } catch (error) {
+                console.error('Error fetching all chats:', error);
+            }
+        }
+        fetchAllUserChat()
+    }, [])
+
 
 
 
@@ -240,43 +256,30 @@ const ChatMessages = () => {
                                 <Input className='chat-search-box' placeholder='Search name..' />
                             </div>
                         </div>
-                        <div className="chat-left-row2">
-                            <div className="select-user-conversation">
-                                <div className='user-chat-info-container'>
-                                    <img src={UserChatImage} alt="" />
-                                    <div className='chat-user-name-messages'>
-                                        <span className='chat-user-name'>Asi Paolo</span>
-                                        <span className='chat-user-messages'>Yes!! I received the product, Thanks </span>
-                                    </div>
-                                </div>
-                                <small className='last-message-time'>5:31 PM</small>
-                            </div>
-                        </div>
-                        <div className="chat-left-row2 green-bkgrnd">
-                            <div className="select-user-conversation">
-                                <div className='user-chat-info-container'>
-                                    <img src={UserChatImage} alt="" />
-                                    <div className='chat-user-name-messages'>
-                                        <span className='chat-user-name'>Asi Paolo</span>
-                                        <span className='chat-user-messages'>Yes!! I received the product, Thanks</span>
-                                    </div>
-                                </div>
-                                <small className='last-message-time'>5:31 PM</small>
-                            </div>
-                        </div>
-                        <div className="chat-left-row2">
-                            <div className="select-user-conversation">
-                                <div className='user-chat-info-container'>
-                                    <img src={UserChatImage} alt="" />
-                                    <div className='chat-user-name-messages'>
-                                        <span className='chat-user-name'>Asi Paolo</span>
-                                        <span className='chat-user-messages'>Yes!! I received the product, Thanks</span>
-                                    </div>
-                                </div>
-                                <small className='last-message-time'>5:31 PM</small>
-                            </div>
-                        </div>
-                        <div className="chat-left-row2">
+                        {allChats ? (
+                            allChats.length > 0 ? (
+                                allChats.map((chat) => (
+                                    <NavLink to={`/messages/${chat?.chat_id}`} className="user-chat-list" key={chat?.chat_id}>
+                                        <div className="select-user-conversation">
+                                            <div className='user-chat-info-container'>
+                                                <img src={UserChatImage} alt="User Chat" />
+                                                <div className='chat-user-name-messages'>
+                                                    <span className='chat-user-name'>{chat?.product_id}</span>
+                                                    <span className='chat-user-messages'>Yes!! I received the product, Thanks </span>
+                                                </div>
+                                            </div>
+                                            <small className='last-message-time'>5:31 PM</small>
+                                        </div>
+                                    </NavLink>
+                                ))
+                            ) : (
+                                <p>No chats available.</p>
+                            )
+                        ) : (
+                            <p>Loading chats...</p>
+                        )}
+
+                        <div className="user-chat-list green-bkgrnd">
                             <div className="select-user-conversation">
                                 <div className='user-chat-info-container'>
                                     <img src={UserChatImage} alt="" />

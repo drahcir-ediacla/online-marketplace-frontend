@@ -42,7 +42,7 @@ const ProductDetails = ({ userId }) => {
     const [input, setInput] = useState('');
     const sender_id = user?.id.toString();
     const receiver_id = product?.seller.id.toString();
-    const product_id = product?.id.toString();
+    const product_id = product?.id;
     const [chatId, setChatId] = useState(null);
     console.log('product_id:', product_id)
 
