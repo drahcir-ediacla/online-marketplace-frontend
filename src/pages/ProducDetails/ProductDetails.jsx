@@ -217,7 +217,7 @@ const ProductDetails = ({ userId }) => {
     //------------------ SEND MESSAGE --------------------------//
     const sendMessage = async () => {
         try {
-            const response = await axios.post('/api/send/messages', {
+            const response = await axios.post('/api/create/messages', {
                 chat_id: chatId,
                 sender_id,
                 receiver_id,

@@ -28,7 +28,7 @@ const ChatMessages = () => {
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id.toString();
-    const product_id = chatInfo?.product_id;
+    const product_id = chatInfo?.product_id.toString();
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
 
     const scrollRef = useRef(null);
