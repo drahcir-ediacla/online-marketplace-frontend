@@ -10,7 +10,6 @@ import BtnGreen from '../../components/Button/BtnGreen'
 import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
 import UserChatImage from '../../assets/images/review-1_icon.png';
-import ItemThumbnail from '../../assets/images/cap-5.jpg'
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
@@ -27,13 +26,36 @@ const ChatMessages = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [chatInfo, setChatInfo] = useState(null);
-    const [allChats, setAllChats] = useState(null);
+    const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
+    const [messengerState, setMessengerState] = useState({}); // State to store messenger for each chat
     const sender_id = user?.id.toString();
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
+    const [messengerInfo, setMessengerInfo] = useState({});
+    console.log('messengerState:', messengerState)
+    console.log('messengerInfo:', messengerInfo)
+    console.log('allChats:', allChats.map(chat => {
+        const userId = messengerState[chat?.chat_id];
+        const displayName = messengerInfo[userId]?.display_name || 'Unknown';
+        return {
+            chatId: chat?.chat_id,
+            displayName: displayName,
+        };
+    }));
+    console.log('Chat ID to Participant ID mapping:', Object.keys(messengerState).reduce((result, chatId) => {
+        result[chatId] = messengerState[chatId];
+        return result;
+    }, {}));
+    
+    const chatIdToParticipantMap = Object.keys(messengerState).reduce((result, chatId) => {
+        result[chatId] = messengerState[chatId];
+        return result;
+    }, {});
 
+
+    
     const scrollRef = useRef(null);
 
 
@@ -92,18 +114,64 @@ const ChatMessages = () => {
 
 
     useEffect(() => {
+        const fetchMessengerInfo = async (userId) => {
+            
+            try {
+                const response = await axios.get(`/api/user/${userId}`);
+                console.log("Fetched messengerInfo:", response.data); // Log fetched data
+                setMessengerInfo(prevState => ({
+                    ...prevState,
+                    [userId]: response.data // Store the user details by user ID
+                }));
+            } catch (error) {
+                console.error('Error fetching receiver information:', error);
+            }
+        };
+    
+        if (messengerState[chat_id]) {
+            fetchMessengerInfo(messengerState[chat_id]); // Pass the user ID to fetch details
+        }
+    }, [messengerState[chat_id]]);
+    
+    
+
+
+
+    useEffect(() => {
         const fetchAllUserChat = async () => {
             try {
                 const response = await axios.get('/api/get-all/user-chat');
-                setAllChats(response.data)
+                const chatsArray = Array.isArray(response.data) ? response.data : []; // Ensure it's an array
+        
+                setAllChats(chatsArray);
+        
+                const updatedMessengerState = {};
+                chatsArray.forEach((chatMessage) => {
+                    if (chatMessage && Array.isArray(chatMessage.participants)) {
+                        const [participant1, participant2] = chatMessage.participants;
+        
+                        if (participant1 !== sender_id && participant2 !== sender_id) {
+                            updatedMessengerState[chatMessage.chat_id] = participant1;
+                        } else if (participant1 !== sender_id) {
+                            updatedMessengerState[chatMessage.chat_id] = participant1;
+                        } else if (participant2 !== sender_id) {
+                            updatedMessengerState[chatMessage.chat_id] = participant2;
+                        }
+                    }
+                });
+        
+                setMessengerState(updatedMessengerState);
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
-        }
-        fetchAllUserChat()
-    }, [])
-
-
+        };
+        
+        
+    
+        fetchAllUserChat();
+    }, [sender_id]); // Include sender_id in dependency array if it can change
+    
+    
 
 
     useEffect(() => {
@@ -171,6 +239,7 @@ const ChatMessages = () => {
                 // Check conditions and set receiver_id accordingly
                 if (chatMessage) {
                     if (chatMessage.sender_id !== sender_id) {
+
                         // If sender_id is not equal to user?.id.toString()
                         setReceiverId(chatMessage.sender_id);
                     } else {
@@ -256,6 +325,7 @@ const ChatMessages = () => {
                                 <Input className='chat-search-box' placeholder='Search name..' />
                             </div>
                         </div>
+
                         {allChats ? (
                             allChats.length > 0 ? (
                                 allChats.map((chat) => (
@@ -264,7 +334,7 @@ const ChatMessages = () => {
                                             <div className='user-chat-info-container'>
                                                 <img src={UserChatImage} alt="User Chat" />
                                                 <div className='chat-user-name-messages'>
-                                                    <span className='chat-user-name'>{chat?.product_id}</span>
+                                                    <span className='chat-user-name'>{messengerInfo[messengerState[chat?.chat_id]]?.display_name || 'Unknown'}</span>
                                                     <span className='chat-user-messages'>Yes!! I received the product, Thanks </span>
                                                 </div>
                                             </div>
@@ -278,6 +348,10 @@ const ChatMessages = () => {
                         ) : (
                             <p>Loading chats...</p>
                         )}
+
+
+
+
 
                         <div className="user-chat-list green-bkgrnd">
                             <div className="select-user-conversation">

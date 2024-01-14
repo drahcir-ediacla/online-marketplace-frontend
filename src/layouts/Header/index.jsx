@@ -131,7 +131,7 @@ function Header() {
               {user ? (
                 <>
                   <div className='nav-tools'>
-                    <div className='message-icon'><MessageIcon /></div>
+                    <div className='message-icon'><Link to='/messages'><MessageIcon /></Link></div>
                     <div className='bell-icon'><BellIcon /></div>
                     <Link onClick={mywishlist} className='heart-icon'><HeartIcon /></Link>
                   </div>
