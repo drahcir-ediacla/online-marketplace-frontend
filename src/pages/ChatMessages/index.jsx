@@ -30,32 +30,15 @@ const ChatMessages = () => {
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const [messengerState, setMessengerState] = useState({}); // State to store messenger for each chat
-    const sender_id = user?.id.toString();
+    const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
-    const [messengerInfo, setMessengerInfo] = useState({});
-    console.log('messengerState:', messengerState)
-    console.log('messengerInfo:', messengerInfo)
-    console.log('allChats:', allChats.map(chat => {
-        const userId = messengerState[chat?.chat_id];
-        const displayName = messengerInfo[userId]?.display_name || 'Unknown';
-        return {
-            chatId: chat?.chat_id,
-            displayName: displayName,
-        };
-    }));
-    console.log('Chat ID to Participant ID mapping:', Object.keys(messengerState).reduce((result, chatId) => {
-        result[chatId] = messengerState[chatId];
-        return result;
-    }, {}));
-    
-    const chatIdToParticipantMap = Object.keys(messengerState).reduce((result, chatId) => {
-        result[chatId] = messengerState[chatId];
-        return result;
-    }, {});
+    console.log('allChats:', allChats)
 
 
-    
+
+
+
     const scrollRef = useRef(null);
 
 
@@ -113,27 +96,6 @@ const ChatMessages = () => {
     }, [chat_id]); // Dependencies updated to include chat_id
 
 
-    useEffect(() => {
-        const fetchMessengerInfo = async (userId) => {
-            
-            try {
-                const response = await axios.get(`/api/user/${userId}`);
-                console.log("Fetched messengerInfo:", response.data); // Log fetched data
-                setMessengerInfo(prevState => ({
-                    ...prevState,
-                    [userId]: response.data // Store the user details by user ID
-                }));
-            } catch (error) {
-                console.error('Error fetching receiver information:', error);
-            }
-        };
-    
-        if (messengerState[chat_id]) {
-            fetchMessengerInfo(messengerState[chat_id]); // Pass the user ID to fetch details
-        }
-    }, [messengerState[chat_id]]);
-    
-    
 
 
 
@@ -141,37 +103,19 @@ const ChatMessages = () => {
         const fetchAllUserChat = async () => {
             try {
                 const response = await axios.get('/api/get-all/user-chat');
-                const chatsArray = Array.isArray(response.data) ? response.data : []; // Ensure it's an array
-        
-                setAllChats(chatsArray);
-        
-                const updatedMessengerState = {};
-                chatsArray.forEach((chatMessage) => {
-                    if (chatMessage && Array.isArray(chatMessage.participants)) {
-                        const [participant1, participant2] = chatMessage.participants;
-        
-                        if (participant1 !== sender_id && participant2 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant1;
-                        } else if (participant1 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant1;
-                        } else if (participant2 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant2;
-                        }
-                    }
-                });
-        
-                setMessengerState(updatedMessengerState);
+
+                setAllChats(response.data);
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
         };
-        
-        
-    
+
+
+
         fetchAllUserChat();
-    }, [sender_id]); // Include sender_id in dependency array if it can change
-    
-    
+    }, []); // Include sender_id in dependency array if it can change
+
+
 
 
     useEffect(() => {
@@ -310,6 +254,11 @@ const ChatMessages = () => {
     }
 
 
+    const getLastMessageContent = (messages) => {
+        const lastMessage = messages[messages.length - 1];
+        return lastMessage ? lastMessage.content : '';
+      };
+
     return (
         <>
             <Header />
@@ -328,14 +277,18 @@ const ChatMessages = () => {
 
                         {allChats ? (
                             allChats.length > 0 ? (
-                                allChats.map((chat) => (
-                                    <NavLink to={`/messages/${chat?.chat_id}`} className="user-chat-list" key={chat?.chat_id}>
+                                Object.keys(allChats).map((chat, index) => (
+                                    <NavLink to={`/messages/${chat?.chat_id}`} className="user-chat-list" key={index}>
                                         <div className="select-user-conversation">
                                             <div className='user-chat-info-container'>
                                                 <img src={UserChatImage} alt="User Chat" />
                                                 <div className='chat-user-name-messages'>
-                                                    <span className='chat-user-name'>{messengerInfo[messengerState[chat?.chat_id]]?.display_name || 'Unknown'}</span>
-                                                    <span className='chat-user-messages'>Yes!! I received the product, Thanks </span>
+                                                    <span className='chat-user-name'>
+                                                        {chat?.otherParticipantsChats?.participantsData?.display_name || 'Unknown'}
+                                                    </span>
+                                                    <span className='chat-user-messages'>
+                                                        {getLastMessageContent(chat?.chat?.messages)}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <small className='last-message-time'>5:31 PM</small>
