@@ -45,6 +45,9 @@ const ProductDetails = ({ userId }) => {
     const product_id = product?.id;
     const [chatId, setChatId] = useState(null);
     const isProductOwner = product?.seller.id === user?.id
+    const viewChat = () => {
+        window.location.href = `/messages/${chatId}`;
+    }
 
 
     useEffect(() => {
@@ -342,7 +345,7 @@ const ProductDetails = ({ userId }) => {
                                         {
                                             chatId ? (
                                                 <>
-                                                    <div>View Chat</div>
+                                                    <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
                                                 </>
                                             ) : (
                                                 <>
