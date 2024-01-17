@@ -44,7 +44,7 @@ const ProductDetails = ({ userId }) => {
     const receiver_id = product?.seller.id.toString();
     const product_id = product?.id;
     const [chatId, setChatId] = useState(null);
-    console.log('product_id:', product_id)
+    const isProductOwner = product?.seller.id === user?.id
 
 
     useEffect(() => {
@@ -229,7 +229,7 @@ const ProductDetails = ({ userId }) => {
             window.location.href = `/messages/${chatID}`;
             // Clear the input field after sending the message
             setInput('');
-        } catch(error) {
+        } catch (error) {
             console.error('Error sending message:', error)
         }
     };
@@ -237,7 +237,7 @@ const ProductDetails = ({ userId }) => {
 
     const handleBtnClearClick = (label) => {
         setInput(label); // Set input value to the clicked button's label
-      };
+    };
 
 
     return (
@@ -334,36 +334,49 @@ const ProductDetails = ({ userId }) => {
                                         </div>
                                     </div>
                                 </div>
-                                {chatId ? (
-                                    <>
-                                        <div>View Chat</div>
-                                    </>
+                                {isProductOwner ? (
+                                    // If the user is the product owner, hide the chat-related elements
+                                    null
                                 ) : (
                                     <>
-                                        <div className='row3'>
-                                            <textarea
-                                                cols="44"
-                                                rows="5"
-                                                value={input}
-                                                onChange={(e) => setInput(e.target.value)}
-                                                placeholder='Write a custom message...'
-                                                className='custom-message'></textarea>
-                                        </div>
-                                        <div className='row4'>
-                                            <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
-                                            <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
-                                            <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
-                                            <BtnGreen label="Send Message" className='send-message' onClick={sendMessage} />
-                                            <Link to="/LoginEmail" className='signin-make-offer'>Sign in to make offer</Link>
-                                            <div className='input-make-offer-container'>
-                                                <span className='php-symbol'>₱</span>
-                                                <Input
-                                                    type='number'
-                                                    className='input-make-offer'
-                                                />
-                                                <BtnGreen label="Make Offer" className='make-offer-btn' />
-                                            </div>
-                                        </div>
+                                        {
+                                            chatId ? (
+                                                <>
+                                                    <div>View Chat</div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className='row3'>
+                                                        <textarea
+                                                            cols="44"
+                                                            rows="5"
+                                                            value={input}
+                                                            onChange={(e) => setInput(e.target.value)}
+                                                            placeholder='Write a custom message...'
+                                                            className='custom-message'></textarea>
+                                                    </div>
+                                                    <div className='row4'>
+                                                        <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
+                                                        <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
+                                                        <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
+                                                        <BtnGreen
+                                                            label="Send Message"
+                                                            className='send-message'
+                                                            onClick={sendMessage}
+                                                            disabled={!input.trim()} // Disable if input is empty or contains only whitespace
+                                                        />
+                                                        <Link to="/LoginEmail" className='signin-make-offer'>Sign in to make offer</Link>
+                                                        <div className='input-make-offer-container'>
+                                                            <span className='php-symbol'>₱</span>
+                                                            <Input
+                                                                type='number'
+                                                                className='input-make-offer'
+                                                            />
+                                                            <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
                                     </>
                                 )}
                             </div>
@@ -375,7 +388,7 @@ const ProductDetails = ({ userId }) => {
                 </div>
                 <MoreFromSeller />
                 <div><RelatedListings /></div>
-            </div>
+            </div >
             <Footer />
         </>
     )

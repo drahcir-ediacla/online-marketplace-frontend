@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import io from 'socket.io-client'
 import axios from '../../apicalls/axios';
 import useAuthentication from '../../hooks/authHook'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import './style.scss'
 import Header from '../../layouts/Header'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -33,7 +33,7 @@ const ChatMessages = () => {
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
-    console.log('allChats:', allChats)
+    console.log('receiverInfo:', receiverInfo)
 
 
 
@@ -54,6 +54,10 @@ const ChatMessages = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]); // Add other dependencies as needed
+
+    const limitCharacters = (text, maxLength) => {
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    };
 
 
     // Function to format price with commas and decimals
@@ -235,6 +239,7 @@ const ChatMessages = () => {
             return 'Invalid Timestamp';
         }
 
+        // Parse the timestamp using Date constructor
         const date = new Date(timestamp);
 
         // Check if date is valid
@@ -254,10 +259,15 @@ const ChatMessages = () => {
     }
 
 
+
     const getLastMessageContent = (messages) => {
-        const lastMessage = messages[messages.length - 1];
-        return lastMessage ? lastMessage.content : '';
-      };
+        return messages && messages.length > 0 ? messages[0].content : '';
+    };
+
+    const getLastMessageTime = (messages) => {
+        return messages && messages.length > 0 ? messages[0].timestamp : '';
+    };
+
 
     return (
         <>
@@ -275,56 +285,42 @@ const ChatMessages = () => {
                             </div>
                         </div>
 
-                        {allChats ? (
-                            allChats.length > 0 ? (
-                                Object.keys(allChats).map((chat, index) => (
-                                    <NavLink to={`/messages/${chat?.chat_id}`} className="user-chat-list" key={index}>
-                                        <div className="select-user-conversation">
-                                            <div className='user-chat-info-container'>
-                                                <img src={UserChatImage} alt="User Chat" />
-                                                <div className='chat-user-name-messages'>
-                                                    <span className='chat-user-name'>
-                                                        {chat?.otherParticipantsChats?.participantsData?.display_name || 'Unknown'}
-                                                    </span>
-                                                    <span className='chat-user-messages'>
-                                                        {getLastMessageContent(chat?.chat?.messages)}
-                                                    </span>
-                                                </div>
+                        {allChats.map((chat, index) => {
+                            const isActive = chat?.chat_id === chat_id;
+                            return (
+                                <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
+                                    <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
+                                        <div className='user-chat-info-container'>
+                                            <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
+                                            <div className='chat-user-name-messages'>
+                                                <span className='chat-user-name'>
+                                                    {chat?.otherParticipant?.display_name || 'Unknown'}
+                                                </span>
+                                                <span className='chat-product-name'>
+                                                    {limitCharacters(chat?.chat?.product?.product_name, 25) || 'Unknown'}
+                                                </span>
+                                                <span className='chat-user-messages'>
+                                                    {getLastMessageContent(chat?.chat?.messages)}
+                                                </span>
                                             </div>
-                                            <small className='last-message-time'>5:31 PM</small>
                                         </div>
-                                    </NavLink>
-                                ))
-                            ) : (
-                                <p>No chats available.</p>
-                            )
-                        ) : (
-                            <p>Loading chats...</p>
-                        )}
-
-
-
-
-
-                        <div className="user-chat-list green-bkgrnd">
-                            <div className="select-user-conversation">
-                                <div className='user-chat-info-container'>
-                                    <img src={UserChatImage} alt="" />
-                                    <div className='chat-user-name-messages'>
-                                        <span className='chat-user-name'>Asi Paolo</span>
-                                        <span className='chat-user-messages'>Yes!! I received the product, Thanks</span>
+                                        <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
                                     </div>
-                                </div>
-                                <small className='last-message-time'>5:31 PM</small>
-                            </div>
-                        </div>
+                                </NavLink>
+                            )
+
+                        })}
                     </div>
                     <div className="chat-right">
                         <div className="chat-right-row1">
                             <div className='user-chat-info-container'>
-                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                <Link to={`/profile/${receiverInfo?.id}`}>
+                                    <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                </Link>
                                 <div className='chat-user-name-messages'>
-                                    <span className='chat-user-name'>{receiverInfo?.display_name}</span>
+                                    <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
+                                        {receiverInfo?.display_name}
+                                    </Link>
                                     <span className='chat-user-status'>Online</span>
                                 </div>
                             </div>
@@ -334,9 +330,13 @@ const ChatMessages = () => {
                         </div>
                         <div className="chat-right-row2">
                             <div className='selling-item-container'>
-                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                    <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                </Link>
                                 <div className='chat-item-info'>
-                                    <span className='chat-item-name'>{productInfo?.product_name}</span>
+                                    <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                        {productInfo?.product_name}
+                                    </Link>
                                     <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
                                 </div>
                             </div>

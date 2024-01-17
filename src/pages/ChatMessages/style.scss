@@ -47,12 +47,15 @@
             }
 
             .user-chat-list {
+                color: var(--gray-500);
+
                 .select-user-conversation {
                     display: flex;
                     justify-content: space-between;
-                    height: 80px;
+                    height: auto;
                     width: 100%;
                     padding: 10px;
+                    color: var(--gray-500);
 
                     .user-chat-info-container {
                         width: 100%;
@@ -72,6 +75,10 @@
                             max-width: 265px;
 
                             .chat-user-name {
+                                font-weight: 400;
+                            }
+
+                            .chat-product-name {
                                 font-weight: 600;
                             }
                         }
@@ -82,11 +89,12 @@
                         width: 53px;
                     }
                 }
+                .active {
+                    background-color: var(--gray-100);
+                }
             }
 
-            .green-bkgrnd {
-                background-color: var(--gray-100);
-            }
+            
         }
 
         .chat-right {
@@ -119,6 +127,7 @@
                         flex-direction: column;
 
                         .chat-user-name {
+                            color: var(--gray-500);
                             font-weight: 600;
                         }
 
@@ -159,6 +168,7 @@
                         justify-content: center;
 
                         .chat-item-name {
+                            color: var(--gray-500);
                             font-weight: 600;
                         }
                     }
