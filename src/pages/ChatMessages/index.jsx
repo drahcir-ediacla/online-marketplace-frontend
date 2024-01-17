@@ -285,31 +285,35 @@ const ChatMessages = () => {
                             </div>
                         </div>
 
-                        {allChats.map((chat, index) => {
-                            const isActive = chat?.chat_id === chat_id;
-                            return (
-                                <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
-                                    <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
-                                        <div className='user-chat-info-container'>
-                                            <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
-                                            <div className='chat-user-name-messages'>
-                                                <span className='chat-user-name'>
-                                                    {chat?.otherParticipant?.display_name || 'Unknown'}
-                                                </span>
-                                                <span className='chat-product-name'>
-                                                    {limitCharacters(chat?.chat?.product?.product_name, 25) || 'Unknown'}
-                                                </span>
-                                                <span className='chat-user-messages'>
-                                                    {getLastMessageContent(chat?.chat?.messages)}
-                                                </span>
+                        {Array.isArray(allChats) ? (
+                            allChats.map((chat, index) => {
+                                const isActive = chat?.chat_id === chat_id;
+                                return (
+                                    <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
+                                        <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
+                                            <div className='user-chat-info-container'>
+                                                <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
+                                                <div className='chat-user-name-messages'>
+                                                    <span className='chat-user-name'>
+                                                        {chat?.otherParticipant?.display_name || 'Unknown'}
+                                                    </span>
+                                                    <span className='chat-product-name'>
+                                                        {limitCharacters(chat?.chat?.product?.product_name, 25) || 'Unknown'}
+                                                    </span>
+                                                    <span className='chat-user-messages'>
+                                                        {getLastMessageContent(chat?.chat?.messages)}
+                                                    </span>
+                                                </div>
                                             </div>
+                                            <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
                                         </div>
-                                        <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
-                                    </div>
-                                </NavLink>
-                            )
+                                    </NavLink>
+                                );
+                            })
+                        ) : (
+                            <p>No Chats Available...</p>
+                        )}
 
-                        })}
                     </div>
                     <div className="chat-right">
                         <div className="chat-right-row1">
