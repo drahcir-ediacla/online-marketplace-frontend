@@ -26,6 +26,7 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -56,19 +57,19 @@ const ChatMessages = () => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-            setShowEmotePicker(false);
-          }
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowEmotePicker(false);
+            }
         };
-    
+
         // Attach the event listener to the document body
         document.body.addEventListener('mousedown', handleClickOutside);
-    
+
         // Clean up the event listener when the component is unmounted
         return () => {
-          document.body.removeEventListener('mousedown', handleClickOutside);
+            document.body.removeEventListener('mousedown', handleClickOutside);
         };
-      }, []);
+    }, []);
 
 
 
@@ -221,31 +222,80 @@ const ChatMessages = () => {
     }, [chat_id, sender_id]);
 
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedImage(file);
+    };
 
 
+    const handleImageUpload = async () => {
+        try {
+            if (selectedImage) {
+                const formData = new FormData();
+                formData.append('image', selectedImage);
+
+                // Upload the image using Axios
+                const response = await axios.post('/api/upload-chat-image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                if (response.status === 200) {
+                    // Handle the uploaded image URL from the response
+                    const imageUrl = response.data.imageUrl;
+                    console.log('imageUrl:', imageUrl)
+
+                    socketRef.current.emit('send_message', {
+                        chat_id,
+                        sender_id,
+                        receiver_id,
+                        product_id,
+                        content: imageUrl,
+                    });
+
+                    // Send the message to the server using Axios
+                    await axios.post('/api/send/messages', {
+                        chat_id,
+                        sender_id,
+                        receiver_id,
+                        product_id,
+                        content: imageUrl,
+                    });
+
+                    // Clear the selected image
+                    setSelectedImage(null);
+                }
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    };
 
 
     const sendMessage = async () => {
-        // Emit the send_message event with the message details
-        socketRef.current.emit('send_message', {
-            chat_id,
-            sender_id,
-            receiver_id,
-            product_id,
-            content: input
-        });
+        // Send regular text message
+        if (input.trim() !== '') {
+            socketRef.current.emit('send_message', {
+                chat_id,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: input,
+            });
 
-        // Send the message to the server using Axios
-        await axios.post('/api/send/messages', {
-            chat_id,
-            sender_id,
-            receiver_id,
-            product_id,
-            content: input
-        });
+            // Send the message to the server using Axios
+            await axios.post('/api/send/messages', {
+                chat_id,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: input,
+            });
 
-        // Clear the input field after sending the message
-        setInput('');
+            // Clear the input field after sending the message
+            setInput('');
+        }
     };
 
 
@@ -412,7 +462,15 @@ const ChatMessages = () => {
                         <div className="chat-right-row4">
                             <div className='chat-icon-buttons'>
                                 <div className='chat-upload-img-btn'>
-                                    <UploadImgIcon />
+                                    <label htmlFor="imageInput">
+                                        <UploadImgIcon />
+                                    </label>
+                                    <input
+                                        id="imageInput"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                    />
                                 </div>
                                 <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
                                     <SmileyIcon />
@@ -431,7 +489,7 @@ const ChatMessages = () => {
                                 onKeyDown={handleKeyPress}
                                 onChange={(e) => setInput(e.target.value)}
                             />
-                            <button onClick={sendMessage} className='chat-send-icon-btn'>
+                            <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
                                 <div className='chat-send-icon'>
                                     <SendIcon />
                                 </div>
