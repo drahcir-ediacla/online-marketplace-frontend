@@ -198,6 +198,12 @@
                             display: flex;
                             gap: 5px;
 
+                            .chat-uploaded-image {
+                                width: 200px;
+                                height: auto;
+                                border-radius: 0;
+                            }
+
                             .chat-sent-message-box {
                                 border-radius: 10px;
                                 padding: 6px;
@@ -234,6 +240,12 @@
                         .row1 {
                             display: flex;
                             gap: 5px;
+
+                            .chat-uploaded-image {
+                                width: 200px;
+                                height: auto;
+                                border-radius: 0;
+                            }
 
                             .chat-received-message-box {
                                 border-radius: 10px;
@@ -307,7 +319,8 @@
                     .chat-upload-img-btn {
                         width: 23px;
                         height: auto;
-                        fill: var(--gray-500)
+                        fill: var(--gray-500);
+                        cursor: pointer;
                     }
 
                     .chat-emote-btn {

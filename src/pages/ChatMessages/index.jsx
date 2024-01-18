@@ -26,7 +26,6 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -222,17 +221,21 @@ const ChatMessages = () => {
     }, [chat_id, sender_id]);
 
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setSelectedImage(file);
+    const handleChatImageClick = () => {
+        document.getElementById('imageInput').click();
     };
 
 
-    const handleImageUpload = async () => {
+    const handleImageUpload = async (e) => {
+        console.log('handleImageUpload triggered');
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
         try {
-            if (selectedImage) {
+            if (file) {
                 const formData = new FormData();
-                formData.append('image', selectedImage);
+                formData.append('image', file);
 
                 // Upload the image using Axios
                 const response = await axios.post('/api/upload-chat-image', formData, {
@@ -264,7 +267,7 @@ const ChatMessages = () => {
                     });
 
                     // Clear the selected image
-                    setSelectedImage(null);
+                    // setSelectedImage(null);
                 }
             }
         } catch (error) {
@@ -430,14 +433,19 @@ const ChatMessages = () => {
                             {messages.map((message, index) => {
                                 // Format the timestamp for each message
                                 const formattedTime = formatTime(message.timestamp);
+                                const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
 
                                 return message.sender_id === sender_id ? (
                                     <div className="chat-sent-messages" key={index}>
                                         <div className='chat-sent-message-info-container'>
                                             <div className='row1'>
-                                                <div className="chat-sent-message-box">
-                                                    {message.content}
-                                                </div>
+                                                {isImage(message.content) ? (
+                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                ) : (
+                                                    <div className="chat-sent-message-box">
+                                                        {message.content}
+                                                    </div>
+                                                )}
                                                 <img src={user?.profile_pic || AvatarIcon} alt="" />
                                             </div>
                                             <small className='chat-time-sent-message'>{formattedTime}</small>
@@ -448,9 +456,13 @@ const ChatMessages = () => {
                                         <div className='chat-received-message-info-container'>
                                             <div className='row1'>
                                                 <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                <div className="chat-received-message-box">
-                                                    {message.content}
-                                                </div>
+                                                {isImage(message.content) ? (
+                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                ) : (
+                                                    <div className="chat-received-message-box">
+                                                        {message.content}
+                                                    </div>
+                                                )}
                                             </div>
                                             <small className='chat-time-received-message'>{formattedTime}</small>
                                         </div>
@@ -461,17 +473,18 @@ const ChatMessages = () => {
                         </div>
                         <div className="chat-right-row4">
                             <div className='chat-icon-buttons'>
-                                <div className='chat-upload-img-btn'>
-                                    <label htmlFor="imageInput">
+                                <label htmlFor="imageInput">
+                                    <div className='chat-upload-img-btn' onClick={() => handleChatImageClick} >
                                         <UploadImgIcon />
-                                    </label>
-                                    <input
-                                        id="imageInput"
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                    />
-                                </div>
+                                    </div>
+                                </label>
+                                <input
+                                    id="imageInput"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    style={{ display: 'none' }}
+                                />
                                 <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
                                     <SmileyIcon />
                                     {showEmotePicker &&
