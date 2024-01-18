@@ -75,7 +75,8 @@
                             max-width: 265px;
 
                             .chat-user-name {
-                                font-weight: 400;
+                                font-weight: 600;
+                                font-size: 12px;
                             }
 
                             .chat-product-name {
@@ -166,6 +167,7 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
+                        max-width: 600px;
 
                         .chat-item-name {
                             color: var(--gray-500);
@@ -198,7 +200,7 @@
 
                             .chat-sent-message-box {
                                 border-radius: 10px;
-                                padding: 10px;
+                                padding: 6px;
                                 background-color: var(--green-200);
                             }
 
@@ -235,7 +237,7 @@
 
                             .chat-received-message-box {
                                 border-radius: 10px;
-                                padding: 10px;
+                                padding: 6px;
                                 background-color: var(--gray-100);
                             }
 
@@ -304,13 +306,20 @@
 
                     .chat-upload-img-btn {
                         width: 23px;
-                        height: 20px;
+                        height: auto;
                         fill: var(--gray-500)
                     }
 
                     .chat-emote-btn {
+                        position: relative;
                         width: 20px;
-                        fill: var(--gray-500)
+                        fill: var(--gray-500);
+                        cursor: pointer;
+
+                        .emoji-picker {
+                            bottom: 25px;
+                            position: absolute;
+                        }
                     }
                 }
 

@@ -6,10 +6,11 @@ import useAuthentication from '../../hooks/authHook'
 import { NavLink, Link } from 'react-router-dom'
 import './style.scss'
 import Header from '../../layouts/Header'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 import BtnGreen from '../../components/Button/BtnGreen'
 import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
-import UserChatImage from '../../assets/images/review-1_icon.png';
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
@@ -25,20 +26,17 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
-    const [messengerState, setMessengerState] = useState({}); // State to store messenger for each chat
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     console.log('receiverInfo:', receiverInfo)
 
-
-
-
-
+    const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
 
 
@@ -54,6 +52,25 @@ const ChatMessages = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]); // Add other dependencies as needed
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+            setShowEmotePicker(false);
+          }
+        };
+    
+        // Attach the event listener to the document body
+        document.body.addEventListener('mousedown', handleClickOutside);
+    
+        // Clean up the event listener when the component is unmounted
+        return () => {
+          document.body.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, []);
+
+
 
     const limitCharacters = (text, maxLength) => {
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -232,6 +249,13 @@ const ChatMessages = () => {
     };
 
 
+    const handleEmoteSelect = (emoji) => {
+        // Append the selected emoji to the message input
+        setInput(input + emoji.native);
+        setShowEmotePicker(false);
+    };
+
+
     // Function to format the timestamp to '0:00 PM' format
     function formatTime(timestamp) {
         // Check if timestamp is valid
@@ -390,8 +414,13 @@ const ChatMessages = () => {
                                 <div className='chat-upload-img-btn'>
                                     <UploadImgIcon />
                                 </div>
-                                <div className='chat-emote-btn'>
+                                <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
                                     <SmileyIcon />
+                                    {showEmotePicker &&
+                                        <div className='emoji-picker'>
+                                            <Picker data={data} emojiSize={20} emojiButtonSize={28} maxFrequentRows={2} onEmojiSelect={handleEmoteSelect} />
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <Input
