@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useAuthentication from '../../hooks/authHook';
-import { GetAllProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import axios from '../../apicalls/axios';
+import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import 'react-multi-carousel/lib/styles.css';
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
@@ -9,13 +10,14 @@ import BtnCategory from '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
 
 
-const NewItems = () => {
+const NewItems = ({ data }) => {
 
-  const [products, setProducts] = useState([]);
-  const [err, setErr] = useState(false);
   const { user } = useAuthentication();
   const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
 
+  console.log("Category Data:", data)
 
   // Add and remove wishlist function
   const addToWishlist = async (productId) => {
@@ -38,42 +40,76 @@ const NewItems = () => {
 
 
   useEffect(() => {
+    // Set the first category as active by default
+    if (data.length > 0) {
+      setActiveCategory(data[0].label);
+    }
+  }, [data]);
+
+
+  useEffect(() => {
     const fetchData = async () => {
 
       try {
+
+        const categoryId = data.find(category => category.label === activeCategory)?.id;
+
+        if (!categoryId) {
+          return;
+        }
+
         // Fetch the all product's data
-        const response = await GetAllProducts();
+        const response = await axios.get(`/api/getcategory/${categoryId}`)
 
-        // Limit the number of items to the first 5
-        const limitedData = response.data.slice(0, 20);
+        const categoryData = response.data;
 
-        setProducts(limitedData);
-        setLoading(false)
+        // Check if the properties exist in the response
+        const subCategoryProducts = categoryData.subCategoryProducts || [];
+        const products = categoryData.products || [];
+
+        // Concatenate subCategoryProducts and products to get all products
+        let allProducts = [...subCategoryProducts, ...products];
+
+        // Limit the number of items to the first 20
+        allProducts = allProducts.slice(0, 20);
+
+        setLoading(false);
+        setCategoryData(allProducts);
 
       } catch (error) {
         setLoading(false)
         console.error('Error fetching product data:', error);
-
-        // Check if the error is due to unauthorized access
-        if (error.response && error.response.status === 500) {
-          return error.message
-          // Handle unauthorized access, e.g., redirect to login
-        } else {
-          // Handle other errors
-          setErr(true); // Depending on your requirements
-        }
       }
     }
     fetchData();
-  }, [])
 
+  }, [activeCategory, data])
 
   // Check if data is null or undefined
-  if (!products) {
+  if (!categoryData) {
     return null; // or return some default content or loading indicator
   }
 
 
+
+  // Specify the labels you want to include
+  const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Furniture"];
+
+  // Filter the categories based on the included labels
+  const filteredCategories = data.filter(category => includedLabels.includes(category.label));
+
+
+  const handleCategoryClick = (label) => {
+    setActiveCategory(label);
+  };
+
+  const viewNewListing = () => {
+    const categoryId = data.find(category => category.label === activeCategory)?.id;
+    if (categoryId) {
+      window.location.href = `/maincategory/${categoryId}/${encodeURIComponent(activeCategory)}`;
+    }
+  };
+  
 
 
   return (
@@ -82,24 +118,32 @@ const NewItems = () => {
         <div className='product-section-title'>
           <h3>Newly Listed Items</h3>
         </div>
+
         <div className='product-section-btns'>
           <div className='sub-categories-btn'>
-            <BtnCategory label="Shoes" className='active' />
-            <BtnCategory label="Mobile" />
-            <BtnCategory label="iPhone Accessories" />
-            <BtnCategory label="Switch Games" />
-            <BtnCategory label="Bicycles" />
-            <BtnCategory label="Chanel" />
+            {filteredCategories.map((category, index) => (
+              <BtnCategory
+                key={index}
+                label={category.label}
+                onClick={() => handleCategoryClick(category.label)}
+                active={category.label === activeCategory}
+              />
+            ))}
           </div>
-          <BtnSeeMore label="See More Shoes >>" />
+          <BtnSeeMore
+            onClick={viewNewListing}
+            label={`More ${activeCategory} >`}
+          />
         </div>
+
+
         <div>
           {loading &&
             <div className='skeleton-card-container'>
               <ProductCardSkeleton card={5} />
             </div>
           }
-          <ProductCarousel data={products} addToWishlist={addToWishlist}
+          <ProductCarousel data={categoryData} addToWishlist={addToWishlist}
             removeFromWishlist={removeFromWishlist} userId={user?.id || ''} />
         </div>
       </div>
