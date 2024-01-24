@@ -109,3 +109,46 @@ p {
   border-radius: 10px;
   margin-bottom: 10px;
 }
+
+
+
+
+// CIrcular Progress Bar
+
+$spinner-radius: 34px;
+$spinner-height: $spinner-radius*2;
+$quiet: #848ea1;
+$g09: #edf0f5;
+
+.circle-progress {
+  display: inline-block;
+  position: relative;
+  width: $spinner-height;
+  height: $spinner-height;
+  
+  &:after {
+    content: attr(data-pct)"%";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: $spinner-height;
+    text-align: center;
+    color: $quiet;
+    font-size: 16px;
+  }
+  .circle-progress-content {
+    transform: rotate(-90deg);
+    
+    .bar, .bg {
+      stroke-linecap: round;
+    }
+    .bar {
+      stroke: #5999FF;
+      transition: stroke-dashoffset 0.1s ease-out; 
+    }
+    .bg {
+      stroke: $g09;
+    }
+  }
+}

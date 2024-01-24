@@ -79,6 +79,7 @@ function App() {
           <Route path='/messages' element={<ChatMessages />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/test/:chat_id' element={<TestPage />} />
+          <Route path='/test' element={<TestPage />} />
           <Route path="/:id" component={<NewItems />} />
           <Route path='/*' element={<PageNotFound />} />
         </Routes>

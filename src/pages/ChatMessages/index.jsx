@@ -15,6 +15,7 @@ import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
 import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
+import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 
 
@@ -27,6 +28,8 @@ const ChatMessages = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [showEmotePicker, setShowEmotePicker] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false)
+    const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
@@ -34,7 +37,7 @@ const ChatMessages = () => {
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
-    console.log('receiverInfo:', receiverInfo)
+    const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -52,6 +55,15 @@ const ChatMessages = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]); // Add other dependencies as needed
+
+
+    useEffect(() => {
+        // Update last image message index whenever messages change
+        if (messages && messages.length > 0) {
+            const lastIndex = messages.findIndex(message => isImage(message.content));
+            setLastImageMessageIndex(lastIndex);
+        }
+    }, [messages]);
 
 
     useEffect(() => {
@@ -233,6 +245,7 @@ const ChatMessages = () => {
             return;
         }
         try {
+            setShowSpinner(true)
             if (file) {
                 const formData = new FormData();
                 formData.append('image', file);
@@ -265,12 +278,18 @@ const ChatMessages = () => {
                         product_id,
                         content: imageUrl,
                     });
+                    setShowSpinner(false);
+                    // Use setTimeout to hide the spinner after 3 seconds
+                    // setTimeout(() => {
+                    //     setShowSpinner(false);
+                    // }, 3000);
 
                     // Clear the selected image
                     // setSelectedImage(null);
                 }
             }
         } catch (error) {
+            setShowSpinner(false)
             console.error('Error uploading image:', error);
         }
     };
@@ -433,36 +452,55 @@ const ChatMessages = () => {
                             {messages.map((message, index) => {
                                 // Format the timestamp for each message
                                 const formattedTime = formatTime(message.timestamp);
-                                const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+
 
                                 return message.sender_id === sender_id ? (
                                     <div className="chat-sent-messages" key={index}>
                                         <div className='chat-sent-message-info-container'>
                                             <div className='row1'>
-                                                {isImage(message.content) ? (
-                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
-                                                ) : (
-                                                    <div className="chat-sent-message-box">
-                                                        {message.content}
-                                                    </div>
+                                                <div className='chat-sent-message-data'>
+                                                    {isImage(message.content) && (
+                                                        <div>
+                                                            <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                        </div>
+                                                    )}
+
+                                                    {!isImage(message.content) && (
+                                                        <div className="chat-sent-message-box">
+                                                            {message.content}
+                                                        </div>
+                                                    )}
+
+                                                    <img src={user?.profile_pic || AvatarIcon} alt="" />
+                                                </div>
+                                                <small className='chat-time-sent-message'>{formattedTime}</small>
+                                                {index === messages.length - 1 && showSpinner && (
+                                                            <div className='loading-spinner-container'>
+                                                                <ImageLoadingSpinner />
+                                                            </div>
                                                 )}
-                                                <img src={user?.profile_pic || AvatarIcon} alt="" />
+                                                {messages.length === 0 && showSpinner && (
+                                                    <ImageLoadingSpinner />
+                                                )}
                                             </div>
-                                            <small className='chat-time-sent-message'>{formattedTime}</small>
+
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="chat-received-messages" key={index}>
                                         <div className='chat-received-message-info-container'>
                                             <div className='row1'>
-                                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                {isImage(message.content) ? (
-                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
-                                                ) : (
-                                                    <div className="chat-received-message-box">
-                                                        {message.content}
-                                                    </div>
-                                                )}
+                                                <div className='chat-received-message-data'>
+                                                    <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                                    {isImage(message.content) && (
+                                                        <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                    )}
+                                                    {!isImage(message.content) && (
+                                                        <div className="chat-received-message-box">
+                                                            {message.content}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                             <small className='chat-time-received-message'>{formattedTime}</small>
                                         </div>

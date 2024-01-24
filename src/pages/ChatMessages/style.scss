@@ -90,12 +90,13 @@
                         width: 53px;
                     }
                 }
+
                 .active {
                     background-color: var(--gray-100);
                 }
             }
 
-            
+
         }
 
         .chat-right {
@@ -195,13 +196,17 @@
                         margin-bottom: 5px;
 
                         .row1 {
-                            display: flex;
-                            gap: 5px;
+                            display: block;
 
-                            .chat-uploaded-image {
-                                width: 200px;
-                                height: auto;
-                                border-radius: 0;
+                            .chat-sent-message-data {
+                                display: flex;
+                                gap: 5px;
+
+                                .chat-uploaded-image {
+                                    width: 200px;
+                                    height: auto;
+                                    border-radius: 0;
+                                }
                             }
 
                             .chat-sent-message-box {
@@ -221,6 +226,11 @@
                         .chat-time-sent-message {
                             color: var(--gray-300);
                         }
+
+                        .loading-spinner-container {
+                            height: 200px;
+                            display: flex;
+                        }
                     }
                 }
 
@@ -238,8 +248,12 @@
                         margin-bottom: 5px;
 
                         .row1 {
-                            display: flex;
-                            gap: 5px;
+                            display: block;
+
+                            .chat-received-message-data {
+                                display: flex;
+                                gap: 5px;
+                            }
 
                             .chat-uploaded-image {
                                 width: 200px;
