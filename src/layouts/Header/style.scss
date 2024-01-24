@@ -715,6 +715,13 @@ header {
                                         cursor: pointer;
                                     }
                                 }
+
+                                .reset-selected-cities {
+                                    font-weight: 500;
+                                    padding: 5px 10px;
+                                    color: var(--green-400);
+                                    cursor: pointer;
+                                }
                             }
 
                             ul {

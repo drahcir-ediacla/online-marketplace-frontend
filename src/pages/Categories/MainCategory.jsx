@@ -10,6 +10,7 @@ import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import newMobileElectronicsData from '../../data/newMobileElectronicsData.json'
 import ProductCarousel from '../../components/Carousel/ProductCarousel'
+import ProductCard from '../../components/Cards/ProductCard'
 import RecommendedItems from '../../components/RecommendedItems'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
 import SubCategory1 from '../../assets/images/sub-category-1.png'
@@ -142,7 +143,12 @@ const MainCategory = () => {
             removeFromWishlist={removeFromWishlist}
             userId={user?.id}
           />
-
+          <ProductCard
+            data={allProducts || []}
+            addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist}
+            userId={user?.id}
+          />
         </div>
         <div className="row5 main-category-center-ads">Your Ads Here</div>
         <div className="row6 main-category-newly-listed">
