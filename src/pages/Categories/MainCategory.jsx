@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
@@ -8,11 +8,8 @@ import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
-import newMobileElectronicsData from '../../data/newMobileElectronicsData.json'
-import ProductCarousel from '../../components/Carousel/ProductCarousel'
+import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
-import RecommendedItems from '../../components/RecommendedItems'
-import BtnSeeMore from '../../components/Button/BtnSeeMore'
 import SubCategory1 from '../../assets/images/sub-category-1.png'
 import SubCategory2 from '../../assets/images/sub-category-2.png'
 import SubCategory3 from '../../assets/images/sub-category-3.png'
@@ -22,13 +19,16 @@ import SubCategory6 from '../../assets/images/sub-category-6.png'
 import SubCategory7 from '../../assets/images/sub-category-7.png'
 
 
-const MainCategory = () => {
+const MainCategory = ({ userId }) => {
 
   const { id, label } = useParams();
   const [category, setCategory] = useState({});
   const [setErr] = useState(false);
   const dispatch = useDispatch();
   const { user } = useAuthentication();
+
+  const [productStates, setProductStates] = useState({});
+  const [wishlistCount, setWishlistCount] = useState({});
 
 
   // Add and remove wishlist function
@@ -51,9 +51,12 @@ const MainCategory = () => {
   };
 
 
-  const subCategoryProducts = Array.isArray(category.subCategoryProducts) ? category.subCategoryProducts : [];
-  const products = Array.isArray(category.products) ? category.products : [];
-  const allProducts = [...subCategoryProducts, ...products];
+  const allProducts = useMemo(() => {
+    const subCategoryProductsArray = Array.isArray(category.subCategoryProducts) ? category.subCategoryProducts : [];
+    const productsArray = Array.isArray(category.products) ? category.products : [];
+    return [...subCategoryProductsArray, ...productsArray];
+  }, [category.subCategoryProducts, category.products]);
+  
 
   // Log the allProducts array for debugging
   console.log('All Products:', allProducts);
@@ -87,6 +90,42 @@ const MainCategory = () => {
     };
     fetchData();
   }, [id, label, dispatch, setErr]);
+
+
+
+  // Use useCallback to memoize the function
+  const getWishlistCount = useCallback((productId) => {
+    const productData = allProducts.find((product) => product.id === productId);
+    return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
+  }, [allProducts]);
+
+  // Use useEffect to update wishlist count after state changes
+  useEffect(() => {
+    // Update wishlist count for all products
+    const updatedWishlistCounts = {};
+    allProducts.forEach((product) => {
+      updatedWishlistCounts[product.id] = getWishlistCount(product.id);
+    });
+
+    // Set the updated wishlist counts
+    setWishlistCount(updatedWishlistCounts);
+
+    console.log('Wishlist count updated:', updatedWishlistCounts);
+  }, [productStates, allProducts, getWishlistCount]);
+
+
+
+  // Initialize productStates based on initial wishlist data
+  useEffect(() => {
+    const initialProductStates = {};
+    allProducts.forEach((product) => {
+      const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+      initialProductStates[product.id] = isProductInWishlist;
+    });
+    console.log('Initial Product States:', initialProductStates);
+    setProductStates(initialProductStates);
+  }, [allProducts, userId]);
+
 
 
   return (
@@ -133,34 +172,22 @@ const MainCategory = () => {
         <div className="row4 main-category-newly-listed">
           <div className="main-category-newly-listed-row1">
             <div className='product-section-title'>
-              <h3>Newly Listed  {category.label}</h3>
+              <h3>{category.label}</h3>
             </div>
-            <BtnSeeMore label="See More >>" />
           </div>
-          <ProductCarousel
-            data={allProducts || []}
-            addToWishlist={addToWishlist}
-            removeFromWishlist={removeFromWishlist}
-            userId={user?.id}
-          />
-          <ProductCard
-            data={allProducts || []}
-            addToWishlist={addToWishlist}
-            removeFromWishlist={removeFromWishlist}
-            userId={user?.id}
-          />
-        </div>
-        <div className="row5 main-category-center-ads">Your Ads Here</div>
-        <div className="row6 main-category-newly-listed">
-          <div className="main-category-newly-listed-row1">
-            <div className='product-section-title'>
-              <h3>Popular Cell Phones</h3>
-            </div>
-            <BtnSeeMore label="See More Shoes >>" />
+          <div className='main-category-newly-listed-row2'><CategoryProductFilter /></div>
+          <div className='main-category-newly-listed-row3'>
+            <ProductCard
+              data={allProducts || []}
+              addToWishlist={addToWishlist}
+              removeFromWishlist={removeFromWishlist}
+              userId={user?.id}
+              wishlistCount={wishlistCount}
+              setWishlistCount={setWishlistCount}
+              getWishlistCount={getWishlistCount}
+            />
           </div>
-          <ProductCarousel data={newMobileElectronicsData} />
         </div>
-        <RecommendedItems />
       </div>
       <Footer />
     </>

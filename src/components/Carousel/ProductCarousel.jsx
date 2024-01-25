@@ -13,14 +13,10 @@ import NoImage from '../../assets/images/no-image-available.png'
 const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) => {
   
 
-
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
   
-
-
-
 
   // Use useCallback to memoize the function
   const getWishlistCount = useCallback((productId) => {
@@ -106,7 +102,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
 
   
 
-
+ 
   return (
     <>
       <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">

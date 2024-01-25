@@ -74,7 +74,7 @@ const removeFromWishlist = async (productId) => {
 
   const products = useMemo(() => Array.isArray(category.products) ? category.products : [], [category.products]);
 
-
+  
 
   // Use useCallback to memoize the function
   const getWishlistCount = useCallback((productId) => {

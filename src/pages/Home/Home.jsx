@@ -33,7 +33,7 @@ function Home() {
         <Header />
         <HeroBanner />
         <GainGreenBanner />
-        <PopularItems />
+        <PopularItems data={categories} />
         <NewItems data={categories} />
         <RecommendedItems />
         <WhyChooseUs />
