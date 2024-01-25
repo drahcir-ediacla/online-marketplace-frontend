@@ -17,7 +17,7 @@ const PopularItems = ({ data }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  console.log('data:', data)
+  console.log('activeCategory:', activeCategory)
 
 
   // Add and remove wishlist function
@@ -49,40 +49,40 @@ const PopularItems = ({ data }) => {
   
 
 
-  // ... (your existing code)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Check if activeCategory is set
+        if (!activeCategory) {
+          return;
+        }
+  
+        // Find the category object for the active category
+        const activeCategoryObject = filteredCategories.find(category => category.label === activeCategory);
+  
+        // Check if activeCategoryObject is found
+        if (!activeCategoryObject) {
+          return;
+        }
+  
+        // Extract the categoryId from the activeCategoryObject
+        const categoryId = activeCategoryObject.id;
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // Check if activeCategory is set
-      if (!activeCategory) {
-        return;
+  
+        // Fetch the product data based on the categoryId
+        const response = await axios.get(`/api/category/most-viewed-product/${categoryId}`);
+  
+        // Update the categoryData state with the fetched data
+        setCategoryData(response.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error('Error fetching product data:', error);
       }
-
-      // Find the category ID for the active category
-      const categoryId = data.find(category => category.label && category.subcategories.label === activeCategory)?.id;
-
-      // Check if categoryId is found
-      if (!categoryId) {
-        return;
-      }
-
-      // Fetch the product data based on the categoryId
-      const response = await axios.get(`/api/category/most-viewed-product/${categoryId}`);
-
-      // Update the categoryData state with the fetched data
-      setCategoryData(response.data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error fetching product data:', error);
-    }
-  };
-
-  fetchData();
-}, [activeCategory, data]);
-
-// ... (the rest of your existing code)
+    };
+  
+    fetchData();
+  }, [activeCategory, data]);
 
 
 
