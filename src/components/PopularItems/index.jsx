@@ -92,7 +92,7 @@ const PopularItems = ({ data }) => {
   }
 
  // Specify the labels you want to include
- const includedLabels = ["Sports Equipment & Supplies", "Iphone & Smartphones", "Cameras", "Men's Footwear"];
+ const includedLabels = ["Sports Equipment & Supplies", "Iphone & Smartphones", "Video Cameras", "Men's Footwear"];
  
 
 // Filter the categories based on the included labels

@@ -8,6 +8,7 @@ import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
+import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
 import SubCategory1 from '../../assets/images/sub-category-1.png'
@@ -56,10 +57,9 @@ const MainCategory = ({ userId }) => {
     const productsArray = Array.isArray(category.products) ? category.products : [];
     return [...subCategoryProductsArray, ...productsArray];
   }, [category.subCategoryProducts, category.products]);
-  
 
-  // Log the allProducts array for debugging
-  console.log('All Products:', allProducts);
+
+  const subcategories = Array.isArray(category.subcategories) ? category.subcategories : [];
 
 
   useEffect(() => {
@@ -139,36 +139,10 @@ const MainCategory = ({ userId }) => {
           </ul>
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
-        <div className="row3 sub-categories-container">
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory1} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Iphone & Smartphones</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory2} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Computers, Tablets & Network Hardware</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory3} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Cameras</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory4} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">TV, Video & Home Audio</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory5} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Headphones</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory6} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Vehicle Electronics</div>
-          </Link>
-          <Link to='/SubCategory/1' className="sub-category-thumbnail">
-            <img src={SubCategory7} alt="" className="sub-category-img" />
-            <div className="sub-category-thumbnail-name">Surveillance & Smart Home Devices</div>
-          </Link>
+        <div className="sub-categories-container">
+          <SubCategoryCarousel data={subcategories} />
         </div>
+
         <div className="row4 main-category-newly-listed">
           <div className="main-category-newly-listed-row1">
             <div className='product-section-title'>

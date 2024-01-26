@@ -59,8 +59,7 @@
     }
 
     .sub-categories-container {
-        display: flex;
-        justify-content: space-between;
+        text-align: center;
         margin-bottom: 40px;
 
         a {
@@ -73,11 +72,6 @@
 
             .sub-category-img {
                 width: 170px;
-            }
-
-            .sub-category-thumbnail-name {
-                font-weight: 500;
-                margin-top: 20px;
             }
         }
     }
@@ -176,9 +170,7 @@
         border: 2px dashed var(--gray-400);
     }
 
-    .sub-categories-container {
-        display: flex;
-        justify-content: space-between;
+    .row3 {
         margin-bottom: 40px;
 
         a {
