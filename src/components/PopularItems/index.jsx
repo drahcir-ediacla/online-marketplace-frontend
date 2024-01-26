@@ -17,7 +17,8 @@ const PopularItems = ({ data }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  console.log('activeCategory:', activeCategory)
+  // Filter the categories based on the included labels
+  const filteredCategories = [];
 
 
   // Add and remove wishlist function
@@ -40,13 +41,30 @@ const PopularItems = ({ data }) => {
   };
 
 
-  // useEffect(() => {
-  //   // Set the first category as active by default
-  //   if (data.length > 0) {
-  //     setActiveCategory(data[0].label);
-  //   }
-  // }, [data]);
-  
+  // Specify the labels you want to include
+  const includedLabels = ["Sports Equipment & Supplies", "Iphone & Smartphones", "Video Cameras", "Men's Footwear"];
+
+
+  const filterCategories = (category) => {
+    if (includedLabels.includes(category.label)) {
+      filteredCategories.push({ ...category });
+    }
+
+    if (category.subcategories && category.subcategories.length > 0) {
+      category.subcategories.forEach(subcategory => filterCategories(subcategory));
+    }
+  };
+
+  data.forEach(category => filterCategories(category));
+
+
+  useEffect(() => {
+    // Set the first category as active by default
+    if (filteredCategories.length > 0 && !activeCategory) {
+      setActiveCategory(filteredCategories[0].label);
+    }
+  }, [filteredCategories]);
+
 
 
   useEffect(() => {
@@ -56,22 +74,22 @@ const PopularItems = ({ data }) => {
         if (!activeCategory) {
           return;
         }
-  
+
         // Find the category object for the active category
         const activeCategoryObject = filteredCategories.find(category => category.label === activeCategory);
-  
+
         // Check if activeCategoryObject is found
         if (!activeCategoryObject) {
           return;
         }
-  
+
         // Extract the categoryId from the activeCategoryObject
         const categoryId = activeCategoryObject.id;
 
-  
+
         // Fetch the product data based on the categoryId
         const response = await axios.get(`/api/category/most-viewed-product/${categoryId}`);
-  
+
         // Update the categoryData state with the fetched data
         setCategoryData(response.data);
         setLoading(false);
@@ -80,7 +98,7 @@ const PopularItems = ({ data }) => {
         console.error('Error fetching product data:', error);
       }
     };
-  
+
     fetchData();
   }, [activeCategory, data]);
 
@@ -91,37 +109,18 @@ const PopularItems = ({ data }) => {
     return null; // or return some default content or loading indicator
   }
 
- // Specify the labels you want to include
- const includedLabels = ["Sports Equipment & Supplies", "Iphone & Smartphones", "Video Cameras", "Men's Footwear"];
- 
+  
 
-// Filter the categories based on the included labels
-const filteredCategories = [];
+  const handleCategoryClick = (label) => {
+    setActiveCategory(label);
+  };
 
-const filterCategories = (category) => {
-  if (includedLabels.includes(category.label)) {
-    filteredCategories.push({ ...category });
-  }
-
-  if (category.subcategories && category.subcategories.length > 0) {
-    category.subcategories.forEach(subcategory => filterCategories(subcategory));
-  }
-};
-
-data.forEach(category => filterCategories(category));
-
-
-
- const handleCategoryClick = (label) => {
-   setActiveCategory(label);
- };
-
- const viewNewListing = () => {
-   const categoryId = data.find(category => category.label === activeCategory)?.id;
-   if (categoryId) {
-     window.location.href = `/maincategory/${categoryId}/${encodeURIComponent(activeCategory)}`;
-   }
- };
+  const viewNewListing = () => {
+    const categoryId = data.find(category => category.label === activeCategory)?.id;
+    if (categoryId) {
+      window.location.href = `/maincategory/${categoryId}/${encodeURIComponent(activeCategory)}`;
+    }
+  };
 
 
   return (
