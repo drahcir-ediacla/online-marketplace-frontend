@@ -189,9 +189,19 @@ const SlidingSideNav = () => {
                                 {category.subcategories.map((subCategory, subIndex) => (
                                   subCategory.label.toLowerCase().includes(searchTerm.toLowerCase()) && (
                                     <li key={subIndex}>
-                                      <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
-                                        {subCategory.label}
-                                      </Link>
+                                      {subCategory.subcategories && subCategory.subcategories.length > 0 ? (
+                                        <>
+                                          <Link to={`/maincategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                                            {subCategory.label}
+                                          </Link>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                                            {subCategory.label}
+                                          </Link>
+                                        </>
+                                      )}
                                     </li>
                                   )
                                 ))}

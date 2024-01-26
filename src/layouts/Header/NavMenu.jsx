@@ -61,9 +61,19 @@ const NavMenu = () => {
                                                 {category.subcategories.map((subCategory, subIndex) => (
                                                     <>
                                                         <li key={subIndex}>
+                                                        {subCategory.subcategories && subCategory.subcategories.length > 0 ? (
+                                                            <>
+                                                            <Link to={`/maincategory/${subCategory.id}/${subCategory.label}`}>
+                                                                {subCategory.label}
+                                                            </Link>
+                                                            </>
+                                                        ) : (
+                                                            <>
                                                             <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
                                                                 {subCategory.label}
                                                             </Link>
+                                                            </>
+                                                        )}
                                                         </li>
                                                     </>
                                                 ))}

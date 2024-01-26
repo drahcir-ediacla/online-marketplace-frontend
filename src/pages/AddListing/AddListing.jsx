@@ -62,29 +62,50 @@ const AddListing = () => {
 
 
   const handleOptionClick = (option) => {
+    let selectedCategory = null;
+  
     // Find the category or subcategory object based on the selectedOption
-    let selectedCategory = categories.find((category) => category.label === option);
-
-    // If the selectedOption is not found in the top-level categories, search subcategories
-    if (!selectedCategory) {
-      for (const category of categories) {
-        selectedCategory = category.subcategories.find((subcategory) => subcategory.label === option);
+    for (const category of categories) {
+      if (category.label === option) {
+        selectedCategory = category;
+        break;
+      }
+  
+      for (const subcategory of category.subcategories) {
+        if (subcategory.label === option) {
+          selectedCategory = subcategory;
+          break;
+        }
+  
+        // Add handling for the second level of subcategories
+        for (const subsubcategory of subcategory.subcategories) {
+          if (subsubcategory.label === option) {
+            selectedCategory = subsubcategory;
+            break;
+          }
+        }
+  
         if (selectedCategory) {
           break;
         }
       }
+  
+      if (selectedCategory) {
+        break;
+      }
     }
-
+  
     if (selectedCategory) {
-      setSelectedOption(option); // Update the selectedOption
+      setSelectedOption(option);
       setProductDetails({
         ...productDetails,
-        category_id: selectedCategory.id, // Set the category ID
+        category_id: selectedCategory.id,
       });
     }
-
+  
     setIsOpen(false);
   };
+  
 
 
   const handleCategoryClick = (clickedCategory) => {
