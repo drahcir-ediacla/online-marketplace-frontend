@@ -163,7 +163,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                   )}
                 </Link>
                 <div className='product-info'>
-                  <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+                  <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 55)}</p></Link>
                   {product.seller && (
                     <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
                   )}
