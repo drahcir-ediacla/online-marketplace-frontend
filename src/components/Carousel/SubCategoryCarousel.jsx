@@ -14,7 +14,7 @@ import SubCategory7 from '../../assets/images/sub-category-7.png'
 
 const SubCategoryCarousel = ({ data }) => {
 
-    
+
     // Check if data is null or undefined
     if (!data) {
         return null; // or return some default content or loading indicator
@@ -50,16 +50,29 @@ const SubCategoryCarousel = ({ data }) => {
         }
     };
 
-
+    console.log('component data:', data)
 
     return (
         <>
             <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
-                {data.map((subcategory, index) => (
-                    <Link to={`/subcategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail" key={index}>
-                        <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
-                        <div className="sub-category-thumbnail-name">{subcategory.label}</div>
-                    </Link>
+                {data.map((subcategory, subIndex) => (
+                    <div key={subIndex}>
+                        {subcategory.subcategories && subcategory.subcategories.length > 0 ? (
+                            <>
+                                <Link to={`/maincategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
+                                    <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
+                                    <div className="sub-category-thumbnail-name">{subcategory.label}</div>
+                                </Link>
+                            </>
+                        ) : (
+                        <>
+                            <Link to={`/subcategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
+                                <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
+                                <div className="sub-category-thumbnail-name">{subcategory.label}</div>
+                            </Link>
+                        </>
+                )}
+                    </div>
                 ))}
             </Carousel>
         </>
