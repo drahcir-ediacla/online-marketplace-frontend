@@ -3,35 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUser } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-// import Home from './pages/Home/Home'
-// import LoginEmail from './pages/Auth/Login/LoginEmail'
-// import LoginPhone from './pages/Auth/Login/LoginPhone'
-// import LoginSMS from './pages/Auth/Login/LoginSMS'
-// import ResetByEmail from './pages/Auth/ResetPassword/ResetByEmail'
-// import ResetByPhone from './pages/Auth/ResetPassword/ResetByPhone'
-// import RegisterByEmail from './pages/Auth/RegisterAccount/RegisterByEmail'
-// import RegisterByPhone from './pages/Auth/RegisterAccount/RegisterByPhone'
-// import EditProfile from './pages/Profile/EditProfile'
-// import ProfilePage from './pages/Profile/ProfilePage'
-// import BuyerProductDetails from './pages/ProducDetails/BuyerProductDetails'
-// import ProductDetails from './pages/ProducDetails/ProductDetails'
-// import MainCategory from './pages/Categories/MainCategory'
-// import SubCategory from './pages/Categories/SubCategory'
-// import DeactivateAccount from './pages/Settings/DeactivateAccount'
-// import SetPassword from './pages/Settings/SetPassword'
-// import Wishlist from './pages/Wishlist'
-// import AddListing from './pages/AddListing/AddListing'
-// import AddListingSuccess from './pages/AddListing/AddListingSuccess'
-// import ChatMessages from './pages/ChatMessages'
-// import Dashboard from './pages/AdminPanel/Dashboard'
-// import PageNotFound from './pages/404/PageNotFound';
-// import TestPage from './pages/TestPage'
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
-// import NewItems from './components/NewItems';
-// import SearchResult from './pages/SearchResult';
-// import TokenRefreshWrapper from './components/TokenRefreshWrapper';
-// import ProtectedPage from './components/ProtectedPage';
 
 
 // Lazy-loaded components

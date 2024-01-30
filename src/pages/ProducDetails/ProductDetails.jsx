@@ -303,7 +303,7 @@ const ProductDetails = ({ userId }) => {
                             </div>
                             <div className="product-details-review">
                                 <div className='review-for'>
-                                    <h5>Reviews for Vito Corleon</h5>
+                                    <h5>Reviews for {product.seller?.display_name}</h5>
                                     <div className="seller-rating">
                                         <span>4.0</span>
                                         <i class="fa-solid fa-star"></i>

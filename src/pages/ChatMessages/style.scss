@@ -5,9 +5,16 @@
         height: 80vh;
 
         .chat-left {
+            display: flex;
+            flex-direction: column;
             width: 427px;
             height: 100%;
             border-right: 1px solid var(--gray-300);
+
+            .user-chat-list-container {
+                flex: 1 1;
+                overflow-y: auto;
+            }
 
             .chat-left-row1 {
                 padding: 10px;

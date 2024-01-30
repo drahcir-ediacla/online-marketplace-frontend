@@ -88,6 +88,15 @@ const SlidingSideNav = () => {
   };
 
 
+  useEffect(() => {
+    // Update body overflow based on isMenuOpen
+    document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+
+    // Cleanup the effect
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen]);
 
 
 

@@ -65,6 +65,7 @@
         .col-right {
             background: white;
             width: 400px;
+            overflow-y: scroll;
 
             .row1 {
                 background: var(--green-600);

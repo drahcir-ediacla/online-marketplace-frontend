@@ -11,13 +11,6 @@ import { Link } from 'react-router-dom'
 import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
-import SubCategory1 from '../../assets/images/sub-category-1.png'
-import SubCategory2 from '../../assets/images/sub-category-2.png'
-import SubCategory3 from '../../assets/images/sub-category-3.png'
-import SubCategory4 from '../../assets/images/sub-category-4.png'
-import SubCategory5 from '../../assets/images/sub-category-5.png'
-import SubCategory6 from '../../assets/images/sub-category-6.png'
-import SubCategory7 from '../../assets/images/sub-category-7.png'
 
 
 const MainCategory = ({ userId }) => {
@@ -52,13 +45,13 @@ const MainCategory = ({ userId }) => {
   };
 
 
-  const allProducts = useMemo(() => {
-    const subCategoryProductsArray = Array.isArray(category?.subCategoryProducts) ? category?.subCategoryProducts : [];
-    const productsArray = Array.isArray(category?.products) ? category?.products : [];
-    return [...subCategoryProductsArray, ...productsArray];
-  }, [category?.subCategoryProducts, category?.products]);
+  // const allProducts = useMemo(() => {
+  //   const subCategoryProductsArray = Array.isArray(category?.subCategoryProducts) ? category?.subCategoryProducts : [];
+  //   const productsArray = Array.isArray(category?.products) ? category?.products : [];
+  //   return [...subCategoryProductsArray, ...productsArray];
+  // }, [category?.subCategoryProducts, category?.products]);
 
-
+  const allProducts = Array.isArray(category?.allProducts) ? category?.allProducts : [];
   const subcategories = Array.isArray(category?.subcategories) ? category?.subcategories : [];
 
 

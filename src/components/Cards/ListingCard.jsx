@@ -100,7 +100,7 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
         return (
         <div key={index} className="prod-listing-thumb">
           <div style={{ height: "333px" }}>
-            <Link to={`/productdetails/${product.id}/${product.product_name}`} className='image-holder'>
+            <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='image-holder'>
               {product.images && product.images[0] && (
                 <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
               )}
@@ -109,7 +109,7 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
               )}
             </Link>
             <div className='product-info'>
-              <Link to={`/productdetails/${product.id}/${product.product_name}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
+              <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 65)}</p></Link>
               <small>{city}, {region}</small>
               <div className="date-post"><div className="small-clock"><ClockIcon /></div><small>{formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</small></div>
             </div>
