@@ -72,7 +72,7 @@ const removeFromWishlist = async (productId) => {
   }, [id, label, dispatch])
 
 
-  const products = useMemo(() => Array.isArray(category.products) ? category.products : [], [category.products]);
+  const products = useMemo(() => Array.isArray(category?.products) ? category?.products : [], [category?.products]);
 
   
 
@@ -125,7 +125,7 @@ const removeFromWishlist = async (productId) => {
         <div className="row3 sub-category-newly-listed">
           <div className="sub-category-newly-listed-row1">
             <div className='product-section-title'>
-              <h3>{category.label}</h3>
+              <h3>{category?.label}</h3>
             </div>
           </div>
           <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>

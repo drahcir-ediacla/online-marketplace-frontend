@@ -52,7 +52,7 @@ const NavMenu = () => {
                         <>
                             <li key={index}>
                                 <div className='btm-border'>
-                                    <Link to={`/maincategory/${category.id}/${category.label}`} className='parent-menu'>
+                                    <Link to={`/category/${category.id}/${category.label}`} className='parent-menu'>
                                        {category.label }
                                     </Link>
                                     {category.subcategories && category.subcategories.length > 0 && (
@@ -61,19 +61,9 @@ const NavMenu = () => {
                                                 {category.subcategories.map((subCategory, subIndex) => (
                                                     <>
                                                         <li key={subIndex}>
-                                                        {subCategory.subcategories && subCategory.subcategories.length > 0 ? (
-                                                            <>
-                                                            <Link to={`/maincategory/${subCategory.id}/${subCategory.label}`}>
+                                                            <Link to={`/category/${subCategory.id}/${subCategory.label}`}>
                                                                 {subCategory.label}
                                                             </Link>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                            <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`}>
-                                                                {subCategory.label}
-                                                            </Link>
-                                                            </>
-                                                        )}
                                                         </li>
                                                     </>
                                                 ))}

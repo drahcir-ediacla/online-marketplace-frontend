@@ -57,21 +57,10 @@ const SubCategoryCarousel = ({ data }) => {
             <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
                 {data.map((subcategory, subIndex) => (
                     <div key={subIndex}>
-                        {subcategory.subcategories && subcategory.subcategories.length > 0 ? (
-                            <>
-                                <Link to={`/maincategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
-                                    <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
-                                    <div className="sub-category-thumbnail-name">{subcategory.label}</div>
-                                </Link>
-                            </>
-                        ) : (
-                        <>
-                            <Link to={`/subcategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
-                                <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
-                                <div className="sub-category-thumbnail-name">{subcategory.label}</div>
-                            </Link>
-                        </>
-                )}
+                        <Link to={`/category/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
+                            <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
+                            <div className="sub-category-thumbnail-name">{subcategory.label}</div>
+                        </Link>
                     </div>
                 ))}
             </Carousel>

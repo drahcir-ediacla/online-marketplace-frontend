@@ -53,13 +53,13 @@ const MainCategory = ({ userId }) => {
 
 
   const allProducts = useMemo(() => {
-    const subCategoryProductsArray = Array.isArray(category.subCategoryProducts) ? category.subCategoryProducts : [];
-    const productsArray = Array.isArray(category.products) ? category.products : [];
+    const subCategoryProductsArray = Array.isArray(category?.subCategoryProducts) ? category?.subCategoryProducts : [];
+    const productsArray = Array.isArray(category?.products) ? category?.products : [];
     return [...subCategoryProductsArray, ...productsArray];
-  }, [category.subCategoryProducts, category.products]);
+  }, [category?.subCategoryProducts, category?.products]);
 
 
-  const subcategories = Array.isArray(category.subcategories) ? category.subcategories : [];
+  const subcategories = Array.isArray(category?.subcategories) ? category?.subcategories : [];
 
 
   useEffect(() => {
@@ -139,14 +139,15 @@ const MainCategory = ({ userId }) => {
           </ul>
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
-        <div className="sub-categories-container">
-          <SubCategoryCarousel data={subcategories} />
-        </div>
-
+        {subcategories && subcategories.length > 0 && (
+          <div className="sub-categories-container">
+            <SubCategoryCarousel data={subcategories} />
+          </div>
+        )}
         <div className="row4 main-category-newly-listed">
           <div className="main-category-newly-listed-row1">
             <div className='product-section-title'>
-              <h3>{category.label}</h3>
+              <h3>{category?.label}</h3>
             </div>
           </div>
           <div className='main-category-newly-listed-row2'><CategoryProductFilter /></div>
