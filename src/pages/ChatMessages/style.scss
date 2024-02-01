@@ -111,6 +111,10 @@
             display: flex;
             flex-direction: column;
 
+            .hidden {
+                display: none;
+            }
+
             .chat-right-row1 {
                 display: flex;
                 align-items: center;
@@ -190,6 +194,14 @@
                 flex: 1;
                 display: block;
                 overflow-y: auto;
+
+                .no-chat-selected {
+                    display: flex;
+                    flex-direction: column;
+                    text-align: center;
+                    height: 100%;
+                    justify-content: center;
+                }
 
                 .chat-sent-messages {
                     display: flex;

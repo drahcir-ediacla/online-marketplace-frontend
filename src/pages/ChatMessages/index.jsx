@@ -413,7 +413,7 @@ const ChatMessages = () => {
                         </div>
                     </div>
                     <div className="chat-right">
-                        <div className="chat-right-row1">
+                        <div className={`chat-right-row1 ${!chat_id ? 'hidden' : ''}`}>
                             <div className='user-chat-info-container'>
                                 <Link to={`/profile/${receiverInfo?.id}`}>
                                     <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
@@ -447,68 +447,77 @@ const ChatMessages = () => {
                             </div>
                         </div>
                         <div className="chat-right-row3" ref={scrollRef}>
-                            <div className="date-messages">
-                                <span>22/05 9:45 AM</span>
-                            </div>
-                            {messages.map((message, index) => {
-                                // Format the timestamp for each message
-                                const formattedTime = formatTime(message.timestamp);
+                            {!chat_id ? (
+                                <>
+                                    <div className='no-chat-selected'>
+                                        No Chat Selected
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="date-messages">
+                                        <span>22/05 9:45 AM</span>
+                                    </div>
+                                    {messages.map((message, index) => {
+                                        // Format the timestamp for each message
+                                        const formattedTime = formatTime(message.timestamp);
 
 
-                                return message.sender_id === sender_id ? (
-                                    <div className="chat-sent-messages" key={index}>
-                                        <div className='chat-sent-message-info-container'>
-                                            <div className='row1'>
-                                                <div className='chat-sent-message-data'>
-                                                    {isImage(message.content) && (
-                                                        <div>
-                                                            <img src={message.content} className='chat-uploaded-image' alt="" />
+                                        return message.sender_id === sender_id ? (
+                                            <div className="chat-sent-messages" key={index}>
+                                                <div className='chat-sent-message-info-container'>
+                                                    <div className='row1'>
+                                                        <div className='chat-sent-message-data'>
+                                                            {isImage(message.content) && (
+                                                                <div>
+                                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                                </div>
+                                                            )}
+
+                                                            {!isImage(message.content) && (
+                                                                <div className="chat-sent-message-box">
+                                                                    {message.content}
+                                                                </div>
+                                                            )}
+
+                                                            <img src={user?.profile_pic || AvatarIcon} alt="" />
                                                         </div>
-                                                    )}
-
-                                                    {!isImage(message.content) && (
-                                                        <div className="chat-sent-message-box">
-                                                            {message.content}
-                                                        </div>
-                                                    )}
-
-                                                    <img src={user?.profile_pic || AvatarIcon} alt="" />
-                                                </div>
-                                                <small className='chat-time-sent-message'>{formattedTime}</small>
-                                                {index === messages.length - 1 && showSpinner && (
-                                                    <div className='loading-spinner-container'>
-                                                        <ImageLoadingSpinner />
+                                                        <small className='chat-time-sent-message'>{formattedTime}</small>
+                                                        {index === messages.length - 1 && showSpinner && (
+                                                            <div className='loading-spinner-container'>
+                                                                <ImageLoadingSpinner />
+                                                            </div>
+                                                        )}
+                                                        {messages.length === 0 && showSpinner && (
+                                                            <ImageLoadingSpinner />
+                                                        )}
                                                     </div>
-                                                )}
-                                                {messages.length === 0 && showSpinner && (
-                                                    <ImageLoadingSpinner />
-                                                )}
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="chat-received-messages" key={index}>
-                                        <div className='chat-received-message-info-container'>
-                                            <div className='row1'>
-                                                <div className='chat-received-message-data'>
-                                                    <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                    {isImage(message.content) && (
-                                                        <img src={message.content} className='chat-uploaded-image' alt="" />
-                                                    )}
-                                                    {!isImage(message.content) && (
-                                                        <div className="chat-received-message-box">
-                                                            {message.content}
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </div>
-                                            <small className='chat-time-received-message'>{formattedTime}</small>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-
+                                        ) : (
+                                            <div className="chat-received-messages" key={index}>
+                                                <div className='chat-received-message-info-container'>
+                                                    <div className='row1'>
+                                                        <div className='chat-received-message-data'>
+                                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                                            {isImage(message.content) && (
+                                                                <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                            )}
+                                                            {!isImage(message.content) && (
+                                                                <div className="chat-received-message-box">
+                                                                    {message.content}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <small className='chat-time-received-message'>{formattedTime}</small>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </>
+                            )}
                         </div>
                         <div className="chat-right-row4">
                             <div className='chat-icon-buttons'>
