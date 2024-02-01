@@ -63,12 +63,13 @@ const NewItems = ({ data }) => {
 
         const categoryData = response.data;
 
-        // Check if the properties exist in the response
-        const subCategoryProducts = categoryData.subCategoryProducts || [];
-        const products = categoryData.products || [];
+        // // Check if the properties exist in the response
+        // const subCategoryProducts = categoryData.subCategoryProducts || [];
+        // const products = categoryData.products || [];
 
         // Concatenate subCategoryProducts and products to get all products
-        let allProducts = [...subCategoryProducts, ...products];
+        let allProducts = categoryData.allProducts || [];
+        
 
         // Limit the number of items to the first 20
         allProducts = allProducts.slice(0, 20);
@@ -106,7 +107,7 @@ const NewItems = ({ data }) => {
   const viewNewListing = () => {
     const categoryId = data.find(category => category.label === activeCategory)?.id;
     if (categoryId) {
-      window.location.href = `/maincategory/${categoryId}/${encodeURIComponent(activeCategory)}`;
+      window.location.href = `/category/${categoryId}/${encodeURIComponent(activeCategory)}`;
     }
   };
   

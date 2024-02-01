@@ -9,7 +9,7 @@ import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.sv
 import NoImage from '../../assets/images/no-image-available.png'
 
 const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlistCount, setWishlistCount, getWishlistCount }) => {
-  
+
 
   const [productStates, setProductStates] = useState({});
   const [showSignInMessage, setShowSignInMessage] = useState({});
@@ -18,7 +18,7 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
   useEffect(() => {
     // Function to handle clicks outside the add-wishlist-sign-in element
     const handleClickOutside = (event) => {
-      if (signInRef.current && !signInRef.current.contains(event.target)) {
+      if (signInRef.current && !signInRef.current.contains(event.target) && !event.target.classList.contains('heart-icon')) {
         // Hide the sign-in message for all products when clicked outside
         setShowSignInMessage({});
       }
@@ -164,11 +164,11 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
               </div>
               <div className='col-wishlist'>
                 {showSignInMessage[product.id] && !userId && (
-                <div ref={signInRef} className='add-wishlist-sign-in'>
-                  <h6>You like this item?</h6>
-                  <p>Sign in to add this item to your wishlist</p>
-                  <Link to={'/loginemail'}>Sign in</Link>
-                </div>
+                  <div ref={signInRef} className='add-wishlist-sign-in'>
+                    <h6>You like this item?</h6>
+                    <p>Sign in to add this item to your wishlist</p>
+                    <Link to={'/loginemail'}>Sign in</Link>
+                  </div>
                 )}
                 <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                 <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>

@@ -5,7 +5,7 @@ import { ReactComponent as HeartRegular } from '../../assets/images/heart-regula
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 
 const WishlistButton = ({ data, addToWishlist, removeFromWishlist, userId, wishlistCount, setWishlistCount, getWishlistCount }) => {
-  
+
   const [productStates, setProductStates] = useState({});
   const [showSignInMessage, setShowSignInMessage] = useState({});
   const signInRef = useRef(null);
@@ -91,12 +91,12 @@ const WishlistButton = ({ data, addToWishlist, removeFromWishlist, userId, wishl
   return (
     <div className='wishlist-container'>
       {showSignInMessage[data.id] && !userId && (
-                <div ref={signInRef} className='add-wishlist-sign-in'>
-                  <h6>You like this item?</h6>
-                  <p>Sign in to add this item to your wishlist</p>
-                  <Link to={'/loginemail'}>Sign in</Link>
-                </div>
-                )}
+        <div ref={signInRef} className='add-wishlist-sign-in'>
+          <h6>You like this item?</h6>
+          <p>Sign in to add this item to your wishlist</p>
+          <Link to={'/loginemail'}>Sign in</Link>
+        </div>
+      )}
       <div className='wishlist-counter'>{wishlistCount[data.id] || ''}</div>
       <button onClick={() => handleWishlistClick(data.id)} className='heart-icon'>
         {productStates[data.id] ? <HeartSolid /> : <HeartRegular />}

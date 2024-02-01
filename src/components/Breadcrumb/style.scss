@@ -1,0 +1,12 @@
+.breadcrumb {
+    a {
+        color: var(--gray-500);
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .last-item {
+            color: var(--gray-400);
+    }
+}

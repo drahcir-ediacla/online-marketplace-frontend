@@ -83,9 +83,9 @@ export const GetAllCategories = async () => {
 }
 
 
-export const GetCategoryByID = async (id, label) => {
+export const GetCategoryByID = async (id, value) => {
   try {
-    const response = await axios.get(`/api/getcategory/${id}/${label}`)
+    const response = await axios.get(`/api/getcategory/${id}/${value}`)
     return response
   } catch (error) {
     return error

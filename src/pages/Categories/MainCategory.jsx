@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
-import { GetCategoryByID, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { GetCategoryByID, AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -11,18 +11,27 @@ import { Link } from 'react-router-dom'
 import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
+import Breadcrumb from '../../components/Breadcrumb'
+
+
 
 
 const MainCategory = ({ userId }) => {
 
   const { id, label } = useParams();
   const [category, setCategory] = useState({});
+  const [categories, setCategories] = useState([]);
+  console.log('categories:', categories)
   const [setErr] = useState(false);
   const dispatch = useDispatch();
   const { user } = useAuthentication();
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
+
+  // If parentId is null, use the id as the selected category
+  // const selectedCategory = parent_id !== null ? String(parent_id) : String(id);
+
 
 
   // Add and remove wishlist function
@@ -53,6 +62,26 @@ const MainCategory = ({ userId }) => {
 
   const allProducts = Array.isArray(category?.allProducts) ? category?.allProducts : [];
   const subcategories = Array.isArray(category?.subcategories) ? category?.subcategories : [];
+
+
+
+
+
+  // FETCH ALL CATEGORIES //
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await GetAllCategories();
+        console.log('Categories:', response.data);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
 
 
   useEffect(() => {
@@ -126,10 +155,7 @@ const MainCategory = ({ userId }) => {
       <Header />
       <div className='container main-category-body'>
         <div className="row1">
-          <ul className='breadcrumb'>
-            <li><Link to='/'>Home</Link></li>
-            <li>Mobiles & Electronics</li>
-          </ul>
+          <Breadcrumb categories={categories} selectedCategory={id} />
         </div>
         <div className="row2 main-category-banner">ADS or HTML Description Here</div>
         {subcategories && subcategories.length > 0 && (

@@ -5,7 +5,7 @@ import axios from '../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import useAuthentication from '../../hooks/authHook';
-import { trackProductView, GetProductsById, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { trackProductView, GetProductsById, AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
@@ -18,6 +18,7 @@ import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import Breadcrumb from '../../components/Breadcrumb'
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
 import Input from '../../components/FormField/Input'
@@ -40,6 +41,8 @@ const ProductDetails = ({ userId }) => {
     const [wishlistCount, setWishlistCount] = useState({});
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
+    const [categories, setCategories] = useState([]);
+    const categoryId = product?.category_id;
     const sender_id = user?.id.toString();
     const receiver_id = product?.seller.id.toString();
     const product_id = product?.id;
@@ -118,6 +121,23 @@ const ProductDetails = ({ userId }) => {
             console.error('Error removing item from wishlist:', error);
         }
     };
+
+
+    // FETCH ALL CATEGORIES //
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await GetAllCategories();
+                console.log('Categories:', response.data);
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
 
 
 
@@ -248,11 +268,7 @@ const ProductDetails = ({ userId }) => {
             <Header />
             <div className="container product-details-body">
                 <div className='row1'>
-                    <ul className='breadcrumb'>
-                        <li><Link to='/'>Home</Link></li>
-                        <li><Link to='#'>Men’s Fashion</Link></li>
-                        <li>Shoes</li>
-                    </ul>
+                    <Breadcrumb categories={categories} selectedCategory={categoryId} />
                 </div>
                 <div className='row2'>
                     <div className='col-left'>
