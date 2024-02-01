@@ -183,7 +183,7 @@ const SlidingSideNav = () => {
                       <li className='main-category' key={index}>
                         <div className={`category-icon`}>
                           <img src={category.icon} alt='' />
-                          <Link to={`/maincategory/${category.id}/${category.label}`} onClick={toggleMenu}>
+                          <Link to={`/category/${category.id}/${category.value}`} onClick={toggleMenu}>
                             {category.label}
                           </Link>
                         </div>
@@ -200,13 +200,13 @@ const SlidingSideNav = () => {
                                     <li key={subIndex}>
                                       {subCategory.subcategories && subCategory.subcategories.length > 0 ? (
                                         <>
-                                          <Link to={`/maincategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                                          <Link to={`/category/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
                                             {subCategory.label}
                                           </Link>
                                         </>
                                       ) : (
                                         <>
-                                          <Link to={`/subcategory/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
+                                          <Link to={`/category/${subCategory.id}/${subCategory.label}`} onClick={toggleMenu}>
                                             {subCategory.label}
                                           </Link>
                                         </>
