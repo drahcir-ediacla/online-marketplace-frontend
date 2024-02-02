@@ -203,6 +203,14 @@
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.10);
                     padding: 23px 16px;
 
+                    .signin-make-offer {
+                        color: #910000;
+                        font-size: 15px;
+                        font-weight: 500;
+                        margin: 20px 0 5px 0;
+                        text-align: center;
+                    }
+
                     h5 {
                         font-weight: 600;
                     }
@@ -286,6 +294,7 @@
                             display: flex;
                             align-items: center;
                             font-size: 20px;
+                            margin-top: 20px;
 
                             .input-make-offer {
                                 width: 100%;
