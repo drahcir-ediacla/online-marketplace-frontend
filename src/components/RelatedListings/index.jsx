@@ -1,34 +1,79 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import useAuthentication from '../../hooks/authHook';
+import { MostViewedProductsByCategory, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
-import ProductCard from '../Cards/ProductCard'
-import relatedListingsData from '../../data/relatedListingsData'
-import BtnCategory from '../Button/BtnCategory'
-import BtnSeeMore from  '../Button/BtnSeeMore'
+import ProductCarousel from '../../components/Carousel/ProductCarousel'
+import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton'
 
-const RelatedListings = () => {
+const PopularItems = ({ data }) => {
+
+  const { user } = useAuthentication();
+  const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState([]);
+  const categoryId = data.category_id;
+
+
+
+  // Add and remove wishlist function
+  const addToWishlist = async (productId) => {
+    try {
+      const response = await AddWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding item to wishlist:', error);
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    try {
+      const response = await RemoveWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        // Fetch the product data based on the categoryId
+        const response = await MostViewedProductsByCategory(categoryId);
+
+        // Update the categoryData state with the fetched data
+        setCategoryData(response.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error('Error fetching product data:', error);
+      }
+    };
+
+    fetchData();
+  }, [categoryId]);
+
+
+
   return (
     <>
       <div className="product-section-container">
         <div className='product-section-title'>
-            <h3>Related Listings</h3>
+          <h3>Related Listings</h3>
         </div>
-        <div className='product-section-btns'>
-          <div className='sub-categories-btn'>
-            <BtnCategory label="Shoes" className='active' />
-            <BtnCategory label="Mobile" />
-            <BtnCategory label="iPhone Accessories" />
-            <BtnCategory label="Switch Games" />
-            <BtnCategory label="Bicycles" />
-            <BtnCategory label="Chanel" />
-          </div>
-          <BtnSeeMore label="See More Shoes >>" />
-        </div>
-        <div className='product-cards-container'>
-            <ProductCard data={relatedListingsData} />
+        <div>
+          {loading &&
+            <div className='skeleton-card-container'>
+              <ProductCardSkeleton card={5} />
+            </div>
+          }
+          <ProductCarousel data={categoryData} addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist} userId={user?.id || ''} />
         </div>
       </div>
     </>
   )
 }
 
-export default RelatedListings
+export default PopularItems

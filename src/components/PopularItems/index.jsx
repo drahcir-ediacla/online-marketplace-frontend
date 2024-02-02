@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import axios from '../../apicalls/axios';
 import useAuthentication from '../../hooks/authHook';
-import { MostViewedProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { MostViewedProductsByCategory, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import BtnCategory from '../../components/Button/BtnCategory'
 import BtnSeeMore from '../../components/Button/BtnSeeMore'
@@ -88,7 +87,7 @@ const PopularItems = ({ data }) => {
 
 
         // Fetch the product data based on the categoryId
-        const response = await axios.get(`/api/category/most-viewed-product/${categoryId}`);
+        const response = await MostViewedProductsByCategory(categoryId);
 
         // Update the categoryData state with the fetched data
         setCategoryData(response.data);

@@ -385,7 +385,6 @@ const ChatMessages = () => {
                                 allChats.map((chat, index) => {
                                     const isActive = chat?.chat_id === chat_id;
                                     return (
-
                                         <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
                                             <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
                                                 <div className='user-chat-info-container'>
@@ -435,11 +434,21 @@ const ChatMessages = () => {
                                 </div>
                                 <div className="chat-right-row2">
                                     <div className='selling-item-container'>
-                                        <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                        <Link
+                                            to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                            className='chat-item-name'
+                                            target="_blank"
+                                            rel="noopener noreferrer" // Add these lines for security best practices
+                                        >
                                             <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
                                         </Link>
                                         <div className='chat-item-info'>
-                                            <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                            <Link
+                                                to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                                className='chat-item-name'
+                                                target="_blank"
+                                                rel="noopener noreferrer" // Add these lines for security best practices
+                                            >
                                                 {productInfo?.product_name}
                                             </Link>
                                             <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>

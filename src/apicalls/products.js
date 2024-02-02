@@ -72,6 +72,16 @@ export const MostViewedProducts = async () => {
 }
 
 
+export const MostViewedProductsByCategory = async (categoryId) => {
+  try {
+    const response = await axios.get(`/api/category/most-viewed-product/${categoryId}`);
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+
 // ------------------------ CATEGORIES API ENDPOINT ------------------------ //
 export const GetAllCategories = async () => {
   try {

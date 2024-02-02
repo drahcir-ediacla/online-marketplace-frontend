@@ -355,56 +355,56 @@ const ProductDetails = ({ userId }) => {
                                 </div>
                                 {user ? (
                                     <>
-                                    {isProductOwner ? (
-                                    // If the user is the product owner, hide the chat-related elements
-                                    null
-                                ) : (
-                                    <>
-                                        {chatId ? (
-                                            <>
-                                                <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
-                                            </>
+                                        {isProductOwner ? (
+                                            // If the user is the product owner, hide the chat-related elements
+                                            null
                                         ) : (
                                             <>
-                                                <div className='row3'>
-                                                    <textarea
-                                                        cols="44"
-                                                        rows="5"
-                                                        value={input}
-                                                        onChange={(e) => setInput(e.target.value)}
-                                                        placeholder='Write a custom message...'
-                                                        className='custom-message'></textarea>
-                                                </div>
-                                                <div className='row4'>
-                                                    <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
-                                                    <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
-                                                    <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
-                                                    <BtnGreen
-                                                        label="Send Message"
-                                                        className='send-message'
-                                                        onClick={sendMessage}
-                                                        disabled={!input.trim()} // Disable if input is empty or contains only whitespace
-                                                    />
-                                                    <div className='input-make-offer-container'>
-                                                        <span className='php-symbol'>₱</span>
-                                                        <Input
-                                                            type='number'
-                                                            className='input-make-offer'
-                                                        />
-                                                        <BtnGreen label="Make Offer" className='make-offer-btn' />
-                                                    </div>
-                                                </div>
+                                                {chatId ? (
+                                                    <>
+                                                        <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className='row3'>
+                                                            <textarea
+                                                                cols="44"
+                                                                rows="5"
+                                                                value={input}
+                                                                onChange={(e) => setInput(e.target.value)}
+                                                                placeholder='Write a custom message...'
+                                                                className='custom-message'></textarea>
+                                                        </div>
+                                                        <div className='row4'>
+                                                            <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
+                                                            <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
+                                                            <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
+                                                            <BtnGreen
+                                                                label="Send Message"
+                                                                className='send-message'
+                                                                onClick={sendMessage}
+                                                                disabled={!input.trim()} // Disable if input is empty or contains only whitespace
+                                                            />
+                                                            <div className='input-make-offer-container'>
+                                                                <span className='php-symbol'>₱</span>
+                                                                <Input
+                                                                    type='number'
+                                                                    className='input-make-offer'
+                                                                />
+                                                                <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </>
                                         )}
                                     </>
-                                )}
-                                    </>
                                 ) : (
                                     <>
-                                    <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
+                                        <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
                                     </>
                                 )}
-                                
+
                             </div>
                             <div className="prod-details-ads">
                                 YOUR ADS HERE
@@ -412,8 +412,8 @@ const ProductDetails = ({ userId }) => {
                         </div>
                     </div>
                 </div>
-                <MoreFromSeller />
-                <div><RelatedListings /></div>
+                <RelatedListings data={product} />
+                <div><MoreFromSeller data={product} /></div>
             </div >
             <Footer />
         </>

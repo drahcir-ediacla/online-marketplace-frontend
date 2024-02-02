@@ -40,3 +40,14 @@ export const UpdateCurrentUser = async (userData) => {
         return error
     }
 }
+
+
+// get user by id
+export const GetUserById = async (userId) => {
+    try {
+        const response = await axios.get(`/api/user/${userId}`)
+        return response
+    } catch (error) {
+        return error
+    }
+}
