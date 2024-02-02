@@ -6,12 +6,14 @@ import './style.scss'
 const ResetByEmail = () => {
   return (
     <>
-    <div className='form-body'>
-      <div className="container form-box">
-        <ResetByEmailForm />
+      <div className='form-body'>
+        <div className='container'>
+          <div className="form-box">
+            <ResetByEmailForm />
+          </div>
+        </div>
+        <LoginFooter />
       </div>
-      <LoginFooter />
-    </div>
     </>
   )
 }

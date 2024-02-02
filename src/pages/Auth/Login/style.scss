@@ -3,10 +3,14 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    .form-box{
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        margin: 20px 0;
+
+    .container {
+        height: 100%;
+        .form-box{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
     }
 }

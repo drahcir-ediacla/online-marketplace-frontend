@@ -266,82 +266,61 @@ const ProductDetails = ({ userId }) => {
     return (
         <>
             <Header />
-            <div className="container product-details-body">
-                <div className='row1'>
-                    <Breadcrumb categories={categories} selectedCategory={categoryId} />
-                </div>
-                <div className='row2'>
-                    <div className='col-left'>
-                        <ItemImgGallery gallery={product.images?.map(image => image.image_url)} />
+            <div className='container '>
+                <div className="product-details-body">
+                    <div className='row1'>
+                        <Breadcrumb categories={categories} selectedCategory={categoryId} />
                     </div>
-                    <div className='col-right'>
-                        <div className='prod-details-title'><span>{product.product_name}</span></div>
-                        <div className='prod-details-price'><span>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span></div>
-                        <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
-                        <div className='prod-details-deal-method'>
-                            <div className='col1'><b>Deal Method:</b></div>
-                            <div className='col2'>
-                                <div><span>Meet Up - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> MCU-Monumento, Morning Breeze Subdivision</span></div>
-                                <div><span>Delivery - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> 186 Blumentritt Tondo Manila</span></div>
-                            </div>
-                        </div>
-                        <div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
-                        <div><img src={ListedInMap} alt="" /></div>
-                        <div>
-                            <div className='prod-details-icon-btn'>
-                                <div>
-                                    <WishlistButton
-                                        data={product}
-                                        addToWishlist={addToWishlist}
-                                        removeFromWishlist={removeFromWishlist}
-                                        userId={user?.id}
-                                        wishlistCount={wishlistCount}
-                                        setWishlistCount={setWishlistCount}
-                                        getWishlistCount={getWishlistCount}
-                                    />
-                                </div>
-                                <div className='share-icon'><ShareIcon /></div>
-                                <div className='flag-icon'><FlagIcon /></div>
-                            </div>
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-                <div className='row3'>
-                    <h2>Product Details</h2>
-                    <hr />
-                    <div className='product-details'>
+                    <div className='row2'>
                         <div className='col-left'>
-                            <span className='time-posted'><b>Posted:</b> {formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</span>
-                            <hr />
-                            <div className='prod-details-title-desc'><h2>{product.product_name}</h2></div>
-                            <div className='prod-details-spec'><p>{product.description}</p>
-                            </div>
-                            <div className="product-details-review">
-                                <div className='review-for'>
-                                    <h5>Reviews for {product.seller?.display_name}</h5>
-                                    <div className="seller-rating">
-                                        <span>4.0</span>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star-half-stroke"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        <span>|</span><span>5 Review(s)</span>
-                                    </div>
-                                </div>
-                                <hr />
-                                <CustomerReviews posts={currentReviewData} />
-                                <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
-                            </div>
+                            <ItemImgGallery gallery={product.images?.map(image => image.image_url)} />
                         </div>
                         <div className='col-right'>
-                            <div className="prod-details-inquiry-form">
-                                <div><h5>Seller Information</h5><small>Joined in {formattedDate}</small></div>
-                                <div className='row2'>
-                                    <div className='col-left'><Link to={`/profile/${product.seller?.id}`}><img src={product.seller?.profile_pic || AvatarIcon} alt="" className='customer-pic' /></Link></div>
-                                    <div className='col-right'>
-                                        <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
+                            <div className='prod-details-title'><span>{product.product_name}</span></div>
+                            <div className='prod-details-price'><span>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span></div>
+                            <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
+                            <div className='prod-details-deal-method'>
+                                <div className='col1'><b>Deal Method:</b></div>
+                                <div className='col2'>
+                                    <div><span>Meet Up - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> MCU-Monumento, Morning Breeze Subdivision</span></div>
+                                    <div><span>Delivery - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> 186 Blumentritt Tondo Manila</span></div>
+                                </div>
+                            </div>
+                            <div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
+                            <div><img src={ListedInMap} alt="" /></div>
+                            <div>
+                                <div className='prod-details-icon-btn'>
+                                    <div>
+                                        <WishlistButton
+                                            data={product}
+                                            addToWishlist={addToWishlist}
+                                            removeFromWishlist={removeFromWishlist}
+                                            userId={user?.id}
+                                            wishlistCount={wishlistCount}
+                                            setWishlistCount={setWishlistCount}
+                                            getWishlistCount={getWishlistCount}
+                                        />
+                                    </div>
+                                    <div className='share-icon'><ShareIcon /></div>
+                                    <div className='flag-icon'><FlagIcon /></div>
+                                </div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='row3'>
+                        <h2>Product Details</h2>
+                        <hr />
+                        <div className='product-details'>
+                            <div className='col-left'>
+                                <span className='time-posted'><b>Posted:</b> {formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</span>
+                                <hr />
+                                <div className='prod-details-title-desc'><h2>{product.product_name}</h2></div>
+                                <div className='prod-details-spec'><p>{product.description}</p>
+                                </div>
+                                <div className="product-details-review">
+                                    <div className='review-for'>
+                                        <h5>Reviews for {product.seller?.display_name}</h5>
                                         <div className="seller-rating">
                                             <span>4.0</span>
                                             <i class="fa-solid fa-star"></i>
@@ -349,72 +328,95 @@ const ProductDetails = ({ userId }) => {
                                             <i class="fa-solid fa-star"></i>
                                             <i class="fa-regular fa-star-half-stroke"></i>
                                             <i class="fa-regular fa-star"></i>
-                                            <span> | </span><span>5 Review(s)</span>
+                                            <span>|</span><span>5 Review(s)</span>
                                         </div>
                                     </div>
+                                    <hr />
+                                    <CustomerReviews posts={currentReviewData} />
+                                    <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
                                 </div>
-                                {user ? (
-                                    <>
-                                        {isProductOwner ? (
-                                            // If the user is the product owner, hide the chat-related elements
-                                            null
-                                        ) : (
-                                            <>
-                                                {chatId ? (
-                                                    <>
-                                                        <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <div className='row3'>
-                                                            <textarea
-                                                                cols="44"
-                                                                rows="5"
-                                                                value={input}
-                                                                onChange={(e) => setInput(e.target.value)}
-                                                                placeholder='Write a custom message...'
-                                                                className='custom-message'></textarea>
-                                                        </div>
-                                                        <div className='row4'>
-                                                            <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
-                                                            <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
-                                                            <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
-                                                            <BtnGreen
-                                                                label="Send Message"
-                                                                className='send-message'
-                                                                onClick={sendMessage}
-                                                                disabled={!input.trim()} // Disable if input is empty or contains only whitespace
-                                                            />
-                                                            <div className='input-make-offer-container'>
-                                                                <span className='php-symbol'>₱</span>
-                                                                <Input
-                                                                    type='number'
-                                                                    className='input-make-offer'
-                                                                />
-                                                                <BtnGreen label="Make Offer" className='make-offer-btn' />
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <>
-                                        <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
-                                    </>
-                                )}
-
                             </div>
-                            <div className="prod-details-ads">
-                                YOUR ADS HERE
+                            <div className='col-right'>
+                                <div className="prod-details-inquiry-form">
+                                    <div><h5>Seller Information</h5><small>Joined in {formattedDate}</small></div>
+                                    <div className='row2'>
+                                        <div className='col-left'><Link to={`/profile/${product.seller?.id}`}><img src={product.seller?.profile_pic || AvatarIcon} alt="" className='customer-pic' /></Link></div>
+                                        <div className='col-right'>
+                                            <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
+                                            <div className="seller-rating">
+                                                <span>4.0</span>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-regular fa-star-half-stroke"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <span> | </span><span>5 Review(s)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {user ? (
+                                        <>
+                                            {isProductOwner ? (
+                                                // If the user is the product owner, hide the chat-related elements
+                                                null
+                                            ) : (
+                                                <>
+                                                    {chatId ? (
+                                                        <>
+                                                            <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className='row3'>
+                                                                <textarea
+                                                                    cols="44"
+                                                                    rows="5"
+                                                                    value={input}
+                                                                    onChange={(e) => setInput(e.target.value)}
+                                                                    placeholder='Write a custom message...'
+                                                                    className='custom-message'></textarea>
+                                                            </div>
+                                                            <div className='row4'>
+                                                                <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
+                                                                <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
+                                                                <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
+                                                                <BtnGreen
+                                                                    label="Send Message"
+                                                                    className='send-message'
+                                                                    onClick={sendMessage}
+                                                                    disabled={!input.trim()} // Disable if input is empty or contains only whitespace
+                                                                />
+                                                                <div className='input-make-offer-container'>
+                                                                    <span className='php-symbol'>₱</span>
+                                                                    <Input
+                                                                        type='number'
+                                                                        className='input-make-offer'
+                                                                    />
+                                                                    <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
+                                        </>
+                                    )}
+
+                                </div>
+                                <div className="prod-details-ads">
+                                    YOUR ADS HERE
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <RelatedListings data={product} />
-                <div><MoreFromSeller data={product} /></div>
-            </div >
+                    <RelatedListings data={product} />
+                    <div><MoreFromSeller data={product} /></div>
+                </div >
+            </div>
             <Footer />
         </>
     )

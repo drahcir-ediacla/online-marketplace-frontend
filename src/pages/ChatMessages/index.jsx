@@ -16,6 +16,7 @@ import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
 import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
+import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 
 
@@ -357,8 +358,17 @@ const ChatMessages = () => {
 
 
     const getLastMessageContent = (messages) => {
-        return messages && messages.length > 0 ? messages[0].content : '';
+        if (messages && messages.length > 0) {
+            // Create a new array and sort it by timestamp in descending order
+            const sortedMessages = [...messages].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            return sortedMessages[0].content;
+        } else {
+            return '';
+        }
     };
+    
+    
+    
 
     const getLastMessageTime = (messages) => {
         return messages && messages.length > 0 ? messages[0].timestamp : '';
@@ -377,7 +387,8 @@ const ChatMessages = () => {
                                 <FilterBy label='Inbox' className='message-collections-btn' />
                             </div>
                             <div className='chat-search-box-container'>
-                                <Input className='chat-search-box' placeholder='Search name..' />
+                                <Input className='chat-search-box' placeholder='Search user name or item name...' />
+                                    <div className='magnifying-glass'><MagnifyingGlass /></div>
                             </div>
                         </div>
                         <div className='user-chat-list-container'>

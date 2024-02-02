@@ -534,14 +534,18 @@ header {
                                     flex-direction: column;
 
                                     li {
+                                        width: 100%;
                                         flex-grow: 0;
                                         text-align: left;
                                         padding: 6px 12px;
                                         letter-spacing: 1px;
+                                    }
 
-                                        a:hover {
+                                    li:hover {
+                                        background-color: var(--gray-100);
+
+                                        a {
                                             color: var(--green-400);
-                                            border-bottom: none;
                                         }
                                     }
                                 }

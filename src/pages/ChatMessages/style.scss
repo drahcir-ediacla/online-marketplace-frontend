@@ -44,11 +44,21 @@
                 }
 
                 .chat-search-box-container {
+                    position: relative;
                     .chat-search-box {
                         border: none;
                         width: 100%;
                         background-color: var(--gray-100);
                         border: 1px solid var(--gray-300);
+                        padding-right: 40px;
+                    }
+
+                    .magnifying-glass {
+                        fill: var(--gray-400);
+                        top: 10px;
+                        right: 10px;
+                        position: absolute;
+                        width: 21px;
                     }
                 }
             }

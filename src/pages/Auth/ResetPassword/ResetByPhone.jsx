@@ -7,11 +7,13 @@ const ResetByPhone = () => {
   return (
     <>
     <div className='form-body'>
-      <div className="container form-box">
-        <ResetByPhoneForm />
+        <div className='container'>
+          <div className="form-box">
+            <ResetByPhoneForm />
+          </div>
+        </div>
+        <LoginFooter />
       </div>
-      <LoginFooter />
-    </div>
     </>
   )
 }

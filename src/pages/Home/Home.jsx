@@ -9,10 +9,12 @@ import NewItems from '../../components/NewItems'
 import RecommendedItems from '../../components/RecommendedItems'
 import WhyChooseUs from '../../components/WhyChooseUs'
 import Footer from '../../layouts/Footer'
+import useAuthentication from '../../hooks/authHook'
 
 function Home() {
 
   const [categories, setCategories] = useState([]);
+  const {user} = useAuthentication();
 
 
   useEffect(() => {
@@ -32,7 +34,7 @@ function Home() {
     <>
         <Header />
         <HeroBanner />
-        <GainGreenBanner />
+        <GainGreenBanner user={user} />
         <PopularItems data={categories} />
         <NewItems data={categories} />
         <RecommendedItems />

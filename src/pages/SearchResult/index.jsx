@@ -3,12 +3,12 @@ import axios from '../../apicalls/axios'
 import { useLocation } from 'react-router-dom'
 import useAuthentication from '../../hooks/authHook'
 import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
-import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
+import './style.scss'
 
 const SearchResult = ({ userId }) => {
 
@@ -24,41 +24,41 @@ const SearchResult = ({ userId }) => {
 
   useEffect(() => {
 
-  const fetchSearchResults = async () => {
+    const fetchSearchResults = async () => {
 
-    // const product_name = searchTerm; // Replace with the actual search term entered by the user
-    
-    try {
-      const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error searching items:', error);
-    }
-  };
+      // const product_name = searchTerm; // Replace with the actual search term entered by the user
 
-  fetchSearchResults();
+      try {
+        const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error searching items:', error);
+      }
+    };
+
+    fetchSearchResults();
   }, [location.search, searchTerm, searchFilterLocation]);
 
 
-  
-// Add and remove wishlist function
-const addToWishlist = async (productId) => {
-  try {
-    const response = await AddWishlist(productId, {});
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error adding item to wishlist:', error);
-  }
-};
 
-const removeFromWishlist = async (productId) => {
-  try {
-    const response = await RemoveWishlist(productId, {});
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error removing item from wishlist:', error);
-  }
-};
+  // Add and remove wishlist function
+  const addToWishlist = async (productId) => {
+    try {
+      const response = await AddWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding item to wishlist:', error);
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    try {
+      const response = await RemoveWishlist(productId, {});
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    }
+  };
 
 
 
@@ -100,33 +100,35 @@ const removeFromWishlist = async (productId) => {
   return (
     <>
       <Header />
-      <div className='container sub-category-body'>
-        <div className="row1">
-          <ul className='breadcrumb'>
-            <li><Link to='/'>Home</Link></li>
-            <li><Link to='/MainCategory'>Mobiles & Electronics</Link></li>
-            <li>Headphones</li>
-          </ul>
-        </div>
-        <div className="row2 sub-category-banner">Your ADS Here</div>
-        <div className="row3 sub-category-newly-listed">
-          <div className="sub-category-newly-listed-row1">
-            <div className='product-section-title'>
-              <h4>Search Results for "{searchTerm}" in {searchFilterLocation}</h4>
-              <h5>Total Results: {products.length > 50 ? `${products.length}+` : products.length}</h5>
-            </div>
+      <div className='container'>
+        <div className='search-result-body'>
+          <div className="row1">
+            <ul className='breadcrumb'>
+              <li><Link to='/'>Home</Link></li>
+              <li><Link to='/MainCategory'>Mobiles & Electronics</Link></li>
+              <li>Headphones</li>
+            </ul>
           </div>
-          <div className='sub-category-newly-listed-row2'><CategoryProductFilter /></div>
-          <div className='sub-category-newly-listed-row3'>
-            <ProductCard
-              data={products || []}
-              addToWishlist={addToWishlist}
-              removeFromWishlist={removeFromWishlist}
-              userId={user?.id}
-              wishlistCount={wishlistCount}
-              setWishlistCount={setWishlistCount}
-              getWishlistCount={getWishlistCount}
-            /></div>
+          <div className="row2 search-result-banner">Your ADS Here</div>
+          <div className="row3 search-result-newly-listed">
+            <div className="search-result-newly-listed-row1">
+              <div className='product-section-title'>
+                <h4>Search Results for "{searchTerm}" in {searchFilterLocation}</h4>
+                <h5>Total Results: {products.length > 50 ? `${products.length}+` : products.length}</h5>
+              </div>
+            </div>
+            <div className='search-result-newly-listed-row2'><CategoryProductFilter /></div>
+            <div className='search-result-newly-listed-row3'>
+              <ProductCard
+                data={products || []}
+                addToWishlist={addToWishlist}
+                removeFromWishlist={removeFromWishlist}
+                userId={user?.id}
+                wishlistCount={wishlistCount}
+                setWishlistCount={setWishlistCount}
+                getWishlistCount={getWishlistCount}
+              /></div>
+          </div>
         </div>
       </div>
       <Footer />

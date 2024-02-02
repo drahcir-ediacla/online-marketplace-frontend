@@ -6,12 +6,14 @@ import './style.scss'
 const Login = () => {
   return (
     <>
-    <div className='form-body'>
-      <div className="container form-box">
-        <LoginPhoneForm />
+      <div className='form-body'>
+        <div className="container">
+          <div className="form-box">
+            <LoginPhoneForm />
+          </div>
+        </div>
+        <LoginFooter />
       </div>
-      <LoginFooter />
-    </div>
     </>
   )
 }

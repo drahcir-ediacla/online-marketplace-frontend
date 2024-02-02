@@ -7,11 +7,13 @@ const Login = () => {
   return (
     <>
     <div className='form-body'>
-      <div className="container form-box">
-        <LoginSmsForm />
+        <div className="container">
+          <div className="form-box">
+            <LoginSmsForm />
+          </div>
+        </div>
+        <LoginFooter />
       </div>
-      <LoginFooter />
-    </div>
     </>
   )
 }
