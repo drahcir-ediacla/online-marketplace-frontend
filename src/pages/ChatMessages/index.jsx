@@ -413,39 +413,46 @@ const ChatMessages = () => {
                         </div>
                     </div>
                     <div className="chat-right">
-                        <div className={`chat-right-row1 ${!chat_id ? 'hidden' : ''}`}>
-                            <div className='user-chat-info-container'>
-                                <Link to={`/profile/${receiverInfo?.id}`}>
-                                    <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                </Link>
-                                <div className='chat-user-name-messages'>
-                                    <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
-                                        {receiverInfo?.display_name}
-                                    </Link>
-                                    <span className='chat-user-status'>Online</span>
+                        {!chat_id ? (
+                            null
+                        ) : (
+                            <>
+                                <div className='chat-right-row1'>
+                                    <div className='user-chat-info-container'>
+                                        <Link to={`/profile/${receiverInfo?.id}`}>
+                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                        </Link>
+                                        <div className='chat-user-name-messages'>
+                                            <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
+                                                {receiverInfo?.display_name}
+                                            </Link>
+                                            <span className='chat-user-status'>Online</span>
+                                        </div>
+                                    </div>
+                                    <div className='three-dots-chat'>
+                                        <ThreeDots />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='three-dots-chat'>
-                                <ThreeDots />
-                            </div>
-                        </div>
-                        <div className="chat-right-row2">
-                            <div className='selling-item-container'>
-                                <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
-                                    <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
-                                </Link>
-                                <div className='chat-item-info'>
-                                    <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
-                                        {productInfo?.product_name}
-                                    </Link>
-                                    <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
-                                </div>
-                            </div>
+                                <div className="chat-right-row2">
+                                    <div className='selling-item-container'>
+                                        <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                        </Link>
+                                        <div className='chat-item-info'>
+                                            <Link to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`} className='chat-item-name'>
+                                                {productInfo?.product_name}
+                                            </Link>
+                                            <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
+                                        </div>
+                                    </div>
 
-                            <div className='three-dots-chat'>
-                                <BtnGreen label='Make Offer' />
-                            </div>
-                        </div>
+                                    <div className='three-dots-chat'>
+                                        <BtnGreen label='Make Offer' />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
                         <div className="chat-right-row3" ref={scrollRef}>
                             {!chat_id ? (
                                 <>
@@ -519,44 +526,49 @@ const ChatMessages = () => {
                                 </>
                             )}
                         </div>
-                        <div className="chat-right-row4">
-                            <div className='chat-icon-buttons'>
-                                <label htmlFor="imageInput">
-                                    <div className='chat-upload-img-btn' onClick={() => handleChatImageClick} >
-                                        <UploadImgIcon />
-                                    </div>
-                                </label>
-                                <input
-                                    id="imageInput"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                    style={{ display: 'none' }}
-                                />
-                                <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
-                                    <SmileyIcon />
-                                    {showEmotePicker &&
-                                        <div className='emoji-picker'>
-                                            <Picker data={data} emojiSize={20} emojiButtonSize={28} maxFrequentRows={2} onEmojiSelect={handleEmoteSelect} />
+                        {!chat_id ? (
+                            null
+                        ) : (
+                            <>
+                                <div className="chat-right-row4">
+                                    <div className='chat-icon-buttons'>
+                                        <label htmlFor="imageInput">
+                                            <div className='chat-upload-img-btn' onClick={() => handleChatImageClick} >
+                                                <UploadImgIcon />
+                                            </div>
+                                        </label>
+                                        <input
+                                            id="imageInput"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
+                                            <SmileyIcon />
+                                            {showEmotePicker &&
+                                                <div className='emoji-picker'>
+                                                    <Picker data={data} emojiSize={20} emojiButtonSize={28} maxFrequentRows={2} onEmojiSelect={handleEmoteSelect} />
+                                                </div>
+                                            }
                                         </div>
-                                    }
+                                    </div>
+                                    <Input
+                                        type="text"
+                                        className='chat-input-message-box'
+                                        placeholder='Type your message'
+                                        value={input}
+                                        onKeyDown={handleKeyPress}
+                                        onChange={(e) => setInput(e.target.value)}
+                                    />
+                                    <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
+                                        <div className='chat-send-icon'>
+                                            <SendIcon />
+                                        </div>
+                                    </button>
                                 </div>
-                            </div>
-                            <Input
-                                type="text"
-                                className='chat-input-message-box'
-                                placeholder='Type your message'
-                                value={input}
-                                onKeyDown={handleKeyPress}
-                                onChange={(e) => setInput(e.target.value)}
-                            />
-                            <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
-                                <div className='chat-send-icon'>
-                                    <SendIcon />
-                                </div>
-                            </button>
-
-                        </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
