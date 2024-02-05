@@ -14,6 +14,12 @@
             .user-chat-list-container {
                 flex: 1 1;
                 overflow-y: auto;
+
+                .no-chat-messages {
+                    display: flex;
+                    justify-content: center;
+                    padding-top: 50px;
+                }
             }
 
             .chat-left-row1 {

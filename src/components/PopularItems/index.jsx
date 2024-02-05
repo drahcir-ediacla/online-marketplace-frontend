@@ -115,11 +115,14 @@ const PopularItems = ({ data }) => {
   };
 
   const viewNewListing = () => {
-    const categoryId = data.find(category => category.label === activeCategory)?.id;
+    const categoryId = filteredCategories.find(category => category.label === activeCategory)?.id;
     if (categoryId) {
-      window.location.href = `/maincategory/${categoryId}/${encodeURIComponent(activeCategory)}`;
+      window.location.href = `/category/${categoryId}/${encodeURIComponent(activeCategory)}`;
     }
-  };
+    console.log('categoryId:', categoryId)
+  }; 
+
+  
 
 
   return (

@@ -39,6 +39,8 @@ const ChatMessages = () => {
     const product_id = chatInfo?.product_id;
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    const [searchTerm, setSearchTerm] = useState('')
+    const [filteredChat, setFilteredChat] = useState(allChats)
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -139,6 +141,7 @@ const ChatMessages = () => {
                 const response = await axios.get('/api/get-all/user-chat');
 
                 setAllChats(response.data);
+                setFilteredChat(response.data);
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
@@ -366,13 +369,37 @@ const ChatMessages = () => {
             return '';
         }
     };
-    
-    
-    
+
+
 
     const getLastMessageTime = (messages) => {
         return messages && messages.length > 0 ? messages[0].timestamp : '';
     };
+
+
+    const handleSearchChange = (e) => {
+        const searchTerm = e.target.value;
+        setSearchTerm(searchTerm);
+
+        if (searchTerm === '') {
+            setFilteredChat(allChats);
+            return;
+        }
+
+        const filtered = allChats.filter(chat => {
+            const productNameMatch = chat?.chat?.product && chat.chat.product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
+            const sellerDisplayNameMatch = chat?.otherParticipant && chat?.otherParticipant?.display_name.toLowerCase().includes(searchTerm.toLowerCase());
+
+            // Check if either product name or seller's display name matches the search term
+            return productNameMatch || sellerDisplayNameMatch;
+
+        });
+
+        setFilteredChat(filtered);
+    }
+
+
+
 
 
     return (
@@ -387,13 +414,18 @@ const ChatMessages = () => {
                                 <FilterBy label='Inbox' className='message-collections-btn' />
                             </div>
                             <div className='chat-search-box-container'>
-                                <Input className='chat-search-box' placeholder='Search user name or item name...' />
-                                    <div className='magnifying-glass'><MagnifyingGlass /></div>
+                                <Input
+                                    className='chat-search-box'
+                                    placeholder='Search user name or item name...'
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                />
+                                <div className='magnifying-glass'><MagnifyingGlass /></div>
                             </div>
                         </div>
                         <div className='user-chat-list-container'>
-                            {Array.isArray(allChats) ? (
-                                allChats.map((chat, index) => {
+                            {Array.isArray(filteredChat) && filteredChat.length > 0 ? (
+                                filteredChat.map((chat, index) => {
                                     const isActive = chat?.chat_id === chat_id;
                                     return (
                                         <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
@@ -418,7 +450,9 @@ const ChatMessages = () => {
                                     );
                                 })
                             ) : (
-                                <p>No Chats Available...</p>
+                                <div className='no-chat-messages'>
+                                    <p>No Chats Available...</p>
+                                </div>
                             )}
                         </div>
                     </div>
