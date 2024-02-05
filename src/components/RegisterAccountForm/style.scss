@@ -1,4 +1,4 @@
-.register-form-container{
+.register-form-container {
     display: flex;
     flex-direction: column;
     gap: 33px;
@@ -7,66 +7,87 @@
     background: white;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
     padding: 38px 42px;
-    .row5{
+
+    .row5 {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        .horizontal-line{
+
+        .horizontal-line {
             width: 100%;
             height: 1px;
             background: var(--gray-300);
         }
     }
-    .row6{
+
+    .row6 {
         display: flex;
         justify-content: center;
-        .facebook-btn{
+
+        .facebook-btn {
             background: var(--fb-blue);
         }
-    }
-    .row7{
-        display: flex;
-        justify-content: center;
-        .google-btn{
-            background: var(--google-red);
+
+        .fb-icon {
+            width: 16px;
         }
     }
-    .row8{
+
+    .row7 {
+        display: flex;
+        justify-content: center;
+
+        .google-btn {
+            background: var(--google-red);
+        }
+
+        .google-icon {
+            width: 23px;
+        }
+    }
+
+    .row8 {
         display: flex;
         justify-content: center;
     }
-    .row9{
+
+    .row9 {
         display: flex;
         justify-content: center;
     }
 }
-.register-form{
+
+.register-form {
     display: flex;
     flex-direction: column;
     gap: 33px;
     height: auto;
+
     .hide {
         display: none;
     }
-    
+
     .valid {
         color: limegreen;
         margin-left: 0.25rem;
     }
-    
+
     .invalid {
         color: red;
         margin-left: 0.25rem;
     }
-    label{
+
+    label {
         font-weight: 700;
     }
-    .offscreen{
+
+    .offscreen {
         position: absolute;
     }
-    input{
+
+    input {
         border: 1px solid var(--gray-300);
         border-radius: 3px;
         width: 360px;
@@ -74,49 +95,61 @@
         padding: 0 15px;
         outline: none;
     }
-    .input-container{
+
+    .input-container {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
-    .row1{
+
+    .row1 {
         display: flex;
         flex-direction: column;
         gap: 14px;
-        .col1, .col2{
+
+        .col1,
+        .col2 {
             text-align: center;
         }
     }
-    .row2{
+
+    .row2 {
         display: flex;
         justify-content: space-between;
-        .instructions{
+
+        .instructions {
             color: red;
             margin-bottom: 0;
             position: absolute;
             font-size: 13px;
         }
-        .offscreen{
+
+        .offscreen {
             color: red;
             position: absolute;
             left: -9999px;
         }
-        .input-container{
+
+        .input-container {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            .row1{
+
+            .row1 {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 font-size: 13px;
-                input{
+
+                input {
                     padding: 0 110px 0 15px;
                 }
             }
-            .row2{
+
+            .row2 {
                 position: relative;
                 display: block;
+
                 // .instructions{
                 //     color: red;
                 //     margin-bottom: 0;
@@ -127,10 +160,11 @@
                 //     position: absolute;
                 //     left: -9999px;
                 // }
-                .phone-number{
+                .phone-number {
                     padding: 0 15px 0 65px;
                 }
-                .plus63{
+
+                .plus63 {
                     position: absolute;
                     height: 42px;
                     width: 57px;
@@ -144,13 +178,16 @@
             }
 
         }
-        .col2{
-            .row2{
+
+        .col2 {
+            .row2 {
                 position: relative;
-                input{
+
+                input {
                     padding: 0 110px 0 15px;
                 }
-                .send-code{
+
+                .send-code {
                     position: absolute;
                     top: 2px;
                     right: 0px;
@@ -158,25 +195,30 @@
                     font-weight: 500;
                     color: var(--green-400);
                 }
-                .send-code:hover{
+
+                .send-code:hover {
                     background: none;
                 }
-                .send-code:disabled{
+
+                .send-code:disabled {
                     color: var(--gray-300);
                 }
             }
-            
+
         }
     }
-    .row3{
+
+    .row3 {
         display: flex;
         justify-content: space-between;
-        .col1{
-            .row1{
+
+        .col1 {
+            .row1 {
                 font-size: 13px;
                 display: block;
             }
-            .row2{
+
+            .row2 {
                 display: block;
                 // .instructions{
                 //     color: red;
@@ -190,11 +232,13 @@
                 // }
             }
         }
-        .col2{
-            .row1{
+
+        .col2 {
+            .row1 {
                 font-size: 13px;
             }
-            .row2{
+
+            .row2 {
                 display: block;
                 // .instructions{
                 //     color: red;
@@ -209,56 +253,65 @@
             }
         }
     }
-    .row4{
+
+    .row4 {
         display: flex;
         justify-content: center;
         margin-top: 20px;
-        .reset-pswrd-btn{
-        background-color: var(--green-400);
+
+        .reset-pswrd-btn {
+            background-color: var(--green-400);
         }
-        .reset-pswrd-btn:disabled{
+
+        .reset-pswrd-btn:disabled {
             background-color: var(--gray-300);
         }
     }
-    .row5{
+
+    .row5 {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        .horizontal-line{
+
+        .horizontal-line {
             width: 100%;
             height: 1px;
             background: var(--gray-300);
         }
     }
-    .row6{
+
+    .row6 {
         display: flex;
         justify-content: center;
-        .facebook-btn{
+
+        .facebook-btn {
             background: var(--fb-blue);
         }
-        .fb-icon{
+
+        .fb-icon {
             width: 16px;
         }
     }
-    .row7{
+
+    .row7 {
         position: relative;
         display: flex;
         justify-content: center;
-        .google-btn{
+
+        .google-btn {
             background: var(--google-red);
         }
-        .google-icon{
-            width: 23px;
-        }
-        
+
     }
-    .row8{
+
+    .row8 {
         display: flex;
         justify-content: center;
     }
-    .row9{
+
+    .row9 {
         display: flex;
         justify-content: center;
     }

@@ -203,6 +203,36 @@
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.10);
                     padding: 23px 16px;
 
+                    .manage-listing-btn {
+                        display: flex;
+                        gap: 10px;
+                        width: 100%;
+                        padding: 8px 15px;
+                        justify-content: center;
+                        background: none;
+                        border: 1px solid var(--gray-300);
+                        border-radius: 5px;
+                    }
+
+                    .edit-listing {
+                        margin-top: 10px;
+
+                        .edit-icon {
+                            width: 20px;
+                        }
+                    }
+
+                    .delete-listing {
+                        color: #FF0022;
+                        .delete-icon {
+                            width: 14px;
+                        }
+                    }
+
+                    .delete-listing:hover, .edit-listing:hover {
+                        background: var(--light-gray);
+                    }
+
                     .signin-make-offer {
                         color: #910000;
                         font-size: 15px;

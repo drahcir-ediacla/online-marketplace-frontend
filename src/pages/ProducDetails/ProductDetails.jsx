@@ -16,8 +16,11 @@ import Pagination from '../../components/Pagination/Pagination'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
+import { ReactComponent as EditIcon } from '../../assets/images/edit-icon.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/images/delete-icon.svg';
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import DeleteItemModal from '../../components/Modal/DeleteItemModal';
 import Breadcrumb from '../../components/Breadcrumb'
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -265,6 +268,7 @@ const ProductDetails = ({ userId }) => {
 
     return (
         <>
+            <DeleteItemModal />
             <Header />
             <div className='container '>
                 <div className="product-details-body">
@@ -358,7 +362,14 @@ const ProductDetails = ({ userId }) => {
                                         <>
                                             {isProductOwner ? (
                                                 // If the user is the product owner, hide the chat-related elements
-                                                null
+                                                <>
+                                                        <button className='manage-listing-btn edit-listing'>
+                                                            <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
+                                                        </button>
+                                                        <button className='manage-listing-btn delete-listing'>
+                                                            <div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span>
+                                                        </button>
+                                                </>
                                             ) : (
                                                 <>
                                                     {chatId ? (

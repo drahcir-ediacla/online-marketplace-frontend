@@ -23,10 +23,18 @@
         .facebook-btn{
             background: var(--fb-blue);
         }
+        
+        .fb-icon{
+            width: 16px;
+        }
     }
     .row9{
         .google-btn{
             background: var(--google-red);
+        }
+        
+        .google-icon{
+            width: 23px;
         }
     }
 }
@@ -99,9 +107,6 @@
     .row8{
         .facebook-btn{
             background: var(--fb-blue);
-        }
-        .fb-icon{
-            width: 16px;
         }
     }
     .row7{
