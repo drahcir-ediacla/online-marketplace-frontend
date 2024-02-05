@@ -153,33 +153,35 @@ const MainCategory = ({ userId }) => {
   return (
     <>
       <Header />
-      <div className='container main-category-body'>
-        <div className="row1">
-          <Breadcrumb categories={categories} selectedCategory={id} />
-        </div>
-        <div className="row2 main-category-banner">ADS or HTML Description Here</div>
-        {subcategories && subcategories.length > 0 && (
-          <div className="sub-categories-container">
-            <SubCategoryCarousel data={subcategories} />
+      <div className='container'>
+        <div className='main-category-body'>
+          <div className="row1">
+            <Breadcrumb categories={categories} selectedCategory={id} />
           </div>
-        )}
-        <div className="row4 main-category-newly-listed">
-          <div className="main-category-newly-listed-row1">
-            <div className='product-section-title'>
-              <h3>{category?.label}</h3>
+          <div className="row2 main-category-banner">ADS or HTML Description Here</div>
+          {subcategories && subcategories.length > 0 && (
+            <div className="sub-categories-container">
+              <SubCategoryCarousel data={subcategories} />
             </div>
-          </div>
-          <div className='main-category-newly-listed-row2'><CategoryProductFilter /></div>
-          <div className='main-category-newly-listed-row3'>
-            <ProductCard
-              data={allProducts || []}
-              addToWishlist={addToWishlist}
-              removeFromWishlist={removeFromWishlist}
-              userId={user?.id}
-              wishlistCount={wishlistCount}
-              setWishlistCount={setWishlistCount}
-              getWishlistCount={getWishlistCount}
-            />
+          )}
+          <div className="row4 main-category-newly-listed">
+            <div className="main-category-newly-listed-row1">
+              <div className='product-section-title'>
+                <h3>{category?.label}</h3>
+              </div>
+            </div>
+            <div className='main-category-newly-listed-row2'><CategoryProductFilter /></div>
+            <div className='main-category-newly-listed-row3'>
+              <ProductCard
+                data={allProducts || []}
+                addToWishlist={addToWishlist}
+                removeFromWishlist={removeFromWishlist}
+                userId={user?.id}
+                wishlistCount={wishlistCount}
+                setWishlistCount={setWishlistCount}
+                getWishlistCount={getWishlistCount}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -102,13 +102,6 @@ const SearchResult = ({ userId }) => {
       <Header />
       <div className='container'>
         <div className='search-result-body'>
-          <div className="row1">
-            <ul className='breadcrumb'>
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/MainCategory'>Mobiles & Electronics</Link></li>
-              <li>Headphones</li>
-            </ul>
-          </div>
           <div className="row2 search-result-banner">Your ADS Here</div>
           <div className="row3 search-result-newly-listed">
             <div className="search-result-newly-listed-row1">

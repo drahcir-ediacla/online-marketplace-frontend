@@ -18,6 +18,7 @@ import DatePicker from '../../components/FormField/DatePicker';
 import genderData from '../../data/genderData';
 import userLocationData from '../../data/userLocationData.json'
 import AlertMessage from '../../components/AlertMessage';
+import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 
 
 
@@ -28,6 +29,7 @@ const EditProfile = () => {
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
+  const [showSpinner, setShowSpinner] = useState(false)
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -46,11 +48,11 @@ const EditProfile = () => {
 
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
- 
+
   useEffect(() => {
     // Set the loader to true when data fetching starts
     dispatch(Setloader(true));
-  
+
     // Fetch the user's data
     dispatch(getUser())
       .then(() => {
@@ -62,7 +64,7 @@ const EditProfile = () => {
         dispatch(Setloader(false));
       });
   }, [dispatch]);
-  
+
 
 
   // Update the local state when user data changes
@@ -83,12 +85,12 @@ const EditProfile = () => {
         profile_pic: user.profile_pic || '',
       });
       // Set selectedCity when user data is available
-      setSelectedRegion(user.region || ''); 
+      setSelectedRegion(user.region || '');
       setSelectedCity(user.city || '');
     }
   }, [user]);
 
-  
+
 
   const handleRegionChange = (event) => {
     const selectedRegion = event.target.value;
@@ -115,6 +117,7 @@ const EditProfile = () => {
     }
 
     try {
+      setShowSpinner(true)
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'auwcvbw0');
@@ -139,10 +142,13 @@ const EditProfile = () => {
           ...updatedUserData,
           profile_pic: imageUrl,
         });
+        setShowSpinner(false)
       } else {
+        setShowSpinner(false)
         console.error('Image upload failed.');
       }
     } catch (error) {
+      setShowSpinner(false)
       console.error('Error uploading image to Cloudinary', error);
     }
   };
@@ -211,7 +217,13 @@ const EditProfile = () => {
                   {error && <div className="error">{error}</div>}
                 </div>
                 <div className='row2'>
-                  <div className='col1'><img src={updatedUserData.profile_pic || ProfileAvatar} alt="" className='profile-pic' /></div>
+                  <div className='col1'>
+                    {showSpinner ? (
+                      <div className='image-loading-spinner'><ImageLoadingSpinner /></div>
+                    ) : (
+                      <img src={updatedUserData.profile_pic || ProfileAvatar} alt="" className='profile-pic' />
+                    )}
+                  </div>
                   <div className='col2'>
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
                     <label htmlFor="fileInput" className="custom-file-upload">
