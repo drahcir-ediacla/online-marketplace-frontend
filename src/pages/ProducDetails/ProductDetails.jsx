@@ -18,6 +18,7 @@ import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
 import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
 import { ReactComponent as EditIcon } from '../../assets/images/edit-icon.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/images/delete-icon.svg';
+import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
@@ -42,6 +43,7 @@ const ProductDetails = ({ userId }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
     const [categories, setCategories] = useState([]);
@@ -266,9 +268,16 @@ const ProductDetails = ({ userId }) => {
     };
 
 
+    const toggleModal = () => {
+        setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+    };
+
+    
+
+
     return (
         <>
-            <DeleteItemModal />
+            {isModalOpen && <DeleteItemModal onClick={toggleModal} productId={id} userId={user.id} />}
             <Header />
             <div className='container '>
                 <div className="product-details-body">
@@ -363,12 +372,15 @@ const ProductDetails = ({ userId }) => {
                                             {isProductOwner ? (
                                                 // If the user is the product owner, hide the chat-related elements
                                                 <>
-                                                        <button className='manage-listing-btn edit-listing'>
-                                                            <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
-                                                        </button>
-                                                        <button className='manage-listing-btn delete-listing'>
-                                                            <div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span>
-                                                        </button>
+                                                    <button className='manage-listing-btn edit-listing'>
+                                                        <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
+                                                    </button>
+                                                    <button className='manage-listing-btn mark-sold-listing'>
+                                                        <div className='edit-icon'><CheckIcon /></div><span>Mark as Sold</span>
+                                                    </button>
+                                                    <button className='manage-listing-btn delete-listing' onClick={toggleModal} >
+                                                        <div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span>
+                                                    </button>
                                                 </>
                                             ) : (
                                                 <>

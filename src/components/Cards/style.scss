@@ -201,6 +201,12 @@
 .prod-listing-thumb:hover {
     color: var(--gray-500);
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
+
+    .three-dots {
+        cursor: pointer;
+        width: 4px;
+        fill: var(--gray-500);
+    }
 }
 
 .prod-listing-thumb {
@@ -279,8 +285,57 @@
         }
 
         .col-wishlist {
+            position: relative;
             display: flex;
             align-items: flex-end;
+
+            .option-manage-listed-items {
+                position: absolute;
+                top: 55px;
+                left: -30px;
+                width: 150px;
+                display: block;
+                background: white;
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+                border-radius: 3px;
+                z-index: 1;
+
+                ul {
+                    padding: 0;
+                    margin: 0;
+
+                    li {
+                        font-size: 14px;
+                        display: flex;
+                        gap: 8px;
+                        padding: 10px 12px 10px 12px;
+                        border-bottom: 1px solid var(--gray-200);
+
+                        .edit-icon {
+                            width: 20px;
+                        }
+
+                        .delete-icon {
+                            width: 14px;
+                        }
+                    }
+
+                    li:hover {
+                        cursor: pointer;
+                        background: var(--gray-200);
+                    }
+
+                    li:last-child {
+                        border-bottom: none;
+                        color: red;
+                    }
+
+                }
+            }
+
+            .wishlist-counter {
+                margin-left: 5px;
+            }
 
             .heart-icon {
                 margin-left: 5px;

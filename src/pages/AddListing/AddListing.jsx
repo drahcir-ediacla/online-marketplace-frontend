@@ -291,12 +291,13 @@ const AddListing = () => {
     // Send the form data (including image URLs) to your backend
     axios.post('/api/addnewproduct', productDetails)
       .then((response) => {
-        dispatch(Setloader(false))
+        dispatch(Setloader(true))
         console.log('Product added successfully:', response.data);
 
         const productId = response.data.id;
         const productName = response.data.product_name;
         window.location.href = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
+        dispatch(Setloader(false))
       })
       .catch((error) => {
         dispatch(Setloader(false))

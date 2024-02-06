@@ -204,7 +204,7 @@ const EditProfile = () => {
     <>
       {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
-      <div className="edit-profile-body">
+      <div className="edit-profile-body" id='edit-profile-body'>
         <div className="container">
           <h3>Manage Account</h3>
           <div className="box">

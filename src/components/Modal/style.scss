@@ -4,15 +4,67 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent white background */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Ensure it's above other content */
+    z-index: 1002;
+    /* Ensure it's above other content */
 
     .modal-box {
-        width: 300px;
-        height: 100px;
+        background: white;
+        width: 416px;
+        height: 262px;
         margin: auto;
+        border-radius: 8px;
+
+        .row1 {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            height: 48px;
+            padding: 8px;
+
+            .closebtn {
+                border: none;
+                background: none;
+                width: 25px;
+                height: 25px;
+                display: flex;
+
+                .fa-times {
+                    color: var(--gray-500);
+                    font-size: 20px;
+                    margin: auto;
+                }
+            }
+        }
+
+        .exclamation-icon {
+            width: 45px;
+            fill: var(--gray-400);
+            margin: auto;
+        }
+
+        .are-you-sure {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+
+            .yes-button{
+                background: red;
+                border: none;
+            }
+
+            .yes-button:hover {
+                background: #D70512;
+            }
+        }
     }
 }

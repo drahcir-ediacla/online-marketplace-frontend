@@ -44,6 +44,18 @@ export const GetRandomProducts = async () => {
 }
 
 
+// ------------------------ DELETE PRODUCTS BY ID ------------------------ //
+
+export const DeleteProductById = async (productId) => {
+  try {
+    const response = await axios.delete(`/api/deleteproductbyid/${productId}`)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+
 // ------------------------ TRACKING PRODUCT VIEWS ------------------------ //
 export const trackProductView = async (productId) => {
   try {
