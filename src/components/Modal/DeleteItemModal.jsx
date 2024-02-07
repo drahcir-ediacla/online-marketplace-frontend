@@ -42,7 +42,7 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
             {isModalOpen &&
                 <div className="modal-container">
                     <div className="modal-box">
-                        <div className='row1'>
+                        <div className='delete-item-modal-row1'>
                             <button className='closebtn' onClick={onClick}>
                                 <i class='fa fa-times'></i>
                             </button>

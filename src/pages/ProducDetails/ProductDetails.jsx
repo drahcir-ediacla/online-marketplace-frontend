@@ -376,7 +376,7 @@ const ProductDetails = ({ userId }) => {
                                                         <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
                                                     </button>
                                                     <button className='manage-listing-btn mark-sold-listing'>
-                                                        <div className='edit-icon'><CheckIcon /></div><span>Mark as Sold</span>
+                                                        <div className='sold-icon'><CheckIcon /></div><span>Mark as Sold</span>
                                                     </button>
                                                     <button className='manage-listing-btn delete-listing' onClick={toggleModal} >
                                                         <div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span>

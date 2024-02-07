@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg';
 import BtnGreen from '../Button/BtnGreen';
+import DeleteItemModal from '../Modal/DeleteItemModal';
 import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import { ReactComponent as ThreeDots } from '../../assets/images//three-dots.svg';
@@ -17,7 +18,29 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
 
   const [productStates, setProductStates] = useState({});
   const [isOptionOpen, setIsOptionOpen] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dropDownOption = useRef(null);
+  const [modalProductId, setModalProductId] = useState(null);
 
+
+  useEffect(() => {
+    const handleGlobalClick = (event) => {
+      // Check if the clicked element is the three-dots icon or inside the option-manage-listed-items
+      if (event.target.closest('.three-dots') || event.target.closest('.option-manage-listed-items')) {
+        return;
+      }
+  
+      // Close the options for all products
+      setIsOptionOpen({});
+    };
+  
+    document.addEventListener('click', handleGlobalClick);
+  
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, []);
+  
 
 
 
@@ -68,18 +91,26 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
 
 
 
-
   const toggleOption = (productId) => {
+    // Close the options for all products
+    setIsOptionOpen({});
+    // Open the options for the specific product
     setIsOptionOpen((prevIsOptionOpen) => ({
       ...prevIsOptionOpen,
-      [productId]: !prevIsOptionOpen[productId],
+      [productId]: true,
     }));
   };
 
   
+  const toggleModal = (productId) => {
+    setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+    setModalProductId(productId);  // Add this line to set the productId in state
+  };
 
   return (
     <>
+      
+      {isModalOpen && <DeleteItemModal onClick={() => toggleModal(modalProductId)} productId={modalProductId} userId={userId} />}
       {data.map((product, index) => {
         const handleWishlistClick = async (productId) => {
           try {
@@ -142,11 +173,11 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
                     <ThreeDots onClick={() => toggleOption(product.id)} />
                   </div>
                   {isOptionOpen[product.id] && (
-                    <div className='option-manage-listed-items'>
+                    <div className='option-manage-listed-items' ref={dropDownOption}>
                       <ul>
                         <li><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
-                        <li><div className='edit-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
-                        <li><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
+                        <li className='mark-sold'><div className='check-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
+                        <li onClick={() => toggleModal(product.id)}><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
                       </ul>
                     </div>
                   )}

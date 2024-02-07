@@ -198,6 +198,7 @@
 
 // LISTING CARD STYLE
 
+
 .prod-listing-thumb:hover {
     color: var(--gray-500);
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
@@ -291,10 +292,10 @@
 
             .option-manage-listed-items {
                 position: absolute;
+                display: block;
                 top: 55px;
                 left: -30px;
                 width: 150px;
-                display: block;
                 background: white;
                 box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
                 border-radius: 3px;
@@ -317,6 +318,14 @@
 
                         .delete-icon {
                             width: 14px;
+                        }
+                    }
+
+                    .mark-sold {
+                        color: var(--green-400);
+
+                        .check-icon {
+                            stroke: var(--green-400);
                         }
                     }
 

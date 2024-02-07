@@ -25,8 +25,9 @@ const SubCategory = lazy(() => import('./pages/Categories/SubCategory'));
 const DeactivateAccount = lazy(() => import('./pages/Settings/DeactivateAccount'));
 const SetPassword = lazy(() => import('./pages/Settings/SetPassword'));
 const Wishlist = lazy(() => import('./pages/Wishlist'));
-const AddListing = lazy(() => import('./pages/AddListing/AddListing'));
-const AddListingSuccess = lazy(() => import('./pages/AddListing/AddListingSuccess'));
+const AddListing = lazy(() => import('./pages/Listing/AddListing'));
+const AddListingSuccess = lazy(() => import('./pages/Listing/AddListingSuccess'));
+const UpdateListing = lazy(() => import('./pages/Listing/UpdateListing'));
 const ChatMessages = lazy(() => import('./pages/ChatMessages'));
 const Dashboard = lazy(() => import('./pages/AdminPanel/Dashboard'));
 const PageNotFound = lazy(() => import('./pages/404/PageNotFound'));
@@ -78,6 +79,7 @@ function App() {
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />
           <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
+          <Route path='/updatelisting/:id/:product_name' element={<UpdateListing />} />
           <Route path='/search-results' element={<SearchResult />} />
           <Route path='/messages/:chat_id' element={<ChatMessages />} />
           <Route path='/messages' element={<ChatMessages />} />
