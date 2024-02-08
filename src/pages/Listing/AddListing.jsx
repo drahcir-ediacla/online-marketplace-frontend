@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products'
+import useAuthentication from '../../hooks/authHook'
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -20,6 +21,9 @@ import BtnClear from '../../components/Button/BtnClear';
 const AddListing = () => {
 
   const dispatch = useDispatch()
+  const {user} = useAuthentication();
+  const userId = user?.id;
+  console.log('userId:', userId)
   const [activeRadio, setActiveRadio] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
@@ -218,8 +222,8 @@ const AddListing = () => {
     setSelectedImages(updatedImages);
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
 
 
 
@@ -306,8 +310,8 @@ const AddListing = () => {
   };
 
 
-  const ProductPage = () => {
-    window.location.href = `/productdetails/${productDetails.id}/${encodeURIComponent(productDetails.product_name)}`;
+  const ProfilePage = () => {
+    window.location.href = `/profile/${userId}`;
   };
 
 
@@ -317,7 +321,7 @@ const AddListing = () => {
       <Header />
       <div className="add-listing-body" >
 
-        <form className="container" onClick={handleFormSubmit}>
+        <form className="container">
           <h3>What are you listing today?</h3>
           <div className="box">
             <div className="col-left">
@@ -583,7 +587,7 @@ const AddListing = () => {
                     </div>
                     <div className='update-listing-btns'>
                       <BtnGreen label='List Now' onClick={handleFormSubmit} />
-                      <BtnClear label='Cancel' onClick={ProductPage} />
+                      <BtnClear type='button' label='Cancel' onClick={ProfilePage} />
                     </div>
                   </div>
                 )}

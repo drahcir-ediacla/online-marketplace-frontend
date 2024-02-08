@@ -403,13 +403,17 @@ const AddListing = () => {
         productDetails.imageUrls = imageUrls;
 
         // Send the form data (including image URLs) to your backend
-        axios.put(`/api/updateproductbyid/${id}/${product_name}`, productDetails)
+        axios.put(`/api/updateproductbyid/${id}/${encodeURIComponent(product_name)}`, productDetails)
             .then((response) => {
                 dispatch(Setloader(true))
                 console.log('Product added successfully:', response.data);
 
-                const productId = response.data.id;
-                const productName = response.data.product_name;
+                const productId = response.data.product?.id;
+                const productName = response.data.product?.product_name;
+
+                console.log('productId:', productId)
+                console.log('productName:', productName)
+
                 window.location.href = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
                 dispatch(Setloader(false))
             })
@@ -420,11 +424,11 @@ const AddListing = () => {
     };
 
     const ProductPage = () => {
-        window.location.href = `/productdetails/${productDetails.id}/${encodeURIComponent(productDetails.product_name)}`;
+        window.location.href = `/productdetails/${id}/${encodeURIComponent(product_name)}`;
     };
-    
 
-    
+
+
 
 
     return (
@@ -698,7 +702,7 @@ const AddListing = () => {
                                             <CheckboxWithTextarea label='Mailing & Delivery' />
                                         </div>
                                         <div className='update-listing-btns'>
-                                            <BtnGreen label='Update Listing' onClick={handleFormSubmit}  />
+                                            <BtnGreen label='Update Listing' onClick={handleFormSubmit} />
                                             <BtnClear type='button' label='Cancel' onClick={ProductPage} />
                                         </div>
                                     </div>
