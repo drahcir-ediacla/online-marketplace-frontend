@@ -157,6 +157,9 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Limit the character count to 255
+    const truncatedValue = value.slice(0, 255);
     setUpdatedUserData({ ...updatedUserData, [name]: value });
   };
 
@@ -199,6 +202,15 @@ const EditProfile = () => {
       setRequiredFieldErrors({}); // Clear validation errors
     }
   };
+
+
+  const maxCharacterCount = 255;
+
+  // Apply a class to change font color if character count exceeds 255
+  const counterClassName =
+    updatedUserData.bio.length > maxCharacterCount ? 'counter-exceeded' : '';
+
+    
 
   return (
     <>
@@ -256,7 +268,7 @@ const EditProfile = () => {
                       className='profile-data-textarea'
                       onChange={handleInputChange}
                       rows='5' />
-                    <br /><small>0/255</small></div>
+                    <br /><small className={counterClassName}>{`${updatedUserData.bio.length}/${maxCharacterCount}`}</small></div>
                 </div>
                 <div className='row5 flex'>
                   <label htmlFor='firstnameID' className='field-name'>FIRST NAME <span className='asterisk'>*</span></label>
