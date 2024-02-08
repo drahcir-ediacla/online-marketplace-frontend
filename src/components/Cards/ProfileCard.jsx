@@ -44,7 +44,7 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
                 {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
                     <>
                         <div className="follow-message-buttons">
-                            <BtnClear label='Follow' /> <BtnGreen label='Message' />
+                            <BtnClear label='Follow' />
                         </div>
                     </>
                 )}
