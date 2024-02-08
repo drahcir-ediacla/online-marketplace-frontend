@@ -63,20 +63,20 @@ const AddListing = () => {
 
   const handleOptionClick = (option) => {
     let selectedCategory = null;
-  
+
     // Find the category or subcategory object based on the selectedOption
     for (const category of categories) {
       if (category.label === option) {
         selectedCategory = category;
         break;
       }
-  
+
       for (const subcategory of category.subcategories) {
         if (subcategory.label === option) {
           selectedCategory = subcategory;
           break;
         }
-  
+
         // Add handling for the second level of subcategories
         for (const subsubcategory of subcategory.subcategories) {
           if (subsubcategory.label === option) {
@@ -84,17 +84,17 @@ const AddListing = () => {
             break;
           }
         }
-  
+
         if (selectedCategory) {
           break;
         }
       }
-  
+
       if (selectedCategory) {
         break;
       }
     }
-  
+
     if (selectedCategory) {
       setSelectedOption(option);
       setProductDetails({
@@ -102,10 +102,10 @@ const AddListing = () => {
         category_id: selectedCategory.id,
       });
     }
-  
+
     setIsOpen(false);
   };
-  
+
 
 
   const handleCategoryClick = (clickedCategory) => {
@@ -221,7 +221,7 @@ const AddListing = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    
+
 
     // Check if the title is provided and meets the minimum length requirement
     if (!productDetails.product_name) {
@@ -230,7 +230,7 @@ const AddListing = () => {
     } else if (productDetails.product_name.length < 5) {
       alert('Title must be at least 5 characters long.');
       return;
-    } 
+    }
 
     // Check if the price is a positive number
     if (!productDetails.price || isNaN(productDetails.price) || productDetails.price <= 0) {
@@ -306,13 +306,18 @@ const AddListing = () => {
   };
 
 
+  const ProductPage = () => {
+    window.location.href = `/productdetails/${productDetails.id}/${encodeURIComponent(productDetails.product_name)}`;
+  };
+
+
 
   return (
     <>
       <Header />
-      <div className="add-listing-body">
+      <div className="add-listing-body" >
 
-        <form className="container">
+        <form className="container" onClick={handleFormSubmit}>
           <h3>What are you listing today?</h3>
           <div className="box">
             <div className="col-left">
@@ -493,7 +498,7 @@ const AddListing = () => {
                         className='listing-input-field'
                         placeholder='Listing Title'
                         onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
-                        
+
                       />
                     </div>
                     <h3>About the item</h3>
@@ -576,7 +581,10 @@ const AddListing = () => {
                       <CheckBox label='Meet Up' />
                       <CheckboxWithTextarea label='Mailing & Delivery' />
                     </div>
-                    <BtnGreen label='List Now' onClick={handleFormSubmit} />
+                    <div className='update-listing-btns'>
+                      <BtnGreen label='List Now' onClick={handleFormSubmit} />
+                      <BtnClear label='Cancel' onClick={ProductPage} />
+                    </div>
                   </div>
                 )}
               </div>

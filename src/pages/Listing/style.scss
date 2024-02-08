@@ -62,7 +62,7 @@
                     }
                 }
 
-                
+
             }
 
             .redirect-buttons {
@@ -482,7 +482,7 @@
                         display: flex;
                         flex-direction: column;
                         gap: 30px;
-                        margin-top: 42px;
+                        margin-top: 30px;
 
                         label {
                             font-weight: 500;
@@ -528,6 +528,12 @@
 
                         .listing-description {
                             width: 100%;
+                        }
+
+                        .update-listing-btns {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
                         }
                     }
                 }

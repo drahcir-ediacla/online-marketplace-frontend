@@ -23,7 +23,6 @@ const AddListing = () => {
     const dispatch = useDispatch()
     const { id, product_name } = useParams();
     const [productId, setProductId] = useState(null);
-    const [dataLoaded, setDataLoaded] = useState(false);
     const [activeRadio, setActiveRadio] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
@@ -31,6 +30,8 @@ const AddListing = () => {
     const [categories, setCategories] = useState([]);
     const dropDownCategory = useRef(null);
     const [condition, setCondition] = useState('');
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
     const [productDetails, setProductDetails] = useState({
         product_name: '',
         description: '',
@@ -63,6 +64,90 @@ const AddListing = () => {
             product_condition: selectedCondition, // Set the product_condition in productDetails
         });
     };
+
+
+    const getCategoryLabelById = (categoryId) => {
+        let selectedLabel = null;
+
+        // Iterate through categories and subcategories to find the matching label
+        for (const category of categories) {
+            if (category.id === categoryId) {
+                selectedLabel = category.label;
+                break;
+            }
+
+            for (const subcategory of category.subcategories) {
+                if (subcategory.id === categoryId) {
+                    selectedLabel = subcategory.label;
+                    break;
+                }
+
+                // Add handling for the second level of subcategories
+                for (const subsubcategory of subcategory.subcategories) {
+                    if (subsubcategory.id === categoryId) {
+                        selectedLabel = subsubcategory.label;
+                        break;
+                    }
+                }
+
+                if (selectedLabel) {
+                    break;
+                }
+            }
+
+            if (selectedLabel) {
+                break;
+            }
+        }
+
+        return selectedLabel;
+    };
+
+    // ...
+
+    // In your component, you can use this function to get the label for productDetails.category_id
+    const selectedLabel = getCategoryLabelById(productDetails.category_id);
+
+    console.log('selectedLabel:', selectedLabel)
+
+
+
+    useEffect(() => {
+        if (selectedLabel) {
+            // Find the corresponding category or subcategory based on selectedLabel
+            const foundCategory = findCategoryByLabel(selectedLabel, categories);
+
+            console.log('foundCategory:', foundCategory);
+
+            if (foundCategory) {
+                setSelectedOption(selectedLabel);
+                // Optionally, you can also set the category_id in productDetails if needed
+                // setProductDetails({
+                //   ...productDetails,
+                //   category_id: foundCategory.id,
+                // });
+            }
+        }
+    }, [selectedLabel, categories]);
+
+    // Recursive function to find category by label within categories and subcategories
+    const findCategoryByLabel = (label, categoryList) => {
+        for (const category of categoryList) {
+            if (category.label === label) {
+                return category;
+            }
+
+            const foundSubcategory = findCategoryByLabel(label, category.subcategories);
+
+            if (foundSubcategory) {
+                return foundSubcategory;
+            }
+        }
+
+        return null;
+    };
+
+
 
 
     const handleOptionClick = (option) => {
@@ -109,6 +194,7 @@ const AddListing = () => {
 
         setIsOpen(false);
     };
+
 
 
 
@@ -163,22 +249,25 @@ const AddListing = () => {
         const fetchProductDetails = async () => {
             try {
                 const response = await GetProductsById(id, product_name);
-                const productDetails = response.data; // Assuming the response contains product details
+                const productDetails = response.data;
                 setProductDetails(productDetails);
-                setDataLoaded(true);
+                setCondition(productDetails.product_condition);
+
+                // Extract image URLs from the images array
+                const imageUrls = productDetails.images.map(image => image.image_url);
+                setImagePreviews(imageUrls);
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
         };
 
-        // Assuming you have a way to get the product ID from the URL parameter
         const productIdFromURL = id; // Implement a function to get the product ID
 
         if (productIdFromURL) {
             setProductId(id);
             fetchProductDetails();
         }
-    }, []);
+    }, [id, product_name]);
 
 
 
@@ -198,8 +287,6 @@ const AddListing = () => {
     }, []);
 
 
-    const [selectedImages, setSelectedImages] = useState([]);
-    const [imagePreviews, setImagePreviews] = useState([]);
 
     const maxImages = 10; // Define the maximum number of images allowed
 
@@ -245,8 +332,8 @@ const AddListing = () => {
         setSelectedImages(updatedImages);
     };
 
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
 
 
 
@@ -266,7 +353,7 @@ const AddListing = () => {
         }
 
         // Check if at least one image is uploaded
-        if (selectedImages.length === 0) {
+        if (imagePreviews.length === 0) {
             alert('Please upload at least one image for your listing.');
             return;
         }
@@ -316,7 +403,7 @@ const AddListing = () => {
         productDetails.imageUrls = imageUrls;
 
         // Send the form data (including image URLs) to your backend
-        axios.post('/api/addnewproduct', productDetails)
+        axios.put(`/api/updateproductbyid/${id}/${product_name}`, productDetails)
             .then((response) => {
                 dispatch(Setloader(true))
                 console.log('Product added successfully:', response.data);
@@ -332,14 +419,20 @@ const AddListing = () => {
             });
     };
 
+    const ProductPage = () => {
+        window.location.href = `/productdetails/${productDetails.id}/${encodeURIComponent(productDetails.product_name)}`;
+    };
+    
+
+    
 
 
     return (
         <>
             <Header />
-            <div className="add-listing-body">
+            <div className="add-listing-body" >
 
-                <form className="container">
+                <form className="container" >
                     <h3>What are you listing today?</h3>
                     <div className="box">
                         <div className="col-left">
@@ -507,106 +600,109 @@ const AddListing = () => {
                                     </div>
                                 )}
 
-                                {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && dataLoaded && (
+                                {selectedOption && selectedOption !== 'Nike' && selectedOption !== 'Adidas' && selectedOption !== 'New Balance' && (
 
-                                        <div className="add-prod-details-form">
-                                            <input type="hidden" name="category_id" value={productDetails.category_id} onChange={(e) => setProductDetails({ ...productDetails, category_id: e.target.value })} />
-                                            <div>
-                                                <label>Title</label>
-                                                <Input
-                                                    type='text'
-                                                    id='listingTitleID'
-                                                    name='product_name'
-                                                    value={productDetails.product_name}
-                                                    className='listing-input-field'
-                                                    placeholder='Listing Title'
-                                                    onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
+                                    <div className="add-prod-details-form">
+                                        <input type="hidden" name="category_id" value={productDetails.category_id} onChange={(e) => setProductDetails({ ...productDetails, category_id: e.target.value })} />
+                                        <div>
+                                            <label>Title</label>
+                                            <Input
+                                                type='text'
+                                                id='listingTitleID'
+                                                name='product_name'
+                                                value={productDetails.product_name}
+                                                className='listing-input-field'
+                                                placeholder='Listing Title'
+                                                onChange={(e) => setProductDetails({ ...productDetails, product_name: e.target.value })}
 
+                                            />
+                                        </div>
+                                        <h3>About the item</h3>
+                                        <div>
+                                            <label>Condition</label>
+                                            <div className="product-conditions">
+                                                <RadioButton
+                                                    id="brandNewID"
+                                                    name="product_condition"
+                                                    value="Brand New"
+                                                    label="Brand New"
+                                                    checked={condition === 'Brand New'}
+                                                    onChange={handleConditionChange}
+                                                />
+                                                <RadioButton
+                                                    id="likeNewID"
+                                                    name="product_condition"
+                                                    value="Like New"
+                                                    label="Like New"
+                                                    checked={condition === 'Like New'}
+                                                    onChange={handleConditionChange}
+                                                />
+                                                <RadioButton
+                                                    id="lightlyUsedID"
+                                                    name="product_condition"
+                                                    value="Lightly Used"
+                                                    label="Lightly Used"
+                                                    checked={condition === 'Lightly Used'}
+                                                    onChange={handleConditionChange}
+                                                />
+                                                <RadioButton
+                                                    id="wellUsedID"
+                                                    name="product_condition"
+                                                    value="Well Used"
+                                                    label="Well Used"
+                                                    checked={condition === 'Well Used'}
+                                                    onChange={handleConditionChange}
+                                                />
+                                                <RadioButton
+                                                    id="heavilyUsedID"
+                                                    name="product_condition"
+                                                    value="Heavily Used"
+                                                    label="Heavily Used"
+                                                    checked={condition === 'Heavily Used'}
+                                                    onChange={handleConditionChange}
                                                 />
                                             </div>
-                                            <h3>About the item</h3>
-                                            <div>
-                                                <label>Condition</label>
-                                                <div className="product-conditions">
-                                                    <RadioButton
-                                                        id="brandNewID"
-                                                        name="product_condition"
-                                                        value="Brand New"
-                                                        label="Brand New"
-                                                        checked={condition === 'Brand New'}
-                                                        onChange={handleConditionChange}
-                                                    />
-                                                    <RadioButton
-                                                        id="likeNewID"
-                                                        name="product_condition"
-                                                        value="Like New"
-                                                        label="Like New"
-                                                        checked={condition === 'Like New'}
-                                                        onChange={handleConditionChange}
-                                                    />
-                                                    <RadioButton
-                                                        id="lightlyUsedID"
-                                                        name="product_condition"
-                                                        value="Lightly Used"
-                                                        label="Lightly Used"
-                                                        checked={condition === 'Lightly Used'}
-                                                        onChange={handleConditionChange}
-                                                    />
-                                                    <RadioButton
-                                                        id="wellUsedID"
-                                                        name="product_condition"
-                                                        value="Well Used"
-                                                        label="Well Used"
-                                                        checked={condition === 'Well Used'}
-                                                        onChange={handleConditionChange}
-                                                    />
-                                                    <RadioButton
-                                                        id="heavilyUsedID"
-                                                        name="product_condition"
-                                                        value="Heavily Used"
-                                                        label="Heavily Used"
-                                                        checked={condition === 'Heavily Used'}
-                                                        onChange={handleConditionChange}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label>Price</label>
-                                                <div className="listing-price-container">
-                                                    <div className="listing-currency">₱</div>
-                                                    <Input
-                                                        type='number'
-                                                        id='listingPriceID'
-                                                        name='price'
-                                                        value={productDetails.price}
-                                                        className='listing-price-input-field'
-                                                        placeholder='Price of your listing'
-                                                        onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label>Description</label>
-                                                <div>
-                                                    <TextArea
-                                                        id='listingDescID'
-                                                        name='description'
-                                                        value={productDetails.description}
-                                                        className='listing-description'
-                                                        placeholder="Type the details of your product here..."
-                                                        rows='7'
-                                                        onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <h3>Deal Method</h3>
-                                            <div>
-                                                <CheckBox label='Meet Up' />
-                                                <CheckboxWithTextarea label='Mailing & Delivery' />
-                                            </div>
-                                            <BtnGreen label='List Now' onClick={handleFormSubmit} />
                                         </div>
-                                        )}
+                                        <div>
+                                            <label>Price</label>
+                                            <div className="listing-price-container">
+                                                <div className="listing-currency">₱</div>
+                                                <Input
+                                                    type='number'
+                                                    id='listingPriceID'
+                                                    name='price'
+                                                    value={productDetails.price}
+                                                    className='listing-price-input-field'
+                                                    placeholder='Price of your listing'
+                                                    onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label>Description</label>
+                                            <div>
+                                                <TextArea
+                                                    id='listingDescID'
+                                                    name='description'
+                                                    value={productDetails.description}
+                                                    className='listing-description'
+                                                    placeholder="Type the details of your product here..."
+                                                    rows='7'
+                                                    onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <h3>Deal Method</h3>
+                                        <div>
+                                            <CheckBox label='Meet Up' />
+                                            <CheckboxWithTextarea label='Mailing & Delivery' />
+                                        </div>
+                                        <div className='update-listing-btns'>
+                                            <BtnGreen label='Update Listing' onClick={handleFormSubmit}  />
+                                            <BtnClear type='button' label='Cancel' onClick={ProductPage} />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

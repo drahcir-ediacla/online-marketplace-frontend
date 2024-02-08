@@ -107,6 +107,10 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
     setModalProductId(productId);  // Add this line to set the productId in state
   };
 
+
+
+
+
   return (
     <>
       
@@ -175,7 +179,7 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
                   {isOptionOpen[product.id] && (
                     <div className='option-manage-listed-items' ref={dropDownOption}>
                       <ul>
-                        <li><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
+                        <li onClick={() => window.location.href=`/updatelisting/${product.id}/${encodeURIComponent(product.product_name)}`}><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
                         <li className='mark-sold'><div className='check-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
                         <li onClick={() => toggleModal(product.id)}><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
                       </ul>
