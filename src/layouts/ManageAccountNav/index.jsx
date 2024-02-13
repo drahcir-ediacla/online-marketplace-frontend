@@ -2,7 +2,7 @@ import React from 'react'
 import {NavLink} from 'react-router-dom'
 import './style.scss'
 
-const ManageAccountNav = (className) => {
+const ManageAccountNav = ({className, userId}) => {
   return (
     <>
       <div className="manage-account-nav-container">
@@ -19,10 +19,10 @@ const ManageAccountNav = (className) => {
                 <div><NavLink activeClassName="active" to='/notifications'>Notifications</NavLink></div>
             </div>
         <div className='row3'>
-            <div className='nav-title'><NavLink to='/wishlist'>Wishlist & Favorites</NavLink></div>
+            <div className='nav-title'><NavLink to={`/wishlist/${userId}`}>Wishlist & Favorites</NavLink></div>
         </div>
         <div className='row4'>
-            <div className='nav-title'>Sell Now</div>
+            <NavLink to='/addlisting' className='nav-title'>Sell Now</NavLink>
         </div>
       </div>
     </>
