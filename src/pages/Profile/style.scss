@@ -67,6 +67,9 @@
 
                     .row1 {
                         width: 100%;
+                        hr {
+                            margin: 0;
+                        }
 
                         h5 {
                             margin: 10px 0 20px 0;
@@ -78,7 +81,7 @@
                         align-items: center;
                         justify-content: center;
                         gap: 27px;
-                        margin-bottom: 30px;
+                        margin-bottom: 20px;
 
                         .col1 {
 
@@ -99,9 +102,66 @@
                             display: flex;
                             flex-direction: column;
                             gap: 20px;
+                            
+                                .profile-pic-buttons {
+                                    display: flex;
+                                    width: 400px;
+                                    gap: 10px;
+                                }
+                        }
+                    }
 
-                            .custom-file-upload {
-                                width: 137px;
+                    .cover-photo-container {
+                        position: relative;
+                        width: 945px;
+                        height: 179px;
+                        border-radius: 5px;
+                        background-color: var(--gray-100);
+                        margin-bottom: 20px;
+
+                        img {
+                            width: 100%;
+                            height: 179px;
+                            border-radius: 5px;
+                        }
+
+                        .cover-photo-buttons {
+                            position: absolute;
+                            top: 0;
+                            display: flex;
+                            width: 100%;
+                            height: 100%;
+                            gap: 10px;
+                            justify-content: center;
+                            align-items: center;
+
+                            .image-loading-spinner {
+                                display: flex;
+                                width: 160px;
+                                height: 160px;
+                            }
+
+                            .cover-photo-btn {
+                                display: none;
+                                background: white;
+                            }
+
+                            .cover-photo-recommended-size {
+                                display: block;
+                                text-align: center;
+
+                                p {
+                                    margin-top: 10px;
+                                    font-size: 13px;
+                                    font-weight: 500;
+                                }
+                            }
+                        }
+
+                        .cover-photo-buttons:hover {
+                            .cover-photo-btn {
+                                display: block;
+                                background: white;
                             }
                         }
                     }
@@ -110,7 +170,7 @@
                         small {
                             float: right;
                         }
-                        
+
                         .counter-exceeded {
                             color: red;
                         }
@@ -164,12 +224,19 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                color: red;
-                font-size: 62px;
+                color: var(--gray-300);
+                font-size: 30px;
                 width: 100%;
                 height: 250px;
-                margin-bottom: 20px;
-                border: 2px dashed var(--gray-400);
+                margin: 20px 0 20px 0;
+                background: #D8DDDC;
+                border-radius: 5px;
+
+                img {
+                    width: 1320px;
+                    height: 250px;
+                    border-radius: 5px;
+                }
             }
 
             .box-body {
@@ -345,4 +412,3 @@
     }
 
 }
-

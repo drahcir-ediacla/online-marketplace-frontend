@@ -156,15 +156,24 @@ const ProfilePage = ({ userId }) => {
                     ) : (
                         <div className="myprofile-body">
                             <div className="container">
-                                <div className="row1">
-                                    {(authenticatedUser?.id === user?.id) && (
+                                {(authenticatedUser?.id === user?.id) && (
+                                    <div className="row1">
                                         <>
                                             <h3>My Profile</h3>
                                             <BtnClear to="/EditProfile" label="Edit Profile" className='edit-profile-btn' />
                                         </>
+                                    </div>
+                                )}
+                                <div className="row2 cover-photo">
+                                    {user?.cover_photo ? (
+                                        <img src={user?.cover_photo} alt="" />
+                                    ) : (
+                                        <>
+                                            NO COVER PHOTO AVAILABLE
+                                        </>
                                     )}
+
                                 </div>
-                                <div className="row2 cover-photo">COVER PHOTO</div>
                                 <div className="row3 box-body">
                                     <div className="col-left">
                                         <ProfileCard

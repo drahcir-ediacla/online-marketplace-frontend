@@ -30,6 +30,7 @@ const EditProfile = () => {
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
   const [showSpinner, setShowSpinner] = useState(false)
+  const [coverPhotoSpinner, setCoverPhotoSpinner] = useState(false)
 
   const [updatedUserData, setUpdatedUserData] = useState({
     email: '',
@@ -44,6 +45,7 @@ const EditProfile = () => {
     gender: '',
     birthday: '',
     profile_pic: '',
+    cover_photo: '',
   });
 
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -83,6 +85,7 @@ const EditProfile = () => {
         gender: user.gender || '',
         birthday: user.birthday || '',
         profile_pic: user.profile_pic || '',
+        cover_photo: user.cover_photo || '',
       });
       // Set selectedCity when user data is available
       setSelectedRegion(user.region || '');
@@ -106,11 +109,9 @@ const EditProfile = () => {
   };
 
 
-  const handleFileInputClick = () => {
-    document.getElementById('fileInput').click();
-  };
 
-  const handleImageUpload = async (e) => {
+
+  const handleProfileImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) {
       return;
@@ -122,7 +123,7 @@ const EditProfile = () => {
       formData.append('file', file);
       formData.append('upload_preset', 'auwcvbw0');
       formData.append('cloud_name', 'yogeek-cloudinary');
-      formData.append('folder', 'profile_picture');
+      formData.append('folder', 'cover_photo');
 
 
       const response = await fetch(
@@ -153,6 +154,74 @@ const EditProfile = () => {
     }
   };
 
+  const handleProfileImgClick = () => {
+    document.getElementById('profileImage').click();
+  };
+
+  const handleRemoveProfileImage = () => {
+    // Remove the profile_pic property from the local state
+    setUpdatedUserData({
+      ...updatedUserData,
+      profile_pic: '',
+    });
+  };
+
+
+  const handleCoverPhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      setCoverPhotoSpinner(true)
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'auwcvbw0');
+      formData.append('cloud_name', 'yogeek-cloudinary');
+      formData.append('folder', 'cover_photo');
+
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data.secure_url;
+
+        // Update the profile_pic property in the local state
+        setUpdatedUserData({
+          ...updatedUserData,
+          cover_photo: imageUrl,
+        });
+        setCoverPhotoSpinner(false)
+      } else {
+        setCoverPhotoSpinner(false)
+        console.error('Image upload failed.');
+      }
+    } catch (error) {
+      setCoverPhotoSpinner(false)
+      console.error('Error uploading image to Cloudinary', error);
+    }
+  };
+
+
+  const handleCoverPhotoClick = () => {
+    document.getElementById('coverPhoto').click();
+  };
+
+  const handleRemoveCoverPhoto = () => {
+    // Remove the profile_pic property from the local state
+    setUpdatedUserData({
+      ...updatedUserData,
+      cover_photo: '',
+    });
+  };
 
 
   const handleInputChange = (e) => {
@@ -210,7 +279,7 @@ const EditProfile = () => {
   const counterClassName =
     updatedUserData.bio.length > maxCharacterCount ? 'counter-exceeded' : '';
 
-    
+
 
   return (
     <>
@@ -228,6 +297,33 @@ const EditProfile = () => {
                   <hr />
                   {error && <div className="error">{error}</div>}
                 </div>
+                {!updatedUserData.cover_photo ? (
+                  <>
+                    <div className="cover-photo-container">
+                      <div className='cover-photo-buttons'>
+                        {coverPhotoSpinner ? (
+                          <div className='image-loading-spinner'><ImageLoadingSpinner /></div>
+                        ) : (
+                          <div className='cover-photo-recommended-size'>
+                            <BtnClear type="button" label="Upload Cover Photo" onClick={handleCoverPhotoClick} />
+                            <p>Cover photo recommended size is 1320 x 250 pixel</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="cover-photo-container">
+                      <img src={updatedUserData.cover_photo} alt="" />
+                      <div className='cover-photo-buttons'>
+                        <BtnClear type="button" label="Update Cover Photo" className='cover-photo-btn' onClick={handleCoverPhotoClick} />
+                        <BtnClear type="button" label="Remove Cover Photo" className='cover-photo-btn' onClick={handleRemoveCoverPhoto} />
+                      </div>
+                    </div>
+                  </>
+                )}
+                <input type="file" id="coverPhoto" accept="image/png, image/jpg, image/jpeg" onChange={handleCoverPhotoUpload} style={{ display: 'none' }} />
                 <div className='row2'>
                   <div className='col1'>
                     {showSpinner ? (
@@ -238,12 +334,20 @@ const EditProfile = () => {
                   </div>
                   <div className='col2'>
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
-                    <label htmlFor="fileInput" className="custom-file-upload">
-                      <div><BtnClear type="button" label="Choose Photo" onClick={handleFileInputClick} /></div>
-                    </label>
-                    <input type="file" id="fileInput" accept="image/png, image/jpg, image/jpeg" onChange={handleImageUpload} style={{ display: 'none' }} />
+                    <div className='profile-pic-buttons'>
+                      {!updatedUserData.profile_pic ? (
+                        <BtnClear type="button" label="Choose Photo" onClick={handleProfileImgClick} />
+                      ) : (
+                        <>
+                          <BtnClear type="button" label="Update Photo" onClick={handleProfileImgClick} />
+                          <BtnClear type="button" label="Remove Photo" onClick={handleRemoveProfileImage} />
+                        </>
+                      )}
+                    </div>
+                    <input type="file" id="profileImage" accept="image/png, image/jpg, image/jpeg" onChange={handleProfileImageUpload} style={{ display: 'none' }} />
                   </div>
                 </div>
+
                 <div className='row3 flex'>
                   <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /></label >
                   <div>

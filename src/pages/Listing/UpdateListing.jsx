@@ -256,6 +256,7 @@ const AddListing = () => {
                 // Extract image URLs from the images array
                 const imageUrls = productDetails.images.map(image => image.image_url);
                 setImagePreviews(imageUrls);
+                setSelectedImages(imageUrls);
             } catch (error) {
                 console.error("Error fetching product details:", error);
             }
