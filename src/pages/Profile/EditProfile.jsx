@@ -336,7 +336,7 @@ const EditProfile = () => {
                     <div>Buyers and sellers can learn a lot about each other by looking at clear frontal face photos.</div>
                     <div className='profile-pic-buttons'>
                       {!updatedUserData.profile_pic ? (
-                        <BtnClear type="button" label="Choose Photo" onClick={handleProfileImgClick} />
+                        <BtnClear type="button" label="Upload Photo" onClick={handleProfileImgClick} />
                       ) : (
                         <>
                           <BtnClear type="button" label="Update Photo" onClick={handleProfileImgClick} />

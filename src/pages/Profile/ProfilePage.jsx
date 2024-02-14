@@ -8,6 +8,7 @@ import { Setloader } from '../../redux/reducer/loadersSlice'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import ProfileCard from '../../components/Cards/ProfileCard'
+import FollowerCard from '../../components/Cards/FollowerCard'
 import SearchBox from '../../components/SearchBox'
 import Filters from '../../components/Button/Filters'
 import ListingCard from '../../components/Cards/ListingCard'
@@ -180,6 +181,8 @@ const ProfilePage = ({ userId }) => {
                                             data={user}
                                             authenticatedUser={authenticatedUser}
                                             setAuthenticatedUser={setAuthenticatedUser}
+                                            allFollowersList={() => openContent(2)}
+                                            allFollowingList={() => openContent(3)}
                                         />
                                     </div>
                                     <div className="col-right">
@@ -187,7 +190,8 @@ const ProfilePage = ({ userId }) => {
                                             <div className="profile-tab-header">
                                                 <button className={`tab-name tablink ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>Listings</button>
                                                 <button className={`tab-name tablink ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>Reviews</button>
-                                                <button className={`tab-name tablink ${activeTab === 2 ? 'active' : ''}`} onClick={() => openContent(2)}>Badges</button>
+                                                <button className={`tab-name tablink ${activeTab === 2 ? 'active' : ''}`} onClick={() => openContent(2)}>Followers</button>
+                                                <button className={`tab-name tablink ${activeTab === 3 ? 'active' : ''}`} onClick={() => openContent(3)}>Following</button>
                                             </div>
                                             <div className='listing-content' style={{ display: activeTab === 0 ? 'block' : 'none' }}>
                                                 <div className='row1'>
@@ -305,8 +309,19 @@ const ProfilePage = ({ userId }) => {
                                                     <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
                                                 </div>
                                             </div>
-                                            <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-                                                <h2>Badges</h2>
+                                            <div className='followers-list' style={{ display: activeTab === 2 ? 'block' : 'none' }}>
+                                                <h5>Mark have 6 follower(s)</h5>
+                                                <div className='follower-card-box'>
+                                                    <FollowerCard />
+                                                    <FollowerCard />
+                                                    <FollowerCard />
+                                                    <FollowerCard />
+                                                    <FollowerCard />
+                                                    <FollowerCard />
+                                                </div>
+                                            </div>
+                                            <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
+                                                <h2>Following</h2>
                                             </div>
                                         </div>
                                     </div>

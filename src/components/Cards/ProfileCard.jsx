@@ -11,34 +11,67 @@ import { useSearchParams } from 'react-router-dom'
 
 
 
-const ProfileInfoCard = ({ data, authenticatedUser }) => {
+const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowingList }) => {
     console.log('user data1:', data);
 
     const [following, setFollowing] = useState(false);
+    const [allFollowing, setAllFollowing] = useState([]);
+    const [allFollower, setAllFollower] = useState([]);
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
-    
+
     useEffect(() => {
         const fetchFollowingUser = async () => {
-          try {
-            const response = await axios.get(`/api/get/following-${data.id}`);
-            
-            // Assuming your API response structure is { message: 'Following User' }
-            setFollowing(response.data.message === 'Following User');
-          } catch (error) {
-            setFollowing(false);
-          }
-        };
-      
-        fetchFollowingUser();
-      }, [data?.id]);
-      
+            try {
+                const response = await axios.get(`/api/get/following-${data.id}`);
 
-       // Check if data is null or undefined
+                // Assuming your API response structure is { message: 'Following User' }
+                setFollowing(response.data.message === 'Following User');
+            } catch (error) {
+                setFollowing(false);
+            }
+        };
+
+        fetchFollowingUser();
+    }, [data?.id]);
+
+
+
+    useEffect(() => {
+        const fetchAllUserFollowing = async () => {
+            try {
+                const response = await axios.get(`/api/getall/following-${data.id}`)
+                setAllFollowing(response.data)
+            } catch (error) {
+                console.error('Error fetching all user following:', error);
+            }
+        }
+        fetchAllUserFollowing()
+    }, [data?.id])
+
+
+
+
+    useEffect(() => {
+        const fetchAllUserFollower = async () => {
+            try {
+                const response = await axios.get(`/api/getall/follower-${data.id}`)
+                setAllFollower(response.data)
+            } catch (error) {
+                console.error('Error fetching all user following:', error);
+            }
+        }
+        fetchAllUserFollower()
+    }, [data?.id])
+
+
+    // Check if data is null or undefined
     if (!data) {
         return null; // or return some default content or loading indicator
     }
+
+
 
     const followUser = async () => {
         try {
@@ -51,7 +84,7 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
     }
 
 
-    const unfollowUser = async() => {
+    const unfollowUser = async () => {
         try {
             const response = await axios.post(`/api/unfollow-${data.id}`)
             setFollowing(false);
@@ -60,8 +93,6 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
             console.error('Error unfollowing user:', error);
         }
     }
-
-
 
 
 
@@ -81,11 +112,11 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
                     <span> | </span><span>5 Review(s)</span>
                 </div>
                 <div className='joined-date-loc'><span>{data?.city}</span> · <span>{formattedDate}</span></div>
-                <div className="profile-social-media">
+                {/* <div className="profile-social-media">
                     <span>Social Media:</span>
                     <div className='fb-icon'><FBIcon /></div>
                     <div className='google-icon'><GoogleIcon /></div>
-                </div>
+                </div> */}
                 <div className="profile-desc"><p>{data?.bio}</p></div>
                 {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
                     <>
@@ -95,14 +126,14 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
                             ) : (
                                 <BtnClear label='Following' className='unfollowing-btn' onClick={unfollowUser} />
                             )}
-                            
+
                         </div>
                     </>
                 )}
                 <div className='follow'>
-                    <div className='follow-counter'><p>Followers</p><span>25</span></div>
+                    <div className='follow-counter' onClick={allFollowersList}><p>Followers</p><span>{allFollower.length}</span></div>
                     <div className='counter-divider'></div>
-                    <div className='follow-counter'><p>Following</p><span>16</span></div>
+                    <div className='follow-counter' onClick={allFollowingList}><p>Following</p><span>{allFollowing.length}</span></div>
                 </div>
             </div>
         </>

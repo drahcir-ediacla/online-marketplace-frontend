@@ -171,7 +171,7 @@
         display: flex;
         gap: 16px;
 
-        .unfollowing-btn{
+        .unfollowing-btn {
             border-color: var(--green-400);
             color: var(--green-400);
         }
@@ -189,6 +189,7 @@
 
         .follow-counter {
             text-align: center;
+            cursor: pointer;
 
             p {
                 margin-bottom: 8px;
@@ -374,4 +375,45 @@
             margin-bottom: 10px;
         }
     }
+}
+
+
+
+// FOLLOWER CARD STYLE
+
+.follower-card-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 180px;
+    background: white;
+    padding: 0 10px 10px 10px;
+
+    .follower-card-row1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 125px;
+        img {
+            width: 92px;
+            height: 92px;
+        }
+    }
+
+    .follower-name {
+        font-weight: 500;
+    }
+
+    .number-follower {
+        font-size: 14px;
+    }
+
+    .following-button {
+        margin-top: 10px;
+    }
+}
+
+.follower-card-container:hover {
+    cursor: pointer;
+    box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
 }
