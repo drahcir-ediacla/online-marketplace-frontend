@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../Button/BtnGreen';
+import axios from '../../apicalls/axios'
+import { useSearchParams } from 'react-router-dom'
 
 
 
@@ -12,13 +14,57 @@ import BtnGreen from '../Button/BtnGreen';
 const ProfileInfoCard = ({ data, authenticatedUser }) => {
     console.log('user data1:', data);
 
+    const [following, setFollowing] = useState(false);
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
-    // Check if data is null or undefined
+    
+    useEffect(() => {
+        const fetchFollowingUser = async () => {
+          try {
+            const response = await axios.get(`/api/get/following-${data.id}`);
+            
+            // Assuming your API response structure is { message: 'Following User' }
+            setFollowing(response.data.message === 'Following User');
+          } catch (error) {
+            setFollowing(false);
+          }
+        };
+      
+        fetchFollowingUser();
+      }, [data?.id]);
+      
+
+       // Check if data is null or undefined
     if (!data) {
         return null; // or return some default content or loading indicator
     }
+
+    const followUser = async () => {
+        try {
+            const response = await axios.post(`/api/follow-${data.id}`)
+            setFollowing(true);
+            return response
+        } catch (error) {
+            console.error('Error following user:', error);
+        }
+    }
+
+
+    const unfollowUser = async() => {
+        try {
+            const response = await axios.post(`/api/unfollow-${data.id}`)
+            setFollowing(false);
+            return response
+        } catch (error) {
+            console.error('Error unfollowing user:', error);
+        }
+    }
+
+
+
+
+
 
     return (
         <>
@@ -44,12 +90,18 @@ const ProfileInfoCard = ({ data, authenticatedUser }) => {
                 {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
                     <>
                         <div className="follow-message-buttons">
-                            <BtnClear label='Follow' />
+                            {!following ? (
+                                <BtnClear label='Follow' onClick={followUser} />
+                            ) : (
+                                <BtnClear label='Following' className='unfollowing-btn' onClick={unfollowUser} />
+                            )}
+                            
                         </div>
                     </>
                 )}
                 <div className='follow'>
                     <div className='follow-counter'><p>Followers</p><span>25</span></div>
+                    <div className='counter-divider'></div>
                     <div className='follow-counter'><p>Following</p><span>16</span></div>
                 </div>
             </div>

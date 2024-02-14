@@ -170,12 +170,22 @@
     .follow-message-buttons {
         display: flex;
         gap: 16px;
+
+        .unfollowing-btn{
+            border-color: var(--green-400);
+            color: var(--green-400);
+        }
     }
 
     .follow {
         display: flex;
         gap: 30px;
         padding-top: 10px;
+
+        .counter-divider {
+            width: 1px;
+            background: var(--gray-300);
+        }
 
         .follow-counter {
             text-align: center;
