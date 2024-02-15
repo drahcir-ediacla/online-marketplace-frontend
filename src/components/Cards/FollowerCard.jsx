@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../apicalls/axios'
 import { Link } from 'react-router-dom'
+import useAuthentication from '../../hooks/authHook'
 import './style.scss'
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
 import BtnClear from '../Button/BtnClear'
 
 const FollowerCard = ({ data }) => {
 
+    const { user } = useAuthentication();
     const [allFollower, setAllFollower] = useState([]);
     const [followerIds, setFollowerIds] = useState([]);
     const [following, setFollowing] = useState(false);
@@ -49,7 +51,7 @@ const FollowerCard = ({ data }) => {
 
     return (
         <>
-            <h5>{data?.display_name} have {allFollower.length} follower(s)</h5>
+            <h5>{data?.id !== user?.id ? (data?.display_name) : ('You')} have {allFollower.length} follower(s)</h5>
             <div className='follower-card-box'>
                 {allFollower.map((follower, index) => (
                     <Link to={`/profile/${follower.follower_id}`} >

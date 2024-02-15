@@ -289,7 +289,7 @@ const EditProfile = () => {
         <div className="container">
           <h3>Manage Account</h3>
           <div className="box">
-            <div className="col-left"><ManageAccountNav className='active' userId={user?.id} /></div>
+            <div className="col-left"><ManageAccountNav className='active' /></div>
             <div className="col-right">
               <form className="edit-profile-form" onSubmit={handleFormSubmit}>
                 <div className='row1'>
