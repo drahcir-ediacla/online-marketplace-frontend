@@ -50,16 +50,16 @@ const FollowerCard = ({ data }) => {
 
     return (
         <>
-            <h5>{data?.id !== user?.id ? (data?.display_name) : ('You')} have {allFollower.length} follower(s)</h5>
+            <h5>{data?.id !== user?.id ? (data?.display_name) : ('You')} have {allFollower?.length} follower(s)</h5>
             <div className='follower-card-box'>
                 {allFollower.map((follower, index) => (
-                    <Link to={`/profile/${follower.follower_id}`} >
+                    <Link to={`/profile/${follower?.follower_id}`} >
                         <div key={index} className="follower-card-container">
                             <div className="follower-card-row1">
-                                <img src={follower.followerInfo.profile_pic || DefaultProfilePic} alt="" />
+                                <img src={follower?.followerInfo?.profile_pic || DefaultProfilePic} alt="" />
                             </div>
-                            <span className='follower-name'>{follower.followerInfo.display_name}</span>
-                            <span className='number-follower'>{follower.followerInfo.followers.length} Followers</span>
+                            <span className='follower-name'>{follower?.followerInfo?.display_name}</span>
+                            <span className='number-follower'>{follower?.followerInfo?.followers?.length} Followers</span>
 
                             {/* {!following ? (
                         <BtnClear label='Follow' className='following-button' />
