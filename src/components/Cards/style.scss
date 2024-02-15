@@ -381,39 +381,49 @@
 
 // FOLLOWER CARD STYLE
 
-.follower-card-container {
+.follower-card-box {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 180px;
-    background: white;
-    padding: 0 10px 10px 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
 
-    .follower-card-row1 {
+    .follower-card-container {
         display: flex;
-        justify-content: center;
         align-items: center;
-        height: 125px;
-        img {
-            width: 92px;
-            height: 92px;
+        flex-direction: column;
+        width: 180px;
+        background: white;
+        color: var(--gray-500);
+        padding: 0 10px 10px 10px;
+
+        .follower-card-row1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 125px;
+
+            img {
+                width: 92px;
+                height: 92px;
+                border-radius: 50%;
+            }
+        }
+
+        .follower-name {
+            font-weight: 500;
+        }
+
+        .number-follower {
+            font-size: 14px;
+        }
+
+        .following-button {
+            margin-top: 10px;
         }
     }
 
-    .follower-name {
-        font-weight: 500;
+    .follower-card-container:hover {
+        cursor: pointer;
+        box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
     }
-
-    .number-follower {
-        font-size: 14px;
-    }
-
-    .following-button {
-        margin-top: 10px;
-    }
-}
-
-.follower-card-container:hover {
-    cursor: pointer;
-    box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
 }

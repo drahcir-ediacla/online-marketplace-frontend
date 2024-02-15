@@ -7,7 +7,7 @@ import BtnClear from '../Button/BtnClear'
 
 const FollowerCard = ({ data }) => {
 
-    const [allFollower, setAllFollower] = useState([]);
+    const [allFollowing, setAllFollowing] = useState([]);
     const [followerIds, setFollowerIds] = useState([]);
     const [following, setFollowing] = useState(false);
 
@@ -15,10 +15,10 @@ const FollowerCard = ({ data }) => {
 
 
     useEffect(() => {
-        const fetchAllUserFollower = async () => {
+        const fetchAllUserFollowing = async () => {
             try {
-                const response = await axios.get(`/api/getall/follower-${data.id}`)
-                setAllFollower(response.data)
+                const response = await axios.get(`/api/getall/following-${data.id}`)
+                setAllFollowing(response.data)
 
                 // Extract follower IDs
                 const ids = response.data.map((follower) => follower.followerInfo.id);
@@ -27,8 +27,9 @@ const FollowerCard = ({ data }) => {
                 console.error('Error fetching all user following:', error);
             }
         }
-        fetchAllUserFollower()
+        fetchAllUserFollowing()
     }, [data?.id])
+
 
 
     useEffect(() => {
@@ -49,16 +50,16 @@ const FollowerCard = ({ data }) => {
 
     return (
         <>
-            <h5>{data?.display_name} have {allFollower.length} follower(s)</h5>
+            <h5>{data?.display_name} following {allFollowing.length} user(s)</h5>
             <div className='follower-card-box'>
-                {allFollower.map((follower, index) => (
-                    <Link to={`/profile/${follower.follower_id}`} >
+                {allFollowing.map((following, index) => (
+                    <Link to={`/profile/${following.following_id}`} >
                         <div key={index} className="follower-card-container">
                             <div className="follower-card-row1">
-                                <img src={follower.followerInfo.profile_pic || DefaultProfilePic} alt="" />
+                                <img src={following.followingInfo.profile_pic || DefaultProfilePic} alt="" />
                             </div>
-                            <span className='follower-name'>{follower.followerInfo.display_name}</span>
-                            <span className='number-follower'>{follower.followerInfo.followers.length} Followers</span>
+                            <span className='follower-name'>{following.followingInfo.display_name}</span>
+                            <span className='number-follower'>{following.followingInfo.following.length} Followers</span>
 
                             {/* {!following ? (
                         <BtnClear label='Follow' className='following-button' />

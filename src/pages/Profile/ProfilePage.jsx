@@ -9,6 +9,7 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import ProfileCard from '../../components/Cards/ProfileCard'
 import FollowerCard from '../../components/Cards/FollowerCard'
+import FollowingCard from '../../components/Cards/FollowingCard'
 import SearchBox from '../../components/SearchBox'
 import Filters from '../../components/Button/Filters'
 import ListingCard from '../../components/Cards/ListingCard'
@@ -310,18 +311,10 @@ const ProfilePage = ({ userId }) => {
                                                 </div>
                                             </div>
                                             <div className='followers-list' style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-                                                <h5>Mark have 6 follower(s)</h5>
-                                                <div className='follower-card-box'>
-                                                    <FollowerCard />
-                                                    <FollowerCard />
-                                                    <FollowerCard />
-                                                    <FollowerCard />
-                                                    <FollowerCard />
-                                                    <FollowerCard />
-                                                </div>
+                                                <FollowerCard data={user} />
                                             </div>
-                                            <div style={{ display: activeTab === 3 ? 'block' : 'none' }}>
-                                                <h2>Following</h2>
+                                            <div className='followers-list' style={{ display: activeTab === 3 ? 'block' : 'none' }}>
+                                                <FollowingCard data={user} />
                                             </div>
                                         </div>
                                     </div>
