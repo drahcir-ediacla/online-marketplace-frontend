@@ -10,10 +10,10 @@ const FollowerCard = ({ data }) => {
 
     const { user } = useAuthentication();
     const [allFollowing, setAllFollowing] = useState([]);
-    const [followerIds, setFollowerIds] = useState([]);
-    const [following, setFollowing] = useState(false);
+    // const [followerIds, setFollowerIds] = useState([]);
+    // const [following, setFollowing] = useState(false);
 
-    console.log('followerIds:', followerIds)
+    
 
 
     useEffect(() => {
@@ -23,8 +23,8 @@ const FollowerCard = ({ data }) => {
                 setAllFollowing(response.data)
 
                 // Extract follower IDs
-                const ids = response.data.map((follower) => follower.followerInfo.id);
-                setFollowerIds(ids);
+                // const ids = response.data.map((follower) => follower.followerInfo.id);
+                // setFollowerIds(ids);
             } catch (error) {
                 console.error('Error fetching all user following:', error);
             }
@@ -34,20 +34,20 @@ const FollowerCard = ({ data }) => {
 
 
 
-    useEffect(() => {
-        const fetchFollowingUser = async () => {
-            try {
-                const response = await axios.get(`/api/get/following-${followerIds}`);
+    // useEffect(() => {
+    //     const fetchFollowingUser = async () => {
+    //         try {
+    //             const response = await axios.get(`/api/get/following-${followerIds}`);
 
-                // Assuming your API response structure is { message: 'Following User' }
-                setFollowing(response.data.message === 'Following User');
-            } catch (error) {
-                setFollowing(false);
-            }
-        };
+    //             // Assuming your API response structure is { message: 'Following User' }
+    //             setFollowing(response.data.message === 'Following User');
+    //         } catch (error) {
+    //             setFollowing(false);
+    //         }
+    //     };
 
-        fetchFollowingUser();
-    }, [followerIds]);
+    //     fetchFollowingUser();
+    // }, [followerIds]);
 
 
     return (
