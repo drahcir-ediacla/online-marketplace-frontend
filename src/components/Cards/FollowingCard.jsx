@@ -59,7 +59,7 @@ const FollowerCard = ({ data }) => {
                                 <img src={following.followingInfo.profile_pic || DefaultProfilePic} alt="" />
                             </div>
                             <span className='follower-name'>{following.followingInfo.display_name}</span>
-                            <span className='number-follower'>{following.followingInfo.following.length} Followers</span>
+                            <span className='number-follower'>{following.followingInfo.followers.length} Followers</span>
 
                             {/* {!following ? (
                         <BtnClear label='Follow' className='following-button' />
