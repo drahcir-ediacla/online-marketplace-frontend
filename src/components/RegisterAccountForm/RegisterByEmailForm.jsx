@@ -105,7 +105,7 @@ const RegisterByEmailForm = () => {
         setMatchPwd('');
       }
     } catch (err) {
-      dispatch(Setloader(false))
+      dispatch(Setloader(false)) 
       if (err.response?.status === 400) {
         setSuccess(false);
         setErrMsg('Account already exists for this email.');

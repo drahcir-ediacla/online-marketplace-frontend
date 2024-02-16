@@ -1,18 +1,22 @@
 // DEACTIVATE ACCOUNT STYLE
 
-.deactivate-accnt-body{
+.deactivate-accnt-body {
     margin-bottom: 150px;
-    .container{
+
+    .container {
         display: block;
-        h3{
+
+        h3 {
             font-weight: 500;
             margin: 20px 0;
         }
-        .box{
+
+        .box {
             display: flex;
             gap: 20px;
-            .col-right{
-                .accnt-deactivation-content{
+
+            .col-right {
+                .accnt-deactivation-content {
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
@@ -21,13 +25,16 @@
                     padding: 30px 30px;
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
                     margin-bottom: 150px;
-                    span{
+
+                    span {
                         font-weight: 500;
                     }
-                    .row1{
+
+                    .row1 {
                         display: flex;
                         justify-content: space-between;
-                        .accnt-deactivation-info{
+
+                        .accnt-deactivation-info {
                             list-style: disc;
                             margin-top: 10px;
                         }
@@ -41,20 +48,24 @@
 
 // SET PASSWORD STYLE
 
-.set-password-body{
+.set-password-body {
     margin-bottom: 150px;
-    .container{
+
+    .container {
         display: block;
-        h3{
+
+        h3 {
             font-weight: 500;
             margin: 20px 0;
         }
-        .box{
+
+        .box {
             display: flex;
             gap: 20px;
-            .col-right{
-                
-                .set-password-form{
+
+            .col-right {
+
+                .set-password-form {
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
@@ -63,24 +74,63 @@
                     padding: 30px 30px;
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
                     margin-bottom: 150px;
-                    span{
+
+                    span {
                         font-weight: 500;
                     }
-                    hr{
+
+                    hr {
                         margin: 0;
                     }
-                    .asterisk{
+
+                    .asterisk {
                         color: red;
                     }
-                    .form-field{
+
+                    .form-field {
                         display: flex;
                         justify-content: space-between;
-                        align-items: center;
-                        .password-input-field{
+                        margin-bottom: 10px;
+
+                        .password-input-field {
                             width: 557px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--gray-300);
+                            outline: none;
+                            padding: 0 10px;
+                        }
+
+                        label {
+                            padding-top: 10px;
+                        }
+
+                        .instructions {
+                            color: red;
+                            margin-bottom: 0;
+                            position: absolute;
+                            font-size: 13px;
+                        }
+
+                        .offscreen {
+                            display: none;
+                        }
+
+                        .valid {
+                            color: limegreen;
+                            margin-left: 0.25rem;
+                        }
+
+                        .invalid {
+                            color: red;
+                            margin-left: 0.25rem;
+                        }
+
+                        .hide {
+                            display: none;
                         }
                     }
-                    
+
                 }
             }
         }
