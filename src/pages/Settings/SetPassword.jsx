@@ -26,7 +26,6 @@ const SetPassword = () => {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [alertMsg, setAlertMsg] = useState('')
-    const [errorSource, setErrorSource] = useState(null);
 
 
     useEffect(() => {

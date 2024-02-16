@@ -1,8 +1,61 @@
-.prod-filter-container{
+.prod-filter-container {
     display: flex;
     justify-content: space-between;
-    .group-filterby{
+
+    .group-filterby {
         display: flex;
         gap: 20px;
+
+        .filter-condition {
+            position: relative;
+
+            .filter-condition-options {
+                position: absolute;
+                width: 200px;
+                padding: 0;
+                background-color: white;
+                box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.15);
+
+                li {
+                    padding: 10px 12px 10px 12px;
+                }
+
+                li:hover {
+                    background: var(--gray-200);
+                }
+            }
+        }
+
+        .filter-deal-option {
+            position: relative;
+
+            .filter-deal-options {
+                position: absolute;
+                width: 250px;
+                padding: 0;
+                background-color: white;
+                box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.15);
+
+                li {
+                    padding: 10px 12px 10px 12px;
+                }
+
+                li:hover {
+                    background: var(--gray-200);
+                }
+            }
+        }
+
+        .filter-price {
+            position: relative;
+
+            .filter-price-input {
+                display: none;
+                position: absolute;
+                background: white;
+                width: 353px;
+                box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.15);
+            }
+        }
     }
 }
