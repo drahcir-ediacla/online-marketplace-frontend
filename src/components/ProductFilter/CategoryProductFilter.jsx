@@ -4,10 +4,14 @@ import FilterBy from '../Button/FilterBy'
 import Filters from '../Button/Filters'
 import CheckBox from '../FormField/CheckBox/CheckBox'
 import Input from '../FormField/Input'
+import BtnClear from '../Button/BtnClear'
+import BtnGreen from '../Button/BtnGreen'
+import RadioButton from '../FormField/RadioButton'
 
 const CategoryProductFilter = () => {
 
   const [activeFilter, setActiveFilter] = useState(null);
+  const [sortBy, setSortBy] = useState('Most Recent');
 
   const containerRef = useRef(null);
 
@@ -30,10 +34,53 @@ const CategoryProductFilter = () => {
   };
 
 
+  const handleSortByChange = (event) => {
+    const selectedSortBy = event.target.value;
+    setSortBy(selectedSortBy); // Update the local state
+  };
+
+
   return (
     <>
       <div className='prod-filter-container' ref={containerRef}>
         <div className='group-filterby'>
+          <div className='filter-sortby'>
+            <FilterBy label='Sort By' onClick={() => toggleFilterVisibility('sortByFilter')} />
+            {activeFilter === 'sortByFilter' && (
+              <ul className='filter-sortby-options'>
+              <li>
+                <RadioButton
+                  id="mostRecent"
+                  name="most_recent"
+                  value="Most Recent"
+                  label="Most Recent"
+                  checked={sortBy === 'Most Recent'}
+                  onChange={handleSortByChange}
+                />
+              </li>
+              <li>
+                <RadioButton
+                  id="priceHighToLow"
+                  name="price_high_low"
+                  value="Price High to Low"
+                  label="Price - High to Low"
+                  checked={sortBy === 'Price High to Low'}
+                  onChange={handleSortByChange}
+                />
+              </li>
+              <li>
+                <RadioButton
+                  id="priceLowtoHigh"
+                  name="price_low_high"
+                  value="Price Low to High"
+                  label="Price - Low to High"
+                  checked={sortBy === 'Price Low to High'}
+                  onChange={handleSortByChange}
+                />
+              </li>
+            </ul>
+            )}
+          </div>
           <div className='filter-condition'>
             <FilterBy label='Condition' onClick={() => toggleFilterVisibility('condition')} />
             {activeFilter === 'condition' && (
@@ -56,15 +103,29 @@ const CategoryProductFilter = () => {
             )}
           </div>
           <div className='filter-price'>
-            <FilterBy label='Price' />
-            <div className='filter-price-input'>
+            <FilterBy label='Price' onClick={() => toggleFilterVisibility('priceFilter')} />
+            {activeFilter === 'priceFilter' && (
+              <div className='filter-price-input'>
                 <p>Show item price from</p>
                 <div className='filter-price-row1'>
-                  <Input />
+                  <div className='input-price-filter-container'>
+                    <span className='php-symbol'>₱</span>
+                    <Input type='number' className='input-price-filter' placeholder='Minimum' />
+                  </div>
+                  -
+                  <div className='input-price-filter-container'>
+                    <span className='php-symbol'>₱</span>
+                    <Input type='number' className='input-price-filter' placeholder='Maximum' />
+                  </div>
                 </div>
-            </div>
+                <hr />
+                <div className='filter-price-row2'>
+                  <BtnClear label='Reset' />
+                  <BtnGreen label='Apply' />
+                </div>
+              </div>
+            )}
           </div>
-
         </div>
         <Filters />
       </div>

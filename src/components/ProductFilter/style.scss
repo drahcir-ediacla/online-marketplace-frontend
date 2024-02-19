@@ -6,6 +6,26 @@
         display: flex;
         gap: 20px;
 
+        .filter-sortby {
+            position: relative;
+
+            .filter-sortby-options {
+                position: absolute;
+                width: 200px;
+                padding: 0;
+                background-color: white;
+                box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.15);
+
+                li {
+                    padding: 10px 12px 10px 12px;
+                }
+
+                li:hover {
+                    background: var(--gray-200);
+                }
+            }
+        }
+
         .filter-condition {
             position: relative;
 
@@ -50,11 +70,49 @@
             position: relative;
 
             .filter-price-input {
-                display: none;
+                display: block;
                 position: absolute;
                 background: white;
                 width: 353px;
+                padding: 17px 0px 17px 0px;
                 box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.15);
+
+                p {
+                    padding: 0 12px 0 12px;
+                    font-weight: 500;
+                }
+
+                .filter-price-row1 {
+                    display: flex;
+                    gap: 5px;
+                    width: 100%;
+                    align-items: center;
+                    padding: 0 12px 0 12px;
+
+                    .input-price-filter-container {
+                        position: relative;
+
+                        .php-symbol {
+                            position: absolute;
+                            top: 10px;
+                            left: 10px;
+                        }
+
+                        .input-price-filter {
+                            width: 100%;
+                            padding-left: 25px;
+                        }
+                    }
+                }
+
+                .filter-price-row2 {
+                    display: flex;
+                    gap: 10px;
+                    width: 100%;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 12px 0 12px;
+                }
             }
         }
     }
