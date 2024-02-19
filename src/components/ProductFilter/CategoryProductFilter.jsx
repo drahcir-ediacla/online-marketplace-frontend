@@ -45,44 +45,50 @@ const CategoryProductFilter = () => {
       <div className='prod-filter-container' ref={containerRef}>
         <div className='group-filterby'>
           <div className='filter-sortby'>
-            <FilterBy label='Sort By' onClick={() => toggleFilterVisibility('sortByFilter')} />
+            <FilterBy
+              label='Sort By'
+              arrowStyle={activeFilter === 'sortByFilter' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
+              onClick={() => toggleFilterVisibility('sortByFilter')} />
             {activeFilter === 'sortByFilter' && (
               <ul className='filter-sortby-options'>
-              <li>
-                <RadioButton
-                  id="mostRecent"
-                  name="most_recent"
-                  value="Most Recent"
-                  label="Most Recent"
-                  checked={sortBy === 'Most Recent'}
-                  onChange={handleSortByChange}
-                />
-              </li>
-              <li>
-                <RadioButton
-                  id="priceHighToLow"
-                  name="price_high_low"
-                  value="Price High to Low"
-                  label="Price - High to Low"
-                  checked={sortBy === 'Price High to Low'}
-                  onChange={handleSortByChange}
-                />
-              </li>
-              <li>
-                <RadioButton
-                  id="priceLowtoHigh"
-                  name="price_low_high"
-                  value="Price Low to High"
-                  label="Price - Low to High"
-                  checked={sortBy === 'Price Low to High'}
-                  onChange={handleSortByChange}
-                />
-              </li>
-            </ul>
+                <li>
+                  <RadioButton
+                    id="mostRecent"
+                    name="most_recent"
+                    value="Most Recent"
+                    label="Most Recent"
+                    checked={sortBy === 'Most Recent'}
+                    onChange={handleSortByChange}
+                  />
+                </li>
+                <li>
+                  <RadioButton
+                    id="priceHighToLow"
+                    name="price_high_low"
+                    value="Price High to Low"
+                    label="Price - High to Low"
+                    checked={sortBy === 'Price High to Low'}
+                    onChange={handleSortByChange}
+                  />
+                </li>
+                <li>
+                  <RadioButton
+                    id="priceLowtoHigh"
+                    name="price_low_high"
+                    value="Price Low to High"
+                    label="Price - Low to High"
+                    checked={sortBy === 'Price Low to High'}
+                    onChange={handleSortByChange}
+                  />
+                </li>
+              </ul>
             )}
           </div>
           <div className='filter-condition'>
-            <FilterBy label='Condition' onClick={() => toggleFilterVisibility('condition')} />
+            <FilterBy
+              label='Condition'
+              arrowStyle={activeFilter === 'condition' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
+              onClick={() => toggleFilterVisibility('condition')} />
             {activeFilter === 'condition' && (
               <ul className='filter-condition-options'>
                 <li><CheckBox label='Brand New' value='Brand New' /></li>
@@ -94,7 +100,10 @@ const CategoryProductFilter = () => {
             )}
           </div>
           <div className='filter-deal-option'>
-            <FilterBy label='Deal Option' onClick={() => toggleFilterVisibility('dealOption')} />
+            <FilterBy
+              label='Deal Option'
+              arrowStyle={activeFilter === 'dealOption' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
+              onClick={() => toggleFilterVisibility('dealOption')} />
             {activeFilter === 'dealOption' && (
               <ul className='filter-deal-options'>
                 <li><CheckBox label='Meet Up' value='Meet Up' /></li>
@@ -103,7 +112,10 @@ const CategoryProductFilter = () => {
             )}
           </div>
           <div className='filter-price'>
-            <FilterBy label='Price' onClick={() => toggleFilterVisibility('priceFilter')} />
+            <FilterBy
+              label='Price'
+              arrowStyle={activeFilter === 'priceFilter' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
+              onClick={() => toggleFilterVisibility('priceFilter')} />
             {activeFilter === 'priceFilter' && (
               <div className='filter-price-input'>
                 <p>Show item price from</p>

@@ -20,7 +20,6 @@ const MainCategory = ({ userId }) => {
   const { id, label } = useParams();
   const [category, setCategory] = useState({});
   const [categories, setCategories] = useState([]);
-  console.log('categories:', categories)
   const [setErr] = useState(false);
   const dispatch = useDispatch();
   const { user } = useAuthentication();
