@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import axios from '../../apicalls/axios'
 import './style.scss'
 import FilterBy from '../Button/FilterBy'
 import Filters from '../Button/Filters'
@@ -8,12 +9,41 @@ import BtnClear from '../Button/BtnClear'
 import BtnGreen from '../Button/BtnGreen'
 import RadioButton from '../FormField/RadioButton'
 
-const CategoryProductFilter = () => {
+const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
 
   const [activeFilter, setActiveFilter] = useState(null);
   const [sortBy, setSortBy] = useState('Most Recent');
+  const [filters, setFilters] = useState({
+    condition: [],
+    sort: '',
+  });
 
+  const [filterPrice, setFilterPrice] = useState({
+    minPrice: '',
+    maxPrice: '',
+  })
+
+  const [filtersApplied, setFiltersApplied] = useState(false);
+
+  const [currentCategory, setCurrentCategory] = useState(categoryId);
   const containerRef = useRef(null);
+
+
+  useEffect(() => {
+    // Reset filters when the category changes
+    setFilters({
+      condition: [],
+      sort: '',
+    });
+    setFilterPrice({
+      minPrice: '',
+      maxPrice: '',
+    });
+    setFiltersApplied(false);
+    setCurrentCategory(categoryId);
+  }, [categoryId]);
+
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,6 +59,32 @@ const CategoryProductFilter = () => {
     };
   }, []);
 
+  
+
+
+  useEffect(() => {
+    // Perform API call with the selected filters and sorting option
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/getcategory/${categoryId}/${value}`, {
+          params: {
+            ...filters,
+            ...filterPrice,
+            sort: filters.sort,
+          }
+        });
+
+        // Update the category data in the parent component
+        updateCategoryData(response.data);
+      } catch (error) {
+        console.error('Error fetching category data:', error);
+      }
+    };
+
+    fetchData();
+  }, [categoryId, value, filters, filtersApplied]);
+
+
   const toggleFilterVisibility = (filter) => {
     setActiveFilter(activeFilter === filter ? null : filter);
   };
@@ -37,6 +93,50 @@ const CategoryProductFilter = () => {
   const handleSortByChange = (event) => {
     const selectedSortBy = event.target.value;
     setSortBy(selectedSortBy); // Update the local state
+    setFilters((prevFilters) => ({ ...prevFilters, sort: selectedSortBy }));
+  };
+
+
+  const handleFilterChange = (event) => {
+    const { name, value, checked } = event.target;
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: name === 'condition'
+        ? checked
+          ? [...prevFilters.condition, value] // Add the value to the array if checked
+          : prevFilters.condition.filter((condition) => condition !== value) // Remove the value if unchecked
+        : value,
+    }));
+  };
+
+
+  const handlePriceChange = (event) => {
+    const { name, value } = event.target;
+    setFilterPrice((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+
+  const applyFilters = () => {
+    setFiltersApplied(true);
+  };
+
+  const resetFilters = () => {
+    setFilterPrice({
+      minPrice: '',
+      maxPrice: '',
+    });
+
+    setFiltersApplied(false);
+  
+    // Reset the input fields
+    const minPriceInput = document.querySelector('input[name="minPrice"]');
+    const maxPriceInput = document.querySelector('input[name="maxPrice"]');
+  
+    if (minPriceInput && maxPriceInput) {
+      minPriceInput.value = '';
+      maxPriceInput.value = '';
+    }
   };
 
 
@@ -54,30 +154,30 @@ const CategoryProductFilter = () => {
                 <li>
                   <RadioButton
                     id="mostRecent"
-                    name="most_recent"
-                    value="Most Recent"
+                    name="sort"
+                    value="recent"
                     label="Most Recent"
-                    checked={sortBy === 'Most Recent'}
+                    checked={sortBy === 'Most Recent' || filters.sort.includes('recent')}
                     onChange={handleSortByChange}
                   />
                 </li>
                 <li>
                   <RadioButton
                     id="priceHighToLow"
-                    name="price_high_low"
-                    value="Price High to Low"
+                    name="sort"
+                    value="highToLow"
                     label="Price - High to Low"
-                    checked={sortBy === 'Price High to Low'}
+                    checked={sortBy === 'Price - High to Low' || filters.sort.includes('highToLow')}
                     onChange={handleSortByChange}
                   />
                 </li>
                 <li>
                   <RadioButton
                     id="priceLowtoHigh"
-                    name="price_low_high"
-                    value="Price Low to High"
+                    name="sort"
+                    value="lowToHigh"
                     label="Price - Low to High"
-                    checked={sortBy === 'Price Low to High'}
+                    checked={sortBy === 'Price - Low to High' || filters.sort.includes('lowToHigh')}
                     onChange={handleSortByChange}
                   />
                 </li>
@@ -91,11 +191,51 @@ const CategoryProductFilter = () => {
               onClick={() => toggleFilterVisibility('condition')} />
             {activeFilter === 'condition' && (
               <ul className='filter-condition-options'>
-                <li><CheckBox label='Brand New' value='Brand New' /></li>
-                <li><CheckBox label='Like New' value='Like New' /></li>
-                <li><CheckBox label='Lightly Used' value='Lightly Used' /></li>
-                <li><CheckBox label='Well Used' value='Well Used' /></li>
-                <li><CheckBox label='Heavily Used' value='Heavily Used' /></li>
+                <li>
+                  <CheckBox
+                    name='condition'
+                    label='Brand New'
+                    value='Brand New'
+                    checked={filters.condition.includes('Brand New')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
+                <li>
+                  <CheckBox
+                    name='condition'
+                    label='Like New'
+                    value='Like New'
+                    checked={filters.condition.includes('Like New')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
+                <li>
+                  <CheckBox
+                    name='condition'
+                    label='Lightly Used'
+                    value='Lightly Used'
+                    checked={filters.condition.includes('Lightly Used')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
+                <li>
+                  <CheckBox
+                    name='condition'
+                    label='Well Used'
+                    value='Well Used'
+                    checked={filters.condition.includes('Well Used')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
+                <li>
+                  <CheckBox
+                    name='condition'
+                    label='Heavily Used'
+                    value='Heavily Used'
+                    checked={filters.condition.includes('Heavily Used')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
               </ul>
             )}
           </div>
@@ -122,18 +262,18 @@ const CategoryProductFilter = () => {
                 <div className='filter-price-row1'>
                   <div className='input-price-filter-container'>
                     <span className='php-symbol'>₱</span>
-                    <Input type='number' className='input-price-filter' placeholder='Minimum' />
+                    <Input type='number' name="minPrice" value={filterPrice.minPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Minimum' />
                   </div>
                   -
                   <div className='input-price-filter-container'>
                     <span className='php-symbol'>₱</span>
-                    <Input type='number' className='input-price-filter' placeholder='Maximum' />
+                    <Input type='number' name="maxPrice" value={filterPrice.maxPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Maximum' />
                   </div>
                 </div>
                 <hr />
                 <div className='filter-price-row2'>
-                  <BtnClear label='Reset' />
-                  <BtnGreen label='Apply' />
+                  <BtnClear label='Reset' onClick={resetFilters} />
+                  <BtnGreen label='Apply' onClick={applyFilters} />
                 </div>
               </div>
             )}
