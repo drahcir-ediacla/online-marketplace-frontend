@@ -6,7 +6,7 @@ import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
-import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
+import SearchResultFilter from '../../components/ProductFilter/SearchResultFilter'
 import ProductCard from '../../components/Cards/ProductCard'
 import './style.scss'
 
@@ -22,22 +22,22 @@ const SearchResult = ({ userId }) => {
   const searchTerm = new URLSearchParams(location.search).get('keyword');
   const searchFilterLocation = new URLSearchParams(location.search).get('location');
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const fetchSearchResults = async () => {
+  //   const fetchSearchResults = async () => {
 
-      // const product_name = searchTerm; // Replace with the actual search term entered by the user
+  //     // const product_name = searchTerm; // Replace with the actual search term entered by the user
 
-      try {
-        const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error searching items:', error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
+  //       setProducts(response.data);
+  //     } catch (error) {
+  //       console.error('Error searching items:', error);
+  //     }
+  //   };
 
-    fetchSearchResults();
-  }, [location.search, searchTerm, searchFilterLocation]);
+  //   fetchSearchResults();
+  // }, [location.search, searchTerm, searchFilterLocation]);
 
 
 
@@ -110,7 +110,13 @@ const SearchResult = ({ userId }) => {
                 <h5>Total Results: {products.length > 50 ? `${products.length}+` : products.length}</h5>
               </div>
             </div>
-            <div className='search-result-newly-listed-row2'><CategoryProductFilter /></div>
+            <div className='search-result-newly-listed-row2'>
+              <SearchResultFilter 
+              searchTerm={searchTerm}
+              searchFilterLocation={searchFilterLocation}
+              searchResultsData={setProducts}
+              />
+              </div>
             <div className='search-result-newly-listed-row3'>
               <ProductCard
                 data={products || []}

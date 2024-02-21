@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from '../../apicalls/axios'
 import './style.scss'
 import FilterBy from '../Button/FilterBy'
-import Filters from '../Button/Filters'
 import CheckBox from '../FormField/CheckBox/CheckBox'
 import Input from '../FormField/Input'
 import BtnClear from '../Button/BtnClear'
@@ -279,7 +278,6 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             )}
           </div>
         </div>
-        <Filters />
       </div>
     </>
   )
