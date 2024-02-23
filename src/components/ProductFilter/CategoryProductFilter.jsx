@@ -38,7 +38,6 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
       minPrice: '',
       maxPrice: '',
     });
-    setFiltersApplied(false);
     setCurrentCategory(categoryId);
   }, [categoryId]);
 
@@ -58,7 +57,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     };
   }, []);
 
-  
+
 
 
   useEffect(() => {
@@ -81,7 +80,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     };
 
     fetchData();
-  }, [categoryId, value, filters, filtersApplied]);
+  }, [categoryId, value, filters]);
 
 
   const toggleFilterVisibility = (filter) => {
@@ -117,8 +116,10 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
 
 
   const applyFilters = () => {
-    setFiltersApplied(true);
+    setFilters((prevFilters) => ({ ...prevFilters, applied: true }));
   };
+
+
 
   const resetFilters = () => {
     setFilterPrice({
@@ -126,15 +127,27 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
       maxPrice: '',
     });
 
-    setFiltersApplied(false);
-  
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      condition: [],
+      sort: '',
+      applied: false, // Reset the applied property
+    }));
+
     // Reset the input fields
     const minPriceInput = document.querySelector('input[name="minPrice"]');
     const maxPriceInput = document.querySelector('input[name="maxPrice"]');
-  
+
     if (minPriceInput && maxPriceInput) {
       minPriceInput.value = '';
       maxPriceInput.value = '';
+    }
+  };
+
+
+  const handleEnterKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      applyFilters();
     }
   };
 
@@ -261,12 +274,26 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
                 <div className='filter-price-row1'>
                   <div className='input-price-filter-container'>
                     <span className='php-symbol'>₱</span>
-                    <Input type='number' name="minPrice" value={filterPrice.minPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Minimum' />
+                    <Input
+                      type='number'
+                      name="minPrice"
+                      value={filterPrice.minPrice}
+                      onChange={handlePriceChange}
+                      onKeyPress={handleEnterKeyPress}
+                      className='input-price-filter'
+                      placeholder='Minimum' />
                   </div>
                   -
                   <div className='input-price-filter-container'>
                     <span className='php-symbol'>₱</span>
-                    <Input type='number' name="maxPrice" value={filterPrice.maxPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Maximum' />
+                    <Input
+                      type='number'
+                      name="maxPrice"
+                      value={filterPrice.maxPrice}
+                      onChange={handlePriceChange}
+                      onKeyPress={handleEnterKeyPress}
+                      className='input-price-filter'
+                      placeholder='Maximum' />
                   </div>
                 </div>
                 <hr />

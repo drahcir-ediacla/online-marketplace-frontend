@@ -11,7 +11,7 @@ import ProfileCard from '../../components/Cards/ProfileCard'
 import FollowerCard from '../../components/Cards/FollowerCard'
 import FollowingCard from '../../components/Cards/FollowingCard'
 import SearchBox from '../../components/SearchBox'
-import Filters from '../../components/Button/Filters'
+import ModalFilter from '../../components/ProductFilter/ModalFilter'
 import ListingCard from '../../components/Cards/ListingCard'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import Pagination from '../../components/Pagination/Pagination'
@@ -91,22 +91,22 @@ const ProfilePage = ({ userId }) => {
     }, [id, dispatch]);
 
 
-    const products = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
-    const [filteredListings, setFilteredListings] = useState(products)
+    const allProducts = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
+    const [filteredListings, setFilteredListings] = useState(allProducts)
 
 
     // Use useCallback to memoize the function
     const getWishlistCount = useCallback((productId) => {
-        const productData = products.find((product) => product.id === productId);
+        const productData = allProducts.find((product) => product.id === productId);
         return productData ? (productData.wishlist ? productData.wishlist.length : 0) : 0;
-    }, [products]);
+    }, [allProducts]);
 
 
     // Use useEffect to update wishlist count after state changes
     useEffect(() => {
         // Update wishlist count for all products
         const updatedWishlistCounts = {};
-        products.forEach((product) => {
+        allProducts.forEach((product) => {
             updatedWishlistCounts[product.id] = getWishlistCount(product.id);
         });
 
@@ -114,20 +114,20 @@ const ProfilePage = ({ userId }) => {
         setWishlistCount(updatedWishlistCounts);
 
         console.log('Wishlist count updated:', updatedWishlistCounts);
-    }, [productStates, products, getWishlistCount]);
+    }, [productStates, allProducts, getWishlistCount]);
 
 
 
     // Initialize productStates based on initial wishlist data
     useEffect(() => {
         const initialProductStates = {};
-        products.forEach((product) => {
+        allProducts.forEach((product) => {
             const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
             initialProductStates[product.id] = isProductInWishlist;
         });
         console.log('Initial Product States:', initialProductStates);
         setProductStates(initialProductStates);
-    }, [products, userId]);
+    }, [allProducts, userId]);
 
 
 
@@ -159,11 +159,11 @@ const ProfilePage = ({ userId }) => {
         setSearchTerm(searchTerm);
 
         if (searchTerm === '') {
-            setFilteredListings(products);
+            setFilteredListings(allProducts);
             return;
         }
 
-        const filtered = products.filter(product => {
+        const filtered = allProducts.filter(product => {
             const productNameMatch = product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
             console.log('productNameMatch:', productNameMatch)
 
@@ -231,7 +231,7 @@ const ProfilePage = ({ userId }) => {
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
-                                                        <Filters />
+                                                        <ModalFilter />
                                                     </div>
                                                 </div>
                                                 <div className="prod-listing-container">
