@@ -30,6 +30,9 @@ const ProfilePage = ({ userId }) => {
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
 
+    const [searchTerm, setSearchTerm] = useState('')
+
+
 
     const addToWishlist = (productId) => {
         axios.post(`/api/addwishlist/product-${productId}`, {})
@@ -61,6 +64,8 @@ const ProfilePage = ({ userId }) => {
                 const response = await axios.get(`/api/user/${id}`);
 
                 setUser(response.data);
+                setFilteredListings(response.data?.products)
+                console.log('setFilteredListings:', setFilteredListings)
 
                 // Fetch the authenticated user's data
                 const authResponse = await axios.get('/auth/check-auth');
@@ -87,7 +92,7 @@ const ProfilePage = ({ userId }) => {
 
 
     const products = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
-
+    const [filteredListings, setFilteredListings] = useState(products)
 
 
     // Use useCallback to memoize the function
@@ -147,6 +152,29 @@ const ProfilePage = ({ userId }) => {
         setActiveTab(tabIndex);
     };
 
+
+
+    const handleSearchChange = (e) => {
+        const searchTerm = e.target.value;
+        setSearchTerm(searchTerm);
+
+        if (searchTerm === '') {
+            setFilteredListings(products);
+            return;
+        }
+
+        const filtered = products.filter(product => {
+            const productNameMatch = product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
+            console.log('productNameMatch:', productNameMatch)
+
+            // Check if either product name or seller's display name matches the search term
+            return productNameMatch;
+
+        });
+
+        setFilteredListings(filtered);
+    }
+
     return (
 
         <>
@@ -198,13 +226,17 @@ const ProfilePage = ({ userId }) => {
                                                 <div className='row1'>
                                                     <div><h5>{user?.id !== authenticatedUser?.id ? (user?.display_name) : ('You')} have {user?.products?.length || 0} listing(s)</h5></div>
                                                     <div className='col-right'>
-                                                        <SearchBox placeholder='Search listings...' />
+                                                        <SearchBox
+                                                            placeholder='Search item name...'
+                                                            value={searchTerm}
+                                                            onChange={handleSearchChange}
+                                                        />
                                                         <Filters />
                                                     </div>
                                                 </div>
                                                 <div className="prod-listing-container">
                                                     <ListingCard
-                                                        data={products || []}
+                                                        data={filteredListings || []}
                                                         city={user?.city || ''}
                                                         region={user?.region || ''}
                                                         authenticatedUser={authenticatedUser}

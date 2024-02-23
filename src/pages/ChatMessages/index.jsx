@@ -142,16 +142,16 @@ const ChatMessages = () => {
 
                 setAllChats(response.data);
                 setFilteredChat(response.data);
+                
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
         };
 
-
+        
 
         fetchAllUserChat();
     }, []); // Include sender_id in dependency array if it can change
-
 
 
 
