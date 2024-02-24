@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import axios from '../../apicalls/axios'
 import { useLocation } from 'react-router-dom'
 import useAuthentication from '../../hooks/authHook'
 import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
-import { Link } from 'react-router-dom'
 import SearchResultFilter from '../../components/ProductFilter/SearchResultFilter'
 import ProductCard from '../../components/Cards/ProductCard'
 import './style.scss'

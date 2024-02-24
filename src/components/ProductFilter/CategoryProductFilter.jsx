@@ -129,8 +129,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      condition: [],
-      sort: '',
+      // condition: [],
+      // sort: '',
       applied: false, // Reset the applied property
     }));
 

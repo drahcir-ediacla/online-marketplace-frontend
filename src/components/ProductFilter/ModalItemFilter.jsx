@@ -7,24 +7,31 @@ import RadioButton from '../FormField/RadioButton'
 import CheckBox from '../FormField/CheckBox/CheckBox'
 import Input from '../FormField/Input'
 
-const ModalFilter = ({ onClick, className }) => {
+const ModalItemFilter = ({ className }) => {
 
     const [activeTab, setActiveTab] = useState(0);
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
     };
 
 
+    const toggleModal = () => {
+        setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+    };
+
     return (
         <>
-            <button className={`custom-filter-button ${className}`} onClick={onClick}>
+            <button className={`custom-filter-button ${className}`} onClick={toggleModal}>
                 <span>Filters</span><div className="svg-style"><FilterIcon /></div>
             </button>
+            {isModalOpen && (
             <div className="item-filter-modal-container">
                 <div className="item-filter-modal-box">
                     <div className="item-filter-modal-row1">
-                        <button className='closebtn' onClick={onClick}>
+                        <button className='closebtn' onClick={toggleModal}>
                             <i class='fa fa-times'></i>
                         </button>
                     </div>
@@ -158,8 +165,9 @@ const ModalFilter = ({ onClick, className }) => {
                     </div>
                 </div>
             </div>
+            )}
         </>
     )
 }
 
-export default ModalFilter
+export default ModalItemFilter

@@ -11,7 +11,7 @@ import ProfileCard from '../../components/Cards/ProfileCard'
 import FollowerCard from '../../components/Cards/FollowerCard'
 import FollowingCard from '../../components/Cards/FollowingCard'
 import SearchBox from '../../components/SearchBox'
-import ModalFilter from '../../components/ProductFilter/ModalFilter'
+import ModalItemFilter from '../../components/ProductFilter/ModalItemFilter'
 import ListingCard from '../../components/Cards/ListingCard'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import Pagination from '../../components/Pagination/Pagination'
@@ -31,6 +31,7 @@ const ProfilePage = ({ userId }) => {
     const [wishlistCount, setWishlistCount] = useState({});
 
     const [searchTerm, setSearchTerm] = useState('')
+
 
 
 
@@ -153,6 +154,7 @@ const ProfilePage = ({ userId }) => {
     };
 
 
+    
 
     const handleSearchChange = (e) => {
         const searchTerm = e.target.value;
@@ -231,7 +233,7 @@ const ProfilePage = ({ userId }) => {
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
-                                                        <ModalFilter />
+                                                        <ModalItemFilter />
                                                     </div>
                                                 </div>
                                                 <div className="prod-listing-container">
