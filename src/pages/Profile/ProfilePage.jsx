@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from '../../apicalls/axios'
-import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import './style.scss'
 import customerReviewsData from '../../data/customerReviewsData.json'
-import { Setloader } from '../../redux/reducer/loadersSlice'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import ProfileCard from '../../components/Cards/ProfileCard'
@@ -25,14 +23,13 @@ const ProfilePage = ({ userId }) => {
     const [user, setUser] = useState(null);
     const [authenticatedUser, setAuthenticatedUser] = useState(null);
     const [err, setErr] = useState(false);
-    const dispatch = useDispatch();
 
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
 
     const [searchTerm, setSearchTerm] = useState('')
 
-
+    console.log('user:', user)
 
 
     const addToWishlist = (productId) => {
@@ -56,44 +53,45 @@ const ProfilePage = ({ userId }) => {
     };
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            dispatch(Setloader(true));
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         dispatch(Setloader(true));
 
-            try {
-                // Fetch the user's profile data
-                const response = await axios.get(`/api/user/${id}`);
+    //         try {
+    //             // Fetch the user's profile data
+    //             const response = await axios.get(`/api/user/${id}`);
 
-                setUser(response.data);
-                setFilteredListings(response.data?.products)
-                console.log('setFilteredListings:', setFilteredListings)
+    //             setUser(response.data);
+    //             setFilteredListings(response.data?.products)
+                
 
-                // Fetch the authenticated user's data
-                const authResponse = await axios.get('/auth/check-auth');
-                setAuthenticatedUser(authResponse.data.user);
+    //             // Fetch the authenticated user's data
+    //             const authResponse = await axios.get('/auth/check-auth');
+    //             setAuthenticatedUser(authResponse.data.user);
 
-                dispatch(Setloader(false));
-            } catch (error) {
-                dispatch(Setloader(false));
-                console.error('Error fetching data:', error);
+    //             dispatch(Setloader(false));
+    //         } catch (error) {
+    //             dispatch(Setloader(false));
+    //             console.error('Error fetching data:', error);
 
-                // Check if the error is due to unauthorized access
-                if (error.response && error.response.status === 401) {
-                    console.error('User not authenticated');
-                    // Handle unauthorized access, e.g., redirect to login
-                } else {
-                    // Handle other errors
-                    setErr(true); // Depending on your requirements
-                }
-            }
-        };
+    //             // Check if the error is due to unauthorized access
+    //             if (error.response && error.response.status === 401) {
+    //                 console.error('User not authenticated');
+    //                 // Handle unauthorized access, e.g., redirect to login
+    //             } else {
+    //                 // Handle other errors
+    //                 setErr(true); // Depending on your requirements
+    //             }
+    //         }
+    //     };
 
-        fetchData();
-    }, [id, dispatch]);
+    //     fetchData();
+    // }, [id, dispatch]);
 
 
     const allProducts = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
     const [filteredListings, setFilteredListings] = useState(allProducts)
+    console.log('filteredListings:', filteredListings)
 
 
     // Use useCallback to memoize the function
@@ -233,7 +231,13 @@ const ProfilePage = ({ userId }) => {
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
-                                                        <ModalItemFilter />
+                                                        <ModalItemFilter 
+                                                        userId={id}
+                                                        userData={setUser}
+                                                        filteredListings={setFilteredListings}
+                                                        authenticatedUser={setAuthenticatedUser}
+                                                        err={setErr}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="prod-listing-container">

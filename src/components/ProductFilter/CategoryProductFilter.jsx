@@ -22,7 +22,6 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     maxPrice: '',
   })
 
-  const [filtersApplied, setFiltersApplied] = useState(false);
 
   const [currentCategory, setCurrentCategory] = useState(categoryId);
   const containerRef = useRef(null);
@@ -281,7 +280,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
                       onChange={handlePriceChange}
                       onKeyPress={handleEnterKeyPress}
                       className='input-price-filter'
-                      placeholder='Minimum' />
+                      placeholder='Minimum'
+                    />
                   </div>
                   -
                   <div className='input-price-filter-container'>
@@ -293,7 +293,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
                       onChange={handlePriceChange}
                       onKeyPress={handleEnterKeyPress}
                       className='input-price-filter'
-                      placeholder='Maximum' />
+                      placeholder='Maximum'
+                    />
                   </div>
                 </div>
                 <hr />
