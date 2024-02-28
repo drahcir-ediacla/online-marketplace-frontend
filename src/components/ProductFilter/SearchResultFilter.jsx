@@ -137,6 +137,13 @@ const CategoryProductFilter = ({ searchTerm, searchFilterLocation, searchResults
     };
 
 
+    const handleEnterKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            applyFilters();
+        }
+    };
+
+
     return (
         <>
             <div className='prod-filter-container' ref={containerRef}>
@@ -259,12 +266,28 @@ const CategoryProductFilter = ({ searchTerm, searchFilterLocation, searchResults
                                 <div className='filter-price-row1'>
                                     <div className='input-price-filter-container'>
                                         <span className='php-symbol'>₱</span>
-                                        <Input type='number' name="minPrice" value={filterPrice.minPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Minimum' />
+                                        <Input
+                                            type='number'
+                                            name="minPrice"
+                                            value={filterPrice.minPrice}
+                                            onChange={handlePriceChange}
+                                            onKeyPress={handleEnterKeyPress}
+                                            className='input-price-filter'
+                                            placeholder='Minimum'
+                                        />
                                     </div>
                                     -
                                     <div className='input-price-filter-container'>
                                         <span className='php-symbol'>₱</span>
-                                        <Input type='number' name="maxPrice" value={filterPrice.maxPrice} onChange={handlePriceChange} className='input-price-filter' placeholder='Maximum' />
+                                        <Input
+                                            type='number'
+                                            name="maxPrice"
+                                            value={filterPrice.maxPrice}
+                                            onChange={handlePriceChange}
+                                            onKeyPress={handleEnterKeyPress}
+                                            className='input-price-filter'
+                                            placeholder='Maximum'
+                                        />
                                     </div>
                                 </div>
                                 <hr />

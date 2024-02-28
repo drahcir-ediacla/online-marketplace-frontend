@@ -21,7 +21,7 @@ import BtnClear from '../../components/Button/BtnClear';
 const AddListing = () => {
 
   const dispatch = useDispatch()
-  const { user } = useAuthentication();
+  const {user} = useAuthentication();
   const userId = user?.id;
   console.log('userId:', userId)
   const [activeRadio, setActiveRadio] = useState(0);
@@ -177,11 +177,8 @@ const AddListing = () => {
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [selectedVideos, setSelectedVideos] = useState([]);
-  const [videoPreviews, setVideoPreviews] = useState([]);
 
   const maxImages = 10; // Define the maximum number of images allowed
-  const maxVideos = 1; // Allow only one video
 
   const handleImgInputClick = () => {
     document.getElementById('imgUpload').click();
@@ -225,46 +222,10 @@ const AddListing = () => {
     setSelectedImages(updatedImages);
   };
 
-
-  const handleVideoInputClick = () => {
-    document.getElementById('videoUpload').click();
-  };
-
-  const handleVideoChange = (e) => {
-    const files = e.target.files;
-
-    if (files.length > maxVideos) {
-      alert(`You can only select up to ${maxVideos} video.`);
-      return;
-    }
-
-    const video = files[0];
-
-    if (!video.type.startsWith('video/')) {
-      alert('Only video files are allowed.');
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      setVideoPreviews([e.target.result]);
-      setSelectedVideos([video]);
-    };
-
-    reader.readAsDataURL(video);
-  };
-
-
-  const removeVideo = () => {
-    setVideoPreviews([]);
-    setSelectedVideos([]);
-  };
-
-
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+
 
     // Check if the title is provided and meets the minimum length requirement
     if (!productDetails.product_name) {
@@ -287,21 +248,52 @@ const AddListing = () => {
       return;
     }
 
-    // Handle image URLs
-    const imageUrls = await handleFileUpload(selectedImages, 'image');
+    // Create an array to store image URLs
+    const imageUrls = [];
 
-    // Handle video URL
-    const videoUrls = await handleFileUpload(selectedVideos, 'video');
+    // Create a FormData object to send the form data
+    const formData = new FormData();
+    formData.append('upload_preset', 'auwcvbw0');
+    formData.append('cloud_name', 'yogeek-cloudinary');
+    formData.append('folder', 'product_images');
 
-    // Combine image and video URLs into productDetails
-    const productDetailsWithFiles = {
-      ...productDetails,
-      fileUrls: [...imageUrls, ...videoUrls],
-    };
+    // Append product details to the FormData
+    for (const key in productDetails) {
+      formData.append(key, productDetails[key]);
+    }
 
+    // Upload selected images to Cloudinary
+    for (let i = 0; i < selectedImages.length; i++) {
+      formData.append('file', selectedImages[i]); // Append images directly to the main FormData
+
+      try {
+        dispatch(Setloader(true))
+        const response = await fetch(
+          'https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload',
+          {
+            method: 'POST',
+            body: formData, // Use the main FormData
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          const imageUrl = data.secure_url; // Get the secure URL from Cloudinary response
+          imageUrls.push(imageUrl); // Add the URL to the array
+        } else {
+          console.error('Error uploading image to Cloudinary:', response.statusText);
+        }
+      } catch ({ error, response }) {
+        console.error('Error uploading image to Cloudinary:', error);
+        console.log('Response:', response);
+      }
+    }
+
+    // After all images are uploaded, add the image URLs to the productDetails
+    productDetails.imageUrls = imageUrls;
 
     // Send the form data (including image URLs) to your backend
-    axios.post('/api/addnewproduct', productDetailsWithFiles)
+    axios.post('/api/addnewproduct', productDetails)
       .then((response) => {
         dispatch(Setloader(true))
         console.log('Product added successfully:', response.data);
@@ -320,48 +312,6 @@ const AddListing = () => {
 
   const ProfilePage = () => {
     window.location.href = `/profile/${userId}`;
-  };
-
-
-  const handleFileUpload = async (files, fileType) => {
-    const fileUrls = [];
-
-    const formData = new FormData();
-    formData.append('upload_preset', 'auwcvbw0');
-    formData.append('cloud_name', 'yogeek-cloudinary');
-    formData.append('folder', fileType === 'image' ? 'product_images' : 'product_videos');
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append('file', files[i]);
-
-      try {
-        dispatch(Setloader(true))
-        const response = await fetch(
-          `https://api.cloudinary.com/v1_1/yogeek-cloudinary/${fileType}/upload`,
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          const fileUrl = data.secure_url;
-          fileUrls.push(fileUrl);
-        } else {
-          console.error(`Error uploading ${fileType} to Cloudinary:`, response.statusText);
-        }
-      } catch (error) {
-        console.error(`Error uploading ${fileType} to Cloudinary:`, error.message);
-      } finally {
-        console.log(`File ${i + 1} processed`);
-      }
-    }
-
-    console.log(`Final fileUrls array for ${fileType}:`, fileUrls);
-    productDetails.fileUrls = fileUrls;
-    console.log(`productDetails.fileUrls:`, productDetails.fileUrls);
-    return fileUrls;
   };
 
 
@@ -427,38 +377,17 @@ const AddListing = () => {
                   </div>
                   <div style={{ display: activeRadio === 0 ? 'block' : 'none' }}>
                     <div className='upload-video-content'>
-                      {videoPreviews.length > 0 ? (
-                        <div className='video-preview-container'>
-                          <video width="498" height='280' controls>
-                            <source src={videoPreviews[0]} type="video/mp4" />
-                            Your browser does not support the video tag.
-                          </video>
-                          <div className='remove-video-preview' onClick={removeVideo}></div>
-                        </div>
-                      ) : (
-                        <>
-                          <label htmlFor='videoUpload'>
-                            <button type='button' className='upload-video-box' onClick={handleVideoInputClick}>
-                              <div className='addlisting-upload-vid'><UploadVidIcon /></div>
-                              <span>Add Video</span>
-                            </button>
-                          </label>
-                          <div>
-                            <ul>
-                              <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
-                              <li>Supported Format: mp4</li>
-                              <li>New Video might take up to 36 hrs to be approved</li>
-                            </ul>
-                          </div>
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        id="videoUpload"
-                        accept="video/*"
-                        style={{ display: 'none' }}
-                        onChange={handleVideoChange}
-                      />
+                      <div className='upload-video-box'>
+                        <div className='addlisting-upload-vid'><UploadVidIcon /></div>
+                        <span>Add Video</span>
+                      </div>
+                      <div>
+                        <ul>
+                          <li>Min size: 480x480 px. max video length: 60 seconds. max file size: 100MB.</li>
+                          <li>Supported Format: mp4</li>
+                          <li>New Video might take up to 36 hrs to be approved</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>

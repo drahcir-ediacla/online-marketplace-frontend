@@ -57,6 +57,10 @@ const ProductDetails = ({ userId }) => {
         window.location.href = `/messages/${chatId}`;
     }
 
+    const imageUrls = product?.images?.map(image => image.image_url) || [];
+    const videoUrls = product?.videos?.map(video => video.video_url) || [];
+    const gallery = [...imageUrls, ...videoUrls];
+
 
     useEffect(() => {
         // Function to check if chat exists and set the chat_id state
@@ -276,7 +280,7 @@ const ProductDetails = ({ userId }) => {
     const UpdateListing = () => {
         window.location.href = `/updatelisting/${id}/${encodeURIComponent(product_name)}`;
     };
-    
+
 
 
     return (
@@ -290,7 +294,7 @@ const ProductDetails = ({ userId }) => {
                     </div>
                     <div className='row2'>
                         <div className='col-left'>
-                            <ItemImgGallery gallery={product.images?.map(image => image.image_url)} />
+                            <ItemImgGallery gallery={gallery} />
                         </div>
                         <div className='col-right'>
                             <div className='prod-details-title'><span>{product.product_name}</span></div>

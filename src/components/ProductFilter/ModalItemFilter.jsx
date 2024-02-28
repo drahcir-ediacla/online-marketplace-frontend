@@ -132,15 +132,15 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
 
 
     const resetFilters = () => {
-        setFilterPrice({
-            minPrice: '',
-            maxPrice: '',
-        });
+        // setFilterPrice({
+        //     minPrice: '',
+        //     maxPrice: '',
+        // });
 
-        setFilters({
-            condition: [],
-            sort: '',
-        });
+        // setFilters({
+        //     condition: [],
+        //     sort: '',
+        // });
 
         const minPriceInput = document.querySelector('input[name="minPrice"]');
         const maxPriceInput = document.querySelector('input[name="maxPrice"]');
@@ -164,6 +164,7 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
     const handleEnterKeyPress = (event) => {
         if (event.key === 'Enter') {
             applyFilters();
+            setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
         }
     };
 
@@ -319,9 +320,10 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
                                                 name="minPrice"
                                                 value={tempFilterPrice.minPrice}
                                                 onChange={handlePriceChange}
-                                                onKeyPress={() => { handleEnterKeyPress(); toggleModal(); }}
+                                                onKeyPress={handleEnterKeyPress}
                                                 className='input-price-filter'
-                                                placeholder='Minimum' />
+                                                placeholder='Minimum'
+                                            />
                                         </div>
                                         -
                                         <div className='input-price-range-filter-container'>
@@ -331,19 +333,18 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
                                                 name="maxPrice"
                                                 value={tempFilterPrice.maxPrice}
                                                 onChange={handlePriceChange}
-                                                onKeyPress={() => { handleEnterKeyPress(); toggleModal(); }}
+                                                onKeyPress={handleEnterKeyPress}
                                                 className='input-price-filter'
-                                                placeholder='Maximum' />
+                                                placeholder='Maximum'
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="item-filter-modal-row3">
-                            <BtnClear label='Reset' onClick={() => {resetFilters(); toggleModal(); }} />
+                            <BtnClear label='Reset All' onClick={resetFilters} />
                             <BtnGreen label='Apply' onClick={() => { applyFilters(); toggleModal(); }} onKeyPress={handleEnterKeyPress} />
-                            
-
                         </div>
                     </div>
                 </div>
