@@ -59,7 +59,9 @@ const ProductDetails = ({ userId }) => {
 
     const imageUrls = product?.images?.map(image => image.image_url) || [];
     const videoUrls = product?.videos?.map(video => video.video_url) || [];
-    const gallery = [...imageUrls, ...videoUrls];
+    const youtubeUrls = product?.youtube_link || null;
+    const gallery = [...imageUrls, ...videoUrls, youtubeUrls].filter(url => url !== null);
+    console.log('gallery:', gallery)
 
 
     useEffect(() => {

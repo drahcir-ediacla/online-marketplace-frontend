@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactImageMagnify from 'react-image-magnify';
 import './style.scss';
 
 const ItemImgGallery = ({ gallery, index }) => {
   const [productImgSrc, setProductImgSrc] = useState(gallery[0]);
   const [thumbIndex, setThumbIndex] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [mediaType, setMediaType] = useState('image');
+  const [mediaType, setMediaType] = useState('image' || 'youtube');
   const thumbHeight = 76; // Update with the actual height of prod-img-thumb
 
   const thumbCarouselRef = useRef();
+  const portalId = 'customPortal';
+
 
 
   const handleSmallImgClick = (index) => {
@@ -52,8 +55,9 @@ const ItemImgGallery = ({ gallery, index }) => {
   const shouldHideSelectedImgArrows = gallery.length <= 1;
 
   const getMediaType = (url) => {
-    return url.endsWith('.mp4') ? 'video' : 'image';
+    return url.endsWith('.mp4') ? 'video' : (url.includes('youtube.com') ? 'youtube' : 'image');
   };
+
 
 
   //This prevents the right-click context menu from appearing
@@ -61,7 +65,7 @@ const ItemImgGallery = ({ gallery, index }) => {
     event.preventDefault();
   };
 
-  
+
 
   return (
     <>
@@ -80,19 +84,28 @@ const ItemImgGallery = ({ gallery, index }) => {
                     alt={`Small Img ${index + 1}`}
                     className='prod-img-thumb'
                     onClick={() => handleSmallImgClick(index)}
+                    onContextMenu={handleContextMenu}
                   />
                 ) : (
-                  <div className='video-thumb-container'>
-                    <video
-                      src={mediaSrc}
-                      alt={`Video ${index + 1}`}
-                      className='prod-vid-thumb'
-                      onClick={() => handleSmallImgClick(index)}
-                    />
-                    <div className='video-icon-container' onClick={() => handleSmallImgClick(index)} >
-                      <i className='fa fa-play-circle' />
+                  getMediaType(mediaSrc) === 'youtube' ? (
+                    <>
+                      <div onClick={() => handleSmallImgClick(index)} className="youtube-container" alt={`Youtube ${index + 1}`}>
+                      <i className='fa fa-youtube-play' />
+                      </div>
+                    </>
+                  ) : (
+                    <div className='video-thumb-container'>
+                      <video
+                        src={mediaSrc}
+                        alt={`Video ${index + 1}`}
+                        className='prod-vid-thumb'
+                        onClick={() => handleSmallImgClick(index)}
+                      />
+                      <div className='video-icon-container' onClick={() => handleSmallImgClick(index)} >
+                        <i className='fa fa-play-circle' />
+                      </div>
                     </div>
-                  </div>
+                  )
                 )}
               </>
             ))}
@@ -107,15 +120,37 @@ const ItemImgGallery = ({ gallery, index }) => {
             {gallery.map((mediaSrc, index) => (
               <>
                 {getMediaType(mediaSrc) === 'image' ? (
-                  <img
+                  <ReactImageMagnify
                     key={index}
-                    id="ProductImg"
-                    src={mediaSrc}
-                    className='selected-prod-img'
-                    alt={`Img ${index + 1}`}
-                    onContextMenu={handleContextMenu}
+                    {...{
+                      smallImage: {
+                        alt: `Img ${index + 1}`,
+                        isFluidWidth: true,
+                        src: mediaSrc,
+                      },
+                      largeImage: {
+                        src: mediaSrc,
+                        width: 1200,
+                        height: 1800,
+                      },
+                      enlargedImageContainerStyle: {
+                        zIndex: "1500",
+                      },
+                      enlargedImageContainerDimensions: {
+                        width: 900,
+                        height: 550,
+                      },
+                      id: `ProductImg_${index}`,  // Unique ID for each ReactImageMagnify component
+                      imageClassName: 'selected-prod-img',
+                      enlargedImageClassName: "selected-prod-large-img",
+                      alt: `Img ${index + 1}`,
+                      enlargedImagePortalId: portalId,  // Pass the portalId variable
+                    }}
                   />
-
+                ) : getMediaType(mediaSrc) === 'youtube' ? (
+                  <div>
+                    <iframe width="444" height="444" src={mediaSrc} frameborder="0" allowfullscreen ></iframe>
+                  </div>
                 ) : (
                   <div className='video-preview-container'>
                     <video
@@ -127,15 +162,16 @@ const ItemImgGallery = ({ gallery, index }) => {
                       controls
                       controlslist="nodownload"
                       onContextMenu={handleContextMenu}
-                    >
-                    </video>
+                    />
                   </div>
                 )}
+
               </>
             ))}
           </div>
           {!shouldHideSelectedImgArrows && <button className='selected-img-arrow right-arrow' onClick={nextSlide} disabled={isAtLastImage}></button>}
         </div>
+        <div className='custom-portal' id={portalId}></div>
       </div>
     </>
   );

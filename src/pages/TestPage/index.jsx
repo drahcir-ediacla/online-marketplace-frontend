@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
-
+import ItemImgGallery from "../../components/Gallery/ItemImgGallery";
 
 
 
@@ -16,6 +16,7 @@ const LoadingSpinner = () => {
   return (
     <>
       <ImageLoadingSpinner style={spinnerStyle}/>
+      <ItemImgGallery />
     </>
   )
 
