@@ -412,9 +412,15 @@ const ProductDetails = ({ userId }) => {
                                             ) : (
                                                 <>
                                                     {chatId ? (
-                                                        <>
-                                                            <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
-                                                        </>
+                                                        productStatus === 'Available' ? (
+                                                            <>
+                                                                <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <BtnGreen label='Sold - View Chat' onClick={viewChat} className="view-chat-btn" />
+                                                            </>
+                                                        )
                                                     ) : (
                                                         productStatus === 'Available' ? (
                                                             <>
