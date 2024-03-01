@@ -6,6 +6,7 @@ import './style.scss';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg';
 import BtnGreen from '../Button/BtnGreen';
 import DeleteItemModal from '../Modal/DeleteItemModal';
+import MarkSoldModal from '../Modal/MarkSoldModal';
 import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
 import { ReactComponent as ThreeDots } from '../../assets/images//three-dots.svg';
@@ -18,7 +19,8 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
 
   const [productStates, setProductStates] = useState({});
   const [isOptionOpen, setIsOptionOpen] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [soldModalOpen, setSoldModalOpen] = useState(false);
   const dropDownOption = useRef(null);
   const [modalProductId, setModalProductId] = useState(null);
 
@@ -29,18 +31,18 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
       if (event.target.closest('.three-dots') || event.target.closest('.option-manage-listed-items')) {
         return;
       }
-  
+
       // Close the options for all products
       setIsOptionOpen({});
     };
-  
+
     document.addEventListener('click', handleGlobalClick);
-  
+
     return () => {
       document.removeEventListener('click', handleGlobalClick);
     };
   }, []);
-  
+
 
 
 
@@ -101,20 +103,25 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
     }));
   };
 
-  
-  const toggleModal = (productId) => {
-    setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+
+  const toggleDeleteModal = (productId) => {
+    setDeleteModalOpen((prevDeleteModalOpen) => !prevDeleteModalOpen);
     setModalProductId(productId);  // Add this line to set the productId in state
   };
 
 
+  const toggleSoldModal = (productId) => {
+    setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
+    setModalProductId(productId);
+  };
 
 
 
   return (
     <>
-      
-      {isModalOpen && <DeleteItemModal onClick={() => toggleModal(modalProductId)} productId={modalProductId} userId={userId} />}
+
+      {deleteModalOpen && <DeleteItemModal onClick={() => toggleDeleteModal(modalProductId)} productId={modalProductId} userId={userId} />}
+      {soldModalOpen && <MarkSoldModal onClick={() => toggleSoldModal(modalProductId)} productId={modalProductId} userId={userId} />}
       {data.map((product, index) => {
         const handleWishlistClick = async (productId) => {
           try {
@@ -179,9 +186,9 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
                   {isOptionOpen[product.id] && (
                     <div className='option-manage-listed-items' ref={dropDownOption}>
                       <ul>
-                        <li onClick={() => window.location.href=`/updatelisting/${product.id}/${encodeURIComponent(product.product_name)}`}><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
-                        <li className='mark-sold'><div className='check-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
-                        <li onClick={() => toggleModal(product.id)}><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
+                        <li onClick={() => window.location.href = `/updatelisting/${product.id}/${encodeURIComponent(product.product_name)}`}><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
+                        <li className='mark-sold' onClick={() => toggleSoldModal(product.id)}><div className='check-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
+                        <li onClick={() => toggleDeleteModal(product.id)}><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
                       </ul>
                     </div>
                   )}

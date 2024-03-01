@@ -182,11 +182,35 @@
                 .selling-item-container {
                     display: flex;
                     gap: 11px;
+                    
+                    .chat-selling-item-img-box {
+                        position: relative;
+                        img {
+                            width: 65px;
+                            height: 65px;
+                        }
+                        .sold-ribbon-label {
+                            position: absolute;
+                            width: 65px;
+                            height: 65px;
+                            color: white;
+                            font-weight: 500;
+                            overflow: hidden;
+                            letter-spacing: 1px;
 
-                    img {
-                        width: 65px;
-                        height: 65px;
+                            span {
+                                position: absolute;
+                                text-align: center;
+                                width: 100px;
+                                background-color: rgba(0, 0, 0, 0.4);
+                                transform: rotate(-45deg);
+                                left: -20px;
+                                top: 23px;
+                            }
+                        }
+
                     }
+                    
 
                     .chat-item-info {
                         display: flex;

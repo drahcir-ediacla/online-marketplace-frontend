@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './style.scss'
-import { ReactComponent as ExclamationIcon } from '../../assets/images/exclamation-regular.svg'
+import { DeleteProductById } from '../../apicalls/products';
+import { Setloader } from '../../redux/reducer/loadersSlice';
+import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
 
-const DeleteItemModal = ({ onClick, productId, userId }) => {
+const MarkSoldModal = ({ onClick, productId, userId }) => {
 
     const dispatch = useDispatch()
     const [isModalOpen, setIsModalOpen] = useState(true);
@@ -21,7 +23,7 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
         };
     }, [isModalOpen]);
 
-    
+
 
 
     return (
@@ -34,13 +36,13 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
                                 <i class='fa fa-times'></i>
                             </button>
                         </div>
-                        <div className='exclamation-icon'><ExclamationIcon /></div>
+                        <div className='modal-sold-icon'><CheckIcon /></div>
                         <div className='are-you-sure'>
-                            <h5>Are you sure you want to delete this item?</h5>
-                            <span>This item will be deleted immediately. You can't undo this action.</span>
+                            <h5>Are you sure you want to mark your listing as Sold?</h5>
+                            <span>You can’t undo this action. <br></br>Buyers can no longer chat with you or make offers for this listing.</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='yes-button' label='Yes, Delete' />
+                            <BtnGreen className='mark-sold-button' label={`Yes, Mark as Sold`} />
                             <BtnClear label='No, Cancel' onClick={onClick} />
                         </div>
                     </div>
@@ -51,4 +53,4 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
 }
 
 
-export default DeleteItemModal
+export default MarkSoldModal

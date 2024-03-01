@@ -22,6 +22,7 @@ import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
+import MarkSoldModal from '../../components/Modal/MarkSoldModal';
 import Breadcrumb from '../../components/Breadcrumb'
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -43,7 +44,8 @@ const ProductDetails = ({ userId }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [soldModalOpen, setSoldModalOpen] = useState(false);
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
     const [categories, setCategories] = useState([]);
@@ -53,6 +55,7 @@ const ProductDetails = ({ userId }) => {
     const product_id = product?.id;
     const [chatId, setChatId] = useState(null);
     const isProductOwner = product?.seller.id === user?.id
+    const productStatus = product?.status
     const viewChat = () => {
         window.location.href = `/messages/${chatId}`;
     }
@@ -274,8 +277,12 @@ const ProductDetails = ({ userId }) => {
     };
 
 
-    const toggleModal = () => {
-        setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
+    const toggleDeleteModal = () => {
+        setDeleteModalOpen((prevDeleteModalOpen) => !prevDeleteModalOpen);
+    };
+
+    const toggleSoldModal = () => {
+        setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
     };
 
 
@@ -287,7 +294,8 @@ const ProductDetails = ({ userId }) => {
 
     return (
         <>
-            {isModalOpen && <DeleteItemModal onClick={toggleModal} productId={id} userId={user.id} />}
+            {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
+            {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} userId={user.id} />}
             <Header />
             <div className='container '>
                 <div className="product-details-body">
@@ -301,7 +309,10 @@ const ProductDetails = ({ userId }) => {
                         <div className='col-right'>
                             <div className='prod-details-title'><span>{product.product_name}</span></div>
                             <div className='prod-details-price'><span>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span></div>
-                            <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
+                                <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
+                            </div>
                             <div className='prod-details-deal-method'>
                                 <div className='col1'><b>Deal Method:</b></div>
                                 <div className='col2'>
@@ -385,10 +396,16 @@ const ProductDetails = ({ userId }) => {
                                                     <button className='manage-listing-btn edit-listing' onClick={UpdateListing}>
                                                         <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
                                                     </button>
-                                                    <button className='manage-listing-btn mark-sold-listing'>
-                                                        <div className='sold-icon'><CheckIcon /></div><span>Mark as Sold</span>
-                                                    </button>
-                                                    <button className='manage-listing-btn delete-listing' onClick={toggleModal} >
+                                                    {productStatus === 'Available' ? (
+                                                        <button className='manage-listing-btn mark-sold-listing' onClick={toggleSoldModal}>
+                                                            <div className='sold-icon'><CheckIcon /></div><span>Mark as Sold</span>
+                                                        </button>
+                                                    ) : (
+                                                        <button className='manage-listing-btn item-sold' onClick={toggleSoldModal} disabled>
+                                                            <span>Item Sold</span>
+                                                        </button>
+                                                    )}
+                                                    <button className='manage-listing-btn delete-listing' onClick={toggleDeleteModal} >
                                                         <div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span>
                                                     </button>
                                                 </>
@@ -399,44 +416,52 @@ const ProductDetails = ({ userId }) => {
                                                             <BtnGreen label='View Chat' onClick={viewChat} className="view-chat-btn" />
                                                         </>
                                                     ) : (
-                                                        <>
-                                                            <div className='row3'>
-                                                                <textarea
-                                                                    cols="44"
-                                                                    rows="5"
-                                                                    value={input}
-                                                                    onChange={(e) => setInput(e.target.value)}
-                                                                    placeholder='Write a custom message...'
-                                                                    className='custom-message'></textarea>
-                                                            </div>
-                                                            <div className='row4'>
-                                                                <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
-                                                                <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
-                                                                <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
-                                                                <BtnGreen
-                                                                    label="Send Message"
-                                                                    className='send-message'
-                                                                    onClick={sendMessage}
-                                                                    disabled={!input.trim()} // Disable if input is empty or contains only whitespace
-                                                                />
-                                                                <div className='input-make-offer-container'>
-                                                                    <span className='php-symbol'>₱</span>
-                                                                    <Input
-                                                                        type='number'
-                                                                        className='input-make-offer'
-                                                                    />
-                                                                    <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                        productStatus === 'Available' ? (
+                                                            <>
+                                                                <div className='row3'>
+                                                                    <textarea
+                                                                        cols="44"
+                                                                        rows="5"
+                                                                        value={input}
+                                                                        onChange={(e) => setInput(e.target.value)}
+                                                                        placeholder='Write a custom message...'
+                                                                        className='custom-message'></textarea>
                                                                 </div>
-                                                            </div>
-                                                        </>
+                                                                <div className='row4'>
+                                                                    <BtnClear label="Is this item still available?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is this item still available?')} />
+                                                                    <BtnClear label="Is the price negotiable?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Is the price negotiable?')} />
+                                                                    <BtnClear label="Do you deliver?" className='prod-details-inquiry-form-btn' onClick={() => handleBtnClearClick('Do you deliver?')} />
+                                                                    <BtnGreen
+                                                                        label="Send Message"
+                                                                        className='send-message'
+                                                                        onClick={sendMessage}
+                                                                        disabled={!input.trim()} // Disable if input is empty or contains only whitespace
+                                                                    />
+                                                                    <div className='input-make-offer-container'>
+                                                                        <span className='php-symbol'>₱</span>
+                                                                        <Input
+                                                                            type='number'
+                                                                            className='input-make-offer'
+                                                                        />
+                                                                        <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className='signin-make-offer'>This item is already sold</div>
+                                                        )
                                                     )}
                                                 </>
                                             )}
                                         </>
                                     ) : (
-                                        <>
-                                            <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
-                                        </>
+                                        productStatus === 'Available' ? (
+                                            <>
+                                                <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
+                                            </>
+                                        ) : (
+                                            <div className='signin-make-offer'>This item is already sold</div>
+                                        )
                                     )}
 
                                 </div>

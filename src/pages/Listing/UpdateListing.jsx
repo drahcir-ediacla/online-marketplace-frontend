@@ -584,7 +584,20 @@ const AddListing = () => {
                                         </div>
                                     </div>
                                     <div style={{ display: activeRadio === 1 ? 'block' : 'none' }}>
-                                        <Input name='youtube_link' value={productDetails.youtube_link} placeholder='Paste your Youtube URL link here' className='input-youtube-link' onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })} />
+                                        <Input
+                                            name='youtube_link'
+                                            value={productDetails.youtube_link}
+                                            placeholder='Paste your Youtube URL link here'
+                                            className='input-youtube-link'
+                                            onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })}
+                                        />
+                                        <b>1. Extract Video ID from URL:</b>
+                                        <p>Extract the YouTube video ID from the video URL. For example, in the URL https://www.youtube.com/watch?v=VIDEO_ID, "VIDEO_ID" is the actual video ID.</p>
+
+                                        <b>2. Construct Embed URL:</b>
+                                        <p>Use the extracted video ID to construct the YouTube embed URL.</p>
+                                        <span>Sample URL basic structure:</span>
+                                        <p>https://www.youtube.com/embed/VIDEO_ID</p>
                                     </div>
                                 </div>
                             </div>

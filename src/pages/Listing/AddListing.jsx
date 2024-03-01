@@ -473,7 +473,8 @@ const AddListing = () => {
                     <p>Extract the YouTube video ID from the video URL. For example, in the URL https://www.youtube.com/watch?v=VIDEO_ID, "VIDEO_ID" is the actual video ID.</p>
 
                     <b>2. Construct Embed URL:</b>
-                    <p>Use the extracted video ID to construct the YouTube embed URL. The basic structure is as follow:</p>
+                    <p>Use the extracted video ID to construct the YouTube embed URL.</p>
+                    <span>Sample URL basic structure:</span>
                     <p>https://www.youtube.com/embed/VIDEO_ID</p>
                   </div>
                 </div>

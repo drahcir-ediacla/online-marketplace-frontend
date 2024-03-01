@@ -39,7 +39,7 @@
     .row2 {
         display: flex;
         justify-content: space-between;
-        margin-top: 30px;
+        margin-top: 20px;
 
         .prod-img-gallery {
             display: flex;
@@ -225,8 +225,16 @@
                     .mark-sold-listing {
                         color: var(--green-400);
                         .sold-icon {
+                            width: 17px;
+                            height: 17px;
                             stroke: var(--green-400);
                         }
+                    }
+
+                    .item-sold {
+                        font-weight: 500;
+                        color: white;
+                        background: var(--gray-300);
                     }
 
                     .delete-listing {
@@ -308,7 +316,7 @@
                         flex-direction: column;
                         gap: 7px;
                         align-items: center;
-                        margin: 20px 0 0 0;
+                        margin: 0;
 
                         .prod-details-inquiry-form-btn {
                             width: 100%;

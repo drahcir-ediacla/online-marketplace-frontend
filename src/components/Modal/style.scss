@@ -13,8 +13,8 @@
 
     .modal-box {
         background: white;
-        width: 416px;
-        height: 262px;
+        width: auto;
+        height: auto;
         margin: auto;
         border-radius: 8px;
 
@@ -46,16 +46,27 @@
             margin: auto;
         }
 
+        .modal-sold-icon {
+            width: 45px;
+            stroke: var(--gray-400);
+            margin: auto;
+        }
+
         .are-you-sure {
             text-align: center;
             margin-top: 25px;
+            padding: 0 20px 0 20px;
+
+            h5 {
+                font-weight: 600;
+            }
         }
 
         .buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
+            margin: 20px 20px 30px 20px;
 
             .yes-button{
                 background: red;
@@ -68,3 +79,7 @@
         }
     }
 }
+
+
+
+// MARK AS SOLD MODAL //

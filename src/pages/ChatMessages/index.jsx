@@ -37,6 +37,7 @@ const ChatMessages = () => {
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
+    const productStatus = productInfo?.status
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
     const [searchTerm, setSearchTerm] = useState('')
@@ -142,13 +143,13 @@ const ChatMessages = () => {
 
                 setAllChats(response.data);
                 setFilteredChat(response.data);
-                
+
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
         };
 
-        
+
 
         fetchAllUserChat();
     }, []); // Include sender_id in dependency array if it can change
@@ -479,14 +480,21 @@ const ChatMessages = () => {
                                 </div>
                                 <div className="chat-right-row2">
                                     <div className='selling-item-container'>
-                                        <Link
-                                            to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
-                                            className='chat-item-name'
-                                            target="_blank"
-                                            rel="noopener noreferrer" // Add these lines for security best practices
-                                        >
-                                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
-                                        </Link>
+                                            <Link
+                                                to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                                className='chat-selling-item-img-box'
+                                                target="_blank"
+                                                rel="noopener noreferrer" // Add these lines for security best practices
+                                            >
+                                                {productStatus === 'Sold' ? (
+                                                    <div className='sold-ribbon-label'>
+                                                    <span>SOLD</span>
+                                                </div>
+                                                ) : (
+                                                    null
+                                                )}
+                                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                            </Link>
                                         <div className='chat-item-info'>
                                             <Link
                                                 to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
