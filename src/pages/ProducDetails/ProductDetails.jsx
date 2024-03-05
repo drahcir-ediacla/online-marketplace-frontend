@@ -295,7 +295,7 @@ const ProductDetails = ({ userId }) => {
     return (
         <>
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
-            {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} userId={user.id} />}
+            {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
             <Header />
             <div className='container '>
                 <div className="product-details-body">

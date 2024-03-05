@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import './style.scss'
-import { DeleteProductById } from '../../apicalls/products';
-import { Setloader } from '../../redux/reducer/loadersSlice';
+import { MarkSoldProduct } from '../../apicalls/products';
 import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
 
-const MarkSoldModal = ({ onClick, productId, userId }) => {
+const MarkSoldModal = ({ onClick, productId, productName, userId }) => {
 
-    const dispatch = useDispatch()
     const [isModalOpen, setIsModalOpen] = useState(true);
 
 
@@ -23,6 +20,17 @@ const MarkSoldModal = ({ onClick, productId, userId }) => {
         };
     }, [isModalOpen]);
 
+
+    const MarkSoldItem = async () => {
+        try {
+            const response = await MarkSoldProduct(productId, productName);
+            window.location.href = `/productdetails/${productId}/${productName}`;
+            return response
+            
+        } catch (error) {
+            return error
+        }
+    }
 
 
 
@@ -42,7 +50,7 @@ const MarkSoldModal = ({ onClick, productId, userId }) => {
                             <span>You can’t undo this action. <br></br>Buyers can no longer chat with you or make offers for this listing.</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='mark-sold-button' label={`Yes, Mark as Sold`} />
+                            <BtnGreen className='mark-sold-button' label={`Yes, Mark as Sold`} onClick={MarkSoldItem} />
                             <BtnClear label='No, Cancel' onClick={onClick} />
                         </div>
                     </div>

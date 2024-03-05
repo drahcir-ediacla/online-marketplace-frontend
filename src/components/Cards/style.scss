@@ -336,7 +336,17 @@
                         color: var(--green-400);
 
                         .check-icon {
+                            width: 17px;
                             stroke: var(--green-400);
+                        }
+                    }
+
+                    .item-sold {
+                        color: var(--gray-300);
+
+                        .check-icon {
+                            width: 17px;
+                            stroke: var(--gray-300);
                         }
                     }
 

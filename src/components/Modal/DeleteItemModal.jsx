@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './style.scss'
+import { DeleteProductById } from '../../apicalls/products';
 import { ReactComponent as ExclamationIcon } from '../../assets/images/exclamation-regular.svg'
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
@@ -22,6 +23,16 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
     }, [isModalOpen]);
 
     
+    const DeleteItem = async () => {
+        try {
+            const response = await DeleteProductById(productId);
+            window.location.href = `/profile/${userId}`;
+            return response
+            
+        } catch (error) {
+            return error
+        }
+    }
 
 
     return (
@@ -40,7 +51,7 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
                             <span>This item will be deleted immediately. You can't undo this action.</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='yes-button' label='Yes, Delete' />
+                            <BtnGreen className='yes-button' label='Yes, Delete' onClick={DeleteItem} />
                             <BtnClear label='No, Cancel' onClick={onClick} />
                         </div>
                     </div>

@@ -56,6 +56,20 @@ export const DeleteProductById = async (productId) => {
 }
 
 
+// ------------------------ MARK AS SOLD PRODUCT ------------------------ //
+export const MarkSoldProduct = async (productId, productName) => {
+
+  const encodedProductName = encodeURIComponent(productName);
+  try {
+    const response = await axios.put(`/api/mark-sold/${productId}/${encodedProductName}`)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+
+
 // ------------------------ TRACKING PRODUCT VIEWS ------------------------ //
 export const trackProductView = async (productId) => {
   try {
