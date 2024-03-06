@@ -18,6 +18,7 @@ import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/profile-avatar.png'
+import NoImage from '../../assets/images/no-item-image-chat.png'
 
 
 
@@ -89,7 +90,7 @@ const ChatMessages = () => {
 
 
     const limitCharacters = (text, maxLength) => {
-        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        return text?.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     };
 
 
@@ -438,7 +439,7 @@ const ChatMessages = () => {
                                                             {chat?.otherParticipant?.display_name || 'Unknown'}
                                                         </span>
                                                         <span className='chat-product-name'>
-                                                            {limitCharacters(chat?.chat?.product?.product_name, 25) || 'Unknown'}
+                                                            {limitCharacters(chat?.chat?.product?.product_name, 25) || 'The item is no longer available'}
                                                         </span>
                                                         <span className='chat-user-messages'>
                                                             {getLastMessageContent(chat?.chat?.messages)}
@@ -493,7 +494,7 @@ const ChatMessages = () => {
                                                 ) : (
                                                     null
                                                 )}
-                                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
+                                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
                                             </Link>
                                         <div className='chat-item-info'>
                                             <Link
@@ -502,9 +503,9 @@ const ChatMessages = () => {
                                                 target="_blank"
                                                 rel="noopener noreferrer" // Add these lines for security best practices
                                             >
-                                                {productInfo?.product_name}
+                                                {productInfo?.product_name || 'The item is no longer available'}
                                             </Link>
-                                            <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
+                                            <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
                                         </div>
                                     </div>
 

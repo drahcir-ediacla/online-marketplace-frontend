@@ -23,7 +23,6 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
   const [soldModalOpen, setSoldModalOpen] = useState(false);
   const dropDownOption = useRef(null);
   const [modalProductId, setModalProductId] = useState(null);
-  const [modalProductName, setModalProductName] = useState(null);
 
 
   useEffect(() => {
@@ -183,19 +182,53 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
                   <div className="price">{formatPrice(product.price)}</div>
                 </div>
                 <div className='col-wishlist'>
-                  <div className='three-dots'>
-                    <ThreeDots onClick={() => toggleOption(product.id)} />
-                  </div>
+                  {(authenticatedUser?.id || !authenticatedUser?.id) !== userId ? (
+                    null
+                  ) : (
+                    <div className='three-dots'>
+                      <ThreeDots onClick={() => toggleOption(product.id)} />
+                    </div>
+                  )}
+
                   {isOptionOpen[product.id] && (
                     <div className='option-manage-listed-items' ref={dropDownOption}>
                       <ul>
-                        <li onClick={() => window.location.href = `/updatelisting/${product.id}/${encodeURIComponent(product.product_name)}`}><div className='edit-icon'><EditIcon /></div><span>Edit Listing</span></li>
                         {productStatus === 'Available' ? (
-                          <li className='mark-sold' onClick={() => toggleSoldModal(product.id)}><div className='check-icon'><CheckIcon /></div><span>Mark as Sold</span></li>
+                          <li onClick={() => window.location.href = `/updatelisting/${product.id}/${encodeURIComponent(product.product_name)}`}>
+                            <div className='edit-icon'>
+                              <EditIcon />
+                            </div>
+                            <span>Edit Listing</span>
+                          </li>
                         ) : (
-                          <li className='item-sold'><div className='check-icon'><CheckIcon /></div><span>Item Sold</span></li>
+                          <li className='item-sold-edit'>
+                            <div className='edit-icon'>
+                              <EditIcon />
+                            </div>
+                            <span>Edit Listing</span>
+                          </li>
                         )}
-                        <li onClick={() => toggleDeleteModal(product.id)}><div className='delete-icon'><DeleteIcon /></div><span>Delete Listing</span></li>
+                        {productStatus === 'Available' ? (
+                          <li className='mark-sold' onClick={() => toggleSoldModal(product.id)}>
+                            <div className='check-icon'>
+                              <CheckIcon />
+                            </div>
+                            <span>Mark as Sold</span>
+                          </li>
+                        ) : (
+                          <li className='item-sold'>
+                            <div className='check-icon'>
+                              <CheckIcon />
+                            </div>
+                            <span>Item Sold</span>
+                          </li>
+                        )}
+                        <li onClick={() => toggleDeleteModal(product.id)}>
+                          <div className='delete-icon'>
+                            <DeleteIcon />
+                          </div>
+                          <span>Delete Listing</span>
+                        </li>
                       </ul>
                     </div>
                   )}

@@ -57,11 +57,11 @@ export const DeleteProductById = async (productId) => {
 
 
 // ------------------------ MARK AS SOLD PRODUCT ------------------------ //
-export const MarkSoldProduct = async (productId, productName) => {
+export const MarkSoldProduct = async (productId) => {
 
-  const encodedProductName = encodeURIComponent(productName);
+ 
   try {
-    const response = await axios.put(`/api/mark-sold/${productId}/${encodedProductName}`)
+    const response = await axios.put(`/api/mark-sold/${productId}`)
     return response
   } catch (error) {
     return error

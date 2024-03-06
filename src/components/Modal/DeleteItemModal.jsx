@@ -26,7 +26,11 @@ const DeleteItemModal = ({ onClick, productId, userId }) => {
     const DeleteItem = async () => {
         try {
             const response = await DeleteProductById(productId);
-            window.location.href = `/profile/${userId}`;
+
+            if (response.status === 200) {
+                window.location.href = `/profile/${userId}`;
+            }
+
             return response
             
         } catch (error) {

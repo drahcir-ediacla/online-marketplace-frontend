@@ -393,15 +393,21 @@ const ProductDetails = ({ userId }) => {
                                             {isProductOwner ? (
                                                 // If the user is the product owner, hide the chat-related elements
                                                 <>
-                                                    <button className='manage-listing-btn edit-listing' onClick={UpdateListing}>
-                                                        <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
-                                                    </button>
+                                                    {productStatus === 'Available' ? (
+                                                        <button className='manage-listing-btn edit-listing' onClick={UpdateListing}>
+                                                            <div className='edit-icon'><EditIcon /></div><span>Edit Listing</span>
+                                                        </button>
+                                                    ) : (
+                                                        <button className='manage-listing-btn disabled-edit-listing' disabled>
+                                                            <span>Edit Listing</span>
+                                                        </button>
+                                                    )}
                                                     {productStatus === 'Available' ? (
                                                         <button className='manage-listing-btn mark-sold-listing' onClick={toggleSoldModal}>
                                                             <div className='sold-icon'><CheckIcon /></div><span>Mark as Sold</span>
                                                         </button>
                                                     ) : (
-                                                        <button className='manage-listing-btn item-sold' onClick={toggleSoldModal} disabled>
+                                                        <button className='manage-listing-btn item-sold' disabled>
                                                             <span>Item Sold</span>
                                                         </button>
                                                     )}

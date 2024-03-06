@@ -222,6 +222,12 @@
                         }
                     }
 
+                    .disabled-edit-listing {
+                        font-weight: 500;
+                        color: white;
+                        background: var(--gray-300);
+                    }
+
                     .mark-sold-listing {
                         color: var(--green-400);
                         .sold-icon {

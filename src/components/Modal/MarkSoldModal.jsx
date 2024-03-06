@@ -23,14 +23,20 @@ const MarkSoldModal = ({ onClick, productId, productName, userId }) => {
 
     const MarkSoldItem = async () => {
         try {
-            const response = await MarkSoldProduct(productId, productName);
-            window.location.href = `/productdetails/${productId}/${productName}`;
-            return response
-            
+            const response = await MarkSoldProduct(productId);
+    
+            if (response.data.success) {
+                window.location.reload();
+            }
+    
+            return response;
         } catch (error) {
-            return error
+            console.error('Error:', error);
+            return error;
         }
-    }
+    };
+    
+    
 
 
 
