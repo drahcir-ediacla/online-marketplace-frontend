@@ -399,6 +399,27 @@
                             }
 
                             .profile-review-container {
+
+                                .review-btns {
+                                    display: flex;
+                                    gap: 10px;
+                                    margin: 20px 0;
+
+                                    .review-tab {
+                                        padding: 5px 20px;
+                                        border: 1px solid var(--gray-300);
+                                        color: var(--gray-500);
+                                        border-radius: 50px;
+                                        background: white;
+                                    }
+
+                                    .active {
+                                        background: var(--green-400);
+                                        color: white;
+                                        border-color: var(--green-400);
+                                    }
+                                }
+
                                 .pagination-container {
                                     margin-top: 20px;
                                     float: right;
@@ -418,7 +439,7 @@
                                 font-weight: 600;
                                 margin-top: 15px;
                             }
-                            
+
                         }
                     }
                 }

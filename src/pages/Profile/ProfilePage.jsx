@@ -63,7 +63,7 @@ const ProfilePage = ({ userId }) => {
 
     //             setUser(response.data);
     //             setFilteredListings(response.data?.products)
-                
+
 
     //             // Fetch the authenticated user's data
     //             const authResponse = await axios.get('/auth/check-auth');
@@ -146,13 +146,18 @@ const ProfilePage = ({ userId }) => {
 
 
     const [activeTab, setActiveTab] = useState(0);
+    const [reviewTab, setReviewTab] = useState(0)
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
     };
 
+    const openReviews = (tabIndex) => {
+        setReviewTab(tabIndex);
+    };
 
-    
+
+
 
     const handleSearchChange = (e) => {
         const searchTerm = e.target.value;
@@ -231,12 +236,12 @@ const ProfilePage = ({ userId }) => {
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
-                                                        <ModalItemFilter 
-                                                        userId={id}
-                                                        userData={setUser}
-                                                        filteredListings={setFilteredListings}
-                                                        authenticatedUser={setAuthenticatedUser}
-                                                        err={setErr}
+                                                        <ModalItemFilter
+                                                            userId={id}
+                                                            userData={setUser}
+                                                            filteredListings={setFilteredListings}
+                                                            authenticatedUser={setAuthenticatedUser}
+                                                            err={setErr}
                                                         />
                                                     </div>
                                                 </div>
@@ -344,8 +349,21 @@ const ProfilePage = ({ userId }) => {
                                                 </div>
                                                 <div className="row2"></div>
                                                 <div className="row3 profile-review-container">
-                                                    <CustomerReviews posts={currentReviewData} />
-                                                    <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
+                                                    <div className='review-btns'>
+                                                        <button className={`review-tab ${reviewTab === 0 ? 'active' : ''}`} onClick={() => openReviews(0)}>All Reviews</button>
+                                                        <button className={`review-tab ${reviewTab === 1 ? 'active' : ''}`} onClick={() => openReviews(1)}>Buyer Reviews</button>
+                                                        <button className={`review-tab ${reviewTab === 2 ? 'active' : ''}`} onClick={() => openReviews(2)}>Seller Reviews</button>
+                                                    </div>
+
+                                                    <div style={{ display: reviewTab === 0 ? 'block' : 'none' }}>
+                                                       <CustomerReviews posts={currentReviewData} />
+                                                        <div className='pagination-container'>
+                                                            <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} />
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: reviewTab === 1 ? 'block' : 'none' }}>Buyer Reviews</div>
+                                                    <div style={{ display: reviewTab === 2 ? 'block' : 'none' }}>Seller Reviews</div>
+
                                                 </div>
                                             </div>
                                             <div className='followers-list' style={{ display: activeTab === 2 ? 'block' : 'none' }}>
