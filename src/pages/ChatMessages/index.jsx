@@ -439,7 +439,7 @@ const ChatMessages = () => {
                                                             {chat?.otherParticipant?.display_name || 'Unknown'}
                                                         </span>
                                                         <span className='chat-product-name'>
-                                                            {limitCharacters(chat?.chat?.product?.product_name, 25) || 'The item is no longer available'}
+                                                            {limitCharacters(chat?.chat?.product?.product_name, 25) || 'The item has been removed'}
                                                         </span>
                                                         <span className='chat-user-messages'>
                                                             {getLastMessageContent(chat?.chat?.messages)}
@@ -503,7 +503,7 @@ const ChatMessages = () => {
                                                 target="_blank"
                                                 rel="noopener noreferrer" // Add these lines for security best practices
                                             >
-                                                {productInfo?.product_name || 'The item is no longer available'}
+                                                {productInfo?.product_name || 'The item has been removed'}
                                             </Link>
                                             <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
                                         </div>

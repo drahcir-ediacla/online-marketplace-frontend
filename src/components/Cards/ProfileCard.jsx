@@ -124,7 +124,7 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
                             {!following ? (
                                 <BtnClear label='Follow' onClick={followUser} />
                             ) : (
-                                <BtnClear label='Following' className='unfollowing-btn' onClick={unfollowUser} />
+                                <BtnClear label='Unfollow' className='unfollowing-btn' onClick={unfollowUser} />
                             )}
 
                         </div>
