@@ -1,6 +1,7 @@
 import React from "react";
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 import ItemImgGallery from "../../components/Gallery/ItemImgGallery";
+import ReviewModal from "../../components/Modal/ReviewModal"
 
 
 
@@ -15,8 +16,9 @@ const LoadingSpinner = () => {
 
   return (
     <>
-      <ImageLoadingSpinner style={spinnerStyle}/>
-      <ItemImgGallery />
+      {/* <ImageLoadingSpinner style={spinnerStyle}/>
+      <ItemImgGallery /> */}
+      <ReviewModal />
     </>
   )
 

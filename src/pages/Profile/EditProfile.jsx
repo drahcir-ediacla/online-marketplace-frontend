@@ -372,7 +372,9 @@ const EditProfile = () => {
                       className='profile-data-textarea'
                       onChange={handleInputChange}
                       rows='5' />
-                    <br /><small className={counterClassName}>{`${updatedUserData.bio.length}/${maxCharacterCount}`}</small></div>
+                    <br />
+                    <small className={counterClassName}>{`${updatedUserData.bio.length}/${maxCharacterCount}`}</small>
+                  </div>
                 </div>
                 <div className='row5 flex'>
                   <label htmlFor='firstnameID' className='field-name'>FIRST NAME <span className='asterisk'>*</span></label>

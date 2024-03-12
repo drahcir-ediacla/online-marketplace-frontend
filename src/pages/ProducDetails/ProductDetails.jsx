@@ -48,6 +48,7 @@ const ProductDetails = ({ userId }) => {
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
+    const [offer, setOffer] = useState('');
     const [categories, setCategories] = useState([]);
     const categoryId = product?.category_id;
     const sender_id = user?.id.toString();
@@ -252,20 +253,22 @@ const ProductDetails = ({ userId }) => {
 
 
     //------------------ SEND MESSAGE --------------------------//
-    const sendMessage = async () => {
+    const createChat = async () => {
         try {
-            const response = await axios.post('/api/create/messages', {
+            const response = await axios.post('/api/create/chat', {
                 chat_id: chatId,
                 sender_id,
                 receiver_id,
                 product_id,
-                content: input
+                content: input,
+                offer_price: offer
             });
 
             const chatID = response.data.chat_id;
             window.location.href = `/messages/${chatID}`;
             // Clear the input field after sending the message
             setInput('');
+            setOffer('');
         } catch (error) {
             console.error('Error sending message:', error)
         }
@@ -446,16 +449,23 @@ const ProductDetails = ({ userId }) => {
                                                                     <BtnGreen
                                                                         label="Send Message"
                                                                         className='send-message'
-                                                                        onClick={sendMessage}
+                                                                        onClick={createChat}
                                                                         disabled={!input.trim()} // Disable if input is empty or contains only whitespace
                                                                     />
                                                                     <div className='input-make-offer-container'>
                                                                         <span className='php-symbol'>₱</span>
                                                                         <Input
                                                                             type='number'
+                                                                            value={offer}
                                                                             className='input-make-offer'
+                                                                            onChange={(e) => setOffer(e.target.value)}
                                                                         />
-                                                                        <BtnGreen label="Make Offer" className='make-offer-btn' />
+                                                                        <BtnGreen
+                                                                            label="Make Offer"
+                                                                            className='make-offer-btn'
+                                                                            onClick={createChat}
+                                                                            disabled={!offer.trim()}
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                             </>

@@ -19,6 +19,7 @@ import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loadi
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 import NoImage from '../../assets/images/no-item-image-chat.png'
+import BtnClear from '../../components/Button/BtnClear';
 
 
 
@@ -38,9 +39,16 @@ const ChatMessages = () => {
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
+    const offer = chatInfo?.offers?.[0]?.offer_price;
     const productStatus = productInfo?.status
+    const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    const isOfferPrice = (content) => {
+        const offerPricePattern = /<h6>.*<\/h6>/; // Regular expression to check for <b> tags
+        return offerPricePattern.test(content);
+    };
+
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState(allChats)
 
@@ -96,15 +104,27 @@ const ChatMessages = () => {
 
     // Function to format price with commas and decimals
     const formatPrice = (price) => {
-        const formattedPrice = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'PHP', // Change to your desired currency code
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(price);
+        const numericValue = parseFloat(price);
 
-        return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
+        if (!isNaN(numericValue)) {
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'PHP', // Change to your desired currency code
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(numericValue);
+
+            return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
+        } else if (typeof price === 'string' && isOfferPrice(price)) {
+            // Extract the numeric value from the HTML string and format it
+            const extractedValue = parseFloat(price.replace(/<.*?>/g, '').replace(/[^0-9.]/g, ''));
+            return formatPrice(extractedValue);
+        }
+
+        return price;
     };
+
+
 
     useEffect(() => {
         // Connect to the WebSocket server
@@ -439,7 +459,7 @@ const ChatMessages = () => {
                                                             {chat?.otherParticipant?.display_name || 'Unknown'}
                                                         </span>
                                                         <span className='chat-product-name'>
-                                                            {limitCharacters(chat?.chat?.product?.product_name, 25) || 'The item has been removed'}
+                                                            {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
                                                         </span>
                                                         <span className='chat-user-messages'>
                                                             {getLastMessageContent(chat?.chat?.messages)}
@@ -481,21 +501,21 @@ const ChatMessages = () => {
                                 </div>
                                 <div className="chat-right-row2">
                                     <div className='selling-item-container'>
-                                            <Link
-                                                to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
-                                                className='chat-selling-item-img-box'
-                                                target="_blank"
-                                                rel="noopener noreferrer" // Add these lines for security best practices
-                                            >
-                                                {productStatus === 'Sold' ? (
-                                                    <div className='sold-ribbon-label'>
+                                        <Link
+                                            to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                            className='chat-selling-item-img-box'
+                                            target="_blank"
+                                            rel="noopener noreferrer" // Add these lines for security best practices
+                                        >
+                                            {productStatus === 'Sold' ? (
+                                                <div className='sold-ribbon-label'>
                                                     <span>SOLD</span>
                                                 </div>
-                                                ) : (
-                                                    null
-                                                )}
-                                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
-                                            </Link>
+                                            ) : (
+                                                null
+                                            )}
+                                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
+                                        </Link>
                                         <div className='chat-item-info'>
                                             <Link
                                                 to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
@@ -508,10 +528,47 @@ const ChatMessages = () => {
                                             <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
                                         </div>
                                     </div>
+                                    {!productInfo ? (
+                                        null
+                                    ) : (
+                                        offer !== null ?
+                                        (sellerId === sender_id ? (
+                                            <div className='offer-buttons'>
+                                                <BtnGreen label='Accept Offer' />
+                                                <BtnClear label='Decline Offer' />
+                                                <BtnClear label='Mark as Sold' />
+                                            </div>
+                                        ) : (
+                                            <div className='offer-buttons'>
+                                                <BtnGreen className='change-offer-btn' label='Change Offer' />
+                                                <BtnClear label='Cancel Offer' />
+                                            </div>
+                                        )
 
-                                    <div className='three-dots-chat'>
-                                        <BtnGreen label='Make Offer' />
-                                    </div>
+                                        ) : (
+                                            sellerId === sender_id ? (
+                                                productStatus === 'Sold' ? (
+                                                    <div className='offer-buttons'>
+                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                    </div>
+                                                ) : (
+                                                    <div className='offer-buttons'>
+                                                        <BtnClear label='Mark as Sold' />
+                                                    </div>
+                                                )
+                                            ) : (
+                                                productStatus === 'Sold' ? (
+                                                    <div className='offer-buttons'>
+                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                    </div>
+                                                ) : (
+                                                    <div className='offer-buttons'>
+                                                        <BtnGreen label='Make Offer' />
+                                                    </div>
+                                                )
+                                            )
+                                        )
+                                    )}
                                 </div>
                             </>
                         )}
@@ -546,7 +603,14 @@ const ChatMessages = () => {
 
                                                             {!isImage(message.content) && (
                                                                 <div className="chat-sent-message-box">
-                                                                    {message.content}
+                                                                    {isOfferPrice(message.content) ? (
+                                                                        <>
+                                                                            <h6>Offered Price</h6>
+                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                        </>
+                                                                    ) : (
+                                                                        message.content
+                                                                    )}
                                                                 </div>
                                                             )}
 
@@ -576,7 +640,14 @@ const ChatMessages = () => {
                                                             )}
                                                             {!isImage(message.content) && (
                                                                 <div className="chat-received-message-box">
-                                                                    {message.content}
+                                                                    {isOfferPrice(message.content) ? (
+                                                                        <>
+                                                                            <h6>Offered Price</h6>
+                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                        </>
+                                                                    ) : (
+                                                                        message.content
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>
