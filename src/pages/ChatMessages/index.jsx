@@ -30,6 +30,8 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [priceOffer, setPriceOffer] = useState('');
+    const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
@@ -39,7 +41,9 @@ const ChatMessages = () => {
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
+    console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
+    console.log('offer:', offer)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
@@ -55,6 +59,17 @@ const ChatMessages = () => {
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
 
+    const [isButtonVisible, setIsButtonVisible] = useState(true);
+    const [isChangeOfferBtn, setIsChangeOfferBtn] = useState(true);
+
+    const toggleVisibility = () => {
+        setIsButtonVisible(!isButtonVisible);
+    };
+
+
+    const toggleChangeOfferBtn = () => {
+        setIsChangeOfferBtn(!isChangeOfferBtn);
+    };
 
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
@@ -62,6 +77,7 @@ const ChatMessages = () => {
             sendMessage();
         }
     };
+
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -190,7 +206,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id]);
+    }, [chat_id, sendOffer]);
 
 
 
@@ -259,6 +275,7 @@ const ChatMessages = () => {
     }, [chat_id, sender_id]);
 
 
+
     const handleChatImageClick = () => {
         document.getElementById('imageInput').click();
     };
@@ -322,29 +339,43 @@ const ChatMessages = () => {
 
 
     const sendMessage = async () => {
-        // Send regular text message
-        if (input.trim() !== '') {
+        if ((input.trim() || priceOffer.trim()) !== '') {
             socketRef.current.emit('send_message', {
                 chat_id,
                 sender_id,
                 receiver_id,
                 product_id,
-                content: input,
+                content: input || `<h6>₱${priceOffer}</h6>`,
+                offer_price: priceOffer,
             });
 
-            // Send the message to the server using Axios
-            await axios.post('/api/send/messages', {
-                chat_id,
-                sender_id,
-                receiver_id,
-                product_id,
-                content: input,
-            });
+            try {
+                // Send the message to the server using Axios
+                await axios.post('/api/send/messages', {
+                    chat_id,
+                    sender_id,
+                    receiver_id,
+                    product_id,
+                    content: input || priceOffer,
+                    offer_price: priceOffer,
+                });
 
-            // Clear the input field after sending the message
-            setInput('');
+                // Clear the input field after sending the message
+                setInput('');
+                setPriceOffer('');
+
+                // Conditionally update chatInfo only if offer_price is not null
+                if (priceOffer.trim() !== '') {
+                    setSendOffer(true);
+                }
+
+            } catch (error) {
+                // Handle error
+                console.error("Error sending message:", error);
+            }
         }
     };
+
 
 
     const handleEmoteSelect = (emoji) => {
@@ -507,12 +538,10 @@ const ChatMessages = () => {
                                             target="_blank"
                                             rel="noopener noreferrer" // Add these lines for security best practices
                                         >
-                                            {productStatus === 'Sold' ? (
+                                            {productStatus === 'Sold' && (
                                                 <div className='sold-ribbon-label'>
                                                     <span>SOLD</span>
                                                 </div>
-                                            ) : (
-                                                null
                                             )}
                                             <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
                                         </Link>
@@ -523,51 +552,85 @@ const ChatMessages = () => {
                                                 target="_blank"
                                                 rel="noopener noreferrer" // Add these lines for security best practices
                                             >
-                                                {productInfo?.product_name || 'The item has been removed'}
+                                                {!productInfo?.product_name ? 'The item has been removed' : productInfo?.product_name}
                                             </Link>
                                             <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
                                         </div>
                                     </div>
+
                                     {!productInfo ? (
                                         null
                                     ) : (
                                         offer !== null ?
-                                        (sellerId === sender_id ? (
-                                            <div className='offer-buttons'>
-                                                <BtnGreen label='Accept Offer' />
-                                                <BtnClear label='Decline Offer' />
-                                                <BtnClear label='Mark as Sold' />
-                                            </div>
-                                        ) : (
-                                            <div className='offer-buttons'>
-                                                <BtnGreen className='change-offer-btn' label='Change Offer' />
-                                                <BtnClear label='Cancel Offer' />
-                                            </div>
-                                        )
-
-                                        ) : (
-                                            sellerId === sender_id ? (
-                                                productStatus === 'Sold' ? (
-                                                    <div className='offer-buttons'>
-                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                    </div>
-                                                ) : (
-                                                    <div className='offer-buttons'>
-                                                        <BtnClear label='Mark as Sold' />
-                                                    </div>
-                                                )
+                                            (sellerId === sender_id ? (
+                                                <div className='offer-buttons'>
+                                                    <BtnGreen label='Accept Offer' />
+                                                    <BtnClear label='Decline Offer' />
+                                                    <BtnClear label='Mark as Sold' />
+                                                </div>
                                             ) : (
-                                                productStatus === 'Sold' ? (
-                                                    <div className='offer-buttons'>
-                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                    </div>
+                                                <div className='offer-buttons'>
+                                                    {isChangeOfferBtn ? (
+                                                        <>
+                                                            <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                            <BtnClear label='Cancel Offer' />
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className='input-offer-container'>
+                                                                <span className='php-symbol'>₱</span>
+                                                                <Input
+                                                                    type='number'
+                                                                    value={priceOffer}
+                                                                    className='input-offer'
+                                                                    onChange={(e) => setPriceOffer(e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <BtnGreen label='Send Offer' onClick={sendMessage} disabled={!priceOffer.trim()} />
+                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )
+                                            ) : (
+                                                sellerId === sender_id ? (
+                                                    productStatus === 'Sold' ? (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                        </div>
+                                                    ) : (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear label='Mark as Sold' />
+                                                        </div>
+                                                    )
                                                 ) : (
-                                                    <div className='offer-buttons'>
-                                                        <BtnGreen label='Make Offer' />
-                                                    </div>
+                                                    productStatus === 'Sold' ? (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                        </div>
+                                                    ) : (
+                                                        <div className='offer-buttons'>
+                                                            {isButtonVisible ? (
+                                                                <BtnGreen label='Make Offer' onClick={toggleVisibility} />
+                                                            ) : (
+                                                                <>
+                                                                    <div className='input-offer-container'>
+                                                                        <span className='php-symbol'>₱</span>
+                                                                        <Input
+                                                                            type='number'
+                                                                            value={priceOffer || '0.00'}
+                                                                            className='input-offer'
+                                                                            onChange={(e) => setPriceOffer(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <BtnGreen label='Send Offer' onClick={sendMessage} disabled={!priceOffer.trim()} />
+                                                                    <BtnClear label='Cancel' onClick={toggleVisibility} />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )
                                                 )
                                             )
-                                        )
                                     )}
                                 </div>
                             </>
