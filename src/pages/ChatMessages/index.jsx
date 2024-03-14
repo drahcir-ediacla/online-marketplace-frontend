@@ -398,7 +398,7 @@ const ChatMessages = () => {
         if (priceOffer) {
             messageContent = `<h6>₱${priceOffer}</h6>`;
         } else {
-            messageContent = 'Cancelled Offer';
+            messageContent = 'Offer Cancelled';
         }
 
         socketRef.current.emit('send_message', {
@@ -417,7 +417,7 @@ const ChatMessages = () => {
                 sender_id,
                 receiver_id,
                 product_id,
-                content: priceOffer || 'Cancelled Offer',
+                content: priceOffer || 'Offer Cancelled',
                 offer_price: offerPriceToSend,
                 offer_status: offerStatus,
             });
@@ -736,7 +736,7 @@ const ChatMessages = () => {
                                                                     ) : (
                                                                         isCancelledOffer(message.content) ? (
                                                                             <>
-                                                                                <div className='cancelled-offered-price-label'><h6>Cancelled Offer</h6></div>
+                                                                                <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div>
                                                                             </>
                                                                         ) : (
                                                                             <span className='normal-chat-text'>{message.content}</span>
@@ -778,7 +778,7 @@ const ChatMessages = () => {
                                                                     ) : (
                                                                         isCancelledOffer(message.content) ? (
                                                                             <>
-                                                                                <div className='cancelled-offered-price-label'><h6>Cancelled Offer</h6></div>
+                                                                                <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div>
                                                                             </>
                                                                         ) : (
                                                                             <span className='normal-chat-text'>{message.content}</span>
