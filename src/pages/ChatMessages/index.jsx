@@ -30,7 +30,7 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const [priceOffer, setPriceOffer] = useState('');
+
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
@@ -44,13 +44,23 @@ const ChatMessages = () => {
     console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
     console.log('offer:', offer)
+    const [priceOffer, setPriceOffer] = useState('');
+    console.log('priceOffer:', priceOffer)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    // const isOfferPrice = chatInfo?.offers?.[0]?.offer_status;
+    // console.log('isOfferPrice:', isOfferPrice)
+
     const isOfferPrice = (content) => {
-        const offerPricePattern = /<h6>.*<\/h6>/; // Regular expression to check for <b> tags
+        const offerPricePattern = /₱/;
         return offerPricePattern.test(content);
+    };
+
+    const isCancelledOffer = (content) => {
+        const cancelledOfferPattern = /Cancelled Offer/;
+        return cancelledOfferPattern.test(content);
     };
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -59,11 +69,11 @@ const ChatMessages = () => {
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
 
-    const [isButtonVisible, setIsButtonVisible] = useState(true);
+    const [isMakeOfferBtn, setIsMakeOfferBtn] = useState(true);
     const [isChangeOfferBtn, setIsChangeOfferBtn] = useState(true);
 
-    const toggleVisibility = () => {
-        setIsButtonVisible(!isButtonVisible);
+    const toggleMakeOfferBtn = () => {
+        setIsMakeOfferBtn(!isMakeOfferBtn);
     };
 
 
@@ -77,6 +87,13 @@ const ChatMessages = () => {
             sendMessage();
         }
     };
+
+    const [cancelOffer, setCancelOffer] = useState('')
+    console.log('cancelOffer:', cancelOffer)
+
+    // const cancelOffer = () => {
+    //     setPriceOffer(null);
+    // }
 
 
     useEffect(() => {
@@ -339,14 +356,14 @@ const ChatMessages = () => {
 
 
     const sendMessage = async () => {
-        if ((input.trim() || priceOffer.trim()) !== '') {
+        setSendOffer(true);
+        if ((input.trim()) !== '') {
             socketRef.current.emit('send_message', {
                 chat_id,
                 sender_id,
                 receiver_id,
                 product_id,
-                content: input || `<h6>₱${priceOffer}</h6>`,
-                offer_price: priceOffer,
+                content: input,
             });
 
             try {
@@ -356,18 +373,14 @@ const ChatMessages = () => {
                     sender_id,
                     receiver_id,
                     product_id,
-                    content: input || priceOffer,
-                    offer_price: priceOffer,
+                    content: input,
                 });
 
                 // Clear the input field after sending the message
                 setInput('');
                 setPriceOffer('');
 
-                // Conditionally update chatInfo only if offer_price is not null
-                if (priceOffer.trim() !== '') {
-                    setSendOffer(true);
-                }
+
 
             } catch (error) {
                 // Handle error
@@ -375,6 +388,55 @@ const ChatMessages = () => {
             }
         }
     };
+
+
+    const sendPriceOffer = async () => {
+        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : null;
+        const offerStatus = priceOffer.trim() !== '' ? 'Pending' : 'None';
+
+        let messageContent;
+        if (priceOffer) {
+            messageContent = `<h6>₱${priceOffer}</h6>`;
+        } else {
+            messageContent = 'Cancelled Offer';
+        }
+
+        socketRef.current.emit('send_message', {
+            chat_id,
+            sender_id,
+            receiver_id,
+            product_id,
+            content: messageContent,
+            offer_price: offerPriceToSend,
+        });
+
+        try {
+            // Send the message to the server using Axios
+            const response = await axios.post('/api/send-offer/messages', {
+                chat_id,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: priceOffer || 'Cancelled Offer',
+                offer_price: offerPriceToSend,
+                offer_status: offerStatus,
+            });
+
+            setSendOffer(false);
+
+            // Clear the input field after sending the message
+            if (response.status === 201) {
+                setInput('');
+                setPriceOffer('');
+                setSendOffer(true);
+            }
+
+        } catch (error) {
+            // Handle error
+            console.error("Error sending message:", error);
+        }
+    };
+
 
 
 
@@ -573,7 +635,7 @@ const ChatMessages = () => {
                                                     {isChangeOfferBtn ? (
                                                         <>
                                                             <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                            <BtnClear label='Cancel Offer' />
+                                                            <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendPriceOffer(); }} />
                                                         </>
                                                     ) : (
                                                         <>
@@ -581,12 +643,12 @@ const ChatMessages = () => {
                                                                 <span className='php-symbol'>₱</span>
                                                                 <Input
                                                                     type='number'
-                                                                    value={priceOffer}
+                                                                    value={priceOffer || '0.00'}
                                                                     className='input-offer'
-                                                                    onChange={(e) => setPriceOffer(e.target.value)}
+                                                                    onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                 />
                                                             </div>
-                                                            <BtnGreen label='Send Offer' onClick={sendMessage} disabled={!priceOffer.trim()} />
+                                                            <BtnGreen label='Send Offer' onClick={() => { sendPriceOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                         </>
                                                     )}
@@ -610,8 +672,8 @@ const ChatMessages = () => {
                                                         </div>
                                                     ) : (
                                                         <div className='offer-buttons'>
-                                                            {isButtonVisible ? (
-                                                                <BtnGreen label='Make Offer' onClick={toggleVisibility} />
+                                                            {isMakeOfferBtn ? (
+                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
                                                             ) : (
                                                                 <>
                                                                     <div className='input-offer-container'>
@@ -623,8 +685,8 @@ const ChatMessages = () => {
                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                         />
                                                                     </div>
-                                                                    <BtnGreen label='Send Offer' onClick={sendMessage} disabled={!priceOffer.trim()} />
-                                                                    <BtnClear label='Cancel' onClick={toggleVisibility} />
+                                                                    <BtnGreen label='Send Offer' onClick={sendPriceOffer} disabled={!priceOffer?.trim()} />
+                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                 </>
                                                             )}
                                                         </div>
@@ -668,15 +730,20 @@ const ChatMessages = () => {
                                                                 <div className="chat-sent-message-box">
                                                                     {isOfferPrice(message.content) ? (
                                                                         <>
-                                                                            <h6>Offered Price</h6>
+                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
                                                                             <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
                                                                         </>
                                                                     ) : (
-                                                                        message.content
+                                                                        isCancelledOffer(message.content) ? (
+                                                                            <>
+                                                                                <div className='cancelled-offered-price-label'><h6>Cancelled Offer</h6></div>
+                                                                            </>
+                                                                        ) : (
+                                                                            <span className='normal-chat-text'>{message.content}</span>
+                                                                        )
                                                                     )}
                                                                 </div>
                                                             )}
-
                                                             <img src={user?.profile_pic || AvatarIcon} alt="" />
                                                         </div>
                                                         <small className='chat-time-sent-message'>{formattedTime}</small>
@@ -705,12 +772,17 @@ const ChatMessages = () => {
                                                                 <div className="chat-received-message-box">
                                                                     {isOfferPrice(message.content) ? (
                                                                         <>
-                                                                            <h6>Offered Price</h6>
+                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
                                                                             <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
                                                                         </>
                                                                     ) : (
-                                                                        message.content
-                                                                    )}
+                                                                        isCancelledOffer(message.content) ? (
+                                                                            <>
+                                                                                <div className='cancelled-offered-price-label'><h6>Cancelled Offer</h6></div>
+                                                                            </>
+                                                                        ) : (
+                                                                            <span className='normal-chat-text'>{message.content}</span>
+                                                                        ))}
                                                                 </div>
                                                             )}
                                                         </div>
