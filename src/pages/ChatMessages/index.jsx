@@ -555,7 +555,7 @@ const ChatMessages = () => {
                                                             {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
                                                         </span>
                                                         <span className='chat-user-messages'>
-                                                            {getLastMessageContent(chat?.chat?.messages)}
+                                                        <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
                                                         </span>
                                                     </div>
                                                 </div>
