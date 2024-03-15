@@ -3,18 +3,24 @@ import { useParams } from 'react-router-dom';
 import io from 'socket.io-client'
 import axios from '../../apicalls/axios';
 import useAuthentication from '../../hooks/authHook'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import './style.scss'
 import Header from '../../layouts/Header'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 import BtnGreen from '../../components/Button/BtnGreen'
 import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
-import UserChatImage from '../../assets/images/review-1_icon.png';
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
 import { ReactComponent as SmileyIcon } from '../../assets/images/smiley-icon.svg'
 import { ReactComponent as SendIcon } from '../../assets/images/send-icon.svg'
+import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
+import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import AvatarIcon from '../../assets/images/profile-avatar.png'
+import NoImage from '../../assets/images/no-item-image-chat.png'
+import BtnClear from '../../components/Button/BtnClear';
+import MarkSoldModal from '../../components/Modal/MarkSoldModal'
 
 
 
@@ -25,41 +31,63 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+
+    const [soldModalOpen, setSoldModalOpen] = useState(false);
+    const [sendOffer, setSendOffer] = useState(false);
+    const [showEmotePicker, setShowEmotePicker] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false)
+    const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
-    const [messengerState, setMessengerState] = useState({}); // State to store messenger for each chat
-    const sender_id = user?.id.toString();
+    const sender_id = user?.id;
     const product_id = chatInfo?.product_id;
-    const allChatIds = allChats.map(chat => chat.chat_id);
+    console.log('product_id:', product_id)
+    const offer = chatInfo?.offers?.[0]?.offer_price;
+    console.log('offer:', offer)
+    const [priceOffer, setPriceOffer] = useState('');
+    console.log('priceOffer:', priceOffer)
+    const [pendingStatus, setPendingStatus] = useState('');
+    const [noneStatus, setNoneStatus] = useState('');
+    const productStatus = productInfo?.status
+    const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
-    const [messengerInfo, setMessengerInfo] = useState({});
-    const [allUserInfo, setAllUserInfo] = useState([]);
-    console.log('messengerState:', messengerState)
-    console.log('messengerInfo:', messengerInfo)
-    console.log('allUserInfo:', allUserInfo)
-    console.log('allChatIds:', allChatIds)
-    console.log('allChats:', allChats.map(chat => {
-        const userId = messengerState[chat?.chat_id];
-        const displayName = messengerInfo[userId]?.display_name || 'Unknown';
-        return {
-            chatId: chat?.chat_id,
-            displayName: displayName,
-        };
-    }));
-    
-    
-    
-    
-    const chatIdToParticipantMap = Object.keys(messengerState).reduce((result, chatId) => {
-        result[chatId] = messengerState[chatId];
-        return result;
-    }, {});
-    console.log('chatIdToParticipantMap:', allUserInfo[chatIdToParticipantMap]?.display_name)
+    const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+   
 
-    
+    const isOfferPrice = (content) => {
+        const offerPricePattern = /Offered Price/;
+        return offerPricePattern.test(content);
+    };
+
+    const isCancelledOffer = (content) => {
+        const cancelledOfferPattern = /Offer Cancelled/;
+        return cancelledOfferPattern.test(content);
+    };
+
+    const [searchTerm, setSearchTerm] = useState('')
+    const [filteredChat, setFilteredChat] = useState(allChats)
+
+    const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
+
+    const [isMakeOfferBtn, setIsMakeOfferBtn] = useState(true);
+    const [isChangeOfferBtn, setIsChangeOfferBtn] = useState(true);
+
+    const toggleMakeOfferBtn = () => {
+        setIsMakeOfferBtn(!isMakeOfferBtn);
+    };
+
+
+    const toggleChangeOfferBtn = () => {
+        setIsChangeOfferBtn(!isChangeOfferBtn);
+    };
+
+
+    const toggleSoldModal = () => {
+        setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
+    };
 
 
     const handleKeyPress = (e) => {
@@ -69,6 +97,7 @@ const ChatMessages = () => {
         }
     };
 
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -76,17 +105,61 @@ const ChatMessages = () => {
     }, [messages]); // Add other dependencies as needed
 
 
+    useEffect(() => {
+        // Update last image message index whenever messages change
+        if (messages && messages.length > 0) {
+            const lastIndex = messages.findIndex(message => isImage(message.content));
+            setLastImageMessageIndex(lastIndex);
+        }
+    }, [messages]);
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowEmotePicker(false);
+            }
+        };
+
+        // Attach the event listener to the document body
+        document.body.addEventListener('mousedown', handleClickOutside);
+
+        // Clean up the event listener when the component is unmounted
+        return () => {
+            document.body.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+
+
+    const limitCharacters = (text, maxLength) => {
+        return text?.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    };
+
+
     // Function to format price with commas and decimals
     const formatPrice = (price) => {
-        const formattedPrice = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'PHP', // Change to your desired currency code
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(price);
+        const numericValue = parseFloat(price);
 
-        return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
+        if (!isNaN(numericValue)) {
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'PHP', // Change to your desired currency code
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(numericValue);
+
+            return formattedPrice.replace(/\.00$/, ''); // Remove '.00' if the fractional part is zero
+        } else if (typeof price === 'string' && isOfferPrice(price)) {
+            // Extract the numeric value from the HTML string and format it
+            const extractedValue = parseFloat(price.replace(/<.*?>/g, '').replace(/[^0-9.]/g, ''));
+            return formatPrice(extractedValue);
+        }
+
+        return price;
     };
+
+
 
     useEffect(() => {
         // Connect to the WebSocket server
@@ -116,41 +189,6 @@ const ChatMessages = () => {
     }, [chat_id]); // Dependencies updated to include chat_id
 
 
-    useEffect(() => {
-        const fetchMessengerInfo = async (userId) => {
-            
-            try {
-                const response = await axios.get(`/api/user/${userId}`);
-                console.log("Fetched messengerInfo:", response.data); // Log fetched data
-                setMessengerInfo(prevState => ({
-                    ...prevState,
-                    [userId]: response.data // Store the user details by user ID
-                }));
-            } catch (error) {
-                console.error('Error fetching receiver information:', error);
-            }
-        };
-    
-        if (messengerState[chat_id]) {
-            fetchMessengerInfo(messengerState[chat_id]); // Pass the user ID to fetch details
-        }
-    }, [messengerState[chat_id]]);
-    
-    
-
-
-    useEffect(() => {
-        const fetchAllUserInfo = async () => {
-            try {
-                const response = await axios.get('/api/users');
-                setAllUserInfo(response.data); // Update receiverInfo state with fetched data
-            } catch (error) {
-                console.error('Error fetching chat information:', error);
-            }
-        };
-            fetchAllUserInfo(); // Fetch receiver information only if receiver_id is available
-    }, []);
-
 
 
 
@@ -158,37 +196,20 @@ const ChatMessages = () => {
         const fetchAllUserChat = async () => {
             try {
                 const response = await axios.get('/api/get-all/user-chat');
-                const chatsArray = Array.isArray(response.data) ? response.data : []; // Ensure it's an array
-        
-                setAllChats(chatsArray);
-        
-                const updatedMessengerState = {};
-                chatsArray.forEach((chatMessage) => {
-                    if (chatMessage && Array.isArray(chatMessage.participants)) {
-                        const [participant1, participant2] = chatMessage.participants;
-        
-                        if (participant1 !== sender_id && participant2 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant1;
-                        } else if (participant1 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant1;
-                        } else if (participant2 !== sender_id) {
-                            updatedMessengerState[chatMessage.chat_id] = participant2;
-                        }
-                    }
-                });
-        
-                setMessengerState(updatedMessengerState);
+
+                setAllChats(response.data);
+                setFilteredChat(response.data);
+
             } catch (error) {
                 console.error('Error fetching all chats:', error);
             }
         };
-        
-        
-    
+
+
+
         fetchAllUserChat();
-    }, [sender_id]); // Include sender_id in dependency array if it can change
-    
-    
+    }, []); // Include sender_id in dependency array if it can change
+
 
 
     useEffect(() => {
@@ -204,7 +225,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id]);
+    }, [chat_id, sendOffer]);
 
 
 
@@ -274,30 +295,148 @@ const ChatMessages = () => {
 
 
 
+    const handleChatImageClick = () => {
+        document.getElementById('imageInput').click();
+    };
 
+
+    const handleImageUpload = async (e) => {
+        console.log('handleImageUpload triggered');
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        try {
+            setShowSpinner(true)
+            if (file) {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                // Upload the image using Axios
+                const response = await axios.post('/api/upload-chat-image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                if (response.status === 200) {
+                    // Handle the uploaded image URL from the response
+                    const imageUrl = response.data.imageUrl;
+                    console.log('imageUrl:', imageUrl)
+
+                    socketRef.current.emit('send_message', {
+                        chat_id,
+                        sender_id,
+                        receiver_id,
+                        product_id,
+                        content: imageUrl,
+                    });
+
+                    // Send the message to the server using Axios
+                    await axios.post('/api/send/messages', {
+                        chat_id,
+                        sender_id,
+                        receiver_id,
+                        product_id,
+                        content: imageUrl,
+                    });
+                    setShowSpinner(false);
+                }
+            }
+        } catch (error) {
+            setShowSpinner(false)
+            console.error('Error uploading image:', error);
+        }
+    };
 
 
     const sendMessage = async () => {
-        // Emit the send_message event with the message details
+        setSendOffer(true);
+        if ((input.trim()) !== '') {
+            socketRef.current.emit('send_message', {
+                chat_id,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: input,
+            });
+
+            try {
+                // Send the message to the server using Axios
+                await axios.post('/api/send/messages', {
+                    chat_id,
+                    sender_id,
+                    receiver_id,
+                    product_id,
+                    content: input,
+                });
+
+                // Clear the input field after sending the message
+                setInput('');
+                setPriceOffer('');
+
+            } catch (error) {
+                // Handle error
+                console.error("Error sending message:", error);
+            }
+        }
+    };
+
+
+    const sendOrCancelOffer = async () => {
+        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : null;
+        const offerStatus = priceOffer.trim() !== '' ? 'Pending' : 'None';
+
+        let messageContent;
+        if (priceOffer) {
+            messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
+        } else {
+            messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+        }
+
         socketRef.current.emit('send_message', {
             chat_id,
             sender_id,
             receiver_id,
             product_id,
-            content: input
+            content: messageContent,
+            offer_price: offerPriceToSend,
         });
 
-        // Send the message to the server using Axios
-        await axios.post('/api/send/messages', {
-            chat_id,
-            sender_id,
-            receiver_id,
-            product_id,
-            content: input
-        });
+        try {
+            // Send the message to the server using Axios
+            const response = await axios.post('/api/send-offer/messages', {
+                chat_id,
+                sender_id,
+                receiver_id,
+                product_id,
+                content: priceOffer || formatPrice(offer),
+                offer_price: offerPriceToSend,
+                offer_status: offerStatus,
+            });
 
-        // Clear the input field after sending the message
-        setInput('');
+            setSendOffer(false);
+
+            // Clear the input field after sending the message
+            if (response.status === 201) {
+                setInput('');
+                setPriceOffer('');
+                setSendOffer(true);
+            }
+
+        } catch (error) {
+            // Handle error
+            console.error("Error sending message:", error);
+        }
+    };
+
+
+
+
+    const handleEmoteSelect = (emoji) => {
+        // Append the selected emoji to the message input
+        setInput(input + emoji.native);
+        setShowEmotePicker(false);
     };
 
 
@@ -308,6 +447,7 @@ const ChatMessages = () => {
             return 'Invalid Timestamp';
         }
 
+        // Parse the timestamp using Date constructor
         const date = new Date(timestamp);
 
         // Check if date is valid
@@ -327,8 +467,52 @@ const ChatMessages = () => {
     }
 
 
+
+    const getLastMessageContent = (messages) => {
+        if (messages && messages.length > 0) {
+            // Create a new array and sort it by timestamp in descending order
+            const sortedMessages = [...messages].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            return sortedMessages[0].content;
+        } else {
+            return '';
+        }
+    };
+
+
+
+    const getLastMessageTime = (messages) => {
+        return messages && messages.length > 0 ? messages[0].timestamp : '';
+    };
+
+
+    const handleSearchChange = (e) => {
+        const searchTerm = e.target.value;
+        setSearchTerm(searchTerm);
+
+        if (searchTerm === '') {
+            setFilteredChat(allChats);
+            return;
+        }
+
+        const filtered = allChats.filter(chat => {
+            const productNameMatch = chat?.chat?.product && chat.chat.product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
+            const sellerDisplayNameMatch = chat?.otherParticipant && chat?.otherParticipant?.display_name.toLowerCase().includes(searchTerm.toLowerCase());
+
+            // Check if either product name or seller's display name matches the search term
+            return productNameMatch || sellerDisplayNameMatch;
+
+        });
+
+        setFilteredChat(filtered);
+    }
+
+
+
+
+
     return (
         <>
+            {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
             <Header />
             <div className="container">
                 <div className="chat-container">
@@ -339,136 +523,327 @@ const ChatMessages = () => {
                                 <FilterBy label='Inbox' className='message-collections-btn' />
                             </div>
                             <div className='chat-search-box-container'>
-                                <Input className='chat-search-box' placeholder='Search name..' />
+                                <Input
+                                    className='chat-search-box'
+                                    placeholder='Search user name or item name...'
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                />
+                                <div className='magnifying-glass'><MagnifyingGlass /></div>
                             </div>
                         </div>
-
-                        {allChats ? (
-                            allChats.length > 0 ? (
-                                allChats.map((chat) => (
-                                    <NavLink to={`/messages/${chat?.chat_id}`} className="user-chat-list" key={chat?.chat_id}>
-                                        <div className="select-user-conversation">
-                                            <div className='user-chat-info-container'>
-                                                <img src={UserChatImage} alt="User Chat" />
-                                                <div className='chat-user-name-messages'>
-                                                    <span className='chat-user-name'>{messengerInfo[messengerState[chat?.chat_id]]?.display_name || 'Unknown'}</span>
-                                                    <span className='chat-user-messages'>Yes!! I received the product, Thanks </span>
+                        <div className='user-chat-list-container'>
+                            {Array.isArray(filteredChat) && filteredChat.length > 0 ? (
+                                filteredChat.map((chat, index) => {
+                                    const isActive = chat?.chat_id === chat_id;
+                                    return (
+                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
+                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
+                                                <div className='user-chat-info-container'>
+                                                    <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
+                                                    <div className='chat-user-name-messages'>
+                                                        <span className='chat-user-name'>
+                                                            {chat?.otherParticipant?.display_name || 'Unknown'}
+                                                        </span>
+                                                        <span className='chat-product-name'>
+                                                            {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
+                                                        </span>
+                                                        <span className='chat-user-messages'>
+                                                            <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
+                                                        </span>
+                                                    </div>
                                                 </div>
+                                                <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
                                             </div>
-                                            <small className='last-message-time'>5:31 PM</small>
-                                        </div>
-                                    </NavLink>
-                                ))
+                                        </NavLink>
+                                    );
+                                })
                             ) : (
-                                <p>No chats available.</p>
-                            )
-                        ) : (
-                            <p>Loading chats...</p>
-                        )}
-
-
-
-
-
-                        <div className="user-chat-list green-bkgrnd">
-                            <div className="select-user-conversation">
-                                <div className='user-chat-info-container'>
-                                    <img src={UserChatImage} alt="" />
-                                    <div className='chat-user-name-messages'>
-                                        <span className='chat-user-name'>Asi Paolo</span>
-                                        <span className='chat-user-messages'>Yes!! I received the product, Thanks</span>
-                                    </div>
+                                <div className='no-chat-messages'>
+                                    <p>No Chats Available...</p>
                                 </div>
-                                <small className='last-message-time'>5:31 PM</small>
-                            </div>
+                            )}
                         </div>
                     </div>
                     <div className="chat-right">
-                        <div className="chat-right-row1">
-                            <div className='user-chat-info-container'>
-                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                <div className='chat-user-name-messages'>
-                                    <span className='chat-user-name'>{receiverInfo?.display_name}</span>
-                                    <span className='chat-user-status'>Online</span>
+                        {!chat_id ? (
+                            null
+                        ) : (
+                            <>
+                                <div className='chat-right-row1'>
+                                    <div className='user-chat-info-container'>
+                                        <Link to={`/profile/${receiverInfo?.id}`}>
+                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                        </Link>
+                                        <div className='chat-user-name-messages'>
+                                            <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
+                                                {receiverInfo?.display_name}
+                                            </Link>
+                                            <span className='chat-user-status'>Online</span>
+                                        </div>
+                                    </div>
+                                    <div className='three-dots-chat'>
+                                        <ThreeDots />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='three-dots-chat'>
-                                <ThreeDots />
-                            </div>
-                        </div>
-                        <div className="chat-right-row2">
-                            <div className='selling-item-container'>
-                                <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : 'default_image_url_or_placeholder'} alt="" />
-                                <div className='chat-item-info'>
-                                    <span className='chat-item-name'>{productInfo?.product_name}</span>
-                                    <span className='chat-item-price'>{formatPrice(productInfo?.price)}</span>
-                                </div>
-                            </div>
+                                <div className="chat-right-row2">
+                                    <div className='selling-item-container'>
+                                        <Link
+                                            to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                            className='chat-selling-item-img-box'
+                                            target="_blank"
+                                            rel="noopener noreferrer" // Add these lines for security best practices
+                                        >
+                                            {productStatus === 'Sold' && (
+                                                <div className='sold-ribbon-label'>
+                                                    <span>SOLD</span>
+                                                </div>
+                                            )}
+                                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
+                                        </Link>
+                                        <div className='chat-item-info'>
+                                            <Link
+                                                to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                                className='chat-item-name'
+                                                target="_blank"
+                                                rel="noopener noreferrer" // Add these lines for security best practices
+                                            >
+                                                {!productInfo?.product_name ? 'The item has been removed' : productInfo?.product_name}
+                                            </Link>
+                                            <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
+                                        </div>
+                                    </div>
 
-                            <div className='three-dots-chat'>
-                                <BtnGreen label='Make Offer' />
-                            </div>
-                        </div>
+                                    {!productInfo ? (
+                                        null
+                                    ) : (
+                                        offer !== null ?
+                                            (sellerId === sender_id ? (
+                                                productStatus === 'Sold' ? (
+                                                    <div className='offer-buttons'>
+                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                    </div>
+                                                ) : (
+                                                    <div className='offer-buttons'>
+                                                        <BtnGreen label='Accept Offer' />
+                                                        <BtnClear label='Decline Offer' />
+                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                    </div>
+                                                )
+                                            ) : (
+                                                <div className='offer-buttons'>
+                                                    {isChangeOfferBtn ? (
+                                                        productStatus === 'Sold' ? (
+                                                            <div className='offer-buttons'>
+                                                                <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                                <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
+                                                            </>
+                                                        )
+                                                    ) : (
+                                                        <>
+                                                            <div className='input-offer-container'>
+                                                                <span className='php-symbol'>₱</span>
+                                                                <Input
+                                                                    type='number'
+                                                                    value={priceOffer || '0.00'}
+                                                                    className='input-offer'
+                                                                    onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
+                                                                />
+                                                            </div>
+                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )
+                                            ) : (
+                                                sellerId === sender_id ? (
+                                                    productStatus === 'Sold' ? (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                        </div>
+                                                    ) : (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                        </div>
+                                                    )
+                                                ) : (
+                                                    productStatus === 'Sold' ? (
+                                                        <div className='offer-buttons'>
+                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                        </div>
+                                                    ) : (
+                                                        <div className='offer-buttons'>
+                                                            {isMakeOfferBtn ? (
+                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
+                                                            ) : (
+                                                                <>
+                                                                    <div className='input-offer-container'>
+                                                                        <span className='php-symbol'>₱</span>
+                                                                        <Input
+                                                                            type='number'
+                                                                            value={priceOffer || '0.00'}
+                                                                            className='input-offer'
+                                                                            onChange={(e) => setPriceOffer(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <BtnGreen label='Send Offer' onClick={sendOrCancelOffer} disabled={!priceOffer?.trim()} />
+                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )
+                                                )
+                                            )
+                                    )}
+                                </div>
+                            </>
+                        )}
                         <div className="chat-right-row3" ref={scrollRef}>
-                            <div className="date-messages">
-                                <span>22/05 9:45 AM</span>
-                            </div>
-                            {messages.map((message, index) => {
-                                // Format the timestamp for each message
-                                const formattedTime = formatTime(message.timestamp);
+                            {!chat_id ? (
+                                <>
+                                    <div className='no-chat-selected'>
+                                        No Chat Selected
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="date-messages">
+                                        <span>22/05 9:45 AM</span>
+                                    </div>
+                                    {messages.map((message, index) => {
+                                        // Format the timestamp for each message
+                                        const formattedTime = formatTime(message.timestamp);
 
-                                return message.sender_id === sender_id ? (
-                                    <div className="chat-sent-messages" key={index}>
-                                        <div className='chat-sent-message-info-container'>
-                                            <div className='row1'>
-                                                <div className="chat-sent-message-box">
-                                                    {message.content}
+                                        return message.sender_id === sender_id ? (
+                                            <div className="chat-sent-messages" key={index}>
+                                                <div className='chat-sent-message-info-container'>
+                                                    <div className='row1'>
+                                                        <div className='chat-sent-message-data'>
+                                                            {isImage(message.content) && (
+                                                                <div>
+                                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                                </div>
+                                                            )}
+
+                                                            {!isImage(message.content) && (
+                                                                <div className="chat-sent-message-box">
+                                                                    {isOfferPrice(message.content) ? (
+                                                                        <>
+                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
+                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                        </>
+                                                                    ) : (
+                                                                        isCancelledOffer(message.content) ? (
+                                                                            <>
+                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
+                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                            </>
+                                                                        ) : (
+                                                                            <span className='normal-chat-text'>{message.content}</span>
+                                                                        )
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                            <img src={user?.profile_pic || AvatarIcon} alt="" />
+                                                        </div>
+                                                        <small className='chat-time-sent-message'>{formattedTime}</small>
+                                                        {index === messages.length - 1 && showSpinner && (
+                                                            <div className='loading-spinner-container'>
+                                                                <ImageLoadingSpinner />
+                                                            </div>
+                                                        )}
+                                                        {messages.length === 0 && showSpinner && (
+                                                            <ImageLoadingSpinner />
+                                                        )}
+                                                    </div>
+
                                                 </div>
-                                                <img src={user?.profile_pic || AvatarIcon} alt="" />
                                             </div>
-                                            <small className='chat-time-sent-message'>{formattedTime}</small>
+                                        ) : (
+                                            <div className="chat-received-messages" key={index}>
+                                                <div className='chat-received-message-info-container'>
+                                                    <div className='row1'>
+                                                        <div className='chat-received-message-data'>
+                                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                                            {isImage(message.content) && (
+                                                                <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                            )}
+                                                            {!isImage(message.content) && (
+                                                                <div className="chat-received-message-box">
+                                                                    {isOfferPrice(message.content) ? (
+                                                                        <>
+                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
+                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                        </>
+                                                                    ) : (
+                                                                        isCancelledOffer(message.content) ? (
+                                                                            <>
+                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
+                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                            </>
+                                                                        ) : (
+                                                                            <span className='normal-chat-text'>{message.content}</span>
+                                                                        ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <small className='chat-time-received-message'>{formattedTime}</small>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </>
+                            )}
+                        </div>
+                        {!chat_id ? (
+                            null
+                        ) : (
+                            <>
+                                <div className="chat-right-row4">
+                                    <div className='chat-icon-buttons'>
+                                        <label htmlFor="imageInput">
+                                            <div className='chat-upload-img-btn' onClick={() => handleChatImageClick} >
+                                                <UploadImgIcon />
+                                            </div>
+                                        </label>
+                                        <input
+                                            id="imageInput"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <div onClick={() => setShowEmotePicker(!showEmotePicker)} ref={emojiPickerRef} className='chat-emote-btn'>
+                                            <SmileyIcon />
+                                            {showEmotePicker &&
+                                                <div className='emoji-picker'>
+                                                    <Picker data={data} emojiSize={20} emojiButtonSize={28} maxFrequentRows={2} onEmojiSelect={handleEmoteSelect} />
+                                                </div>
+                                            }
                                         </div>
                                     </div>
-                                ) : (
-                                    <div className="chat-received-messages" key={index}>
-                                        <div className='chat-received-message-info-container'>
-                                            <div className='row1'>
-                                                <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                <div className="chat-received-message-box">
-                                                    {message.content}
-                                                </div>
-                                            </div>
-                                            <small className='chat-time-received-message'>{formattedTime}</small>
+                                    <Input
+                                        type="text"
+                                        className='chat-input-message-box'
+                                        placeholder='Type your message'
+                                        value={input}
+                                        onKeyDown={handleKeyPress}
+                                        onChange={(e) => setInput(e.target.value)}
+                                    />
+                                    <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
+                                        <div className='chat-send-icon'>
+                                            <SendIcon />
                                         </div>
-                                    </div>
-                                );
-                            })}
-
-                        </div>
-                        <div className="chat-right-row4">
-                            <div className='chat-icon-buttons'>
-                                <div className='chat-upload-img-btn'>
-                                    <UploadImgIcon />
+                                    </button>
                                 </div>
-                                <div className='chat-emote-btn'>
-                                    <SmileyIcon />
-                                </div>
-                            </div>
-                            <Input
-                                type="text"
-                                className='chat-input-message-box'
-                                placeholder='Type your message'
-                                value={input}
-                                onKeyDown={handleKeyPress}
-                                onChange={(e) => setInput(e.target.value)}
-                            />
-                            <button onClick={sendMessage} className='chat-send-icon-btn'>
-                                <div className='chat-send-icon'>
-                                    <SendIcon />
-                                </div>
-                            </button>
-
-                        </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

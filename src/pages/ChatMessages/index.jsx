@@ -20,6 +20,7 @@ import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifyin
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 import NoImage from '../../assets/images/no-item-image-chat.png'
 import BtnClear from '../../components/Button/BtnClear';
+import MarkSoldModal from '../../components/Modal/MarkSoldModal'
 
 
 
@@ -31,6 +32,7 @@ const ChatMessages = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
+    const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
@@ -46,12 +48,17 @@ const ChatMessages = () => {
     console.log('offer:', offer)
     const [priceOffer, setPriceOffer] = useState('');
     console.log('priceOffer:', priceOffer)
+    const [pendingStatus, setPendingStatus] = useState('');
+    const [cancelStatus, setCancelStatus] = useState('');
+    const [acceptStatus, setAcceptStatus] = useState('');
+    const [declineStatus, setDeclineStatus] = useState('');
+    const [offerStatus, setOfferStatus] = useState('');
+    console.log('offerStatus:', offerStatus)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
-    // const isOfferPrice = chatInfo?.offers?.[0]?.offer_status;
-    // console.log('isOfferPrice:', isOfferPrice)
+
 
     const isOfferPrice = (content) => {
         const offerPricePattern = /Offered Price/;
@@ -81,6 +88,12 @@ const ChatMessages = () => {
         setIsChangeOfferBtn(!isChangeOfferBtn);
     };
 
+
+    const toggleSoldModal = () => {
+        setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
+    };
+
+
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
         if (e.key === 'Enter') {
@@ -88,12 +101,33 @@ const ChatMessages = () => {
         }
     };
 
-    const [cancelOffer, setCancelOffer] = useState('')
-    console.log('cancelOffer:', cancelOffer)
+    const setPendingStatusClick = () => {
+        setPendingStatus('Pending');
+        setCancelStatus('');
+        setAcceptStatus('');
+        setDeclineStatus('');
+    }
 
-    // const cancelOffer = () => {
-    //     setPriceOffer(null);
-    // }
+    const setCancelStatusClick = () => {
+        setCancelStatus('Cancelled')
+        setPendingStatus('');
+        setAcceptStatus('');
+        setDeclineStatus('');
+    }
+
+    const setAcceptStatusClick = () => {
+        setAcceptStatus('Accepted');
+        setCancelStatus('');
+        setPendingStatus('');
+        setDeclineStatus('');
+    }
+
+    const setDeclineStatusClick = () => {
+        setDeclineStatus('Declined');
+        setAcceptStatus('');
+        setCancelStatus('');
+        setPendingStatus('');
+    }
 
 
     useEffect(() => {
@@ -339,13 +373,6 @@ const ChatMessages = () => {
                         content: imageUrl,
                     });
                     setShowSpinner(false);
-                    // Use setTimeout to hide the spinner after 3 seconds
-                    // setTimeout(() => {
-                    //     setShowSpinner(false);
-                    // }, 3000);
-
-                    // Clear the selected image
-                    // setSelectedImage(null);
                 }
             }
         } catch (error) {
@@ -380,8 +407,6 @@ const ChatMessages = () => {
                 setInput('');
                 setPriceOffer('');
 
-
-
             } catch (error) {
                 // Handle error
                 console.error("Error sending message:", error);
@@ -391,14 +416,26 @@ const ChatMessages = () => {
 
 
     const sendOrCancelOffer = async () => {
-        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : null;
-        const offerStatus = priceOffer.trim() !== '' ? 'Pending' : 'None';
+        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
+        console.log('offerPriceToSend:', offerPriceToSend)
+        // const offerStatus = pendingStatus || cancelStatus;
+        // console.log('offerStatus:', offerStatus)
+
+        const offerStatus = 'Cancelled'
 
         let messageContent;
-        if (priceOffer) {
+        if (offerStatus === 'Pending') {
             messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
         } else {
-            messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            if (offerStatus === 'Cancelled') {
+                messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
+            else if (offerStatus === 'Accepted') {
+                messageContent = `<h6 style="color: green; font-weight: 500;">Offer Accepted</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
+            else if (offerStatus === 'Declined') {
+                messageContent = `<h6 style="color: red; font-weight: 500;">Offer Declined</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
         }
 
         socketRef.current.emit('send_message', {
@@ -426,7 +463,7 @@ const ChatMessages = () => {
 
             // Clear the input field after sending the message
             if (response.status === 201) {
-                setInput('');
+                
                 setPriceOffer('');
                 setSendOffer(true);
             }
@@ -519,6 +556,7 @@ const ChatMessages = () => {
 
     return (
         <>
+            {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
             <Header />
             <div className="container">
                 <div className="chat-container">
@@ -555,7 +593,7 @@ const ChatMessages = () => {
                                                             {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
                                                         </span>
                                                         <span className='chat-user-messages'>
-                                                        <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
+                                                            <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
                                                         </span>
                                                     </div>
                                                 </div>
@@ -625,18 +663,30 @@ const ChatMessages = () => {
                                     ) : (
                                         offer !== null ?
                                             (sellerId === sender_id ? (
-                                                <div className='offer-buttons'>
-                                                    <BtnGreen label='Accept Offer' />
-                                                    <BtnClear label='Decline Offer' />
-                                                    <BtnClear label='Mark as Sold' />
-                                                </div>
+                                                productStatus === 'Sold' ? (
+                                                    <div className='offer-buttons'>
+                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                    </div>
+                                                ) : (
+                                                    <div className='offer-buttons'>
+                                                        <BtnGreen label='Accept Offer' />
+                                                        <BtnClear label='Decline Offer' />
+                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                    </div>
+                                                )
                                             ) : (
                                                 <div className='offer-buttons'>
                                                     {isChangeOfferBtn ? (
-                                                        <>
-                                                            <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                            <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
-                                                        </>
+                                                        productStatus === 'Sold' ? (
+                                                            <div className='offer-buttons'>
+                                                                <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                                <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
+                                                            </>
+                                                        )
                                                     ) : (
                                                         <>
                                                             <div className='input-offer-container'>
@@ -648,7 +698,7 @@ const ChatMessages = () => {
                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                 />
                                                             </div>
-                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                            <BtnGreen label='Send Offer' onClick={() => {  sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                         </>
                                                     )}
@@ -662,7 +712,7 @@ const ChatMessages = () => {
                                                         </div>
                                                     ) : (
                                                         <div className='offer-buttons'>
-                                                            <BtnClear label='Mark as Sold' />
+                                                            <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
                                                         </div>
                                                     )
                                                 ) : (
@@ -685,7 +735,7 @@ const ChatMessages = () => {
                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                         />
                                                                     </div>
-                                                                    <BtnGreen label='Send Offer' onClick={sendOrCancelOffer} disabled={!priceOffer?.trim()} />
+                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); }} disabled={!priceOffer?.trim()} />
                                                                     <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                 </>
                                                             )}
@@ -697,7 +747,6 @@ const ChatMessages = () => {
                                 </div>
                             </>
                         )}
-
                         <div className="chat-right-row3" ref={scrollRef}>
                             {!chat_id ? (
                                 <>
@@ -713,7 +762,6 @@ const ChatMessages = () => {
                                     {messages.map((message, index) => {
                                         // Format the timestamp for each message
                                         const formattedTime = formatTime(message.timestamp);
-
 
                                         return message.sender_id === sender_id ? (
                                             <div className="chat-sent-messages" key={index}>
