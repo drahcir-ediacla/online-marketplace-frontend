@@ -54,12 +54,12 @@ const ChatMessages = () => {
     // console.log('isOfferPrice:', isOfferPrice)
 
     const isOfferPrice = (content) => {
-        const offerPricePattern = /₱/;
+        const offerPricePattern = /Offered Price/;
         return offerPricePattern.test(content);
     };
 
     const isCancelledOffer = (content) => {
-        const cancelledOfferPattern = /Cancelled Offer/;
+        const cancelledOfferPattern = /Offer Cancelled/;
         return cancelledOfferPattern.test(content);
     };
 
@@ -390,15 +390,15 @@ const ChatMessages = () => {
     };
 
 
-    const sendPriceOffer = async () => {
+    const sendOrCancelOffer = async () => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : null;
         const offerStatus = priceOffer.trim() !== '' ? 'Pending' : 'None';
 
         let messageContent;
         if (priceOffer) {
-            messageContent = `<h6>₱${priceOffer}</h6>`;
+            messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
         } else {
-            messageContent = 'Offer Cancelled';
+            messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
         }
 
         socketRef.current.emit('send_message', {
@@ -417,7 +417,7 @@ const ChatMessages = () => {
                 sender_id,
                 receiver_id,
                 product_id,
-                content: priceOffer || 'Offer Cancelled',
+                content: priceOffer || formatPrice(offer),
                 offer_price: offerPriceToSend,
                 offer_status: offerStatus,
             });
@@ -635,7 +635,7 @@ const ChatMessages = () => {
                                                     {isChangeOfferBtn ? (
                                                         <>
                                                             <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                            <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendPriceOffer(); }} />
+                                                            <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
                                                         </>
                                                     ) : (
                                                         <>
@@ -648,7 +648,7 @@ const ChatMessages = () => {
                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                 />
                                                             </div>
-                                                            <BtnGreen label='Send Offer' onClick={() => { sendPriceOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                         </>
                                                     )}
@@ -685,7 +685,7 @@ const ChatMessages = () => {
                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                         />
                                                                     </div>
-                                                                    <BtnGreen label='Send Offer' onClick={sendPriceOffer} disabled={!priceOffer?.trim()} />
+                                                                    <BtnGreen label='Send Offer' onClick={sendOrCancelOffer} disabled={!priceOffer?.trim()} />
                                                                     <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                 </>
                                                             )}
@@ -736,7 +736,8 @@ const ChatMessages = () => {
                                                                     ) : (
                                                                         isCancelledOffer(message.content) ? (
                                                                             <>
-                                                                                <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div>
+                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
+                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
                                                                             </>
                                                                         ) : (
                                                                             <span className='normal-chat-text'>{message.content}</span>
@@ -778,7 +779,8 @@ const ChatMessages = () => {
                                                                     ) : (
                                                                         isCancelledOffer(message.content) ? (
                                                                             <>
-                                                                                <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div>
+                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
+                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
                                                                             </>
                                                                         ) : (
                                                                             <span className='normal-chat-text'>{message.content}</span>

@@ -53,7 +53,7 @@ const MarkSoldModal = ({ onClick, productId, productName, userId }) => {
                         <div className='modal-sold-icon'><CheckIcon /></div>
                         <div className='are-you-sure'>
                             <h5>Are you sure you want to mark your listing as Sold?</h5>
-                            <span>You can’t undo this action. <br></br>Buyers can no longer chat with you or make offers for this listing.</span>
+                            <span>You can’t undo this action. <br></br>Buyers can no longer make offers for this listing.</span>
                         </div>
                         <div className='buttons'>
                             <BtnGreen className='mark-sold-button' label={`Yes, Mark as Sold`} onClick={MarkSoldItem} />
