@@ -45,6 +45,7 @@ const ChatMessages = () => {
     const product_id = chatInfo?.product_id;
     console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
+    const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
     console.log('offer:', offer)
     const [priceOffer, setPriceOffer] = useState('');
     console.log('priceOffer:', priceOffer)
@@ -129,6 +130,12 @@ const ChatMessages = () => {
         setPendingStatus('');
     }
 
+    // useEffect(() => {
+    //     if (offerStatus) {
+    //       sendOrCancelOffer();
+    //     }
+    //   }, [offerStatus]);
+      
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -415,14 +422,13 @@ const ChatMessages = () => {
     };
 
 
-    const sendOrCancelOffer = async () => {
+    const sendOrCancelOffer = async (offerStatus) => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
         console.log('offerPriceToSend:', offerPriceToSend)
         // const offerStatus = pendingStatus || cancelStatus;
         // console.log('offerStatus:', offerStatus)
-
-        const offerStatus = 'Cancelled'
-
+        
+        
         let messageContent;
         if (offerStatus === 'Pending') {
             messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
@@ -661,7 +667,7 @@ const ChatMessages = () => {
                                     {!productInfo ? (
                                         null
                                     ) : (
-                                        offer !== null ?
+                                        offerCurrentStatus === 'Pending' ?
                                             (sellerId === sender_id ? (
                                                 productStatus === 'Sold' ? (
                                                     <div className='offer-buttons'>
@@ -684,7 +690,7 @@ const ChatMessages = () => {
                                                         ) : (
                                                             <>
                                                                 <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                                <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
+                                                                <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer('Cancelled');}} />
                                                             </>
                                                         )
                                                     ) : (
@@ -698,7 +704,7 @@ const ChatMessages = () => {
                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                 />
                                                             </div>
-                                                            <BtnGreen label='Send Offer' onClick={() => {  sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                         </>
                                                     )}
@@ -735,7 +741,7 @@ const ChatMessages = () => {
                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                         />
                                                                     </div>
-                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); }} disabled={!priceOffer?.trim()} />
+                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); }} disabled={!priceOffer?.trim()} />
                                                                     <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                 </>
                                                             )}
