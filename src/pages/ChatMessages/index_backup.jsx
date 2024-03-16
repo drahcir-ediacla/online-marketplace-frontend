@@ -45,16 +45,17 @@ const ChatMessages = () => {
     const product_id = chatInfo?.product_id;
     console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
+    const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
     console.log('offer:', offer)
     const [priceOffer, setPriceOffer] = useState('');
     console.log('priceOffer:', priceOffer)
-    const [pendingStatus, setPendingStatus] = useState('');
-    const [noneStatus, setNoneStatus] = useState('');
+    const [offerStatus, setOfferStatus] = useState('');
+    console.log('offerStatus:', offerStatus)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
-   
+
 
     const isOfferPrice = (content) => {
         const offerPricePattern = /Offered Price/;
@@ -96,6 +97,13 @@ const ChatMessages = () => {
             sendMessage();
         }
     };
+
+    //This code will execute sendOrCancelOffer whenever offerStatus changes.
+    // useEffect(() => {
+    //     if (offerStatus) {
+    //       sendOrCancelOffer();
+    //     }
+    //   }, [offerStatus]);
 
 
     useEffect(() => {
@@ -383,15 +391,26 @@ const ChatMessages = () => {
     };
 
 
-    const sendOrCancelOffer = async () => {
-        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : null;
-        const offerStatus = priceOffer.trim() !== '' ? 'Pending' : 'None';
+    const sendOrCancelOffer = async (offerStatus) => {
+        const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
+        console.log('offerPriceToSend:', offerPriceToSend)
+        // const offerStatus = pendingStatus || cancelStatus;
+        // console.log('offerStatus:', offerStatus)
+
 
         let messageContent;
-        if (priceOffer) {
+        if (offerStatus === 'Pending') {
             messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
         } else {
-            messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            if (offerStatus === 'Cancelled') {
+                messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
+            else if (offerStatus === 'Accepted') {
+                messageContent = `<h6 style="color: green; font-weight: 500;">Offer Accepted</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
+            else if (offerStatus === 'Declined') {
+                messageContent = `<h6 style="color: red; font-weight: 500;">Offer Declined</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
+            }
         }
 
         socketRef.current.emit('send_message', {
@@ -400,7 +419,6 @@ const ChatMessages = () => {
             receiver_id,
             product_id,
             content: messageContent,
-            offer_price: offerPriceToSend,
         });
 
         try {
@@ -419,7 +437,7 @@ const ChatMessages = () => {
 
             // Clear the input field after sending the message
             if (response.status === 201) {
-                setInput('');
+
                 setPriceOffer('');
                 setSendOffer(true);
             }
@@ -614,92 +632,114 @@ const ChatMessages = () => {
                                         </div>
                                     </div>
 
-                                    {!productInfo ? (
-                                        null
-                                    ) : (
-                                        offer !== null ?
-                                            (sellerId === sender_id ? (
-                                                productStatus === 'Sold' ? (
-                                                    <div className='offer-buttons'>
-                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                    </div>
-                                                ) : (
-                                                    <div className='offer-buttons'>
-                                                        <BtnGreen label='Accept Offer' />
-                                                        <BtnClear label='Decline Offer' />
-                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
-                                                    </div>
-                                                )
-                                            ) : (
-                                                <div className='offer-buttons'>
-                                                    {isChangeOfferBtn ? (
-                                                        productStatus === 'Sold' ? (
-                                                            <div className='offer-buttons'>
-                                                                <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                            </div>
-                                                        ) : (
-                                                            <>
-                                                                <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                                <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer(); }} />
-                                                            </>
-                                                        )
-                                                    ) : (
-                                                        <>
-                                                            <div className='input-offer-container'>
-                                                                <span className='php-symbol'>₱</span>
-                                                                <Input
-                                                                    type='number'
-                                                                    value={priceOffer || '0.00'}
-                                                                    className='input-offer'
-                                                                    onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
-                                                                />
-                                                            </div>
-                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer(); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
-                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
-                                                        </>
-                                                    )}
-                                                </div>
-                                            )
-                                            ) : (
-                                                sellerId === sender_id ? (
-                                                    productStatus === 'Sold' ? (
-                                                        <div className='offer-buttons'>
-                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                        </div>
-                                                    ) : (
-                                                        <div className='offer-buttons'>
-                                                            <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
-                                                        </div>
-                                                    )
-                                                ) : (
-                                                    productStatus === 'Sold' ? (
-                                                        <div className='offer-buttons'>
-                                                            <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                        </div>
-                                                    ) : (
-                                                        <div className='offer-buttons'>
-                                                            {isMakeOfferBtn ? (
-                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
-                                                            ) : (
-                                                                <>
-                                                                    <div className='input-offer-container'>
-                                                                        <span className='php-symbol'>₱</span>
-                                                                        <Input
-                                                                            type='number'
-                                                                            value={priceOffer || '0.00'}
-                                                                            className='input-offer'
-                                                                            onChange={(e) => setPriceOffer(e.target.value)}
-                                                                        />
+                                    {!productInfo ?
+                                        (
+                                            null
+                                        ) :
+                                        (
+                                            offerCurrentStatus !== 'None' ?
+                                                (
+                                                    sellerId === sender_id ?
+                                                        (
+                                                            productStatus === 'Sold' ?
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
                                                                     </div>
-                                                                    <BtnGreen label='Send Offer' onClick={sendOrCancelOffer} disabled={!priceOffer?.trim()} />
-                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )
+                                                                ) :
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        <BtnGreen label='Accept Offer' />
+                                                                        <BtnClear label='Decline Offer' />
+                                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                    </div>
+                                                                )
+                                                        ) :
+                                                        (
+                                                            <div className='offer-buttons'>
+                                                                {isChangeOfferBtn ?
+                                                                    (
+                                                                        productStatus === 'Sold' ?
+                                                                            (
+                                                                                <div className='offer-buttons'>
+                                                                                    <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                                </div>
+                                                                            ) :
+                                                                            (
+                                                                                <>
+                                                                                    <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                                                    <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer('Cancelled'); }} />
+                                                                                </>
+                                                                            )
+                                                                    ) :
+                                                                    (
+                                                                        <>
+                                                                            <div className='input-offer-container'>
+                                                                                <span className='php-symbol'>₱</span>
+                                                                                <Input
+                                                                                    type='number'
+                                                                                    value={priceOffer || '0.00'}
+                                                                                    className='input-offer'
+                                                                                    onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
+                                                                                />
+                                                                            </div>
+                                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                                        </>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        )
+                                                ) :
+                                                (
+                                                    sellerId === sender_id ?
+                                                        (
+                                                            productStatus === 'Sold' ?
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                    </div>
+                                                                ) :
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                    </div>
+                                                                )
+                                                        ) :
+                                                        (
+                                                            productStatus === 'Sold' ?
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                    </div>
+                                                                ) :
+                                                                (
+                                                                    <div className='offer-buttons'>
+                                                                        {isMakeOfferBtn ?
+                                                                            (
+                                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
+                                                                            ) :
+                                                                            (
+                                                                                <>
+                                                                                    <div className='input-offer-container'>
+                                                                                        <span className='php-symbol'>₱</span>
+                                                                                        <Input
+                                                                                            type='number'
+                                                                                            value={priceOffer || '0.00'}
+                                                                                            className='input-offer'
+                                                                                            onChange={(e) => setPriceOffer(e.target.value)}
+                                                                                        />
+                                                                                    </div>
+                                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                )
+                                                        )
                                                 )
-                                            )
-                                    )}
+                                        )}
                                 </div>
                             </>
                         )}
