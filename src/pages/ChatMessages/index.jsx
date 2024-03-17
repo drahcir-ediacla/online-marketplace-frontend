@@ -21,6 +21,7 @@ import AvatarIcon from '../../assets/images/profile-avatar.png'
 import NoImage from '../../assets/images/no-item-image-chat.png'
 import BtnClear from '../../components/Button/BtnClear';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal'
+import ReviewModal from '../../components/Modal/ReviewModal'
 
 
 
@@ -31,8 +32,8 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-
     const [soldModalOpen, setSoldModalOpen] = useState(false);
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
@@ -100,6 +101,10 @@ const ChatMessages = () => {
         setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
     };
 
+    const toggleReviewModal = () => {
+        setReviewModalOpen((prevReviewModalOpen) => !prevReviewModalOpen);
+    };
+
 
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
@@ -108,10 +113,10 @@ const ChatMessages = () => {
         }
     };
 
-    //This code will execute sendOrCancelOffer whenever offerStatus changes.
+    //This code will execute handleOfferOptions whenever offerStatus changes.
     // useEffect(() => {
     //     if (offerStatus) {
-    //       sendOrCancelOffer();
+    //       handleOfferOptions();
     //     }
     //   }, [offerStatus]);
 
@@ -401,7 +406,7 @@ const ChatMessages = () => {
     };
 
 
-    const sendOrCancelOffer = async (offerStatus) => {
+    const handleOfferOptions = async (offerStatus) => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
         console.log('offerPriceToSend:', offerPriceToSend)
         // const offerStatus = pendingStatus || cancelStatus;
@@ -541,6 +546,7 @@ const ChatMessages = () => {
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
+            {reviewModalOpen && <ReviewModal />}
             <Header />
             <div className="container">
                 <div className="chat-container">
@@ -661,14 +667,14 @@ const ChatMessages = () => {
                                                                     offerCurrentStatus === 'Pending' ?
                                                                         (
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen label='Accept Offer' onClick={() => { sendOrCancelOffer('Accepted'); }} />
-                                                                                <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer('Declined'); }} />
+                                                                                <BtnGreen label='Accept Offer' onClick={() => { handleOfferOptions('Accepted'); }} />
+                                                                                <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Declined'); }} />
                                                                                 <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
                                                                             </div>
                                                                         ) :
                                                                         (
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen className='change-offer-btn' label='Leave Review' />
+                                                                                <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
                                                                                 <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
                                                                             </div>
                                                                         )
@@ -688,11 +694,11 @@ const ChatMessages = () => {
                                                                                 offerCurrentStatus === 'Pending' ? (
                                                                                     <>
                                                                                         <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                                                        <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer('Cancelled'); }} />
+                                                                                        <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Cancelled'); }} />
                                                                                     </>
                                                                                 ) : (
                                                                                     <>
-                                                                                        <BtnGreen className='change-offer-btn' label='Leave Review' />
+                                                                                        <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
                                                                                     </>
                                                                                 )
                                                                             )
@@ -708,7 +714,7 @@ const ChatMessages = () => {
                                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                                 />
                                                                             </div>
-                                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                            <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                                         </>
                                                                     )
@@ -755,7 +761,7 @@ const ChatMessages = () => {
                                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                                         />
                                                                                     </div>
-                                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                    <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
                                                                                     <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                                 </>
                                                                             )
