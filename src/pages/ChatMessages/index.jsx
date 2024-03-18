@@ -32,8 +32,10 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-    const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    console.log('reviewModalOpen:', reviewModalOpen )
+    const [soldModalOpen, setSoldModalOpen] = useState(false);
+    console.log('soldModalOpen:', soldModalOpen )
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
@@ -546,7 +548,7 @@ const ChatMessages = () => {
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
-            {reviewModalOpen && <ReviewModal />}
+            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} />}
             <Header />
             <div className="container">
                 <div className="chat-container">

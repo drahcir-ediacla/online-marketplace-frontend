@@ -46,12 +46,66 @@
             gap: 5px;
 
             .review-text-box {
-                width: 600px;
+                width: 685px;
             }
 
             span {
                 font-weight: 500;
                 font-size: 16px;
+            }
+        }
+
+        .review-modal-row4 {
+            display: flex;
+            gap: 10px;
+            padding: 10px 20px;
+
+            .upload-img-box {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
+                width: 127px;
+                border: 1px dashed var(--gray-500);
+                color: var(--green-400);
+                padding: 12px 0px;
+                background: none;
+
+                .add-review-upload-img {
+                    width: 36px;
+                    stroke: var(--green-400);
+                }
+            }
+
+            .preview-img-box {
+                position: relative;
+                border: 1px solid var(--gray-200);
+
+                .review-preview-image {
+                    width: 127px;
+                    height: 127px;
+                }
+
+                .upload-img-close {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    text-align: center;
+                    line-height: 24px;
+                    z-index: 1;
+                    cursor: pointer;
+                }
+
+                .upload-img-close:after {
+                    content: "✖";
+                    font-size: 14px;
+                    color: white;
+                }
             }
         }
 

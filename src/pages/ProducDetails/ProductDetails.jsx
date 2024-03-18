@@ -46,6 +46,7 @@ const ProductDetails = ({ userId }) => {
     const [wishlistCount, setWishlistCount] = useState({});
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
+    console.log('soldModalOpen:', soldModalOpen)
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
     const [offer, setOffer] = useState('');
