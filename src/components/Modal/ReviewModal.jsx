@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from '../../apicalls/axios';
 import { FaStar } from 'react-icons/fa';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import './style.scss'
 import TextArea from '../../components/FormField/TextArea';
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
-// import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg';
 import { ReactComponent as PlusSign } from '../../assets/images/plus-sign.svg';
-import PreviewImage from '../../assets/images/cap-1.jpg'
 
 
-const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
+const ReviewModal = ({ onClick, productId, userId, sellerId, targetId, chatId, displayName }) => {
 
 
     const [isModalOpen, setIsModalOpen] = useState(true);
@@ -20,6 +20,7 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [uploadImgCounter, setUploadImgCounter] = useState(0);
     const [selectedImages, setSelectedImages] = useState([]);
+    const dispatch = useDispatch();
     const maxImages = 5;
 
     const handleImgInputClick = () => {
@@ -106,6 +107,9 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
         setHoverValue(undefined)
     }
 
+
+
+
     const submitReview = async () => {
 
         // Check if star rating is provided
@@ -122,13 +126,42 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
         }
 
         try {
+            dispatch(Setloader(true));
+            // Upload images to Cloudinary
+            const uploadedImageUrls = [];
+            for (const image of selectedImages) {
+                const formData = new FormData();
+                formData.append('file', image);
+                formData.append('upload_preset', 'auwcvbw0');
+                formData.append('cloud_name', 'yogeek-cloudinary'); // Your Cloudinary upload preset
+                formData.append('folder', 'review_images'); // Folder in Cloudinary
+
+                const response = await fetch(
+                    'https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload', 
+                {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload image');
+                }
+
+                const responseData = await response.json();
+                uploadedImageUrls.push(responseData.secure_url);
+            }
+
+
             await axios.post('/api/submit-review', {
+                chat_id: chatId,
                 reviewer_id: userId,
+                reviewer_name: displayName,
                 target_id: targetId,
                 role: reviewerRole,
                 product_id: productId,
                 rating: currentRateValue,
                 comment: commentValue,
+                imageUrls: uploadedImageUrls,
             })
 
             // Clear form fields after successful submission
@@ -140,7 +173,10 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
 
             // Close the modal
             setIsModalOpen(false);
+            dispatch(Setloader(false));
+            window.location.reload();
         } catch (error) {
+            dispatch(Setloader(false));
             // Handle error
             console.error("Error sending message:", error);
         }
@@ -197,7 +233,7 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId }) => {
                         {userId !== sellerId &&
                             <div className="review-modal-row4">
                                 {imagePreviews.map((preview, index) => (
-                                    <div className="preview-img-box">
+                                    <div key={index} className="preview-img-box">
                                         <img src={preview} alt={`Img ${index}`} className='review-preview-image' />
                                         <div onClick={() => removeImage(index)} className="upload-img-close"></div>
                                     </div>

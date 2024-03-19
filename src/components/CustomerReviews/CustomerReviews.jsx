@@ -1,12 +1,25 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import axios from '../../apicalls/axios';
 import './style.scss'
+import { FaStar } from 'react-icons/fa';
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 
-const CustomerReviews = ({posts, loading}) => {
+const CustomerReviews = ({posts, targetId}) => {
 
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
+  const [reviewsData, setReviewsData] = useState([])
+ 
+  useEffect (() => {
+    const fetchReviewsByTargetId = async() => {
+      try {
+        const response = await axios.get(`/api/get-reviews/${targetId}`)
+      } catch(error) {
+
+      }
+    }
+  })
+
+  const stars = Array(5).fill(0);
+
 
   return (
     <>
@@ -16,13 +29,18 @@ const CustomerReviews = ({posts, loading}) => {
         <div className='col-right-customer-review'>
           <div>
             <div className='stars-dots-container'>
-              <div className="star-rating-customer">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-              </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+                                {stars.map((_, index) => {
+                                    return (
+                                        <FaStar
+                                            key={index}
+                                            size={15}
+                                            style={{ cursor: 'pointer' }}
+                                            color={(data.rating) > index ? '#FFD800' : '#bcbcbc'}
+                                        />
+                                    )
+                                })}
+                            </div>
               <div className='three-dots'><ThreeDots /></div>
             </div>
             <div><span className='name-customer-review'>{data.name}</span> - <span className='date-customer-review'>{data.date}</span></div>

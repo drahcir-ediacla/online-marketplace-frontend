@@ -33,9 +33,7 @@ const ChatMessages = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
-    console.log('reviewModalOpen:', reviewModalOpen )
     const [soldModalOpen, setSoldModalOpen] = useState(false);
-    console.log('soldModalOpen:', soldModalOpen )
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
@@ -45,15 +43,13 @@ const ChatMessages = () => {
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
+    const authUserDisplayName = user?.display_name;
     const product_id = chatInfo?.product_id;
-    console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
     const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
-    console.log('offer:', offer)
+    const existingReview = chatInfo?.review;
+    console.log('existingReview:', existingReview)
     const [priceOffer, setPriceOffer] = useState('');
-    console.log('priceOffer:', priceOffer)
-    const [offerStatus, setOfferStatus] = useState('');
-    console.log('offerStatus:', offerStatus)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
@@ -240,7 +236,7 @@ const ChatMessages = () => {
     useEffect(() => {
         const fetchChatById = async () => {
             try {
-                const response = await axios.get(`/api/get/chat/${chat_id}`);
+                const response = await axios.get(`/api/get/chat/${chat_id}/${sender_id}`);
                 setChatInfo(response.data); // Update receiverInfo state with fetched data
             } catch (error) {
                 console.error('Error fetching chat information:', error);
@@ -250,7 +246,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id, sendOffer]);
+    }, [chat_id, sendOffer, user?.id]);
 
 
 
@@ -548,7 +544,7 @@ const ChatMessages = () => {
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
-            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} />}
+            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} />}
             <Header />
             <div className="container">
                 <div className="chat-container">
@@ -676,7 +672,13 @@ const ChatMessages = () => {
                                                                         ) :
                                                                         (
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
+                                                                                {existingReview && existingReview.length === 0 ? (
+                                                                                    <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
+                                                                                ) : (
+                                                                                    <>
+                                                                                        <span>Review Submitted &nbsp;&nbsp;</span>
+                                                                                    </>
+                                                                                )}
                                                                                 <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
                                                                             </div>
                                                                         )
@@ -699,9 +701,13 @@ const ChatMessages = () => {
                                                                                         <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Cancelled'); }} />
                                                                                     </>
                                                                                 ) : (
-                                                                                    <>
+                                                                                    existingReview && existingReview.length === 0 ? (
                                                                                         <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
-                                                                                    </>
+                                                                                    ) : (
+                                                                                        <>
+                                                                                            <span>Review Submitted</span>
+                                                                                        </>
+                                                                                    )
                                                                                 )
                                                                             )
                                                                     ) :
