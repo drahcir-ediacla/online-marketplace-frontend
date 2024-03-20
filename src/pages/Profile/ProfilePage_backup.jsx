@@ -44,12 +44,12 @@ const ProfilePage = ({ userId }) => {
                 console.log('Error fetching all the reviews:', error)
             }
         };
-
-        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-
+        if (id) {
+            fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+        }
     }, [id])
 
-
+    
 
     const addToWishlist = (productId) => {
         axios.post(`/api/addwishlist/product-${productId}`, {})
@@ -157,8 +157,8 @@ const ProfilePage = ({ userId }) => {
         const indexOfLastPost = currentPage * postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         // // const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-        return reviewsData.slice(indexOfFirstPost, indexOfLastPost);
-    }, [currentPage, reviewsData]);
+        return customerReviewsData.slice(indexOfFirstPost, indexOfLastPost);
+    }, [currentPage]);
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -377,7 +377,7 @@ const ProfilePage = ({ userId }) => {
                                                     <div style={{ display: reviewTab === 0 ? 'block' : 'none' }}>
                                                         <CustomerReviews posts={currentReviewData} />
                                                         <div className='pagination-container'>
-                                                            <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
+                                                            <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} />
                                                         </div>
                                                     </div>
                                                     <div style={{ display: reviewTab === 1 ? 'block' : 'none' }}>Buyer Reviews</div>

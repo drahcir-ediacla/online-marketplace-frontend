@@ -10,8 +10,15 @@ import BtnGreen from '../Button/BtnGreen'
 import { ReactComponent as PlusSign } from '../../assets/images/plus-sign.svg';
 
 
-const ReviewModal = ({ onClick, productId, userId, sellerId, targetId, chatId, displayName }) => {
-
+const ReviewModal = ({
+    onClick,
+    productId,
+    userId,
+    sellerId,
+    targetId,
+    chatId,
+    displayName,
+    profileImg }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [currentRateValue, setCurrentRateValue] = useState(0);
@@ -137,11 +144,11 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId, chatId, d
                 formData.append('folder', 'review_images'); // Folder in Cloudinary
 
                 const response = await fetch(
-                    'https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload', 
-                {
-                    method: 'POST',
-                    body: formData,
-                });
+                    'https://api.cloudinary.com/v1_1/yogeek-cloudinary/image/upload',
+                    {
+                        method: 'POST',
+                        body: formData,
+                    });
 
                 if (!response.ok) {
                     throw new Error('Failed to upload image');
@@ -162,6 +169,7 @@ const ReviewModal = ({ onClick, productId, userId, sellerId, targetId, chatId, d
                 rating: currentRateValue,
                 comment: commentValue,
                 imageUrls: uploadedImageUrls,
+                profile_pic: profileImg,
             })
 
             // Clear form fields after successful submission

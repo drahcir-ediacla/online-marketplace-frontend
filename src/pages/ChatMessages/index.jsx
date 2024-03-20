@@ -44,11 +44,12 @@ const ChatMessages = () => {
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const authUserDisplayName = user?.display_name;
+    const profileImg = user?.profile_pic;
+    console.log('profileImg:', profileImg)
     const product_id = chatInfo?.product_id;
     const offer = chatInfo?.offers?.[0]?.offer_price;
     const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
     const existingReview = chatInfo?.review;
-    console.log('existingReview:', existingReview)
     const [priceOffer, setPriceOffer] = useState('');
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
@@ -544,7 +545,7 @@ const ChatMessages = () => {
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
-            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} />}
+            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} profileImg={profileImg} />}
             <Header />
             <div className="container">
                 <div className="chat-container">
