@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from '../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
+import { FaStar } from 'react-icons/fa';
 import useAuthentication from '../../hooks/authHook';
 import { trackProductView, GetProductsById, AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import Header from '../../layouts/Header'
@@ -19,6 +20,7 @@ import { ReactComponent as FlagIcon } from '../../assets/images/flag-icon.svg'
 import { ReactComponent as EditIcon } from '../../assets/images/edit-icon.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/images/delete-icon.svg';
 import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
+import { ReactComponent as NoReviewIcon } from '../../assets/images/group-messages-icon.svg'
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
@@ -59,6 +61,10 @@ const ProductDetails = ({ userId }) => {
     const [chatId, setChatId] = useState(null);
     const isProductOwner = product?.seller.id === user?.id
     const productStatus = product?.status
+    const [reviewsData, setReviewsData] = useState([])
+    const [avgRating, setAvgRating] = useState()
+    const [totalReviews, setTotalReviews] = useState()
+    const stars = Array(5).fill(0);
     const viewChat = () => {
         window.location.href = `/messages/${chatId}`;
     }
@@ -68,6 +74,26 @@ const ProductDetails = ({ userId }) => {
     const youtubeUrls = product?.youtube_link || null;
     const gallery = [...imageUrls, ...videoUrls, youtubeUrls].filter(url => url !== null);
     console.log('gallery:', gallery)
+
+
+
+    useEffect(() => {
+        const fetchReviewsByTargetId = async () => {
+            try {
+                const response = await axios.get(`/api/get-reviews/${product?.seller?.id}`)
+                setReviewsData(response.data.reviewsTargetId)
+                setAvgRating(response.data.averageRating)
+                setTotalReviews(response.data.totalReviews)
+
+            } catch (error) {
+                console.log('Error fetching all the reviews:', error)
+            }
+        };
+
+        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+
+    }, [product?.seller?.id])
+
 
 
     useEffect(() => {
@@ -113,8 +139,8 @@ const ProductDetails = ({ userId }) => {
         const indexOfLastPost = currentPage * postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         // // const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-        return customerReviewsData.slice(indexOfFirstPost, indexOfLastPost);
-    }, [currentPage]);
+        return reviewsData.slice(indexOfFirstPost, indexOfLastPost);
+    }, [currentPage, reviewsData]);
 
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -360,20 +386,39 @@ const ProductDetails = ({ userId }) => {
                                 </div>
                                 <div className="product-details-review">
                                     <div className='review-for'>
-                                        <h5>Reviews for {product.seller?.display_name}</h5>
+                                        {reviewsData && reviewsData.length > 0 ? (
+                                            <h5>Reviews for {product.seller?.display_name}</h5>
+                                        ) : (
+                                            <h5>No Reviews for {product.seller?.display_name}</h5>
+                                        )}
                                         <div className="seller-rating">
-                                            <span>4.0</span>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-regular fa-star-half-stroke"></i>
-                                            <i class="fa-regular fa-star"></i>
-                                            <span>|</span><span>5 Review(s)</span>
+                                            <span>{avgRating}</span>
+                                            <div style={{ display: 'flex', gap: '3px' }}>
+                                                {stars.map((_, index) => {
+                                                    return (
+                                                        <FaStar
+                                                            key={index}
+                                                            size={17}
+                                                            color={(avgRating) > index ? '#FFD800' : '#bcbcbc'}
+                                                        />
+                                                    )
+                                                })}
+                                            </div>
+                                            <span>|</span><span>{totalReviews || 0} Review(s)</span>
                                         </div>
                                     </div>
                                     <hr />
-                                    <CustomerReviews posts={currentReviewData} />
-                                    <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={customerReviewsData.length} currentPage={currentPage} /></div>
+                                    {reviewsData && reviewsData.length > 0 ? (
+                                        <>
+                                            <CustomerReviews posts={currentReviewData} />
+                                            <div className='pagination-container'><Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} /></div>
+                                        </>
+                                    ) : (
+                                        <div className='no-review-message-container'>
+                                            <div className='no-review-icon'><NoReviewIcon /></div>
+                                            <h5>{user?.display_name} does not yet have any reviews.</h5>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className='col-right'>
@@ -384,13 +429,19 @@ const ProductDetails = ({ userId }) => {
                                         <div className='col-right'>
                                             <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
                                             <div className="seller-rating">
-                                                <span>4.0</span>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-regular fa-star-half-stroke"></i>
-                                                <i class="fa-regular fa-star"></i>
-                                                <span> | </span><span>5 Review(s)</span>
+                                                <span>{avgRating}</span>
+                                                <div style={{ display: 'flex', gap: '3px' }}>
+                                                    {stars.map((_, index) => {
+                                                        return (
+                                                            <FaStar
+                                                                key={index}
+                                                                size={17}
+                                                                color={(avgRating) > index ? '#FFD800' : '#bcbcbc'}
+                                                            />
+                                                        )
+                                                    })}
+                                                </div>
+                                                <span>|</span><span>{totalReviews || 0} Review(s)</span>
                                             </div>
                                         </div>
                                     </div>

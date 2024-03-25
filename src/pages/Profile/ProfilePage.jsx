@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
+import { FaStar } from 'react-icons/fa';
 import './style.scss'
 import customerReviewsData from '../../data/customerReviewsData.json'
 import Header from '../../layouts/Header'
@@ -14,6 +15,7 @@ import ListingCard from '../../components/Cards/ListingCard'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import Pagination from '../../components/Pagination/Pagination'
 import BtnClear from '../../components/Button/BtnClear'
+import { ReactComponent as NoReviewIcon } from '../../assets/images/group-messages-icon.svg'
 
 
 let postsPerPage = 5;
@@ -29,6 +31,9 @@ const ProfilePage = ({ userId }) => {
 
     const [reviewsData, setReviewsData] = useState([])
     console.log('reviewsData:', reviewsData)
+    const [avgRating, setAvgRating] = useState()
+    const [totalReviews, setTotalReviews] = useState()
+    const stars = Array(5).fill(0);
 
     const [searchTerm, setSearchTerm] = useState('')
 
@@ -38,7 +43,9 @@ const ProfilePage = ({ userId }) => {
         const fetchReviewsByTargetId = async () => {
             try {
                 const response = await axios.get(`/api/get-reviews/${id}`)
-                setReviewsData(response.data)
+                setReviewsData(response.data.reviewsTargetId)
+                setAvgRating(response.data.averageRating)
+                setTotalReviews(response.data.totalReviews)
 
             } catch (error) {
                 console.log('Error fetching all the reviews:', error)
@@ -236,6 +243,8 @@ const ProfilePage = ({ userId }) => {
                                             setAuthenticatedUser={setAuthenticatedUser}
                                             allFollowersList={() => openContent(2)}
                                             allFollowingList={() => openContent(3)}
+                                            avgRating={avgRating}
+                                            totalReviews={totalReviews}
                                         />
                                     </div>
                                     <div className="col-right">
@@ -283,17 +292,23 @@ const ProfilePage = ({ userId }) => {
                                                 <div className='row1'>
                                                     <div className="overall-rating">
                                                         <div className='avg-rate-box'>
-                                                            <div className='total-avg-rate'>4.0</div>
+                                                            <div className='total-avg-rate'>{avgRating || 0}</div>
                                                             <div className='out-of-5-stars'>Out of 5 Stars</div>
                                                             <div className="seller-rating">
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-regular fa-star-half-stroke"></i>
-                                                                <i class="fa-regular fa-star"></i>
+                                                                <div style={{ display: 'flex', gap: '5px' }}>
+                                                                    {stars.map((_, index) => {
+                                                                        return (
+                                                                            <FaStar
+                                                                                key={index}
+                                                                                size={23}
+                                                                                color={(avgRating) > index ? '#FFD800' : '#bcbcbc'}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <span>Overall rating of 28 reviews/ratings</span>
+                                                        <span>Overall rating of {totalReviews} reviews/ratings</span>
                                                     </div>
                                                     <div className="vl"></div>
                                                     <div className='progress-rating'>
@@ -368,18 +383,26 @@ const ProfilePage = ({ userId }) => {
                                                 </div>
                                                 <div className="row2"></div>
                                                 <div className="row3 profile-review-container">
-                                                    <div className='review-btns'>
-                                                        <button className={`review-tab ${reviewTab === 0 ? 'active' : ''}`} onClick={() => openReviews(0)}>All Reviews</button>
-                                                        <button className={`review-tab ${reviewTab === 1 ? 'active' : ''}`} onClick={() => openReviews(1)}>Buyer Reviews</button>
-                                                        <button className={`review-tab ${reviewTab === 2 ? 'active' : ''}`} onClick={() => openReviews(2)}>Seller Reviews</button>
-                                                    </div>
-
-                                                    <div style={{ display: reviewTab === 0 ? 'block' : 'none' }}>
-                                                        <CustomerReviews posts={currentReviewData} />
-                                                        <div className='pagination-container'>
-                                                            <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
+                                                    {reviewsData && reviewsData.length > 0 ? (
+                                                        <>
+                                                            <div className='review-btns'>
+                                                                <button className={`review-tab ${reviewTab === 0 ? 'active' : ''}`} onClick={() => openReviews(0)}>All Reviews</button>
+                                                                <button className={`review-tab ${reviewTab === 1 ? 'active' : ''}`} onClick={() => openReviews(1)}>Buyer Reviews</button>
+                                                                <button className={`review-tab ${reviewTab === 2 ? 'active' : ''}`} onClick={() => openReviews(2)}>Seller Reviews</button>
+                                                            </div>
+                                                            <div style={{ display: reviewTab === 0 ? 'block' : 'none' }}>
+                                                                <CustomerReviews posts={currentReviewData} />
+                                                                <div className='pagination-container'>
+                                                                    <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <div className='no-review-message-container'>
+                                                            <div className='no-review-icon'><NoReviewIcon /></div>
+                                                            <h5>{user?.display_name} does not yet have any reviews.</h5>
                                                         </div>
-                                                    </div>
+                                                    )}
                                                     <div style={{ display: reviewTab === 1 ? 'block' : 'none' }}>Buyer Reviews</div>
                                                     <div style={{ display: reviewTab === 2 ? 'block' : 'none' }}>Seller Reviews</div>
 

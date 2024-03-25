@@ -27,7 +27,6 @@ const CustomerReviews = ({ posts }) => {
                       <FaStar
                         key={index}
                         size={15}
-                        style={{ cursor: 'pointer' }}
                         color={(data.rating) > index ? '#FFD800' : '#bcbcbc'}
                       />
                     )

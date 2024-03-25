@@ -187,6 +187,21 @@
                         margin-top: 20px;
                         float: right;
                     }
+
+                    .no-review-message-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        color: var(--gray-400);
+                        padding: 50px 0 50px 0;
+                        gap: 20px;
+
+                        .no-review-icon {
+                            width: 150px;
+                            fill: var(--gray-300);
+                            opacity: 60%;
+                        }
+                    }
                 }
             }
 
@@ -230,6 +245,7 @@
 
                     .mark-sold-listing {
                         color: var(--green-400);
+
                         .sold-icon {
                             width: 17px;
                             height: 17px;
@@ -245,12 +261,15 @@
 
                     .delete-listing {
                         color: #FF0022;
+
                         .delete-icon {
                             width: 14px;
                         }
                     }
 
-                    .delete-listing:hover, .edit-listing:hover, .mark-sold-listing:hover {
+                    .delete-listing:hover,
+                    .edit-listing:hover,
+                    .mark-sold-listing:hover {
                         background: var(--light-gray);
                     }
 

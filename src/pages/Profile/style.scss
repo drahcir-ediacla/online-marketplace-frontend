@@ -424,6 +424,22 @@
                                     margin-top: 20px;
                                     float: right;
                                 }
+
+                                .no-review-message-container {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    color: var(--gray-400);
+                                    padding: 50px 0 50px 0;
+                                    gap: 20px;
+
+                                    .no-review-icon {
+                                        width: 150px;
+                                        fill: var(--gray-300);
+                                        opacity: 60%;
+                                    }
+                                }
+
                             }
 
                         }

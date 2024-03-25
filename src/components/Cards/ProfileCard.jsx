@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './style.scss'
+import { FaStar } from 'react-icons/fa';
 import DefaultProfilePic from '../../assets/images/profile-avatar.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
@@ -11,7 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 
 
 
-const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowingList }) => {
+const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowingList, totalReviews, avgRating }) => {
     console.log('user data1:', data);
 
     const [following, setFollowing] = useState(false);
@@ -19,6 +20,7 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
     const [allFollower, setAllFollower] = useState([]);
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    const stars = Array(5).fill(0);
 
 
     useEffect(() => {
@@ -34,7 +36,7 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
         };
 
         fetchFollowingUser();
-    }, [data?.id]);
+    }, [data?.id, following]);
 
 
 
@@ -48,7 +50,7 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
             }
         }
         fetchAllUserFollowing()
-    }, [data?.id])
+    }, [data?.id, following])
 
 
 
@@ -63,7 +65,7 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
             }
         }
         fetchAllUserFollower()
-    }, [data?.id])
+    }, [data?.id, following])
 
 
     // Check if data is null or undefined
@@ -103,13 +105,19 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
                 <img src={data?.profile_pic || DefaultProfilePic} alt="" className="profile-pic" />
                 <span className='profile-name'>{data?.display_name}</span>
                 <div className="seller-rating">
-                    <span>4.0</span>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-regular fa-star-half-stroke"></i>
-                    <i class="fa-regular fa-star"></i>
-                    <span> | </span><span>5 Review(s)</span>
+                    <span>{avgRating}</span>
+                    <div style={{ display: 'flex', gap: '3px' }}>
+                        {stars.map((_, index) => {
+                            return (
+                                <FaStar
+                                    key={index}
+                                    size={17}
+                                    color={(avgRating) > index ? '#FFD800' : '#bcbcbc'}
+                                />
+                            )
+                        })}
+                    </div>
+                    <span>|</span><span>{totalReviews || 0} Review(s)</span>
                 </div>
                 <div className='joined-date-loc'><span>{data?.city}</span> · <span>{formattedDate}</span></div>
                 {/* <div className="profile-social-media">
