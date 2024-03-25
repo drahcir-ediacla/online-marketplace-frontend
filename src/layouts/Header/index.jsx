@@ -142,7 +142,7 @@ function Header() {
                       <div className='triangle-icon'><TriangleIcon /></div>
                       <ul>
                         <li><Link to='/editprofile'>Manage Account</Link></li>
-                        <li><Link onClick={myProfile}>My Profile</Link></li>
+                        <li><Link onClick={myProfile}>My Profile & Listings</Link></li>
                         <li><Link to='/settings/1'>Settings</Link></li>
                         <li>Help & Support</li>
                         <li><Link onClick={logout}>Logout</Link></li>
