@@ -44,6 +44,7 @@ const ProductDetails = ({ userId }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
+    const [sendMessage, setSendMessage] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     console.log('soldModalOpen:', soldModalOpen)
@@ -93,7 +94,7 @@ const ProductDetails = ({ userId }) => {
         if (sender_id && receiver_id && product_id) {
             checkChatExists();
         }
-    }, [sender_id, receiver_id, product_id]); // Dependencies
+    }, [sender_id, receiver_id, product_id, sendMessage]); // Dependencies
 
     console.log('Chat ID:', chatId)
 
@@ -270,6 +271,7 @@ const ProductDetails = ({ userId }) => {
             // Clear the input field after sending the message
             setInput('');
             setOffer('');
+            setSendMessage(true);
         } catch (error) {
             console.error('Error sending message:', error)
         }
