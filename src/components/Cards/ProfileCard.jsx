@@ -12,7 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 
 
 
-const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowingList, totalReviews, avgRating }) => {
+const ProfileInfoCard = ({ data, authenticatedUser, reviewsData, avgRating, totalReviews, allFollowersList, allFollowingList }) => {
     console.log('user data1:', data);
 
     const [following, setFollowing] = useState(false);
@@ -21,6 +21,25 @@ const ProfileInfoCard = ({ data, authenticatedUser, allFollowersList, allFollowi
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     const stars = Array(5).fill(0);
+
+
+    useEffect(() => {
+        const fetchReviewsByTargetId = async () => {
+            try {
+                const response = await axios.get(`/api/get-reviews/${data?.id}`)
+                reviewsData(response.data.reviewsTargetId)
+                avgRating(response.data.averageRating)
+                totalReviews(response.data.totalReviews)
+
+            } catch (error) {
+                console.log('Error fetching all the reviews:', error)
+            }
+        };
+
+        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
+    }, [data?.id])
+
 
 
     useEffect(() => {

@@ -39,22 +39,22 @@ const ProfilePage = ({ userId }) => {
 
 
 
-    useEffect(() => {
-        const fetchReviewsByTargetId = async () => {
-            try {
-                const response = await axios.get(`/api/get-reviews/${id}`)
-                setReviewsData(response.data.reviewsTargetId)
-                setAvgRating(response.data.averageRating)
-                setTotalReviews(response.data.totalReviews)
+    // useEffect(() => {
+    //     const fetchReviewsByTargetId = async () => {
+    //         try {
+    //             const response = await axios.get(`/api/get-reviews/${id}`)
+    //             setReviewsData(response.data.reviewsTargetId)
+    //             setAvgRating(response.data.averageRating)
+    //             setTotalReviews(response.data.totalReviews)
 
-            } catch (error) {
-                console.log('Error fetching all the reviews:', error)
-            }
-        };
+    //         } catch (error) {
+    //             console.log('Error fetching all the reviews:', error)
+    //         }
+    //     };
 
-        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-
-    }, [id])
+    //     fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+    //     console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
+    // }, [id])
 
 
 
@@ -117,7 +117,6 @@ const ProfilePage = ({ userId }) => {
 
     const allProducts = useMemo(() => Array.isArray(user?.products) ? user?.products : [], [user?.products]);
     const [filteredListings, setFilteredListings] = useState(allProducts)
-    console.log('filteredListings:', filteredListings)
 
 
     // Use useCallback to memoize the function
@@ -243,8 +242,9 @@ const ProfilePage = ({ userId }) => {
                                             setAuthenticatedUser={setAuthenticatedUser}
                                             allFollowersList={() => openContent(2)}
                                             allFollowingList={() => openContent(3)}
-                                            avgRating={avgRating}
-                                            totalReviews={totalReviews}
+                                            avgRating={setAvgRating}
+                                            totalReviews={setTotalReviews}
+                                            reviewsData={setReviewsData}
                                         />
                                     </div>
                                     <div className="col-right">
