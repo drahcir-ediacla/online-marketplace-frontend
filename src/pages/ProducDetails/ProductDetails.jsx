@@ -62,6 +62,7 @@ const ProductDetails = ({ userId }) => {
     const isProductOwner = product?.seller.id === user?.id
     const productStatus = product?.status
     const [reviewsData, setReviewsData] = useState([])
+    console.log('reviewsData:', reviewsData)
     const [avgRating, setAvgRating] = useState()
     const [totalReviews, setTotalReviews] = useState()
     const stars = Array(5).fill(0);
@@ -139,7 +140,7 @@ const ProductDetails = ({ userId }) => {
         const indexOfLastPost = currentPage * postsPerPage;
         const indexOfFirstPost = indexOfLastPost - postsPerPage;
         // // const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-        return reviewsData.slice(indexOfFirstPost, indexOfLastPost);
+        return reviewsData?.slice(indexOfFirstPost, indexOfLastPost);
     }, [currentPage, reviewsData]);
 
     // Change page

@@ -31,30 +31,33 @@ const ProfilePage = ({ userId }) => {
 
     const [reviewsData, setReviewsData] = useState([])
     console.log('reviewsData:', reviewsData)
-    const [avgRating, setAvgRating] = useState()
-    const [totalReviews, setTotalReviews] = useState()
+    const [avgRating, setAvgRating] = useState(null)
+    console.log('avgRating:', avgRating)
+    const [totalReviews, setTotalReviews] = useState(null)
+    const [ratingBreakdown, setRatingBreakdown] = useState(null)
     const stars = Array(5).fill(0);
 
     const [searchTerm, setSearchTerm] = useState('')
 
 
 
-    // useEffect(() => {
-    //     const fetchReviewsByTargetId = async () => {
-    //         try {
-    //             const response = await axios.get(`/api/get-reviews/${id}`)
-    //             setReviewsData(response.data.reviewsTargetId)
-    //             setAvgRating(response.data.averageRating)
-    //             setTotalReviews(response.data.totalReviews)
+    useEffect(() => {
+        const fetchReviewsByTargetId = async () => {
+            try {
+                const response = await axios.get(`/api/get-reviews/${id}`)
+                setReviewsData(response.data.reviewsTargetId)
+                setAvgRating(response.data.averageRating)
+                setTotalReviews(response.data.totalReviews)
+                setRatingBreakdown(response.data.ratingBreakdown)
 
-    //         } catch (error) {
-    //             console.log('Error fetching all the reviews:', error)
-    //         }
-    //     };
+            } catch (error) {
+                console.log('Error fetching all the reviews:', error)
+            }
+        };
 
-    //     fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-    //     console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
-    // }, [id])
+        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
+    }, [id])
 
 
 
@@ -242,9 +245,8 @@ const ProfilePage = ({ userId }) => {
                                             setAuthenticatedUser={setAuthenticatedUser}
                                             allFollowersList={() => openContent(2)}
                                             allFollowingList={() => openContent(3)}
-                                            avgRating={setAvgRating}
-                                            totalReviews={setTotalReviews}
-                                            reviewsData={setReviewsData}
+                                            avgRating={avgRating}
+                                            totalReviews={totalReviews}
                                         />
                                     </div>
                                     <div className="col-right">
@@ -314,70 +316,100 @@ const ProfilePage = ({ userId }) => {
                                                     <div className='progress-rating'>
                                                         <div className='progress-bar-box'>
                                                             <div className="progress-stars">
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    {stars.map((_, index) => {
+                                                                        return (
+                                                                            <FaStar
+                                                                                key={index}
+                                                                                size={17}
+                                                                                color={5 > index ? '#FFD800' : '#bcbcbc'}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                             <div class="progress-bar-container">
-                                                                <div class="five-star-bar"></div>
+                                                                <div class="five-star-bar" style={{ width: `${(ratingBreakdown?.['5'] || 0) * 20}%` }}></div>
                                                             </div>
-                                                            <span>15</span>
+                                                            <span>{ratingBreakdown?.[5]}</span>
                                                         </div>
                                                         <div className='progress-bar-box'>
                                                             <div className='progress-bar-box'>
                                                                 <div className="progress-stars">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <i class="fa-regular fa-star"></i>
+                                                                    <div style={{ display: 'flex' }}>
+                                                                        {stars.map((_, index) => {
+                                                                            return (
+                                                                                <FaStar
+                                                                                    key={index}
+                                                                                    size={17}
+                                                                                    color={4 > index ? '#FFD800' : '#bcbcbc'}
+                                                                                />
+                                                                            )
+                                                                        })}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="progress-bar-container">
-                                                                    <div class="four-star-bar"></div>
+                                                                    <div class="four-star-bar" style={{ width: `${(ratingBreakdown?.['4'] || 0) * 20}%` }}></div>
                                                                 </div>
-                                                                <span>10</span>
+                                                                <span>{ratingBreakdown?.[4]}</span>
                                                             </div>
                                                         </div>
                                                         <div className='progress-bar-box'>
                                                             <div className="progress-stars">
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    {stars.map((_, index) => {
+                                                                        return (
+                                                                            <FaStar
+                                                                                key={index}
+                                                                                size={17}
+                                                                                color={3 > index ? '#FFD800' : '#bcbcbc'}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                             <div class="progress-bar-container">
-                                                                <div class="three-star-bar"></div>
+                                                                <div class="three-star-bar" style={{ width: `${(ratingBreakdown?.['3'] || 0) * 20}%` }}></div>
                                                             </div>
-                                                            <span>6</span>
+                                                            <span>{ratingBreakdown?.[3]}</span>
                                                         </div>
                                                         <div className='progress-bar-box'>
                                                             <div className="progress-stars">
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    {stars.map((_, index) => {
+                                                                        return (
+                                                                            <FaStar
+                                                                                key={index}
+                                                                                size={17}
+                                                                                color={2 > index ? '#FFD800' : '#bcbcbc'}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                             <div class="progress-bar-container">
-                                                                <div class="two-star-bar"></div>
+                                                                <div class="two-star-bar" style={{ width: `${(ratingBreakdown?.['2'] || 0) * 20}%` }}></div>
                                                             </div>
-                                                            <span>3</span>
+                                                            <span>{ratingBreakdown?.[2]}</span>
                                                         </div>
                                                         <div className='progress-bar-box'>
                                                             <div className="progress-stars">
-                                                                <i class="fa-solid fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
-                                                                <i class="fa-regular fa-star"></i>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    {stars.map((_, index) => {
+                                                                        return (
+                                                                            <FaStar
+                                                                                key={index}
+                                                                                size={17}
+                                                                                color={1 > index ? '#FFD800' : '#bcbcbc'}
+                                                                            />
+                                                                        )
+                                                                    })}
+                                                                </div>
                                                             </div>
                                                             <div class="progress-bar-container">
-                                                                <div class="one-star-bar"></div>
+                                                                <div class="one-star-bar" style={{ width: `${(ratingBreakdown?.['1'] || 0) * 20}%` }}></div>
                                                             </div>
-                                                            <span>1</span>
+                                                            <span>{ratingBreakdown?.[1]}</span>
                                                         </div>
                                                     </div>
                                                 </div>

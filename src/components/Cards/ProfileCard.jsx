@@ -12,40 +12,23 @@ import { useSearchParams } from 'react-router-dom'
 
 
 
-const ProfileInfoCard = ({ data, authenticatedUser, reviewsData, avgRating, totalReviews, allFollowersList, allFollowingList }) => {
-    console.log('user data1:', data);
+const ProfileInfoCard = ({ data, avgRating, totalReviews, authenticatedUser, allFollowersList, allFollowingList }) => {
 
     const [following, setFollowing] = useState(false);
+    const [profileId, setProfileId] = useState(false);
     const [allFollowing, setAllFollowing] = useState([]);
     const [allFollower, setAllFollower] = useState([]);
     const originalDate = data?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     const stars = Array(5).fill(0);
 
-
-    useEffect(() => {
-        const fetchReviewsByTargetId = async () => {
-            try {
-                const response = await axios.get(`/api/get-reviews/${data?.id}`)
-                reviewsData(response.data.reviewsTargetId)
-                avgRating(response.data.averageRating)
-                totalReviews(response.data.totalReviews)
-
-            } catch (error) {
-                console.log('Error fetching all the reviews:', error)
-            }
-        };
-
-        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
-    }, [data?.id])
-
-
+    
 
     useEffect(() => {
         const fetchFollowingUser = async () => {
             try {
                 const response = await axios.get(`/api/get/following-${data.id}`);
+                console.log('followingdata.id:', data?.id)
 
                 // Assuming your API response structure is { message: 'Following User' }
                 setFollowing(response.data.message === 'Following User');
@@ -124,14 +107,14 @@ const ProfileInfoCard = ({ data, authenticatedUser, reviewsData, avgRating, tota
                 <img src={data?.profile_pic || DefaultProfilePic} alt="" className="profile-pic" />
                 <span className='profile-name'>{data?.display_name}</span>
                 <div className="seller-rating">
-                    <span>{avgRating}</span>
+                    <span>{avgRating === 0 ? ("") : (avgRating)}</span>
                     <div style={{ display: 'flex', gap: '3px' }}>
                         {stars.map((_, index) => {
                             return (
                                 <FaStar
                                     key={index}
                                     size={17}
-                                    color={(avgRating) > index ? '#FFD800' : '#bcbcbc'}
+                                    color={(avgRating || 0) > index ? '#FFD800' : '#bcbcbc'}
                                 />
                             )
                         })}
