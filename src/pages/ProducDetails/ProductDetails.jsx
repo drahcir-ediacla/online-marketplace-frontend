@@ -393,7 +393,7 @@ const ProductDetails = ({ userId }) => {
                                             <h5>No Reviews for {product.seller?.display_name}</h5>
                                         )}
                                         <div className="seller-rating">
-                                            <span>{avgRating}</span>
+                                            <span>{avgRating || ""}</span>
                                             <div style={{ display: 'flex', gap: '3px' }}>
                                                 {stars.map((_, index) => {
                                                     return (
@@ -430,7 +430,7 @@ const ProductDetails = ({ userId }) => {
                                         <div className='col-right'>
                                             <Link to={`/profile/${product.seller?.id}`} className='seller-name'>{product.seller?.display_name}</Link>
                                             <div className="seller-rating">
-                                                <span>{avgRating}</span>
+                                                <span>{avgRating || ""}</span>
                                                 <div style={{ display: 'flex', gap: '3px' }}>
                                                     {stars.map((_, index) => {
                                                         return (
