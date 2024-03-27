@@ -36,7 +36,7 @@ const HeroBanner = () => {
                 <BtnClear label='Start Selling' className='hero-btn' />
               </div>
             </div>
-          </OwlCarousel>;
+          </OwlCarousel>
         </div>
       </div>
     </>
