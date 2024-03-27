@@ -417,7 +417,7 @@ const ProductDetails = ({ userId }) => {
                                     ) : (
                                         <div className='no-review-message-container'>
                                             <div className='no-review-icon'><NoReviewIcon /></div>
-                                            <h5>{user?.display_name} does not yet have any reviews.</h5>
+                                            <h5>{product.seller?.display_name} does not yet have any reviews.</h5>
                                         </div>
                                     )}
                                 </div>
