@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './style.scss'
 import { GetAllCategories } from '../../apicalls/products'
-import HeroBanner from '../../components/Hero'
+import HeroBanner from '../../components/HeroBanner'
 import Header from '../../layouts/Header'
 import GainGreenBanner from '../../components/GainGreenBanner'
 import PopularItems from '../../components/PopularItems'
