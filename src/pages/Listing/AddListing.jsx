@@ -471,7 +471,7 @@ const AddListing = () => {
                     />
                     <h6 className='embed-youtube-instructions'>Please follow instructions on how to embed youtube video.</h6>
                     <b>1. Extract Video ID from URL:</b>
-                    <p>Extract the YouTube video ID from the video URL. For example, in the URL https://www.youtube.com/watch?v=VIDEO_ID, <b>"VIDEO_ID"</b> is the actual video ID.</p>
+                    <p>Extract the YouTube video ID from the video URL. For example, in the URL <span className='youtube-link'>https://www.youtube.com/watch?v=VIDEO_ID</span>, <span className='video-id'>"VIDEO_ID"</span> is the actual video ID.</p>
 
                     <b>2. Construct Embed URL:</b>
                     <p>Use the extracted video ID to construct the YouTube embed URL. See sample URL below.</p>

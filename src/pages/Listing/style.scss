@@ -298,6 +298,16 @@
 
                         .embed-youtube-instructions {
                             color: var(--green-400);
+                            margin-bottom: 20px;
+                        }
+
+                        .youtube-link {
+                            font-weight: 600;
+                        }
+
+                        .video-id {
+                            font-weight: 600;
+                            color: red;
                         }
 
                         .sample-embed-url-label {
