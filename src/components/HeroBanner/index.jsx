@@ -24,7 +24,7 @@ const HeroBanner = () => {
       <div className="container">
         <div className="hero-banner">
           <OwlCarousel className='owl-theme' {...options}>
-            <div class='item hero-banner-one'>
+            <div class='item hero-banner-one' style={{backgroundImage: `url(../../assets/images/hero-banner1.webp)`}}>
               <div className='text-container'>
                 <h1>Your One-Stop-Shop Buy and Sell for all Gadget Needs</h1>
                 <BtnClear label='Start Selling' className='hero-btn' />

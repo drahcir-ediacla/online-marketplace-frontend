@@ -295,6 +295,18 @@
                         span {
                             font-weight: 600;
                         }
+
+                        .embed-youtube-instructions {
+                            color: var(--green-400);
+                        }
+
+                        .sample-embed-url-label {
+                            color: red;
+                        }
+
+                        .sample-embed-url {
+                            color: blue;
+                        }
                     }
                 }
             }
