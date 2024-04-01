@@ -469,7 +469,7 @@ const AddListing = () => {
                       className='input-youtube-link'
                       onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })}
                     />
-                    <h6 className='embed-youtube-instructions'>Please follow instructions on how to embed youtube video</h6>
+                    <h6 className='embed-youtube-instructions'>Please follow instructions on how to embed youtube video.</h6>
                     <b>1. Extract Video ID from URL:</b>
                     <p>Extract the YouTube video ID from the video URL. For example, in the URL https://www.youtube.com/watch?v=VIDEO_ID, <b>"VIDEO_ID"</b> is the actual video ID.</p>
 
