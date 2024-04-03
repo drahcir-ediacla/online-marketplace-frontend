@@ -32,9 +32,9 @@ const StickyHeader = ({ authenticated }) => {
         // Check if the current location is already the homepage
         if (navigate && window.location.pathname === '/') {
             // Refresh the page or scroll to the top
-            window.location.reload(); // Refresh the page
+            // window.location.reload(); // Refresh the page
             // OR
-            // window.scrollTo(0, 0); // Scroll to the top
+            window.scrollTo(0, 0); // Scroll to the top
         }
     };
 
