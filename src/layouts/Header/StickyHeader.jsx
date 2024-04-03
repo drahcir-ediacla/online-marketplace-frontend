@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/Yogeek-logo-gray.png';
 import SearchBox from '../Header/HeaderSearchBox';
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -10,6 +10,7 @@ import SlidingSideNav from '../SlidingSideNav'
 const StickyHeader = ({ authenticated }) => {
 
     const [isSticky, setIsSticky] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -27,13 +28,24 @@ const StickyHeader = ({ authenticated }) => {
     }, []);
 
 
+    const handleHomePageClick = () => {
+        // Check if the current location is already the homepage
+        if (navigate && window.location.pathname === '/') {
+            // Refresh the page or scroll to the top
+            window.location.reload(); // Refresh the page
+            // OR
+            // window.scrollTo(0, 0); // Scroll to the top
+        }
+    };
+
+
     return (
         <>
             <div id="sticky-header" className={`sticky-header ${isSticky ? 'sticky' : ''}`}>
                 <div className='container'>
                     <div className='sticky-navbar'>
                         <div className='col1'>
-                            <Link to="/">
+                            <Link to="/" onClick={handleHomePageClick}>
                                 <img src={Logo} alt='' className='logo' />
                             </Link>
                         </div>
