@@ -525,7 +525,7 @@ const ProductDetails = ({ userId }) => {
                                                                 </div>
                                                             </>
                                                         ) : (
-                                                            <div className='signin-make-offer'>This item is already sold</div>
+                                                            <Link to={`/profile/${product.seller?.id}`} className='signin-make-offer'>This item is already sold. <br></br>Click to see more listings from seller.</Link>
                                                         )
                                                     )}
                                                 </>
@@ -537,7 +537,7 @@ const ProductDetails = ({ userId }) => {
                                                 <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
                                             </>
                                         ) : (
-                                            <div className='signin-make-offer'>This item is already sold</div>
+                                            <Link to={`/profile/${product.seller?.id}`} className='signin-make-offer'>This item is already sold. <br></br>Click to see more listings from seller.</Link>
                                         )
                                     )}
 
