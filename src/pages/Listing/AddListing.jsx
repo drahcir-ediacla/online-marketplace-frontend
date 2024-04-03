@@ -470,11 +470,11 @@ const AddListing = () => {
                       onChange={(e) => setProductDetails({ ...productDetails, youtube_link: e.target.value })}
                     />
                     <h6 className='embed-youtube-instructions'>Please follow instructions on how to embed youtube video.</h6>
-                    <b>1. Extract Video ID from URL:</b>
-                    <p>Extract the YouTube video ID from the video URL. For example, in the URL <span className='youtube-link'>https://www.youtube.com/watch?v=VIDEO_ID</span>, <span className='video-id'>"VIDEO_ID"</span> is the actual video ID.</p>
+                    <b>1. Get the Youtube Link:</b>
+                    <p>Get the YouTube video ID from the video URL. For example, in the URL <span className='youtube-link'>https://www.youtube.com/watch?v=VIDEO_ID</span>, <span className='video-id'>"VIDEO_ID"</span> is the actual video ID.</p>
 
-                    <b>2. Construct Embed URL:</b>
-                    <p>Use the extracted video ID to construct the YouTube embed URL. See sample URL below.</p>
+                    <b>2. Create Youtube Embed URL:</b>
+                    <p>Use the YouTube video ID to create the YouTube embed URL. See sample URL below.</p>
                     <span className='sample-embed-url-label'>Sample Youtube Embed URL:</span>
                     <p className='sample-embed-url'>https://www.youtube.com/embed/VIDEO_ID</p>
                   </div>

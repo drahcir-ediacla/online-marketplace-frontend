@@ -46,5 +46,11 @@
                 }
             }
         }
+        
+        .owl-item.active {
+            h1 {
+                animation: fadeInDown ease 1s;
+            }
+        }
     }
 }

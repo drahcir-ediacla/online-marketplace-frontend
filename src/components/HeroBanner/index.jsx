@@ -4,6 +4,8 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './style.scss';
 import BtnClear from '../Button/BtnClear';
+import HeroBanner1 from '../../assets/images/hero-banner1.webp'
+import HeroBanner2 from '../../assets/images/hero-banner2.webp'
 
 const HeroBanner = () => {
 
@@ -24,15 +26,15 @@ const HeroBanner = () => {
       <div className="container">
         <div className="hero-banner">
           <OwlCarousel className='owl-theme' {...options}>
-            <div class='item hero-banner-one' style={{backgroundImage: `url(../../assets/images/hero-banner1.webp)`}}>
+            <div class='item hero-banner-one' style={{backgroundImage: `url(${HeroBanner1})`}}>
               <div className='text-container'>
                 <h1>Your One-Stop-Shop Buy and Sell for all Gadget Needs</h1>
                 <BtnClear label='Start Selling' className='hero-btn' />
               </div>
             </div>
-            <div class='item hero-banner-one'>
+            <div class='item hero-banner-one' style={{backgroundImage: `url(${HeroBanner2})`}}>
               <div className='text-container'>
-                <h1>Your One-Stop-Shop Buy and Sell for all Gadget Needs</h1>
+                <h1>Find, buy, sell items discover fashion, home décor and more.</h1>
                 <BtnClear label='Start Selling' className='hero-btn' />
               </div>
             </div>
