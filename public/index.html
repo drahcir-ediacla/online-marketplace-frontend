@@ -67,11 +67,14 @@
   <script>
     window.fbAsyncInit = function () {
       FB.init({
-        appId: '1245184422822098',
+        appId: '790095492766954',
         xfbml: true,
         version: 'v19.0'
       });
-      FB.AppEvents.logPageView();
+
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
     };
 
     (function (d, s, id) {
@@ -81,7 +84,26 @@
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+    function statusChangeCallback(response) {
+      if (response.status === 'connected') {
+        console.log('Logged in and authenticated')
+      } else {
+        console.log('Not authenticated')
+      }
+    }
+
+
+    function checkLoginState() {
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
+    }
   </script>
+
+
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+  </fb:login-button>
 </body>
 
 </html>
