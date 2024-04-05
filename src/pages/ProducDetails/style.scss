@@ -108,6 +108,7 @@
             }
 
             .prod-details-icon-btn {
+                position: relative;
                 display: flex;
                 gap: 15px;
                 margin-top: 10px;
@@ -118,9 +119,22 @@
                     fill: var(--gray-500);
                 }
 
-                .share-icon {
-                    width: 23px;
-                    fill: var(--gray-500);
+                .share-listing-component {
+                    .share-icon {
+                        width: 23px;
+                        fill: var(--gray-500);
+                        cursor: pointer;
+                    }
+
+                    .share-options {
+                        display: none;
+                    }
+                }
+
+                .share-listing-component:hover {
+                    .share-options {
+                        display: block;
+                    }
                 }
 
                 .flag-icon {

@@ -11,7 +11,6 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import './style.scss'
-import customerReviewsData from '../../data/customerReviewsData.json'
 import ItemImgGallery from '../../components/Gallery/ItemImgGallery'
 import Pagination from '../../components/Pagination/Pagination'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
@@ -23,6 +22,7 @@ import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import { ReactComponent as NoReviewIcon } from '../../assets/images/group-messages-icon.svg'
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import ShareListing from '../../components/ShareListing';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal';
 import Breadcrumb from '../../components/Breadcrumb'
@@ -75,7 +75,6 @@ const ProductDetails = ({ userId }) => {
     const youtubeUrls = product?.youtube_link || null;
     const gallery = [...imageUrls, ...videoUrls, youtubeUrls].filter(url => url !== null);
     console.log('gallery:', gallery)
-
 
 
     useEffect(() => {
@@ -318,10 +317,10 @@ const ProductDetails = ({ userId }) => {
         setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
     };
 
-
     const UpdateListing = () => {
         window.location.href = `/updatelisting/${id}/${encodeURIComponent(product_name)}`;
     };
+
 
 
 
@@ -357,6 +356,7 @@ const ProductDetails = ({ userId }) => {
                             <div><img src={ListedInMap} alt="" /></div>
                             <div>
                                 <div className='prod-details-icon-btn'>
+                                    {/* {showShareOptions && <ShareListing ref={shareRef} />} */}
                                     <div>
                                         <WishlistButton
                                             data={product}
@@ -368,10 +368,13 @@ const ProductDetails = ({ userId }) => {
                                             getWishlistCount={getWishlistCount}
                                         />
                                     </div>
-                                    <div className='share-icon'><ShareIcon /></div>
+                                    <div className="share-listing-component">
+                                        <div className='share-icon'><ShareIcon /></div>
+                                        <div className="share-options"><ShareListing /></div>
+                                    </div>
+
                                     <div className='flag-icon'><FlagIcon /></div>
                                 </div>
-                                <div></div>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,31 @@
+.share-listing-container {
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: fit-content;
+    padding-top: 10px;
+    z-index: 1;
+
+    .share-listing-box {
+        width: fit-content;
+        padding: 15px 12px;
+        background: white;
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+
+        h5 {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .social-icon {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 0 0;
+        }
+        span {
+            font-weight: 500;
+        }
+    }
+}

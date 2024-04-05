@@ -56,14 +56,14 @@ function Header() {
     }
   };
 
-  
 
-     const mywishlist = () => {
-      if (user) {
-        const userId = user?.id;
-        window.location.href = `/wishlist/${userId}`;
-      }
-    };
+
+  const mywishlist = () => {
+    if (user) {
+      const userId = user?.id;
+      window.location.href = `/wishlist/${userId}`;
+    }
+  };
 
   const logout = () => {
     const localBaseUrl = process.env.REACT_APP_BASE_URL;
@@ -138,15 +138,17 @@ function Header() {
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>
                     <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
-                    <div className='my-account-dropdown'>
-                      <div className='triangle-icon'><TriangleIcon /></div>
-                      <ul>
-                        <li><Link to='/editprofile'>Manage Account</Link></li>
-                        <li><Link onClick={myProfile}>My Profile & Listings</Link></li>
-                        <li><Link to='/settings/1'>Settings</Link></li>
-                        <li>Help & Support</li>
-                        <li><Link onClick={logout}>Logout</Link></li>
-                      </ul>
+                    <div className="my-account-dropdown-container">
+                      <div className='my-account-dropdown'>
+                        <div className='triangle-icon'><TriangleIcon /></div>
+                        <ul>
+                          <li><Link to='/editprofile'>Manage Account</Link></li>
+                          <li><Link onClick={myProfile}>My Profile & Listings</Link></li>
+                          <li><Link to='/settings/1'>Settings</Link></li>
+                          <li>Help & Support</li>
+                          <li><Link onClick={logout}>Logout</Link></li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </>
