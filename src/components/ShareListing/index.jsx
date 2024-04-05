@@ -9,6 +9,34 @@ import MessengerIcon from '../../assets/images/messenger-share.png'
 
 const ShareListing = () => {
 
+    // Function to share product details to social networks
+    const shareProduct = (network) => {
+        // Dummy URL for the online store product page
+        const productUrl = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
+
+        // Constructing shareable message
+        const message = `Check out this awesome product: ${product.name}!`;
+
+        // URL to share
+        let shareUrl = '';
+        switch (network) {
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
+                break;
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(message)}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(product.name)}`;
+                break;
+            default:
+                break;
+        }
+
+        // Opening a new window for sharing
+        window.open(shareUrl, '_blank');
+    };
+
 
     return (
         <>
