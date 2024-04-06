@@ -11,9 +11,11 @@ const ShareListing = ({ productId, productName }) => {
 
     // Function to share product details to social networks
     const shareProduct = (network) => {
-        // Dummy URL for the online store product page
-        const productUrl = `/productdetails/${productId}/${encodeURIComponent(productName)}`;
+        
+        const ClientUrl = process.env.REACT_APP_CLIENT_URL;
+        const productUrl = `${ClientUrl}/productdetails/${productId}/${encodeURIComponent(productName)}`;
 
+        console.log('productUrl:', productUrl)
         // Constructing shareable message
         const message = `Check out this awesome product: ${productName}!`;
 
@@ -21,7 +23,7 @@ const ShareListing = ({ productId, productName }) => {
         let shareUrl = '';
         switch (network) {
             case 'facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}&text=${encodeURIComponent(message)}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}`;
                 break;
             case 'twitter':
                 shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(message)}`;
@@ -32,6 +34,7 @@ const ShareListing = ({ productId, productName }) => {
             default:
                 break;
         }
+        console.log('shareUrl:', shareUrl)
 
         // Open the share URL in a centered pop-up window
         const windowWidth = 600; // Set your desired width
