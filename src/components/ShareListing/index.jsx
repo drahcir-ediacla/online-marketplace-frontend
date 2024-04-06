@@ -7,34 +7,40 @@ import MailIcon from '../../assets/images/mail-share.png'
 import MessengerIcon from '../../assets/images/messenger-share.png'
 
 
-const ShareListing = () => {
+const ShareListing = ({ productId, productName }) => {
 
     // Function to share product details to social networks
     const shareProduct = (network) => {
         // Dummy URL for the online store product page
-        const productUrl = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
+        const productUrl = `/productdetails/${productId}/${encodeURIComponent(productName)}`;
 
         // Constructing shareable message
-        const message = `Check out this awesome product: ${product.name}!`;
+        const message = `Check out this awesome product: ${productName}!`;
 
         // URL to share
         let shareUrl = '';
         switch (network) {
             case 'facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}&text=${encodeURIComponent(message)}`;
                 break;
             case 'twitter':
                 shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(message)}`;
                 break;
             case 'linkedin':
-                shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(product.name)}`;
+                shareUrl = `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(productName)}`;
                 break;
             default:
                 break;
         }
 
+        // Open the share URL in a centered pop-up window
+        const windowWidth = 600; // Set your desired width
+        const windowHeight = 500; // Set your desired height
+        const left = (window.screen.width - windowWidth) / 2;
+        const top = (window.screen.height - windowHeight) / 2;
+
         // Opening a new window for sharing
-        window.open(shareUrl, '_blank');
+        window.open(shareUrl, '_blank', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + left + ',top=' + top + ',toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
     };
 
 
@@ -44,7 +50,7 @@ const ShareListing = () => {
                 <div className="share-listing-box">
                     <h5>Share this unique offer:</h5>
                     <div className='social-icon'>
-                        <img src={FbIcon} alt="" />
+                        <img src={FbIcon} alt="" onClick={() => shareProduct('facebook')} />
                         <img src={TwitIcon} alt="" />
                         <img src={ViberIcon} alt="" />
                         <img src={MessengerIcon} alt="" />

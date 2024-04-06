@@ -370,7 +370,7 @@ const ProductDetails = ({ userId }) => {
                                     </div>
                                     <div className="share-listing-component">
                                         <div className='share-icon'><ShareIcon /></div>
-                                        <div className="share-options"><ShareListing /></div>
+                                        <div className="share-options"><ShareListing productId={id} productName={product_name} /></div>
                                     </div>
 
                                     <div className='flag-icon'><FlagIcon /></div>
