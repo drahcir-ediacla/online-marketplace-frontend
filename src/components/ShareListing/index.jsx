@@ -23,7 +23,7 @@ const ShareListing = ({ productId, productName }) => {
         let shareUrl = '';
         switch (network) {
             case 'facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}&quote=${encodeURIComponent(message)}`;
                 break;
             case 'twitter':
                 shareUrl = `https://twitter.com/intent/tweet?url=${productUrl}&text=${encodeURIComponent(message)}`;
