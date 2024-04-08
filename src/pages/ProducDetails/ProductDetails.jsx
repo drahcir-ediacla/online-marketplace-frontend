@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import axios from '../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -328,6 +329,13 @@ const ProductDetails = ({ userId }) => {
         <>
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
+            <Helmet>
+                <title>{product_name}</title>
+                <meta property="og:title" content={product_name} />
+                <meta property="og:description" content="This is description" />
+                {/* <meta property="og:image" content={productImageUrl} />
+                <meta property="og:url" content={productUrl} /> */}
+            </Helmet>
             <Header />
             <div className='container '>
                 <div className="product-details-body">
