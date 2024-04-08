@@ -1,5 +1,5 @@
 import React from 'react'
-import { FacebookShareButton, FacebookMessengerShareButton } from 'react-share'
+import { FacebookShareButton } from 'react-share'
 import './style.scss'
 import FbIcon from '../../assets/images/fb-share.png'
 import TwitIcon from '../../assets/images/twitter-share.png'
