@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet';
 import { FacebookShareButton, TwitterShareButton, ViberShareButton, FacebookMessengerShareButton } from 'react-share'
 import './style.scss'
 import FbIcon from '../../assets/images/fb-share.png'
@@ -16,12 +17,14 @@ const ShareListing = ({ productId, productName }) => {
 
 
     return (
-        <>
+        <><Helmet>
+            <meta property="og:url" content={productUrl} />
+        </Helmet>
             <div className="share-listing-container">
                 <div className="share-listing-box">
                     <h5>Share this unique offer:</h5>
                     <div className='social-icon'>
-                        <FacebookShareButton url={productUrl} quote={message}>
+                        <FacebookShareButton url={productUrl} title={productName}>
                             <img src={FbIcon} alt="" />
                         </FacebookShareButton>
                         <TwitterShareButton url={productUrl} title={productName}>
