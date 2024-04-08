@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet';
-import { FacebookShareButton, TwitterShareButton, ViberShareButton, FacebookMessengerShareButton } from 'react-share'
+import { FacebookShareButton, TwitterShareButton, ViberShareButton, FacebookMessengerShareButton, EmailShareButton } from 'react-share'
 import './style.scss'
 import FbIcon from '../../assets/images/fb-share.png'
 import TwitIcon from '../../assets/images/twitter-share.png'
@@ -30,13 +30,18 @@ const ShareListing = ({ productId, productName }) => {
                         <TwitterShareButton url={productUrl} title={productName}>
                             <img src={TwitIcon} alt="" />
                         </TwitterShareButton>
-                        <ViberShareButton>
+                        <ViberShareButton title={productName} url={productUrl}>
                             <img src={ViberIcon} alt="" />
                         </ViberShareButton>
                         <FacebookMessengerShareButton redirectUri={productUrl} url={productUrl} appId={'1245184422822098'}  >
                             <img src={MessengerIcon} alt="" />
                         </FacebookMessengerShareButton>
-                        <img src={MailIcon} alt="" />
+                        <EmailShareButton
+                            url={productUrl}
+                            subject={`Check out this product: ${productName}`}
+                            body={`Hi,\n\nI thought you might be interested in this product: ${productName}\n\nCheck it out here: ${productUrl}`}>
+                            <img src={MailIcon} alt="" subject={productName} />
+                        </EmailShareButton>
                     </div>
                 </div>
             </div>
