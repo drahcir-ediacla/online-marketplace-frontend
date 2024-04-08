@@ -332,9 +332,9 @@ const ProductDetails = ({ userId }) => {
             <Helmet>
                 <title>{product_name}</title>
                 <meta property="og:title" content={product_name} />
-                <meta property="og:description" content="This is description" />
-                {/* <meta property="og:image" content={productImageUrl} />
-                <meta property="og:url" content={productUrl} /> */}
+                <meta property="og:description" content={product?.description} />
+                <meta property="og:image" content={product?.images?.[0]?.image_url} />
+                {/* <meta property="og:url" content={productUrl} /> */}
             </Helmet>
             <Header />
             <div className='container '>

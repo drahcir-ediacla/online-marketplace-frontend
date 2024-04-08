@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet';
 import './style.scss'
 import FbIcon from '../../assets/images/fb-share.png'
 import TwitIcon from '../../assets/images/twitter-share.png'
@@ -62,6 +63,9 @@ const ShareListing = ({ productId, productName }) => {
 
     return (
         <>
+            <Helmet>
+                <meta property="og:url" content={productUrl} />
+            </Helmet>
             <div className="share-listing-container">
                 <div className="share-listing-box">
                     <h5>Share this unique offer:</h5>
