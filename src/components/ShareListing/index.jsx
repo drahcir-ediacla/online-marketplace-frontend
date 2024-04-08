@@ -19,6 +19,7 @@ const ShareListing = ({ productId, productName }) => {
     return (
         <><Helmet>
             <meta property="og:url" content={productUrl} />
+            <meta property="og:title" content={productName} />
         </Helmet>
             <div className="share-listing-container">
                 <div className="share-listing-box">
