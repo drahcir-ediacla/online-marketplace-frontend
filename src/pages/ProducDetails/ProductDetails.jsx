@@ -334,7 +334,6 @@ const ProductDetails = ({ userId }) => {
                 <meta property="og:title" content={product_name} />
                 <meta property="og:description" content={product?.description} />
                 <meta property="og:image" content={product?.images?.[0]?.image_url} />
-                {/* <meta property="og:url" content={productUrl} /> */}
             </Helmet>
             <Header />
             <div className='container '>
