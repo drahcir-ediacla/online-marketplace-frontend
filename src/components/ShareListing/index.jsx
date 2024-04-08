@@ -1,5 +1,5 @@
 import React from 'react'
-import { FacebookShareButton } from 'react-share'
+import { FacebookShareButton, TwitterShareButton, ViberShareButton, FacebookMessengerShareButton } from 'react-share'
 import './style.scss'
 import FbIcon from '../../assets/images/fb-share.png'
 import TwitIcon from '../../assets/images/twitter-share.png'
@@ -22,11 +22,17 @@ const ShareListing = ({ productId, productName }) => {
                     <h5>Share this unique offer:</h5>
                     <div className='social-icon'>
                         <FacebookShareButton url={productUrl} quote={message}>
-                        <img src={FbIcon} alt="" />
+                            <img src={FbIcon} alt="" />
                         </FacebookShareButton>
-                        <img src={TwitIcon} alt="" />
-                        <img src={ViberIcon} alt="" />
-                        <img src={MessengerIcon} alt="" />
+                        <TwitterShareButton url={productUrl} title={productName}>
+                            <img src={TwitIcon} alt="" />
+                        </TwitterShareButton>
+                        <ViberShareButton>
+                            <img src={ViberIcon} alt="" />
+                        </ViberShareButton>
+                        <FacebookMessengerShareButton redirectUri={productUrl} url={productUrl} appId={'1245184422822098'}  >
+                            <img src={MessengerIcon} alt="" />
+                        </FacebookMessengerShareButton>
                         <img src={MailIcon} alt="" />
                     </div>
                 </div>
