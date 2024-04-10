@@ -26,6 +26,7 @@ import { Setloader } from '../../redux/reducer/loadersSlice';
 import ShareListing from '../../components/ShareListing';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal';
+import ReportModal from '../../components/Modal/ReportModal';
 import Breadcrumb from '../../components/Breadcrumb'
 import BtnClear from '../../components/Button/BtnClear'
 import BtnGreen from '../../components/Button/BtnGreen'
@@ -50,6 +51,7 @@ const ProductDetails = ({ userId }) => {
     const [sendMessage, setSendMessage] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
+    const [reportModalOpen, setReportModalOpen] = useState(false)
     console.log('soldModalOpen:', soldModalOpen)
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
@@ -318,6 +320,10 @@ const ProductDetails = ({ userId }) => {
         setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
     };
 
+    const toggleReportdModal = () => {
+        setReportModalOpen((prevReportModalOpen) => !prevReportModalOpen);
+    };
+
     const UpdateListing = () => {
         window.location.href = `/updatelisting/${id}/${encodeURIComponent(product_name)}`;
     };
@@ -329,6 +335,7 @@ const ProductDetails = ({ userId }) => {
         <>
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
+            {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} userId={user.id} />}
             <Helmet>
                 <title>{product_name}</title>
                 {/* <meta property="og:title" content={product_name} /> */}
@@ -381,7 +388,7 @@ const ProductDetails = ({ userId }) => {
                                         <div className="share-options"><ShareListing productId={id} productName={product_name} /></div>
                                     </div>
 
-                                    <div className='flag-icon'><FlagIcon /></div>
+                                    <div className='flag-icon'><FlagIcon onClick={toggleReportdModal} /></div>
                                 </div>
                             </div>
                         </div>

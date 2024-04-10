@@ -36,8 +36,6 @@ const MarkSoldModal = ({ onClick, productId, productName, userId }) => {
         }
     };
     
-    
-
 
 
     return (
