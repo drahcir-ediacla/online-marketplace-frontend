@@ -582,6 +582,23 @@
                             width: 100%;
                         }
 
+                        .listing-add-location-input-field {
+                            display: flex;
+                            width: 100%;
+                        }
+
+                        .delivery-options {
+                            display: flex;
+
+                            label {
+                                font-weight: 400;
+                            }
+
+                            .delivery-options-col1, .delivery-options-col2 {
+                                flex-grow: 1;
+                            }
+                        }
+
                         .update-listing-btns {
                             display: flex;
                             flex-direction: column;

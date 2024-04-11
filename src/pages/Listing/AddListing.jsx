@@ -667,8 +667,28 @@ const AddListing = () => {
                     </div>
                     <h3>Deal Method</h3>
                     <div>
-                      <CheckBox label='Meet Up' />
-                      <CheckboxWithTextarea label='Mailing & Delivery' />
+                      {/* <CheckBox label='Meet Up' />
+                      <CheckboxWithTextarea label='Mailing & Delivery' /> */}
+                      <label>Meet Up</label>
+                      <Input
+                        type='text'
+                        placeholder='Add Location'
+                        className='listing-add-location-input-field'
+                      />
+                    </div>
+                    <div>
+                      <label>Mailing & Delivery</label>
+                      <div className='delivery-options'>
+                        <div className='delivery-options-col1'>
+                          <CheckBox label='Lalamove' />
+                          <CheckBox label='Grab Express' />
+                          <CheckBox label='Ninja Van' />
+                        </div>
+                        <div className='delivery-options-col2'>
+                          <CheckBox label='LBC' />
+                          <CheckBox label='J&T' />
+                        </div>
+                      </div>
                     </div>
                     <div className='update-listing-btns'>
                       <BtnGreen label='List Now' onClick={handleFormSubmit} />

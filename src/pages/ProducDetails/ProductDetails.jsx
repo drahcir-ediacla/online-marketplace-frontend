@@ -387,8 +387,12 @@ const ProductDetails = ({ userId }) => {
                                         <div className='share-icon'><ShareIcon /></div>
                                         <div className="share-options"><ShareListing productId={id} productName={product_name} /></div>
                                     </div>
+                                    {isProductOwner || !user ? (
+                                        null
+                                    ) : (
+                                        <div className='flag-icon'><FlagIcon onClick={toggleReportdModal} /></div>
+                                    )}
 
-                                    <div className='flag-icon'><FlagIcon onClick={toggleReportdModal} /></div>
                                 </div>
                             </div>
                         </div>
