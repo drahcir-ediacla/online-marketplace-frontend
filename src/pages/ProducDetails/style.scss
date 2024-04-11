@@ -110,18 +110,18 @@
             .prod-details-icon-btn {
                 position: relative;
                 display: flex;
-                gap: 15px;
+                gap: 8px;
                 margin-top: 10px;
                 align-items: center;
 
                 .heart-icon {
-                    width: 23px;
+                    width: 20px;
                     fill: var(--gray-500);
                 }
 
                 .share-listing-component {
                     .share-icon {
-                        width: 23px;
+                        width: 20px;
                         fill: var(--gray-500);
                         cursor: pointer;
                     }
@@ -138,7 +138,7 @@
                 }
 
                 .flag-icon {
-                    width: 19px;
+                    width: 16px;
                     fill: var(--gray-500);
                     cursor: pointer;
                 }

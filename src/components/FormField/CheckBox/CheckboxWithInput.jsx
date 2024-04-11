@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function CheckboxWithTextarea({ label, value }) {
+function CheckboxWithInput({ label, value }) {
   const [isChecked, setIsChecked] = useState(false);
   const [textValue, setTextValue] = useState('');
 
@@ -20,7 +20,7 @@ function CheckboxWithTextarea({ label, value }) {
     <div>
       <label className='checkbox-region'>{label}<input type="checkbox" className='checkbox' value={value} checked={isChecked} onChange={handleCheckboxChange}/><span class="checkmark"></span></label>
       {isChecked && (
-        <textarea
+        <input
           value={textValue}
           onChange={handleTextareaChange}
         />
@@ -29,4 +29,4 @@ function CheckboxWithTextarea({ label, value }) {
   );
 }
 
-export default CheckboxWithTextarea;
+export default CheckboxWithInput;

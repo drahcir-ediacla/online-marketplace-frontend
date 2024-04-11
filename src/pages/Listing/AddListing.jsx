@@ -14,7 +14,7 @@ import Input from '../../components/FormField/Input';
 import RadioButton from '../../components/FormField/RadioButton'
 import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
-import CheckboxWithTextarea from '../../components/FormField/CheckBox/CheckboxWithTextarea'
+import CheckboxWithInput from '../../components/FormField/CheckBox/CheckboxWithInput'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
 
