@@ -336,7 +336,7 @@ const ProductDetails = ({ userId }) => {
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
             {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} userId={user.id} />}
             <Helmet>
-                {/* <title>{product_name}</title> */}
+                <title>{product_name}</title>
                 {/* <meta property="og:title" content={product_name} /> */}
                 <meta property="og:description" content={product?.description} />
                 <meta property="og:image" content={product?.images?.[0]?.image_url} />
