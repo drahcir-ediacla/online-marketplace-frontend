@@ -30,6 +30,7 @@ const AddListing = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
   const dropDownCategory = useRef(null);
+  const [delivery, setDelivery] = useState([]);
   const [condition, setCondition] = useState('Brand New');
   const [productDetails, setProductDetails] = useState({
     product_name: '',
@@ -37,8 +38,11 @@ const AddListing = () => {
     price: 0, // You can set a default value
     category_id: '', // Set the selected category's ID here
     product_condition: 'Brand New',
+    mailing_delivery: '',
     youtube_link: '',
   });
+
+
 
   const openContent = (radioIndex) => {
     setActiveRadio(radioIndex);
@@ -47,7 +51,6 @@ const AddListing = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   }
-
 
 
   const handleSearchChange = (e) => {
@@ -63,6 +66,30 @@ const AddListing = () => {
       product_condition: selectedCondition, // Set the product_condition in productDetails
     });
   };
+
+  
+  const selectedDelivery = delivery.join(' | ');
+
+  const handleCheckboxDeliveryChange = (event) => {
+    const deliveryOption = event.target.value;
+    // Check if the delivery option is already selected
+    const isSelected = delivery.includes(deliveryOption);
+
+    // Toggle the delivery option based on its selection state
+    if (isSelected) {
+      // If already selected, remove it from the array
+      setDelivery(prevDelivery => prevDelivery.filter(option => option !== deliveryOption));
+    } else {
+      // If not selected, add it to the array
+      setDelivery(prevDelivery => [...prevDelivery, deliveryOption]);
+    }
+
+    setProductDetails({
+      ...productDetails,
+      mailing_delivery: selectedDelivery, // Set the product_condition in productDetails
+    });
+  };
+
 
 
   const handleOptionClick = (option) => {
@@ -680,13 +707,33 @@ const AddListing = () => {
                       <label>Mailing & Delivery</label>
                       <div className='delivery-options'>
                         <div className='delivery-options-col1'>
-                          <CheckBox label='Lalamove' />
-                          <CheckBox label='Grab Express' />
-                          <CheckBox label='Ninja Van' />
+                          <CheckBox
+                            label='Lalamove'
+                            value='Lalamove'
+                            onChange={handleCheckboxDeliveryChange}
+                          />
+                          <CheckBox
+                            label='Grab Express'
+                            value='Grab Express'
+                            onChange={handleCheckboxDeliveryChange}
+                          />
+                          <CheckBox
+                            label='Ninja Van'
+                            value='Ninja Van'
+                            onChange={handleCheckboxDeliveryChange}
+                          />
                         </div>
                         <div className='delivery-options-col2'>
-                          <CheckBox label='LBC' />
-                          <CheckBox label='J&T' />
+                          <CheckBox
+                            label='LBC'
+                            value='LBC'
+                            onChange={handleCheckboxDeliveryChange}
+                          />
+                          <CheckBox
+                            label='J&T'
+                            value='J&T'
+                            onChange={handleCheckboxDeliveryChange}
+                          />
                         </div>
                       </div>
                     </div>

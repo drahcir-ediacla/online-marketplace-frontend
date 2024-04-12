@@ -29,6 +29,7 @@ const AddListing = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const dropDownCategory = useRef(null);
+    const [delivery, setDelivery] = useState([]);
     const [condition, setCondition] = useState('');
     const [productDetails, setProductDetails] = useState({
         product_name: '',
@@ -36,6 +37,7 @@ const AddListing = () => {
         price: 0, // You can set a default value
         category_id: '', // Set the selected category's ID here
         product_condition: '',
+        mailing_delivery: '',
         youtube_link: '',
     });
 
@@ -62,6 +64,37 @@ const AddListing = () => {
             product_condition: selectedCondition, // Set the product_condition in productDetails
         });
     };
+
+
+    // const selectedDelivery = delivery.join(' | ');
+    // console.log('selectedDelivery:', selectedDelivery)
+
+    const handleCheckboxDeliveryChange = (event) => {
+        const deliveryOption = event.target.value;
+        // Check if the delivery option is already selected
+        const isSelected = delivery.includes(deliveryOption);
+      
+        // Toggle the delivery option based on its selection state
+        if (isSelected) {
+          // If already selected, remove it from the array
+          setDelivery((prevDelivery) =>
+            prevDelivery.filter((option) => option !== deliveryOption)
+          );
+        } else {
+          // If not selected, add it to the array
+          setDelivery((prevDelivery) => [...prevDelivery, deliveryOption]);
+        }
+      };
+
+      useEffect(() => {
+        // Update mailing_delivery directly with the new value of delivery
+        setProductDetails({
+          ...productDetails,
+          mailing_delivery: delivery.join(' | '), // Join the delivery array into a string
+        });
+      }, [delivery]);
+
+      console.log('delivery:', delivery)
 
 
     const getCategoryLabelById = (categoryId) => {
@@ -248,8 +281,10 @@ const AddListing = () => {
             try {
                 const response = await GetProductsById(id, product_name);
                 const productDetails = response.data;
+                const deliveryOptions = productDetails.mailing_delivery.split(' | ');
                 setProductDetails(productDetails);
                 setCondition(productDetails.product_condition);
+                setDelivery(deliveryOptions);
 
                 // Extract image URLs from the images array
                 const imageUrls = productDetails.images.map(image => image.image_url);
@@ -802,13 +837,38 @@ const AddListing = () => {
                                             <label>Mailing & Delivery</label>
                                             <div className='delivery-options'>
                                                 <div className='delivery-options-col1'>
-                                                    <CheckBox label='Lalamove' />
-                                                    <CheckBox label='Grab Express' />
-                                                    <CheckBox label='Ninja Van' />
+                                                    <CheckBox
+                                                        label='Lalamove'
+                                                        value='Lalamove'
+                                                        onChange={handleCheckboxDeliveryChange}
+                                                        checked={delivery.includes('Lalamove')} // Pass checked prop based on whether it's included in the delivery array
+                                                    />
+                                                    <CheckBox
+                                                        label='Grab Express'
+                                                        value='Grab Express'
+                                                        onChange={handleCheckboxDeliveryChange}
+                                                        checked={delivery.includes('Grab Express')}
+                                                    />
+                                                    <CheckBox
+                                                        label='Ninja Van'
+                                                        value='Ninja Van'
+                                                        onChange={handleCheckboxDeliveryChange}
+                                                        checked={delivery.includes('Ninja Van')}
+                                                    />
                                                 </div>
                                                 <div className='delivery-options-col2'>
-                                                    <CheckBox label='LBC' />
-                                                    <CheckBox label='J&T' />
+                                                    <CheckBox
+                                                        label='LBC'
+                                                        value='LBC'
+                                                        onChange={handleCheckboxDeliveryChange}
+                                                        checked={delivery.includes('LBC')}
+                                                    />
+                                                    <CheckBox
+                                                        label='J&T'
+                                                        value='J&T'
+                                                        onChange={handleCheckboxDeliveryChange}
+                                                        checked={delivery.includes('J&T')}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

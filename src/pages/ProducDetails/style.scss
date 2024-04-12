@@ -96,6 +96,10 @@
                     display: flex;
                     flex-direction: column;
 
+                    .deal-method-label {
+                        color: lightslategray;
+                    }
+
                     .deal-method-loc-icon {
                         width: 14px;
                         height: 18px;

@@ -52,7 +52,6 @@ const ProductDetails = ({ userId }) => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false)
-    console.log('soldModalOpen:', soldModalOpen)
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
     const [offer, setOffer] = useState('');
@@ -61,11 +60,11 @@ const ProductDetails = ({ userId }) => {
     const sender_id = user?.id.toString();
     const receiver_id = product?.seller.id.toString();
     const product_id = product?.id;
+    const deliveryOption = product?.mailing_delivery;
     const [chatId, setChatId] = useState(null);
     const isProductOwner = product?.seller.id === user?.id
     const productStatus = product?.status
     const [reviewsData, setReviewsData] = useState([])
-    console.log('reviewsData:', reviewsData)
     const [avgRating, setAvgRating] = useState()
     const [totalReviews, setTotalReviews] = useState()
     const stars = Array(5).fill(0);
@@ -360,14 +359,18 @@ const ProductDetails = ({ userId }) => {
                                 <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                                 <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
                             </div>
-                            <div className='prod-details-deal-method'>
-                                <div className='col1'><b>Deal Method:</b></div>
-                                <div className='col2'>
-                                    <div><span>Meet Up - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> MCU-Monumento, Morning Breeze Subdivision</span></div>
-                                    <div><span>Delivery - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> 186 Blumentritt Tondo Manila</span></div>
+                            {deliveryOption === '' ? (
+                                null
+                            ) : (
+                                <div className='prod-details-deal-method'>
+                                    <div className='col1'><b>Deal Method:</b></div>
+                                    <div className='col2'>
+                                        {/* <div><span className='deal-method-label'>Meet Up - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> MCU-Monumento, Morning Breeze Subdivision</span></div> */}
+                                        <div><span className='deal-method-label'>Delivery - </span><span> {product.mailing_delivery}</span></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
+                            )}
+                            < div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
                             <div><img src={ListedInMap} alt="" /></div>
                             <div>
                                 <div className='prod-details-icon-btn'>
@@ -573,7 +576,7 @@ const ProductDetails = ({ userId }) => {
                     <RelatedListings data={product} />
                     <div><MoreFromSeller data={product} /></div>
                 </div >
-            </div>
+            </div >
             <Footer />
         </>
     )
