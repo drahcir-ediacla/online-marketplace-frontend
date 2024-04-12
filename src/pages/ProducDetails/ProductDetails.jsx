@@ -359,7 +359,7 @@ const ProductDetails = ({ userId }) => {
                                 <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                                 <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
                             </div>
-                            {deliveryOption === '' ? (
+                            {deliveryOption === null ? (
                                 null
                             ) : (
                                 <div className='prod-details-deal-method'>

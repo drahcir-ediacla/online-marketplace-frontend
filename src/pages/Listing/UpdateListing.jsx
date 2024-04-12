@@ -281,7 +281,7 @@ const AddListing = () => {
             try {
                 const response = await GetProductsById(id, product_name);
                 const productDetails = response.data;
-                const deliveryOptions = productDetails.mailing_delivery.split(' | ');
+                const deliveryOptions = productDetails.mailing_delivery ? productDetails.mailing_delivery.split(' | ') : [];
                 setProductDetails(productDetails);
                 setCondition(productDetails.product_condition);
                 setDelivery(deliveryOptions);
