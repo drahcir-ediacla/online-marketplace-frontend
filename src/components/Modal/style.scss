@@ -114,7 +114,7 @@
             align-items: center;
             justify-content: flex-end;
             height: 48px;
-            padding: 8px;
+            padding: 8px 8px 0 8px;
 
             .closebtn {
                 border: none;
@@ -183,7 +183,7 @@
 // REPORT MODAL //
 
 .modal-container {
-    .modal-box {
+    .report-modal-box {
         max-width: 550px;
 
         .report-item-modal-row1 {

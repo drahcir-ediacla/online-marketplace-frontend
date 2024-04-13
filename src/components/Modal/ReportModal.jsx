@@ -42,7 +42,7 @@ const ReportModal = ({ onClick, productId, userId }) => {
         <>
             {isModalOpen &&
                 <div className="modal-container">
-                    <div className="modal-box">
+                    <div className="report-modal-box">
                         <div className='report-item-modal-row1'>
                             <button className='closebtn' onClick={onClick}>
                                 <i class='fa fa-times'></i>
