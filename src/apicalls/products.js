@@ -150,9 +150,9 @@ export const RemoveWishlist = async (id) => {
 }
 
 
-export const GetUserWishlist = async (id) => {
+export const GetUserWishlist = async () => {
   try {
-    const response = await axios.get(`/api/getuserwishlist/${id}`)
+    const response = await axios.get('/api/getuserwishlist')
     return response
   } catch (error) {
     return error

@@ -133,7 +133,7 @@ function Header() {
                   <div className='nav-tools'>
                     <div className='message-icon'><Link to='/messages'><MessageIcon /></Link></div>
                     <div className='bell-icon'><BellIcon /></div>
-                    <Link onClick={mywishlist} className='heart-icon'><HeartIcon /></Link>
+                    <Link to='/wishlist' className='heart-icon'><HeartIcon /></Link>
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>

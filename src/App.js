@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUser } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -18,7 +19,6 @@ const RegisterByEmail = lazy(() => import('./pages/Auth/RegisterAccount/Register
 const RegisterByPhone = lazy(() => import('./pages/Auth/RegisterAccount/RegisterByPhone'));
 const EditProfile = lazy(() => import('./pages/Profile/EditProfile'));
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
-const BuyerProductDetails = lazy(() => import('./pages/ProducDetails/BuyerProductDetails'));
 const ProductDetails = lazy(() => import('./pages/ProducDetails/ProductDetails'));
 const MainCategory = lazy(() => import('./pages/Categories/MainCategory'));
 const SubCategory = lazy(() => import('./pages/Categories/SubCategory'));
@@ -67,14 +67,13 @@ function App() {
           <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
           <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
           <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
-          <Route path='/editprofile' element={<EditProfile />} />
-          <Route path='/myprofile' element={<ProfilePage />} />
+          <Route path='/editprofile' element={user ? <EditProfile /> : <Navigate to="/loginemail" /> } />
+          <Route path='/wishlist' element={<Wishlist />} />
           <Route path='/profile/:id' element={<ProfilePage />} />
           <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
-          <Route path='/buyerproductdetails' element={<BuyerProductDetails />} />
           <Route path='/category/:id/:value' element={<MainCategory />} />
           <Route path='/subcategory/:id/:label' element={<SubCategory />} />
-          <Route path='/wishlist/:id' element={<Wishlist />} />
+          
           <Route path='/deactivateaccount' element={<DeactivateAccount />} />
           <Route path='/setpassword' element={<SetPassword />} />
           <Route path='/addlisting' element={<AddListing />} />

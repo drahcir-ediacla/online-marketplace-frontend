@@ -13,12 +13,11 @@ import SadImage from '../../assets/images/page-not-found-image.png'
 
 const Wishlist = ({ userId }) => {
 
-    const { id } = useParams();
+    const { user } = useAuthentication();
     const [wishlist, setwishlist] = useState([]);
     const [data, setData] = useState([]);
     const [err, setErr] = useState(false);
     const dispatch = useDispatch();
-    const { user } = useAuthentication();
 
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
@@ -54,7 +53,7 @@ const Wishlist = ({ userId }) => {
 
             try {
                 // Fetch the user's wishlist
-                const response = await GetUserWishlist(id);
+                const response = await GetUserWishlist();
                 if (response.data && Array.isArray(response.data)) {
                     setwishlist(response.data);
                     setwishlistEmpty(response.data.length === 0);
@@ -84,7 +83,7 @@ const Wishlist = ({ userId }) => {
             }
         }
         fetchData();
-    }, [id, dispatch])
+    }, [dispatch])
 
 
     const mywishlist = useMemo(() => Array.isArray(wishlist) ? wishlist : [], [wishlist]);
