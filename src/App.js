@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUser } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoutes from './components/PrivateRoutes';
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 
 
 // Lazy-loaded components
 const Home = lazy(() => import('./pages/Home/Home'));
-const LoginEmail  = lazy(() => import('./pages/Auth/Login/LoginEmail'));
+const LoginEmail = lazy(() => import('./pages/Auth/Login/LoginEmail'));
 const LoginPhone = lazy(() => import('./pages/Auth/Login/LoginPhone'));
 const LoginSMS = lazy(() => import('./pages/Auth/Login/LoginSMS'));
 const ResetByEmail = lazy(() => import('./pages/Auth/ResetPassword/ResetByEmail'));
@@ -42,10 +42,10 @@ const SearchResult = lazy(() => import('./pages/SearchResult'));
 function App() {
 
   const user = useSelector((state) => state.user.data);
-  const {loading} = useSelector(state => state.loaders);
+  const { loading } = useSelector(state => state.loaders);
   const dispatch = useDispatch();
 
-  useEffect (() => {
+  useEffect(() => {
     dispatch(getUser())
   }, [dispatch]);
 
@@ -53,41 +53,42 @@ function App() {
 
   return (
     <>
-    
-    {loading && <LoadingSpinner />}
+
+      {loading && <LoadingSpinner />}
       <Router>
         <ScrollToTop />
         <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
-          <Route path="/" index element={<Home />} />
-          <Route path='/loginemail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
-          <Route path='/loginphone' element={user ? <Navigate to="/" /> : <LoginPhone />} />
-          <Route path='/loginsms' element={user ? <Navigate to="/" /> : <LoginSMS />} />
-          <Route path='/resetbyemail' element={user ? <Navigate to="/" /> : <ResetByEmail />} />
-          <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
-          <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
-          <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
-          <Route path='/editprofile' element={user ? <EditProfile /> : <Navigate to="/loginemail" /> } />
-          <Route path='/wishlist' element={<Wishlist />} />
-          <Route path='/profile/:id' element={<ProfilePage />} />
-          <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
-          <Route path='/category/:id/:value' element={<MainCategory />} />
-          <Route path='/subcategory/:id/:label' element={<SubCategory />} />
-          
-          <Route path='/deactivateaccount' element={<DeactivateAccount />} />
-          <Route path='/setpassword' element={<SetPassword />} />
-          <Route path='/addlisting' element={<AddListing />} />
-          <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
-          <Route path='/updatelisting/:id/:product_name' element={<UpdateListing />} />
-          <Route path='/search-results' element={<SearchResult />} />
-          <Route path='/messages/:chat_id' element={<ChatMessages />} />
-          <Route path='/messages' element={<ChatMessages />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/test/:chat_id' element={<TestPage />} />
-          <Route path='/test' element={<TestPage />} />
-          <Route path="/:id" component={<NewItems />} />
-          <Route path='/*' element={<PageNotFound />} />
-        </Routes>
+          <Routes>
+            <Route path="/" index element={<Home />} />
+            <Route path='/loginemail' element={user ? <Navigate to="/" /> : <LoginEmail />} />
+            <Route path='/loginphone' element={user ? <Navigate to="/" /> : <LoginPhone />} />
+            <Route path='/loginsms' element={user ? <Navigate to="/" /> : <LoginSMS />} />
+            <Route path='/resetbyemail' element={user ? <Navigate to="/" /> : <ResetByEmail />} />
+            <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
+            <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
+            <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
+            <Route path='/profile/:id' element={<ProfilePage />} />
+            <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
+            <Route path='/category/:id/:value' element={<MainCategory />} />
+            <Route path='/subcategory/:id/:label' element={<SubCategory />} />
+            <Route path='/search-results' element={<SearchResult />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/test/:chat_id' element={<TestPage />} />
+            <Route path='/test' element={<TestPage />} />
+            <Route path="/:id" component={<NewItems />} />
+            <Route path='/*' element={<PageNotFound />} />
+            <Route element={<PrivateRoutes />}>
+              <Route path='/editprofile' element={<EditProfile />} />
+              <Route path='/wishlist' element={<Wishlist />} />
+              <Route path='/deactivateaccount' element={<DeactivateAccount />} />
+              <Route path='/setpassword' element={<SetPassword />} />
+              <Route path='/addlisting' element={<AddListing />} />
+              <Route path='/addlistingsuccess/:id/:product_name' element={<AddListingSuccess />} />
+              <Route path='/updatelisting/:id/:product_name' element={<UpdateListing />} />
+              <Route path='/messages/:chat_id' element={<ChatMessages />} />
+              <Route path='/messages' element={<ChatMessages />} />
+            </Route>
+          </Routes>
         </Suspense>
       </Router>
     </>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'

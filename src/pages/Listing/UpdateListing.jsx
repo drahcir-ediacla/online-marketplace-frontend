@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
 import { GetAllCategories, GetProductsById } from '../../apicalls/products'
+import { GetCurrentUser } from '../../apicalls/users';
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -40,6 +41,8 @@ const AddListing = () => {
         mailing_delivery: '',
         youtube_link: '',
     });
+    const [error, setError] = useState(null);
+    
 
     const openContent = (radioIndex) => {
         setActiveRadio(radioIndex);
@@ -73,28 +76,27 @@ const AddListing = () => {
         const deliveryOption = event.target.value;
         // Check if the delivery option is already selected
         const isSelected = delivery.includes(deliveryOption);
-      
+
         // Toggle the delivery option based on its selection state
         if (isSelected) {
-          // If already selected, remove it from the array
-          setDelivery((prevDelivery) =>
-            prevDelivery.filter((option) => option !== deliveryOption)
-          );
+            // If already selected, remove it from the array
+            setDelivery((prevDelivery) =>
+                prevDelivery.filter((option) => option !== deliveryOption)
+            );
         } else {
-          // If not selected, add it to the array
-          setDelivery((prevDelivery) => [...prevDelivery, deliveryOption]);
+            // If not selected, add it to the array
+            setDelivery((prevDelivery) => [...prevDelivery, deliveryOption]);
         }
-      };
+    };
 
-      useEffect(() => {
+    useEffect(() => {
         // Update mailing_delivery directly with the new value of delivery
         setProductDetails({
-          ...productDetails,
-          mailing_delivery: delivery.join(' | '), // Join the delivery array into a string
+            ...productDetails,
+            mailing_delivery: delivery.join(' | '), // Join the delivery array into a string
         });
-      }, [delivery]);
+    }, [delivery]);
 
-      console.log('delivery:', delivery)
 
 
     const getCategoryLabelById = (categoryId) => {
@@ -279,12 +281,15 @@ const AddListing = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await GetProductsById(id, product_name);
-                const productDetails = response.data;
+                const response1 = await GetProductsById(id, product_name);
+                const productDetails = response1.data;
                 const deliveryOptions = productDetails.mailing_delivery ? productDetails.mailing_delivery.split(' | ') : [];
                 setProductDetails(productDetails);
                 setCondition(productDetails.product_condition);
                 setDelivery(deliveryOptions);
+
+                const response2 = await GetCurrentUser();
+                const currentUser = response2.data.user;
 
                 // Extract image URLs from the images array
                 const imageUrls = productDetails.images.map(image => image.image_url);
@@ -293,8 +298,16 @@ const AddListing = () => {
                 setSelectedImages(imageUrls);
                 setVideoPreviews(videoUrls);
                 setSelectedVideos(videoUrls);
+
+                const userId = currentUser?.id;
+                if (userId !== productDetails?.seller?.id) {
+                    setError("You don't have permission to access this page.");
+                } else {
+                    setError(null); // Reset error state if condition is not met
+                }
             } catch (error) {
                 console.error("Error fetching product details:", error);
+                setError("Error fetching product details. Please try again later.");
             }
         };
 
@@ -306,6 +319,7 @@ const AddListing = () => {
         }
     }, [id, product_name]);
 
+    
 
 
     useEffect(() => {
@@ -520,14 +534,16 @@ const AddListing = () => {
         return fileUrls;
     };
 
-
+    if (error) {
+        return <div>{error}</div>; // Render error message
+    }
+    
 
 
     return (
         <>
             <Header />
             <div className="add-listing-body" >
-
                 <form className="container" >
                     <h3>What are you listing today?</h3>
                     <div className="box">
