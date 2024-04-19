@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReportModal from '../../components/Modal/ReportModal';
+import Notification from '../../components/Notification'
 
 function ImageUploader() {
   const [images, setImages] = useState([]);
@@ -25,7 +26,7 @@ function ImageUploader() {
 
   return (
     <div>
-      <ReportModal />
+      <Notification />
       <h1>Image Uploader</h1>
       <input type="file" multiple onChange={handleImageChange} />
       <br />

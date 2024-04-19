@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../apicalls/axios';
 import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
 
 const NotificationComponent = () => {
@@ -21,7 +21,7 @@ const NotificationComponent = () => {
 
   const markAsRead = async (notificationId) => {
     try {
-      await axios.put(`/api/notifications/${notificationId}`, { read: true });
+      await axios.put(`/api/read-notifications/${notificationId}`, { read: true });
       // Update the state to reflect the change
       setNotifications(notifications.map(notification => 
         notification.id === notificationId ? { ...notification, read: true } : notification
@@ -36,7 +36,7 @@ const NotificationComponent = () => {
       <h2>Notifications</h2>
       <ul>
         {notifications.map(notification => (
-          <li key={notification.id} style={{ fontWeight: notification.read ? 'normal' : 'bold' }}>
+          <li key={notification.id} style={{ background: notification.read ? 'none' : '#bcbcbc' }}>
             {notification.message}
             {!notification.read && (
               <button onClick={() => markAsRead(notification.id)}>Mark as Read</button>
