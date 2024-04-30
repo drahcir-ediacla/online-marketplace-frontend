@@ -4,7 +4,6 @@ import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as MessageIcon } from '../../assets/images/message-regular.svg';
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
-import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
 import { ReactComponent as GlobeIcon } from '../../assets/images/globe-regular.svg';
 import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.svg';
 import Logo from '../../assets/images/Yogeek-logo.png';
@@ -12,6 +11,7 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 import StickyHeader from './StickyHeader';
+import Notification from '../../components/Notification';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
@@ -132,7 +132,7 @@ function Header() {
                 <>
                   <div className='nav-tools'>
                     <div className='message-icon'><Link to='/messages'><MessageIcon /></Link></div>
-                    <div className='bell-icon'><BellIcon /></div>
+                    <Notification />
                     <Link to='/wishlist' className='heart-icon'><HeartIcon /></Link>
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
