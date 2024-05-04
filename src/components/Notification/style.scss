@@ -6,12 +6,13 @@
         width: 18px;
         fill: black;
         stroke: 2rem;
+        cursor: pointer;
     }
 
     .red-counter {
         position: absolute;
         text-align: center;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         top: 2px;
         left: 43px;
@@ -90,6 +91,14 @@
                             background-color: var(--green-400);
                         }
                     }
+
+                    a {
+                        color: var(--gray-500);
+                    }
+                }
+
+                li:hover {
+                    background: var(--gray-100);
                 }
             }
         }

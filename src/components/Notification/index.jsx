@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../apicalls/axios';
 import './style.scss'
 import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
@@ -7,6 +7,7 @@ import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.
 const NotificationComponent = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   useEffect(() => {
     // Fetch notifications when the component mounts
@@ -50,39 +51,63 @@ const NotificationComponent = () => {
     }
   };
 
+
+  const notificationRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target) &&
+        !event.target.closest('.bell-icon')
+      ) {
+        setIsDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+
+
   return (
     <div className='notification'>
-      <div className='bell-icon'><BellIcon /></div>
-      {unreadNotifications.length > 0 ? (
-        <div className="red-counter">{unreadNotifications.length}</div>
-      ) : (
-        null
-      )}
-      <div className="notification-dropdown-container">
-        <div className="notification-dropdown">
-          <div className='triangle-icon'><TriangleIcon /></div>
-          <div className="notification-header">
-            <div className="notification-counter">{unreadNotifications.length} Unread Notifications</div>
-            <div className="read-all">See all</div>
-          </div>
-          <ul>
-            {notifications.map(notification => (
-              <li key={notification.id} onClick={() => markAsRead(notification.id)}>
-                <div className="user-image">
-                  <img src={notification.subjectUser.profile_pic} alt="" />
-                </div>
-                <span dangerouslySetInnerHTML={{ __html: notification.message }} />
-                {!notification.read && (
-                  <div className="circle-container">
-                    <div className='circle'></div>
+      <div className='bell-icon' onClick={toggleDropdown}><BellIcon /></div>
+      {unreadNotifications.length > 0 ? <div className="red-counter">{unreadNotifications.length}</div> : null}
+      {isDropdownVisible && (
+        <div className="notification-dropdown-container" ref={notificationRef}>
+          <div className="notification-dropdown">
+            <div className='triangle-icon'><TriangleIcon /></div>
+            <div className="notification-header">
+              <div className="notification-counter">{unreadNotifications.length} Unread Notifications</div>
+              <div className="read-all">See all</div>
+            </div>
+            <ul>
+              {notifications.map((notification) => (
+                <li key={notification.id} onClick={() => markAsRead(notification.id)}>
+                  <div className="user-image">
+                    <img src={notification.subjectUser.profile_pic} alt="" />
                   </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                  <span dangerouslySetInnerHTML={{ __html: notification.message }} />
+                  {!notification.read && (
+                    <div className="circle-container">
+                      <div className='circle'></div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-
+      )}
     </div>
   );
 };
