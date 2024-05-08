@@ -1,0 +1,145 @@
+.notification-list-body {
+    margin-bottom: 150px;
+
+    .container {
+        display: block;
+
+        h3 {
+            font-weight: 500;
+            margin: 20px 0;
+        }
+
+        .box {
+            display: flex;
+            gap: 20px;
+
+            .col-right {
+
+                .notification-list-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    width: 985px;
+                    background: white;
+                    padding: 30px 30px;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+                    margin-bottom: 150px;
+
+                    .view-options-btn-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+
+                        .all-btn {
+                            font-weight: 500;
+                            color: var(--green-400);
+                            background-color: var(--green-200);
+                            border-radius: 50%;
+                            padding: 10px 10px;
+                        }
+
+                        .unread-btn {
+                            font-weight: 500;
+                        }
+                    }
+
+                    ul {
+                        padding: 0;
+                        margin: 0;
+
+                        li {
+                            display: flex;
+                            gap: 15px;
+                            padding: 10px 12px;
+                            cursor: pointer;
+
+                            .user-avatar {
+                                img {
+                                    width: 60px;
+                                    height: 60px;
+                                    border-radius: 50%;
+                                }
+                            }
+
+                            .notification-info {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                gap: 3px;
+                                width: 100%;
+                            }
+
+                            .circle-container {
+                                width: auto;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin-left: 10px;
+
+                                .circle {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: var(--green-400);
+                                }
+                            }
+                        }
+                    }
+
+                    hr {
+                        margin: 0;
+                    }
+
+                    .asterisk {
+                        color: red;
+                    }
+
+                    .form-field {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+
+                        .password-input-field {
+                            width: 557px;
+                            height: 40px;
+                            border-radius: 5px;
+                            border: 1px solid var(--gray-300);
+                            outline: none;
+                            padding: 0 10px;
+                        }
+
+                        label {
+                            padding-top: 10px;
+                        }
+
+                        .instructions {
+                            color: red;
+                            margin-bottom: 0;
+                            position: absolute;
+                            font-size: 13px;
+                        }
+
+                        .offscreen {
+                            display: none;
+                        }
+
+                        .valid {
+                            color: limegreen;
+                            margin-left: 0.25rem;
+                        }
+
+                        .invalid {
+                            color: red;
+                            margin-left: 0.25rem;
+                        }
+
+                        .hide {
+                            display: none;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}

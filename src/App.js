@@ -22,6 +22,7 @@ const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const ProductDetails = lazy(() => import('./pages/ProducDetails/ProductDetails'));
 const MainCategory = lazy(() => import('./pages/Categories/MainCategory'));
 const SubCategory = lazy(() => import('./pages/Categories/SubCategory'));
+const NotificationList = lazy(() => import('./pages/NotificationList'))
 const DeactivateAccount = lazy(() => import('./pages/Settings/DeactivateAccount'));
 const SetPassword = lazy(() => import('./pages/Settings/SetPassword'));
 const Wishlist = lazy(() => import('./pages/Wishlist'));
@@ -80,6 +81,7 @@ function App() {
             <Route element={<PrivateRoutes />}>
               <Route path='/editprofile' element={<EditProfile />} />
               <Route path='/wishlist' element={<Wishlist />} />
+              <Route path='/notificationlist' element={<NotificationList />} />
               <Route path='/deactivateaccount' element={<DeactivateAccount />} />
               <Route path='/setpassword' element={<SetPassword />} />
               <Route path='/addlisting' element={<AddListing />} />

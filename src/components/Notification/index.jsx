@@ -17,7 +17,14 @@ const NotificationComponent = () => {
   const fetchNotifications = async () => {
     try {
       const response = await axios.get('/api/notifications');
-      setNotifications(response.data);
+
+      // Sort notifications from latest to oldest based on createdAt
+      const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      // Slice the array to select only the first 10 elements
+      const limitedNotifications = sortedNotifications.slice(0, 10);
+      setNotifications(limitedNotifications);
+
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -87,24 +94,32 @@ const NotificationComponent = () => {
           <div className="notification-dropdown">
             <div className='triangle-icon'><TriangleIcon /></div>
             <div className="notification-header">
-              <div className="notification-counter">{unreadNotifications.length} Unread Notifications</div>
-              <div className="read-all">See all</div>
+              <div className="notification-counter">Notifications</div>
+              {notifications.length === 0 ? (
+                null
+              ) : (
+                <div className="see-all">See all</div>
+              )}
             </div>
-            <ul>
-              {notifications.map((notification) => (
-                <li key={notification.id} onClick={() => markAsRead(notification.id)}>
-                  <div className="user-image">
-                    <img src={notification.subjectUser.profile_pic} alt="" />
-                  </div>
-                  <span dangerouslySetInnerHTML={{ __html: notification.message }} />
-                  {!notification.read && (
-                    <div className="circle-container">
-                      <div className='circle'></div>
+            {notifications.length === 0 ? (
+              <div className='no-notifications'>You don't have any notifications</div>
+            ) : (
+              <ul>
+                {notifications.map((notification) => (
+                  <li key={notification.id} onClick={() => markAsRead(notification.id)}>
+                    <div className="user-image">
+                      <img src={notification.subjectUser.profile_pic} alt="" />
                     </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    <span dangerouslySetInnerHTML={{ __html: notification.message }} />
+                    {!notification.read && (
+                      <div className="circle-container">
+                        <div className='circle'></div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       )}
