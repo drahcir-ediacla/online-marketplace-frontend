@@ -1,5 +1,6 @@
 .notification-list-body {
     margin-bottom: 150px;
+    height: 100vh;
 
     .container {
         display: block;
@@ -20,10 +21,21 @@
                     flex-direction: column;
                     gap: 16px;
                     width: 985px;
+                    height: 100%;
                     background: white;
                     padding: 30px 30px;
                     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
                     margin-bottom: 150px;
+
+                    .no-notif {
+                        width: 100%;
+                        font-size: 16px;
+                        color: var(--gray-300);
+                        text-align: center;
+                        padding: 50px 0;
+                        letter-spacing: 1px;
+                    }
+
 
                     .view-options-btn-container {
                         display: flex;
@@ -31,15 +43,35 @@
                         gap: 16px;
 
                         .all-btn {
-                            font-weight: 500;
-                            color: var(--green-400);
-                            background-color: var(--green-200);
-                            border-radius: 50%;
-                            padding: 10px 10px;
+                            width: 43.78px;
                         }
 
                         .unread-btn {
+                            width: 79.61px;
+                        }
+
+                        .unread-btn,
+                        .all-btn {
+                            border: 0;
+                            background: none;
+                        }
+
+                        .unread-btn:hover,
+                        .all-btn:hover {
+                            color: var(--gray-400);
+                            background-color: var(--gray-200);
+                            border-radius: 50px;
+                            padding: 10px 10px;
+                            border: 0;
+                        }
+
+                        .active {
                             font-weight: 500;
+                            color: var(--green-400);
+                            background-color: var(--green-200);
+                            border-radius: 50px;
+                            padding: 10px 10px;
+                            border: 0;
                         }
                     }
 
@@ -50,8 +82,9 @@
                         li {
                             display: flex;
                             gap: 15px;
-                            padding: 10px 12px;
+                            padding: 15px 12px;
                             cursor: pointer;
+                            border-bottom: 1px solid var(--gray-300);
 
                             .user-avatar {
                                 img {
@@ -67,6 +100,10 @@
                                 justify-content: center;
                                 gap: 3px;
                                 width: 100%;
+
+                                a {
+                                    color: var(--gray-500);
+                                }
                             }
 
                             .circle-container {
@@ -84,60 +121,24 @@
                                 }
                             }
                         }
-                    }
 
-                    hr {
-                        margin: 0;
-                    }
-
-                    .asterisk {
-                        color: red;
-                    }
-
-                    .form-field {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-bottom: 10px;
-
-                        .password-input-field {
-                            width: 557px;
-                            height: 40px;
-                            border-radius: 5px;
-                            border: 1px solid var(--gray-300);
-                            outline: none;
-                            padding: 0 10px;
+                        li:first-child {
+                            border-top: 1px solid var(--gray-300);
                         }
 
-                        label {
-                            padding-top: 10px;
+                        li:last-child {
+                            border: 0;
                         }
-
-                        .instructions {
-                            color: red;
-                            margin-bottom: 0;
-                            position: absolute;
-                            font-size: 13px;
-                        }
-
-                        .offscreen {
-                            display: none;
-                        }
-
-                        .valid {
-                            color: limegreen;
-                            margin-left: 0.25rem;
-                        }
-
-                        .invalid {
-                            color: red;
-                            margin-left: 0.25rem;
-                        }
-
-                        .hide {
-                            display: none;
+                        
+                        .no-unread-notif {
+                            width: 100%;
+                            font-size: 16px;
+                            color: var(--gray-300);
+                            text-align: center;
+                            padding: 50px 0;
+                            letter-spacing: 1px;
                         }
                     }
-
                 }
             }
         }
