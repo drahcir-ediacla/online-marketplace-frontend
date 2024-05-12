@@ -45,7 +45,12 @@ const NotificationList = () => {
             try {
                 const response = await axios.get('/api/notifications/unread');
 
-                setUnreadNotifications(response.data);
+                const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                // Slice the array to select only the first 10 elements
+                const limitedNotifications = sortedNotifications.slice(0, 10);
+
+                setUnreadNotifications(limitedNotifications);
 
             } catch (error) {
                 console.error('Error fetching unread notifications:', error);
@@ -60,6 +65,10 @@ const NotificationList = () => {
             await axios.put(`/api/read-notifications/${notificationId}`, { read: true });
             // Update the state to reflect the change
             setNotifications(notifications.map(notification =>
+                notification.id === notificationId ? { ...notification, read: true } : notification
+            ));
+
+            setUnreadNotifications(unreadNotifications.map(notification =>
                 notification.id === notificationId ? { ...notification, read: true } : notification
             ));
         } catch (error) {
@@ -83,30 +92,55 @@ const NotificationList = () => {
                                     <button className={`unread-btn ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>UNREAD</button>
                                 </div>
                                 {notifications.length === 0 ? (
-                                    <div style={{ display: activeTab === 0 ? 'block' : 'none' }} className='no-notif'>You don't have unread notifications</div>
+                                    <ul>
+                                        <li>
+                                            <div style={{ display: activeTab === 0 ? 'block' : 'none' }} className='no-notif'>You don't have any notifications</div>
+                                        </li>
+                                    </ul>
                                 ) : (
                                     <ul style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-                                    {notifications.map((notification) => (
-                                        <li key={notification.id} onClick={() => markAsRead(notification.id)}>
-                                            <div className="user-avatar">
-                                                <img src={notification.subjectUser.profile_pic} alt="" />
-                                            </div>
-                                            <div className='notification-info'>
-                                                <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
-                                                <div className="date">10/27/2022 17:07</div>
-                                            </div>
-                                            {!notification.read && (
-                                                <div className="circle-container">
-                                                    <div className="circle"></div>
+                                        {notifications.map((notification) => (
+                                            <li key={notification.id} onClick={() => markAsRead(notification.id)}>
+                                                <div className="user-avatar">
+                                                    <img src={notification.subjectUser.profile_pic} alt="" />
                                                 </div>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
+                                                <div className='notification-info'>
+                                                    <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                    <div className="date">10/27/2022 17:07</div>
+                                                </div>
+                                                {!notification.read && (
+                                                    <div className="circle-container">
+                                                        <div className="circle"></div>
+                                                    </div>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 )}
-                                <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                                    <li><div  className='no-unread-notif'>You don't have unread notifications</div></li>
-                                </ul>
+                                {unreadNotifications.length === 0 ? (
+                                    <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+                                        <li><div className='no-unread-notif'>You don't have unread notifications</div></li>
+                                    </ul>
+                                ) : (
+                                    <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+                                        {unreadNotifications.map((notification) => (
+                                            <li key={notification.id} onClick={() => markAsRead(notification.id)}>
+                                                <div className="user-avatar">
+                                                    <img src={notification.subjectUser.profile_pic} alt="" />
+                                                </div>
+                                                <div className='notification-info'>
+                                                    <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                    <div className="date">10/27/2022 17:07</div>
+                                                </div>
+                                                {!notification.read && (
+                                                    <div className="circle-container">
+                                                        <div className="circle"></div>
+                                                    </div>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {Link} from 'react-router-dom'
 import axios from '../../apicalls/axios';
 import './style.scss'
 import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
@@ -98,7 +99,7 @@ const NotificationComponent = () => {
               {notifications.length === 0 ? (
                 null
               ) : (
-                <div className="see-all">See all</div>
+                <div className="see-all"><Link to='/notificationlist'>See all</Link></div>
               )}
             </div>
             {notifications.length === 0 ? (
@@ -110,7 +111,7 @@ const NotificationComponent = () => {
                     <div className="user-image">
                       <img src={notification.subjectUser.profile_pic} alt="" />
                     </div>
-                    <span dangerouslySetInnerHTML={{ __html: notification.message }} />
+                    <span style={{width: '100%'}} dangerouslySetInnerHTML={{ __html: notification.message }} />
                     {!notification.read && (
                       <div className="circle-container">
                         <div className='circle'></div>
