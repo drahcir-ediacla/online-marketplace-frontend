@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from '../../apicalls/axios';
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import './style.scss'
 import { ReactComponent as BellIcon } from '../../assets/images/bell-regular.svg';
 import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.svg';
@@ -111,7 +113,10 @@ const NotificationComponent = () => {
                     <div className="user-image">
                       <img src={notification.subjectUser.profile_pic} alt="" />
                     </div>
-                    <span style={{width: '100%'}} dangerouslySetInnerHTML={{ __html: notification.message }} />
+                    <div className='notification-message'>
+                      <span style={{ width: '100%' }} dangerouslySetInnerHTML={{ __html: notification.message }} />
+                      <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
+                    </div>
                     {!notification.read && (
                       <div className="circle-container">
                         <div className='circle'></div>

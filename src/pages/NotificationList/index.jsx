@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from '../../apicalls/axios';
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import './style.scss'
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
 import ManageAccountNav from '../../layouts/ManageAccountNav';
-import Avatar from '../../assets/images/review-1_icon.png';
-
+import { ReactComponent as ThreeDots } from '../../assets/images//three-dots.svg';
 
 
 const NotificationList = () => {
@@ -13,6 +14,7 @@ const NotificationList = () => {
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -76,6 +78,31 @@ const NotificationList = () => {
         }
     };
 
+
+    const notificationRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                notificationRef.current &&
+                !notificationRef.current.contains(e.target) &&
+                !e.target.closest('.dots-container')
+            ) {
+                setIsDropdownVisible(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+
+    const toggleDropdown = () => {
+        setIsDropdownVisible(!isDropdownVisible);
+    };
+
     return (
         <>
             <Header />
@@ -87,9 +114,28 @@ const NotificationList = () => {
                         <div className="col-right">
                             <div className="notification-list-container">
                                 <h5>NOTIFICATIONS</h5>
-                                <div className='view-options-btn-container'>
-                                    <button className={`all-btn ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>ALL</button>
-                                    <button className={`unread-btn ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>UNREAD</button>
+                                <div className="notification-btns">
+                                    <div className='view-options-btn-container'>
+                                        <button className={`all-btn ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>ALL</button>
+                                        <button className={`unread-btn ${activeTab === 1 ? 'active' : ''}`} onClick={() => openContent(1)}>UNREAD</button>
+                                    </div>
+                                    <div className='dots-container' onClick={toggleDropdown}>
+                                        <div className='three-dots'>
+                                            <ThreeDots />
+                                        </div>
+                                        {isDropdownVisible && (
+                                            <div className="three-dots-dropdown-options" ref={notificationRef}>
+                                                <ul>
+                                                    <li>
+                                                        <span>Mark All as Read</span>
+                                                    </li>
+                                                    <li>
+                                                        <span>Clear All Notifications</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 {notifications.length === 0 ? (
                                     <ul>
@@ -106,7 +152,7 @@ const NotificationList = () => {
                                                 </div>
                                                 <div className='notification-info'>
                                                     <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
-                                                    <div className="date">10/27/2022 17:07</div>
+                                                    <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
                                                 </div>
                                                 {!notification.read && (
                                                     <div className="circle-container">
@@ -130,7 +176,7 @@ const NotificationList = () => {
                                                 </div>
                                                 <div className='notification-info'>
                                                     <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
-                                                    <div className="date">10/27/2022 17:07</div>
+                                                    <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
                                                 </div>
                                                 {!notification.read && (
                                                     <div className="circle-container">
