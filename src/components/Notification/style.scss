@@ -46,20 +46,21 @@
                 position: absolute;
                 top: -9px;
                 right: 200px;
-                fill: var(--gray-200);
+                fill: var(--green-400);
                 width: 30px;
                 z-index: 2;
             }
 
             .notification-header {
+                color: white;
                 display: flex;
                 font-weight: 500;
-                padding: 5px 12px 5px 12px;
+                padding: 8px 12px 8px 12px;
                 justify-content: space-between;
-                background: var(--gray-200);
+                background: var(--green-400);
 
                 a {
-                    color: var(--gray-500);
+                    color: white;
                 }
             }
 

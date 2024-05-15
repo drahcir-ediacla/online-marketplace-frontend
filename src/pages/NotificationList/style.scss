@@ -113,6 +113,7 @@
 
                                     li:first-child {
                                         border-top: none;
+                                        border-bottom: none;
                                     }
                                 }
                             }
@@ -124,50 +125,64 @@
                         margin: 0;
 
                         li {
-                            display: flex;
-                            align-items: center;
-                            gap: 15px;
-                            padding: 15px 12px;
-                            cursor: pointer;
+
+                            padding: 12px 12px;
                             border-bottom: 1px solid var(--gray-300);
 
-                            .user-avatar {
-                                img {
-                                    width: 60px;
-                                    height: 60px;
-                                    border-radius: 50%;
-                                }
+                            .delete-notif-btn {
+                                display: flex;
+                                justify-content: flex-end;
                             }
 
-                            .notification-info {
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                gap: 3px;
-                                width: 100%;
-
-                                a {
-                                    color: var(--gray-500);
-                                }
-
-                                .date {
-                                    font-size: 14px;
-                                    color: var(--gray-400);
-                                }
+                            .fa-times:before {
+                                color: var(--gray-300);
+                                cursor: pointer;
                             }
 
-                            .circle-container {
-                                width: auto;
+                            .notification-container {
                                 display: flex;
-                                justify-content: center;
                                 align-items: center;
-                                margin-left: 10px;
+                                gap: 15px;
+                                cursor: pointer;
 
-                                .circle {
-                                    width: 10px;
-                                    height: 10px;
-                                    border-radius: 50%;
-                                    background-color: var(--green-400);
+                                .user-avatar {
+                                    img {
+                                        width: 60px;
+                                        height: 60px;
+                                        border-radius: 50%;
+                                    }
+                                }
+
+                                .notification-info {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    gap: 3px;
+                                    width: 100%;
+
+                                    a {
+                                        color: var(--gray-500);
+                                    }
+
+                                    .date {
+                                        font-size: 14px;
+                                        color: var(--gray-400);
+                                    }
+                                }
+
+                                .circle-container {
+                                    width: auto;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    margin-left: 10px;
+
+                                    .circle {
+                                        width: 10px;
+                                        height: 10px;
+                                        border-radius: 50%;
+                                        background-color: var(--green-400);
+                                    }
                                 }
                             }
                         }
@@ -177,7 +192,7 @@
                         }
 
                         li:last-child {
-                            border: 0;
+                            border-bottom: none;
                         }
 
                         li:hover {
@@ -191,6 +206,20 @@
                             text-align: center;
                             padding: 50px 0;
                             letter-spacing: 1px;
+                        }
+                    }
+
+                    .view-more {
+                        text-align: center;
+                        margin-top: 30px;
+
+                        .view-more-btn {
+                            text-decoration: underline;
+                            padding: 10px;
+                            color: #aaaaaa;
+                            font-weight: 500;
+                            border: none;
+                            background: none;
                         }
                     }
                 }

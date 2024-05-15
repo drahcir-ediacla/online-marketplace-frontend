@@ -144,48 +144,76 @@ const NotificationList = () => {
                                         </li>
                                     </ul>
                                 ) : (
-                                    <ul style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-                                        {notifications.map((notification) => (
-                                            <li key={notification.id} onClick={() => markAsRead(notification.id)}>
-                                                <div className="user-avatar">
-                                                    <img src={notification.subjectUser.profile_pic} alt="" />
-                                                </div>
-                                                <div className='notification-info'>
-                                                    <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
-                                                    <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
-                                                </div>
-                                                {!notification.read && (
-                                                    <div className="circle-container">
-                                                        <div className="circle"></div>
+                                    <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+                                        <ul>
+                                            {notifications.map((notification) => (
+                                                <li key={notification.id} >
+                                                    <div className="delete-notif-btn">
+                                                        <i class="fa fa-times"></i>
                                                     </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                                    <div className="notification-container" onClick={() => markAsRead(notification.id)}>
+                                                        <div className="user-avatar">
+                                                            <img src={notification.subjectUser.profile_pic} alt="" />
+                                                        </div>
+                                                        <div className='notification-info'>
+                                                            <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                            <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
+                                                        </div>
+                                                        {!notification.read && (
+                                                            <div className="circle-container">
+                                                                <div className="circle"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {notifications.length > 10 ? (
+                                            <div className='view-more'>
+                                                <button className='view-more-btn'>View more</button>
+                                            </div>
+                                        ) : (
+                                            null
+                                        )}
+                                    </div>
                                 )}
                                 {unreadNotifications.length === 0 ? (
                                     <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
                                         <li><div className='no-unread-notif'>You don't have unread notifications</div></li>
                                     </ul>
                                 ) : (
-                                    <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                                        {unreadNotifications.map((notification) => (
-                                            <li key={notification.id} onClick={() => markAsRead(notification.id)}>
-                                                <div className="user-avatar">
-                                                    <img src={notification.subjectUser.profile_pic} alt="" />
-                                                </div>
-                                                <div className='notification-info'>
-                                                    <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
-                                                    <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
-                                                </div>
-                                                {!notification.read && (
-                                                    <div className="circle-container">
-                                                        <div className="circle"></div>
+                                    <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+                                        <ul>
+                                            {unreadNotifications.map((notification) => (
+                                                <li key={notification.id} >
+                                                    <div className="delete-notif-btn">
+                                                        <i class="fa fa-times"></i>
                                                     </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                                    <div className="notification-container" onClick={() => markAsRead(notification.id)}>
+                                                        <div className="user-avatar">
+                                                            <img src={notification.subjectUser.profile_pic} alt="" />
+                                                        </div>
+                                                        <div className='notification-info'>
+                                                            <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                            <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
+                                                        </div>
+                                                        {!notification.read && (
+                                                            <div className="circle-container">
+                                                                <div className="circle"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {notifications.length > 10 ? (
+                                            <div className='view-more'>
+                                                <button className='view-more-btn'>View more</button>
+                                            </div>
+                                        ) : (
+                                            null
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>
