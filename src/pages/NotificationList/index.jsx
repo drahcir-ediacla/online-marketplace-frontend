@@ -15,6 +15,8 @@ const NotificationList = () => {
     const [unreadNotifications, setUnreadNotifications] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [displayedNotificationsCount, setDisplayedNotificationsCount] = useState(20); // Initial count
+    const [displayedUnreadNotificationsCount, setDisplayedUnreadNotificationsCount] = useState(20); // Initial count
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -29,16 +31,16 @@ const NotificationList = () => {
         try {
             const response = await axios.get('/api/notifications');
 
-            // Sort notifications from latest to oldest based on createdAt
             const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-            // Slice the array to select only the first 10 elements
-            const limitedNotifications = sortedNotifications.slice(0, 10);
-            setNotifications(limitedNotifications);
-
+            setNotifications(sortedNotifications);
         } catch (error) {
             console.error('Error fetching notifications:', error);
         }
+    };
+
+    const loadMoreNotifications = () => {
+        setDisplayedNotificationsCount(prevCount => prevCount + 20);
     };
 
 
@@ -49,10 +51,7 @@ const NotificationList = () => {
 
                 const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-                // Slice the array to select only the first 10 elements
-                const limitedNotifications = sortedNotifications.slice(0, 10);
-
-                setUnreadNotifications(limitedNotifications);
+                setUnreadNotifications(sortedNotifications);
 
             } catch (error) {
                 console.error('Error fetching unread notifications:', error);
@@ -60,6 +59,13 @@ const NotificationList = () => {
         }
         fetchUnreadNotifications()
     }, [])
+
+
+    const loadMoreUnreadNotifications = () => {
+        setDisplayedUnreadNotificationsCount(prevCount => prevCount + 20);
+    };
+
+
 
 
     const markAsRead = async (notificationId) => {
@@ -77,6 +83,21 @@ const NotificationList = () => {
             console.error('Error marking notification as read:', error);
         }
     };
+
+
+
+    const markAllAsRead = async () => {
+        try {
+            await axios.put('/api/read-all-notifications', { read: true });
+
+            // Fetch updated notifications after marking all as read
+            fetchNotifications();
+            setUnreadNotifications([]);
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        }
+    }
+
 
 
     const notificationRef = useRef();
@@ -103,6 +124,30 @@ const NotificationList = () => {
         setIsDropdownVisible(!isDropdownVisible);
     };
 
+    const deleteNotificationById = async (notificationId) => {
+        try {
+            await axios.delete(`/api/delete-notification/${notificationId}`);
+            setNotifications(notifications.filter(notification => notification.id !== notificationId));
+            setUnreadNotifications(unreadNotifications.filter(notification => notification.id !== notificationId));
+        } catch (error) {
+            console.error('Error deleting notification:', error);
+        }
+    };
+
+
+    const deleteAllNotifications = async () => {
+        try {
+            await axios.delete('/api/delete-all-notifications')
+
+            // Fetch updated notifications after marking all as read
+            fetchNotifications();
+            setUnreadNotifications([]);
+        } catch (error) {
+            console.error('Error deleting all notifications', error)
+        }
+    }
+
+
     return (
         <>
             <Header />
@@ -121,15 +166,17 @@ const NotificationList = () => {
                                     </div>
                                     <div className='dots-container' onClick={toggleDropdown}>
                                         <div className='three-dots'>
-                                            <ThreeDots />
+                                            {notifications.length > 0 && <ThreeDots />}
                                         </div>
                                         {isDropdownVisible && (
                                             <div className="three-dots-dropdown-options" ref={notificationRef}>
                                                 <ul>
-                                                    <li>
-                                                        <span>Mark All as Read</span>
-                                                    </li>
-                                                    <li>
+                                                    {unreadNotifications.length > 0 &&
+                                                        <li onClick={markAllAsRead}>
+                                                            <span>Mark All as Read</span>
+                                                        </li>
+                                                    }
+                                                    <li onClick={deleteAllNotifications}>
                                                         <span>Clear All Notifications</span>
                                                     </li>
                                                 </ul>
@@ -138,17 +185,13 @@ const NotificationList = () => {
                                     </div>
                                 </div>
                                 {notifications.length === 0 ? (
-                                    <ul>
-                                        <li>
-                                            <div style={{ display: activeTab === 0 ? 'block' : 'none' }} className='no-notif'>You don't have any notifications</div>
-                                        </li>
-                                    </ul>
+                                    <div style={{ display: activeTab === 0 ? 'block' : 'none' }} className='no-notif'>You don't have any notifications</div>
                                 ) : (
                                     <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
                                         <ul>
-                                            {notifications.map((notification) => (
+                                            {notifications.slice(0, displayedNotificationsCount).map((notification) => (
                                                 <li key={notification.id} >
-                                                    <div className="delete-notif-btn">
+                                                    <div className="delete-notif-btn" onClick={() => deleteNotificationById(notification.id)}>
                                                         <i class="fa fa-times"></i>
                                                     </div>
                                                     <div className="notification-container" onClick={() => markAsRead(notification.id)}>
@@ -168,25 +211,21 @@ const NotificationList = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {notifications.length > 10 ? (
+                                        {notifications.length > displayedNotificationsCount && 
                                             <div className='view-more'>
-                                                <button className='view-more-btn'>View more</button>
+                                                <button className='view-more-btn' onClick={loadMoreNotifications}>View more</button>
                                             </div>
-                                        ) : (
-                                            null
-                                        )}
+                                        }
                                     </div>
                                 )}
                                 {unreadNotifications.length === 0 ? (
-                                    <ul style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                                        <li><div className='no-unread-notif'>You don't have unread notifications</div></li>
-                                    </ul>
+                                    <div className='no-notif' style={{ display: activeTab === 1 ? 'block' : 'none' }}>You don't have unread notifications</div>
                                 ) : (
                                     <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
                                         <ul>
-                                            {unreadNotifications.map((notification) => (
+                                            {unreadNotifications.slice(0, displayedUnreadNotificationsCount).map((notification) => (
                                                 <li key={notification.id} >
-                                                    <div className="delete-notif-btn">
+                                                    <div className="delete-notif-btn" onClick={() => deleteNotificationById(notification.id)}>
                                                         <i class="fa fa-times"></i>
                                                     </div>
                                                     <div className="notification-container" onClick={() => markAsRead(notification.id)}>
@@ -206,13 +245,11 @@ const NotificationList = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {notifications.length > 10 ? (
+                                        {unreadNotifications.length > displayedUnreadNotificationsCount && 
                                             <div className='view-more'>
-                                                <button className='view-more-btn'>View more</button>
+                                                <button className='view-more-btn' onClick={loadMoreUnreadNotifications}>View more</button>
                                             </div>
-                                        ) : (
-                                            null
-                                        )}
+                                        }
                                     </div>
                                 )}
                             </div>
