@@ -29,23 +29,40 @@ const ProfilePage = ({ userId }) => {
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
 
-    const [reviewsData, setReviewsData] = useState([])
-    console.log('reviewsData:', reviewsData)
+    const [reviewsData, setReviewsData] = useState([]);
+    const [checkReviewsData, setCheckReviewsData] = useState([]);
     const [avgRating, setAvgRating] = useState(null)
-    console.log('avgRating:', avgRating)
     const [totalReviews, setTotalReviews] = useState(null)
     const [ratingBreakdown, setRatingBreakdown] = useState(null)
     const stars = Array(5).fill(0);
 
     const [searchTerm, setSearchTerm] = useState('')
+    const [role, setRole] = useState('');
+    console.log('role:', role)
 
 
 
     useEffect(() => {
         const fetchReviewsByTargetId = async () => {
             try {
-                const response = await axios.get(`/api/get-reviews/${id}`)
+                const response = await axios.get(`/api/get-reviews/${id}/${role}`)
                 setReviewsData(response.data.reviewsTargetId)
+
+            } catch (error) {
+                console.log('Error fetching all the reviews:', error)
+            }
+        };
+
+        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
+        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
+    }, [id, role])
+
+
+    useEffect(() => {
+        const checkReviewsData = async () => {
+            try {
+                const response = await axios.get(`/api/get-reviews/${id}`)
+                setCheckReviewsData(response.data.allReviewsTargetId)
                 setAvgRating(response.data.averageRating)
                 setTotalReviews(response.data.totalReviews)
                 setRatingBreakdown(response.data.ratingBreakdown)
@@ -55,8 +72,7 @@ const ProfilePage = ({ userId }) => {
             }
         };
 
-        fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
+        checkReviewsData(); // Fetch receiver information only if receiver_id is available
     }, [id])
 
 
@@ -174,14 +190,14 @@ const ProfilePage = ({ userId }) => {
 
 
     const [activeTab, setActiveTab] = useState(0);
-    const [reviewTab, setReviewTab] = useState(0)
+
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
     };
 
     const openReviews = (tabIndex) => {
-        setReviewTab(tabIndex);
+        setRole(tabIndex);
     };
 
 
@@ -291,7 +307,7 @@ const ProfilePage = ({ userId }) => {
                                                 </div>
                                             </div>
                                             <div className="reviews-content" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                                                {reviewsData && reviewsData.length !== 0 && (
+                                                {checkReviewsData && checkReviewsData.length !== 0 && (
                                                     <>
                                                         <div className='row1'>
                                                             <div className="overall-rating">
@@ -418,14 +434,14 @@ const ProfilePage = ({ userId }) => {
                                                         <div className="row2"></div>
                                                     </>)}
                                                 <div className="row3 profile-review-container">
-                                                    {reviewsData && reviewsData.length > 0 ? (
+                                                    {checkReviewsData && checkReviewsData.length > 0 ? (
                                                         <>
                                                             <div className='review-btns'>
-                                                                <button className={`review-tab ${reviewTab === 0 ? 'active' : ''}`} onClick={() => openReviews(0)}>All Reviews</button>
-                                                                <button className={`review-tab ${reviewTab === 1 ? 'active' : ''}`} onClick={() => openReviews(1)}>Buyer Reviews</button>
-                                                                <button className={`review-tab ${reviewTab === 2 ? 'active' : ''}`} onClick={() => openReviews(2)}>Seller Reviews</button>
+                                                                <button className={`review-tab ${role === '' ? 'active' : ''}`} onClick={() => openReviews('')}>All Reviews</button>
+                                                                <button className={`review-tab ${role === 'Buyer' ? 'active' : ''}`} onClick={() => openReviews('Buyer')}>Buyer Reviews</button>
+                                                                <button className={`review-tab ${role === 'Seller' ? 'active' : ''}`} onClick={() => openReviews('Seller')}>Seller Reviews</button>
                                                             </div>
-                                                            <div style={{ display: reviewTab === 0 ? 'block' : 'none' }}>
+                                                            <div style={{ display: role === '' ? 'block' : 'none' }}>
                                                                 <CustomerReviews posts={currentReviewData} />
                                                                 <div className='pagination-container'>
                                                                     <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
@@ -438,8 +454,36 @@ const ProfilePage = ({ userId }) => {
                                                             <h5>{user?.display_name} does not yet have any reviews.</h5>
                                                         </div>
                                                     )}
-                                                    <div style={{ display: reviewTab === 1 ? 'block' : 'none' }}>Buyer Reviews</div>
-                                                    <div style={{ display: reviewTab === 2 ? 'block' : 'none' }}>Seller Reviews</div>
+                                                    <div style={{ display: role === 'Buyer' ? 'block' : 'none' }}>
+                                                        {reviewsData && reviewsData.length > 0 ? (
+                                                            <>
+                                                                <CustomerReviews posts={currentReviewData} />
+                                                                <div className='pagination-container'>
+                                                                    <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className='no-review-message-container'>
+                                                                <div className='no-review-icon'><NoReviewIcon /></div>
+                                                                <h5>{user?.display_name} does not yet have any buyer reviews.</h5>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div style={{ display: role === 'Seller' ? 'block' : 'none' }}>
+                                                        {reviewsData && reviewsData.length > 0 ? (
+                                                            <>
+                                                                <CustomerReviews posts={currentReviewData} />
+                                                                <div className='pagination-container'>
+                                                                    <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className='no-review-message-container'>
+                                                                <div className='no-review-icon'><NoReviewIcon /></div>
+                                                                <h5>{user?.display_name} does not yet have any seller reviews.</h5>
+                                                            </div>
+                                                        )}
+                                                    </div>
 
                                                 </div>
                                             </div>
