@@ -9,7 +9,7 @@
   --gray-200: #EFEFEF;
   --gray-300: #BCBCBC;
   --gray-400: #959595;
-  --gray-500: #555555;
+  --gray-500: #222;
   --green-100: #EFFDF5;
   --green-200: #A5F0C5;
   --green-300: #28B67E;
@@ -34,7 +34,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  color: #555;
+  color: #222;
   font-size: 15px;
 }
 
