@@ -119,12 +119,16 @@
                 align-items: center;
 
                 .heart-icon {
+                    display: flex;
+                    align-items: center;
                     width: 20px;
                     fill: var(--gray-500);
                 }
 
                 .share-listing-component {
                     .share-icon {
+                        display: flex;
+                        align-items: center;
                         width: 20px;
                         fill: var(--gray-500);
                         cursor: pointer;
@@ -156,6 +160,11 @@
 
     .row3 {
         margin: 40px 0 70px 0;
+
+        h2 {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
 
         .product-details {
             display: flex;
@@ -243,6 +252,7 @@
                         width: 100%;
                         padding: 8px 15px;
                         justify-content: center;
+                        align-items: center;
                         background: none;
                         border: 1px solid var(--gray-300);
                         border-radius: 5px;
@@ -252,7 +262,9 @@
                         margin-top: 10px;
 
                         .edit-icon {
+                            display: flex;
                             width: 20px;
+                            stroke: var(--gray-500);
                         }
                     }
 
@@ -282,6 +294,7 @@
                         color: #FF0022;
 
                         .delete-icon {
+                            display: flex;
                             width: 14px;
                         }
                     }

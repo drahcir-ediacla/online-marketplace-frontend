@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import './style.scss'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import LoginBtn from '../../components/Button/LoginBtn'
+import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 
@@ -42,7 +43,7 @@ const RegisterByPhoneForm = () => {
             </div>
             <div className='col2 input-container'>
               <div className='row1'><b>Verification Code</b></div>
-              <div className='row2'><input type="text" placeholder='Enter the verification code' /><div className="send-code"><Link to="#">Send Code</Link></div></div>
+              <div className='row2'><input type="text" placeholder='Enter the verification code' /><BtnClear label='Send Code' className='send-code' disabled /></div>
             </div>
           </div>
           <div className='row3'>

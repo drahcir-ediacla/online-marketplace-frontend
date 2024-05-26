@@ -3,14 +3,13 @@ header {
         background-color: var(--green-600);
         height: 37px;
         display: flex;
-        font-size: 14px;
+        font-size: 15px;
         color: white;
 
         .container {
-            max-width: 1352px;
+            width: 1320px;
             display: flex;
             justify-content: space-between;
-            padding: 0 16px;
 
             .col-left {
                 display: flex;
@@ -24,10 +23,14 @@ header {
                     cursor: pointer;
 
                     .globe-icon {
+                        display: flex;
                         margin-right: 8px;
                         width: 15px;
                         fill: white;
-                        padding-bottom: 1px;
+                    }
+
+                    span {
+                        font-size: 14px;
                     }
 
                     .down {
@@ -94,6 +97,7 @@ header {
 
                     a {
                         color: white;
+                        font-size: 14px;
                     }
                 }
 
@@ -106,24 +110,53 @@ header {
                     flex-basis: 92px;
                     gap: 15px;
 
-                    .message-icon {
-                        width: 19px;
-                        fill: white;
+                    .header-message-icon-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 25px;
+                        cursor: pointer;
 
-                        a {
+                        .message-icon {
+                            display: flex;
+                            align-items: center;
+                            width: 19px;
+                            fill: white;
+
+                            a {
+                                fill: white;
+                                padding: 0;
+                                margin: 0;
+                            }
+                        }
+                    }
+
+                    .header-notification-icon-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 25px;
+                        cursor: pointer;
+
+                        .bell-icon {
+                            display: flex;
+                            width: 18px;
                             fill: white;
                         }
                     }
 
-                    .bell-icon {
-                        width: 18px;
-                        fill: white;
-                        stroke: 2rem;
-                    }
+                    .header-wishlist-icon-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 25px;
+                        cursor: pointer;
 
-                    .heart-icon {
-                        width: 20px;
-                        fill: white;
+                        .heart-icon {
+                            display: flex;
+                            width: 20px;
+                            fill: white;
+                        }
                     }
                 }
 
@@ -183,7 +216,7 @@ header {
                                 padding: 0;
 
                                 li {
-                                    padding: 5px 0;
+                                    padding: 3px 0;
                                 }
 
                                 li:hover {
@@ -204,17 +237,21 @@ header {
         display: flex;
 
         .container {
-            max-width: 1352px;
-            padding: 0 16px;
+            width: 1320px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
 
             .col1 {
-                .logo {
-                    width: 188px;
-                    height: 47.6px;
+
+                a {
+                    display: flex;
+
+                    .logo {
+                        width: 188px;
+                        height: 47.6px;
+                    }
                 }
             }
 
@@ -231,6 +268,8 @@ header {
 
                     .search-box {
                         input {
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 15px;
                             width: 500px;
                             border-radius: 5px 0 0 5px;
                             padding-left: 10px;
@@ -242,6 +281,8 @@ header {
                         position: relative;
 
                         input {
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 15px;
                             width: 270px;
                             border-radius: 0 5px 5px 0;
                             border: none;
@@ -249,7 +290,8 @@ header {
 
                         .location-icon {
                             position: absolute;
-                            top: 8px;
+                            display: flex;
+                            top: 9px;
                             left: 8px;
                             width: 16px;
                             fill: var(--gray-500);
@@ -269,6 +311,7 @@ header {
                             border-radius: 0 5px 5px 0;
 
                             .magnifying-glass {
+                                display: flex;
                                 width: 21px;
                                 background: var(--green-400);
                                 fill: white;
@@ -345,6 +388,7 @@ header {
                                     justify-content: space-between;
 
                                     .icon {
+                                        display: flex;
                                         text-align: center;
 
                                         img {
@@ -392,7 +436,7 @@ header {
                                         right: auto;
                                         min-width: 250px;
                                         max-height: 420px;
-                                        margin-left: 2px;
+                                        margin-left: 1px;
                                         overflow-y: auto;
                                         background-color: white;
                                         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
@@ -516,6 +560,7 @@ header {
 
                             .grid-icon {
                                 position: absolute;
+                                display: flow-root;
                                 top: 0;
                                 fill: var(--gray-500);
                                 width: 18px;
@@ -624,6 +669,8 @@ header {
                     gap: 2px;
 
                     input {
+                        font-size: 15px;
+                        font-family: 'Poppins', sans-serif;
                         outline: none;
                         height: 42px;
                         padding-left: 32px;
@@ -671,6 +718,7 @@ header {
                             border-radius: 0 5px 5px 0;
 
                             .magnifying-glass {
+                                display: flex;
                                 width: 21px;
                                 background: var(--green-400);
                                 fill: white;
@@ -745,6 +793,7 @@ header {
                                     justify-content: space-between;
 
                                     .icon {
+                                        display: flex;
                                         text-align: center;
 
                                         img {
@@ -792,7 +841,7 @@ header {
                                         right: auto;
                                         min-width: 250px;
                                         max-height: 420px;
-                                        margin-left: 2px;
+                                        margin-left: 1px;
                                         overflow-y: auto;
                                         background-color: white;
                                         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
@@ -828,6 +877,7 @@ header {
                         padding: 16px 0;
 
                         .grid-icon {
+                            display: flex;
                             fill: var(--gray-500);
                             width: 22px;
                             padding-right: 7px;

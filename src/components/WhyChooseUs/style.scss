@@ -1,28 +1,40 @@
-.why-choose-us-box{
+.why-choose-us-box {
     background: var(--green-100);
     padding: 50px 0;
     font-family: kanit, sans-serif;
     margin-top: 100px;
-    .container{
+
+    .container {
         display: block;
         text-align: center;
-        h1{
+
+        h1 {
+            font-family: kanit, sans-serif;
             font-size: 45px;
             margin-bottom: 60px;
+            font-weight: 500;
         }
-        .row1{
+
+        h4 {
+            font-family: kanit, sans-serif;
+            font-size: 24px;
+        }
+
+        .row1 {
             display: flex;
             justify-content: space-between;
-                .why-choose-us-card{
-                    text-decoration: none;
-                    color: var(--green-500);
-                    display: block;
-                    text-align: center;
-                    width: 240px;
-                    img{
-                        margin-bottom: 13px;
-                    }
+
+            .why-choose-us-card {
+                text-decoration: none;
+                color: var(--green-500);
+                display: block;
+                text-align: center;
+                width: 240px;
+
+                img {
+                    margin-bottom: 13px;
                 }
+            }            
         }
     }
 }

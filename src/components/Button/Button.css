@@ -1,69 +1,80 @@
 /* SUB CATEGORY BUTTON */
 .custom-button {
-    padding: 5px 20px;
-    border: 1px solid var(--gray-300);
-    color: var(--gray-500);
-    border-radius: 50px;
-    background: white;
-    cursor: pointer;
-    outline: none;
-  }
-
-  /* CATEGORY BUTTON */
-  .category-button{
-    padding: 5px 20px;
-    border: 1px solid var(--gray-300);
-    color: var(--gray-500);
-    border-radius: 50px;
-    background: white;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .active, .category-button:hover {
-    background: var(--green-400);
-    color: white;
-    border-color: var(--green-400);
-  }
-  
-
-  /* SEE MORE BUTTON */
-.seemore-button{
-    border: none;
-    color: var(--green-400);
-    padding: 5px 0px;
-    background: none;
-    outline: none;
+  padding: 5px 20px;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  border-radius: 50px;
+  background: white;
+  cursor: pointer;
+  outline: none;
 }
 
-.seemore-button:hover{
-    border: none;
-    background: none;
-    color: var(--green-400);
-    text-decoration: underline;
+/* CATEGORY BUTTON */
+.category-button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  padding: 5px 20px;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  border-radius: 50px;
+  background: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.active,
+.category-button:hover {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  background: var(--green-400);
+  color: white;
+  border-color: var(--green-400);
+}
+
+
+/* SEE MORE BUTTON */
+.seemore-button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  border: none;
+  color: var(--green-400);
+  padding: 5px 0px;
+  background: none;
+  outline: none;
+}
+
+.seemore-button:hover {
+  border: none;
+  background: none;
+  color: var(--green-400);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 /* LOGIN FORM BUTTON */
-.custom-login-button{
-    width: 360px;
-    height: 47px;
-    border-radius: 5px;
-    color: white;
-    background: var(--green-400);
-    border: none;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-items: center;
-    outline: none;
+.custom-login-button {
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  width: 360px;
+  height: 47px;
+  border-radius: 5px;
+  color: white;
+  background: var(--green-400);
+  border: none;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  outline: none;
 }
 
-.svg-class{
+.svg-class {
+  display: flex;
   fill: white;
 }
 
 /* CLEAR BUTTON */
-.clear-button{
+.clear-button {
   padding: 8px 15px;
   border-radius: 5px;
   border: 1px solid var(--gray-300);
@@ -75,13 +86,13 @@
   text-align: center;
 }
 
-.clear-button:hover{
+.clear-button:hover {
   background: var(--light-gray);
   color: var(--gray-500);
 }
 
 /* GREEN BUTTON */
-.green-button{
+.green-button {
   padding: 8px 15px;
   border-radius: 5px;
   border: 1px solid var(--green-400);
@@ -94,7 +105,7 @@
   text-align: center;
 }
 
-.green-button:hover{
+.green-button:hover {
   background: #008774;
   color: white;
 }
@@ -110,7 +121,7 @@
 }
 
 /* FILTERS BUTTON */
-.custom-filter-button{
+.custom-filter-button {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -123,41 +134,41 @@
   outline: none;
 }
 
-.custom-filter-button:hover{
+.custom-filter-button:hover {
   background-color: var(--light-gray);
 }
 
-.custom-filter-button .svg-style{
+.custom-filter-button .svg-style {
   width: 20px;
   fill: var(--gray-500);
 }
 
 
 /* FILTERBY BUTTON */
-.custom-filterby-button{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 20px;
-    height: 40px;
-    border: 1px solid var(--gray-300);
-    color: var(--gray-500);
-    border-radius: 50px;
-    background: white;
-    cursor: pointer;
-    outline: none;
+.custom-filterby-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  height: 40px;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  border-radius: 50px;
+  background: white;
+  cursor: pointer;
+  outline: none;
 }
 
-.custom-filterby-button:hover{
+.custom-filterby-button:hover {
   background-color: var(--light-gray);
 }
 
-.custom-filterby-button .svg-style{
+.custom-filterby-button .svg-style {
   width: 20px;
   fill: var(--gray-500);
 }
 
-.filterby-arrow-down::after{
+.filterby-arrow-down::after {
   content: "\f078";
   font-family: FontAwesome;
   color: var(--gray-500);

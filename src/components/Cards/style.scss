@@ -108,11 +108,13 @@
             }
 
             .heart-icon {
+                display: flex;
                 margin-left: 5px;
                 width: 15px;
                 fill: var(--gray-500);
                 border: none;
                 background: none;
+                padding-bottom: 4px;
             }
         }
     }
@@ -328,11 +330,13 @@
                         border-bottom: 1px solid var(--gray-200);
 
                         .edit-icon {
+                            display: flex;
                             width: 20px;
                             stroke: var(--gray-500);
                         }
 
                         .delete-icon {
+                            display: flex;
                             width: 14px;
                         }
                     }
@@ -341,6 +345,7 @@
                         color: var(--gray-300);
 
                         .edit-icon {
+                            display: flex;
                             width: 20px;
                             stroke: var(--gray-300);
                         }
@@ -350,6 +355,7 @@
                         color: var(--green-400);
 
                         .check-icon {
+                            display: flex;
                             width: 17px;
                             stroke: var(--green-400);
                         }
@@ -359,6 +365,7 @@
                         color: var(--gray-300);
 
                         .check-icon {
+                            display: flex;
                             width: 17px;
                             stroke: var(--gray-300);
                         }

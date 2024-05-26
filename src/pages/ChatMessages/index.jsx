@@ -40,6 +40,7 @@ const ChatMessages = () => {
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
+    console.log('allChats:', allChats)
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
@@ -200,7 +201,19 @@ const ChatMessages = () => {
                     setMessages(prevMessages => [...prevMessages, data]);
                 }
             }
-        });
+            setFilteredChat(prevChats => prevChats.map(chat => {
+                if (chat.chat_id === data.chat_id) {
+                    return {
+                        ...chat,
+                        chat: {
+                            ...chat.chat,
+                            messages: [...chat.chat.messages, data]
+                        }
+                    };
+                }
+                return chat;
+            }));
+        }); 
 
         return () => {
             // Disconnect the socket when the component unmounts
@@ -208,30 +221,25 @@ const ChatMessages = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id]); // Dependencies updated to include chat_id
-
-
-
+    }, [chat_id,messages]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
-        const fetchAllUserChat = async () => {
-            try {
-                const response = await axios.get('/api/get-all/user-chat');
-
-                setAllChats(response.data);
-                setFilteredChat(response.data);
-
-            } catch (error) {
-                console.error('Error fetching all chats:', error);
-            }
-        };
-
-
-
         fetchAllUserChat();
-    }, []); // Include sender_id in dependency array if it can change
+    }, [])
 
+
+    const fetchAllUserChat = async () => {
+        try {
+            const response = await axios.get('/api/get-all/user-chat');
+
+            setAllChats(response.data);
+            setFilteredChat(response.data);
+
+        } catch (error) {
+            console.error('Error fetching all chats:', error);
+        }
+    };
 
 
     useEffect(() => {
@@ -396,6 +404,7 @@ const ChatMessages = () => {
                 // Clear the input field after sending the message
                 setInput('');
                 setPriceOffer('');
+                // fetchAllUserChat();
 
             } catch (error) {
                 // Handle error
@@ -539,7 +548,18 @@ const ChatMessages = () => {
     }
 
 
+    const markMessageAsRead = async (chatId) => {
+        try {
+            await axios.put(`/api/read-message/${chatId}`, { read: true });
 
+            setAllChats(filteredChat.map(chat =>
+                chat.chat_id === chatId ? { ...filteredChat, read: true } : filteredChat
+            ));
+            fetchAllUserChat();
+        } catch (error) {
+            console.error('Error marking message as read:', error);
+        }
+    }
 
 
     return (
@@ -570,8 +590,8 @@ const ChatMessages = () => {
                                 filteredChat.map((chat, index) => {
                                     const isActive = chat?.chat_id === chat_id;
                                     return (
-                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
-                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
+                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index} >
+                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`} onClick={() => markMessageAsRead(chat.chat_id)}>
                                                 <div className='user-chat-info-container'>
                                                     <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
                                                     <div className='chat-user-name-messages'>
@@ -586,7 +606,14 @@ const ChatMessages = () => {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                <div className='chat-time-container'>
+                                                    <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                    {chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read) && (
+                                                        <div className="circle-container">
+                                                            <div className="circle"></div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </NavLink>
                                     );

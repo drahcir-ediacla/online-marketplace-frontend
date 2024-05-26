@@ -1,4 +1,4 @@
-.reset-form-container{
+.reset-form-container {
     display: flex;
     flex-direction: column;
     gap: 33px;
@@ -7,42 +7,56 @@
     background: white;
     padding: 38px 42px;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
-    .row7{
+
+    a {
+        color: var(--blue);
+    }
+
+    .row7 {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        .horizontal-line{
+
+        .horizontal-line {
             width: 100%;
             height: 1px;
             background: var(--gray-300);
         }
     }
-    .row8{
-        .facebook-btn{
+
+    .row8 {
+        .facebook-btn {
             background: var(--fb-blue);
+            cursor: pointer;
         }
-        
-        .fb-icon{
+
+        .fb-icon {
             width: 16px;
         }
     }
-    .row9{
-        .google-btn{
+
+    .row9 {
+        .google-btn {
             background: var(--google-red);
+            cursor: pointer;
         }
-        
-        .google-icon{
+
+        .google-icon {
             width: 23px;
         }
     }
 }
-.reset-form{
+
+.reset-form {
     display: flex;
     flex-direction: column;
     gap: 33px;
-    input{
+
+    input {
+        font-size: 15px;
+        font-family: 'Poppins', sans-serif;
         border: 1px solid var(--gray-300);
         border-radius: 3px;
         width: 360px;
@@ -50,82 +64,103 @@
         padding: 0 15px;
         outline: none;
     }
-    .input-container{
+
+    .input-container {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
-    Button{
+
+    Button {
         width: 100%;
         height: 47px;
         border-radius: 5px;
         color: white;
     }
-    .row1{
+
+    .row1 {
         display: flex;
         flex-direction: column;
         gap: 14px;
-        .col1, .col2{
+
+        .col1,
+        .col2 {
             text-align: center;
         }
     }
-    .row2, .row3{
-        .col1{
+
+    .row2,
+    .row3 {
+        .col1 {
             display: flex;
             justify-content: space-between;
             font-size: 13px;
         }
     }
-    .row3{
-        .col2{
+
+    .row3 {
+        .col2 {
             position: relative;
-            input{
+
+            input {
                 padding: 0 110px 0 15px;
             }
-            .send-code{
+
+            .send-code {
                 position: absolute;
                 top: 10px;
                 right: 20px;
             }
         }
     }
-    .row4{
-        .col1{
+
+    .row4 {
+        .col1 {
             font-size: 13px;
         }
     }
-    .row5{
-        .col1{
+
+    .row5 {
+        .col1 {
             font-size: 13px;
         }
     }
-    .row6{
-        .continue-btn{
+
+    .row6 {
+        .continue-btn {
             background-color: var(--green-400);
+            cursor: pointer;
         }
     }
-    .row8{
-        .facebook-btn{
+
+    .row8 {
+        .facebook-btn {
             background: var(--fb-blue);
+            cursor: pointer;
         }
     }
-    .row7{
+
+    .row7 {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        .horizontal-line{
+
+        .horizontal-line {
             width: 100%;
             height: 1px;
             background: var(--gray-300);
         }
     }
-    .row9{
-        .google-btn{
+
+    .row9 {
+        .google-btn {
             background: var(--google-red);
+            cursor: pointer;
         }
-        .google-icon{
+
+        .google-icon {
             width: 23px;
         }
     }

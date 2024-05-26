@@ -21,6 +21,7 @@ import AvatarIcon from '../../assets/images/profile-avatar.png'
 import NoImage from '../../assets/images/no-item-image-chat.png'
 import BtnClear from '../../components/Button/BtnClear';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal'
+import ReviewModal from '../../components/Modal/ReviewModal'
 
 
 
@@ -31,7 +32,7 @@ const ChatMessages = () => {
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
-
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
@@ -42,15 +43,14 @@ const ChatMessages = () => {
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
+    const authUserDisplayName = user?.display_name;
+    const profileImg = user?.profile_pic;
+    console.log('profileImg:', profileImg)
     const product_id = chatInfo?.product_id;
-    console.log('product_id:', product_id)
     const offer = chatInfo?.offers?.[0]?.offer_price;
     const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
-    console.log('offer:', offer)
+    const existingReview = chatInfo?.review;
     const [priceOffer, setPriceOffer] = useState('');
-    console.log('priceOffer:', priceOffer)
-    const [offerStatus, setOfferStatus] = useState('');
-    console.log('offerStatus:', offerStatus)
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
@@ -67,8 +67,19 @@ const ChatMessages = () => {
         return cancelledOfferPattern.test(content);
     };
 
+    const isAcceptedOffer = (content) => {
+        const acceptedOfferPattern = /Offer Accepted/;
+        return acceptedOfferPattern.test(content);
+    };
+
+    const isDeclinedOffer = (content) => {
+        const declinedOfferPattern = /Offer Declined/;
+        return declinedOfferPattern.test(content);
+    };
+
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState(allChats)
+    console.log('filteredChat:', filteredChat)
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -90,6 +101,10 @@ const ChatMessages = () => {
         setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
     };
 
+    const toggleReviewModal = () => {
+        setReviewModalOpen((prevReviewModalOpen) => !prevReviewModalOpen);
+    };
+
 
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
@@ -98,10 +113,10 @@ const ChatMessages = () => {
         }
     };
 
-    //This code will execute sendOrCancelOffer whenever offerStatus changes.
+    //This code will execute handleOfferOptions whenever offerStatus changes.
     // useEffect(() => {
     //     if (offerStatus) {
-    //       sendOrCancelOffer();
+    //       handleOfferOptions();
     //     }
     //   }, [offerStatus]);
 
@@ -197,33 +212,28 @@ const ChatMessages = () => {
     }, [chat_id]); // Dependencies updated to include chat_id
 
 
-
-
-
     useEffect(() => {
-        const fetchAllUserChat = async () => {
-            try {
-                const response = await axios.get('/api/get-all/user-chat');
-
-                setAllChats(response.data);
-                setFilteredChat(response.data);
-
-            } catch (error) {
-                console.error('Error fetching all chats:', error);
-            }
-        };
-
-
-
         fetchAllUserChat();
-    }, []); // Include sender_id in dependency array if it can change
+    }, [])
 
+
+    const fetchAllUserChat = async () => {
+        try {
+            const response = await axios.get('/api/get-all/user-chat');
+
+            setAllChats(response.data);
+            setFilteredChat(response.data);
+
+        } catch (error) {
+            console.error('Error fetching all chats:', error);
+        }
+    };
 
 
     useEffect(() => {
         const fetchChatById = async () => {
             try {
-                const response = await axios.get(`/api/get/chat/${chat_id}`);
+                const response = await axios.get(`/api/get/chat/${chat_id}/${sender_id}`);
                 setChatInfo(response.data); // Update receiverInfo state with fetched data
             } catch (error) {
                 console.error('Error fetching chat information:', error);
@@ -233,7 +243,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id, sendOffer]);
+    }, [chat_id, sendOffer, user?.id]);
 
 
 
@@ -391,7 +401,7 @@ const ChatMessages = () => {
     };
 
 
-    const sendOrCancelOffer = async (offerStatus) => {
+    const handleOfferOptions = async (offerStatus) => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
         console.log('offerPriceToSend:', offerPriceToSend)
         // const offerStatus = pendingStatus || cancelStatus;
@@ -400,7 +410,7 @@ const ChatMessages = () => {
 
         let messageContent;
         if (offerStatus === 'Pending') {
-            messageContent = `<h6 style="color: #035956; font-weight: 600;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
+            messageContent = `<h6 style="color: #035956; font-weight: 500;">Offered Price</h6><span style="font-weight: 600;">${formatPrice(priceOffer)}</span>`;
         } else {
             if (offerStatus === 'Cancelled') {
                 messageContent = `<h6 style="color: red; font-weight: 500;">Offer Cancelled</h6><span style="font-weight: 600;">${formatPrice(offer)}</span>`;
@@ -525,12 +535,24 @@ const ChatMessages = () => {
     }
 
 
+    const markMessageAsRead = async (chatId) => {
+        try {
+            await axios.put(`/api/read-message/${chatId}`, { read: true });
 
+            setAllChats(filteredChat.map(chat =>
+                chat.chat_id === chatId ? { ...filteredChat, read: true } : filteredChat
+            ));
+            fetchAllUserChat();
+        } catch (error) {
+            console.error('Error marking message as read:', error);
+        }
+    }
 
 
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
+            {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} profileImg={profileImg} />}
             <Header />
             <div className="container">
                 <div className="chat-container">
@@ -555,8 +577,8 @@ const ChatMessages = () => {
                                 filteredChat.map((chat, index) => {
                                     const isActive = chat?.chat_id === chat_id;
                                     return (
-                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index}>
-                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`}>
+                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index} >
+                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`} onClick={() => markMessageAsRead(chat.chat_id)}>
                                                 <div className='user-chat-info-container'>
                                                     <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
                                                     <div className='chat-user-name-messages'>
@@ -571,7 +593,14 @@ const ChatMessages = () => {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                <div className='chat-time-container'>
+                                                    <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                    {chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read) && (
+                                                        <div className="circle-container">
+                                                            <div className="circle"></div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </NavLink>
                                     );
@@ -637,7 +666,7 @@ const ChatMessages = () => {
                                             null
                                         ) :
                                         (
-                                            offerCurrentStatus !== 'None' ?
+                                            offerCurrentStatus === 'Pending' || offerCurrentStatus === 'Accepted' ?
                                                 (
                                                     sellerId === sender_id ?
                                                         (
@@ -648,11 +677,26 @@ const ChatMessages = () => {
                                                                     </div>
                                                                 ) :
                                                                 (
-                                                                    <div className='offer-buttons'>
-                                                                        <BtnGreen label='Accept Offer' />
-                                                                        <BtnClear label='Decline Offer' />
-                                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
-                                                                    </div>
+                                                                    offerCurrentStatus === 'Pending' ?
+                                                                        (
+                                                                            <div className='offer-buttons'>
+                                                                                <BtnGreen label='Accept Offer' onClick={() => { handleOfferOptions('Accepted'); }} />
+                                                                                <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Declined'); }} />
+                                                                                <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                            </div>
+                                                                        ) :
+                                                                        (
+                                                                            <div className='offer-buttons'>
+                                                                                {existingReview && existingReview.length === 0 ? (
+                                                                                    <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
+                                                                                ) : (
+                                                                                    <>
+                                                                                        <span>Review Submitted &nbsp;&nbsp;</span>
+                                                                                    </>
+                                                                                )}
+                                                                                <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                            </div>
+                                                                        )
                                                                 )
                                                         ) :
                                                         (
@@ -666,10 +710,20 @@ const ChatMessages = () => {
                                                                                 </div>
                                                                             ) :
                                                                             (
-                                                                                <>
-                                                                                    <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                                                    <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); sendOrCancelOffer('Cancelled'); }} />
-                                                                                </>
+                                                                                offerCurrentStatus === 'Pending' ? (
+                                                                                    <>
+                                                                                        <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                                                        <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Cancelled'); }} />
+                                                                                    </>
+                                                                                ) : (
+                                                                                    existingReview && existingReview.length === 0 ? (
+                                                                                        <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
+                                                                                    ) : (
+                                                                                        <>
+                                                                                            <span>Review Submitted</span>
+                                                                                        </>
+                                                                                    )
+                                                                                )
                                                                             )
                                                                     ) :
                                                                     (
@@ -683,7 +737,7 @@ const ChatMessages = () => {
                                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                                 />
                                                                             </div>
-                                                                            <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                            <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                                             <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                                         </>
                                                                     )
@@ -730,7 +784,7 @@ const ChatMessages = () => {
                                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                                         />
                                                                                     </div>
-                                                                                    <BtnGreen label='Send Offer' onClick={() => { sendOrCancelOffer('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                    <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
                                                                                     <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                                 </>
                                                                             )
@@ -777,18 +831,18 @@ const ChatMessages = () => {
                                                                             <div className='offered-price-label'><h6>Offered Price</h6></div>
                                                                             <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
                                                                         </>
+                                                                    ) : isCancelledOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                    ) : isAcceptedOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                    ) : isDeclinedOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
                                                                     ) : (
-                                                                        isCancelledOffer(message.content) ? (
-                                                                            <>
-                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
-                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                            </>
-                                                                        ) : (
-                                                                            <span className='normal-chat-text'>{message.content}</span>
-                                                                        )
+                                                                        <span className='normal-chat-text'>{message.content}</span>
                                                                     )}
                                                                 </div>
                                                             )}
+
                                                             <img src={user?.profile_pic || AvatarIcon} alt="" />
                                                         </div>
                                                         <small className='chat-time-sent-message'>{formattedTime}</small>
@@ -820,15 +874,15 @@ const ChatMessages = () => {
                                                                             <div className='offered-price-label'><h6>Offered Price</h6></div>
                                                                             <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
                                                                         </>
+                                                                    ) : isCancelledOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                    ) : isAcceptedOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                    ) : isDeclinedOffer(message.content) ? (
+                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
                                                                     ) : (
-                                                                        isCancelledOffer(message.content) ? (
-                                                                            <>
-                                                                                {/* <div className='cancelled-offered-price-label'><h6>Offer Cancelled</h6></div> */}
-                                                                                <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                            </>
-                                                                        ) : (
-                                                                            <span className='normal-chat-text'>{message.content}</span>
-                                                                        ))}
+                                                                        <span className='normal-chat-text'>{message.content}</span>
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>

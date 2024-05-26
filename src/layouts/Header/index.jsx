@@ -56,14 +56,17 @@ function Header() {
     }
   };
 
-
+  const messages = () => {
+    window.location.href = '/messages';
+  }
 
   const mywishlist = () => {
     if (user) {
       const userId = user?.id;
-      window.location.href = `/wishlist/${userId}`;
+      window.location.href = `/wishlist`;
     }
   };
+  
 
   const logout = () => {
     const localBaseUrl = process.env.REACT_APP_BASE_URL;
@@ -131,9 +134,17 @@ function Header() {
               {user ? (
                 <>
                   <div className='nav-tools'>
-                    <div className='message-icon'><Link to='/messages'><MessageIcon /></Link></div>
-                    <Notification />
-                    <Link to='/wishlist' className='heart-icon'><HeartIcon /></Link>
+                    <div className='header-message-icon-container' onClick={messages}>
+                      <div className='message-icon'><MessageIcon /></div>
+                    </div>
+                    <div className='header-notification-icon-container'>
+                      <Notification />
+                    </div>
+                    <div className='header-wishlist-icon-container' onClick={mywishlist}>
+                      <div className='heart-icon'>
+                        <HeartIcon />
+                      </div>
+                    </div>
                   </div>
                   <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
                   <div className='my-account'>

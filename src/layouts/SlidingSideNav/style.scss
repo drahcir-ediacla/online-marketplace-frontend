@@ -110,6 +110,8 @@
                     width: 349px;
 
                     input {
+                        font-size: 15px;
+                        font-family: 'Poppins', sans-serif;
                         width: 100%;
                         height: 42px;
                         outline: none;
@@ -133,6 +135,7 @@
                         border-radius: 0 5px 5px 0;
 
                         .magnifying-glass {
+                            display: flex;
                             width: 21px;
                             background: var(--green-400);
                             fill: white;

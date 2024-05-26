@@ -40,6 +40,8 @@
                     }
 
                     .message-collections-btn {
+                        font-size: 15px;
+                        font-family: 'Poppins', sans-serif;
                         display: flex;
                         justify-content: space-between;
                         width: 116px;
@@ -96,8 +98,12 @@
                         .chat-user-name-messages {
                             display: flex;
                             flex-direction: column;
-                            max-width: 265px;
+                            width: 265px;
                             overflow: hidden;
+
+                            h6 {
+                                font-size: 1rem;
+                            }
 
                             .chat-user-name {
                                 font-weight: 600;
@@ -110,9 +116,34 @@
                         }
                     }
 
-                    .last-message-time {
-                        padding-top: 10px;
-                        width: 53px;
+                    .chat-time-container {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-evenly;
+                        width: 100%;
+                        padding: 0 5px;
+
+                        .last-message-time {
+                            text-align: end;
+                            align-self: flex-end;
+                            padding-top: 10px;
+                            width: 53px;
+                        }
+
+                        .circle-container {
+                            width: auto;
+                            display: flex;
+                            justify-content: end;
+                            align-items: center;
+                            margin-left: 10px;
+
+                            .circle {
+                                width: 10px;
+                                height: 10px;
+                                border-radius: 50%;
+                                background-color: var(--green-400);
+                            }
+                        }
                     }
                 }
 
@@ -166,6 +197,7 @@
                 }
 
                 .three-dots-chat {
+                    display: flex;
                     width: 5px;
                     fill: var(--green-400);
                 }
@@ -183,16 +215,22 @@
                 box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.08);
 
                 .offer-buttons {
+                    font-size: 15px;
+                    font-family: 'Poppins', sans-serif;
                     display: flex;
                     gap: 5px;
                     align-items: center;
 
                     .change-offer-btn {
+                        font-size: 15px;
+                        font-family: 'Poppins', sans-serif;
                         background: red;
                         border: none;
                     }
 
                     .item-sold-btn {
+                        font-size: 15px;
+                        font-family: 'Poppins', sans-serif;
                         font-weight: 500;
                         color: white;
                         background: var(--gray-300);
@@ -203,7 +241,7 @@
 
                         .php-symbol {
                             position: absolute;
-                            top: 10px;
+                            top: 8px;
                             left: 10px;
                         }
 
@@ -450,6 +488,7 @@
                     gap: 10px;
 
                     .chat-upload-img-btn {
+                        display: flex;
                         width: 23px;
                         height: auto;
                         fill: var(--gray-500);
@@ -457,6 +496,7 @@
                     }
 
                     .chat-emote-btn {
+                        display: flex;
                         position: relative;
                         width: 20px;
                         fill: var(--gray-500);
@@ -483,6 +523,8 @@
                     cursor: pointer;
 
                     .chat-send-icon {
+                        display: flex;
+                        justify-content: center;
                         stroke: white;
                         fill: none;
                     }

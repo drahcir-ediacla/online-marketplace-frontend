@@ -1,7 +1,8 @@
-.container{
+.container {
     display: flex;
     justify-content: center;
-    .contentbox{
+
+    .contentbox {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -10,22 +11,30 @@
         margin: 20px 0;
         padding: 50px 30px;
         background-color: #D6DA1A;
-        .col-left{
+
+        .col-left {
             display: flex;
-            .dollar-box{
+
+            .dollar-box {
+                display: flex;
                 padding-right: 20px;
-                img{
+
+                img {
                     width: 36px;
+                    height: 36px;
+                    align-self: center;
                 }
             }
-            h2{
+
+            h2 {
                 font-family: 'Kanit', sans-serif;
                 color: var(--green-500);
                 font-weight: 700;
             }
         }
-        .col-right{
-            .gain-more-btn{
+
+        .col-right {
+            .gain-more-btn {
                 display: flex;
                 width: 194px;
                 height: 48px;
@@ -34,7 +43,12 @@
                 padding: 9px 31px;
                 text-decoration: none;
                 border: 2px solid var(--green-500);
-                h5{
+
+                .sell-arrow {
+                    display: flex;
+                }
+
+                h5 {
                     font-family: 'Kanit', sans-serif;
                     margin: 0;
                     color: var(--green-500);
