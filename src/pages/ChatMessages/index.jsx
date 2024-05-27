@@ -31,6 +31,7 @@ const ChatMessages = () => {
     const socketRef = useRef(null);
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
+    console.log('messages:', messages)
     const [input, setInput] = useState('');
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
@@ -80,6 +81,15 @@ const ChatMessages = () => {
 
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState(allChats)
+    const unreadChat = filteredChat
+        .filter(chat =>
+            chat?.chat?.messages.some(
+                message =>
+                    message.receiver_id === user?.id && // Check if the message is received by the user
+                    !message.read // Check if the message is not read
+            )
+        )
+        .map(chat => chat.chat_id);
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -188,6 +198,15 @@ const ChatMessages = () => {
         // Connect to the WebSocket server
         socketRef.current = io(process.env.REACT_APP_BASE_URL);
 
+
+        // Extract all chat_ids from filteredChat
+        const filteredChatIds = filteredChat.map(chat => chat.chat_id);
+
+        // Join all chat rooms based on their chat_ids
+        filteredChatIds.forEach(chatId => {
+            socketRef.current.emit('joinChat', chatId);
+        });
+
         // Join the chat room based on chat_id when component mounts
         socketRef.current.emit('joinChat', chat_id);
 
@@ -201,19 +220,17 @@ const ChatMessages = () => {
                     setMessages(prevMessages => [...prevMessages, data]);
                 }
             }
+            // Update the filtered chat
             setFilteredChat(prevChats => prevChats.map(chat => {
-                if (chat.chat_id === data.chat_id) {
-                    return {
-                        ...chat,
-                        chat: {
-                            ...chat.chat,
-                            messages: [...chat.chat.messages, data]
-                        }
-                    };
-                }
-                return chat;
+                return {
+                    ...chat,
+                    chat: {
+                        ...chat.chat,
+                        messages: chat.chat_id === data.chat_id ? [...chat.chat.messages, data] : chat.chat.messages
+                    }
+                };
             }));
-        }); 
+        });
 
         return () => {
             // Disconnect the socket when the component unmounts
@@ -221,7 +238,7 @@ const ChatMessages = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id,messages]); // Dependencies updated to include chat_id
+    }, [chat_id]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
@@ -942,6 +959,7 @@ const ChatMessages = () => {
                                         value={input}
                                         onKeyDown={handleKeyPress}
                                         onChange={(e) => setInput(e.target.value)}
+                                        onFocus={() => markMessageAsRead(chat_id)}
                                     />
                                     <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
                                         <div className='chat-send-icon'>

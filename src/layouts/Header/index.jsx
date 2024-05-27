@@ -11,7 +11,8 @@ import RangeSlider from './RangeSlider';
 import SearchBox from './HeaderSearchBox';
 import NavMenu from './NavMenu';
 import StickyHeader from './StickyHeader';
-import Notification from '../../components/Notification';
+import NotificationBell from '../../components/Notification';
+import ChatMessageIcon from '../../components/ChatMessageIcon';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
@@ -135,10 +136,10 @@ function Header() {
                 <>
                   <div className='nav-tools'>
                     <div className='header-message-icon-container' onClick={messages}>
-                      <div className='message-icon'><MessageIcon /></div>
+                      <ChatMessageIcon />
                     </div>
                     <div className='header-notification-icon-container'>
-                      <Notification />
+                      <NotificationBell />
                     </div>
                     <div className='header-wishlist-icon-container' onClick={mywishlist}>
                       <div className='heart-icon'>
