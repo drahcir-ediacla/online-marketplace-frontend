@@ -196,10 +196,49 @@
                     }
                 }
 
-                .three-dots-chat {
-                    display: flex;
-                    width: 5px;
-                    fill: var(--green-400);
+                .three-dots-container {
+                    position: relative;
+                    padding: 5px 5px;
+                    cursor: pointer;
+
+                    .three-dots-chat {
+                        display: flex;
+                        width: 5px;
+                        fill: var(--green-400);
+                        rotate: 90deg;
+                    }
+
+                    .chat-action-options {
+                        position: absolute;
+                        width: auto;
+                        background: white;
+                        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+                        border-radius: 3px;
+                        top: 25px;
+                        right: -30px;
+                        z-index: 1;
+
+                        ul {
+                            width: max-content;
+                            margin: 0;
+                            padding: 0;
+
+                            li:first-child {
+                                border-top: none;
+                                border-bottom: none;
+                            }
+
+                            li {
+                                font-weight: 500;
+                                border: 1px solid var(--gray-200);
+                                padding: 10px 12px 10px 12px;
+                            }
+
+                            li:hover {
+                                background: var(--gray-100);
+                            }
+                        }
+                    }
                 }
             }
 

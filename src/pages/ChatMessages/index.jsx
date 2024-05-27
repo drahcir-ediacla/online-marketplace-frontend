@@ -31,23 +31,21 @@ const ChatMessages = () => {
     const socketRef = useRef(null);
     const { user } = useAuthentication();
     const [messages, setMessages] = useState([]);
-    console.log('messages:', messages)
     const [input, setInput] = useState('');
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
+    const [showChatActionOptions, setShowChatActionOptions] = useState(false)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
-    console.log('allChats:', allChats)
     const [productInfo, setProductInfo] = useState(null);
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const authUserDisplayName = user?.display_name;
     const profileImg = user?.profile_pic;
-    console.log('profileImg:', profileImg)
     const product_id = chatInfo?.product_id;
     const offer = chatInfo?.offers?.[0]?.offer_price;
     const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
@@ -81,15 +79,6 @@ const ChatMessages = () => {
 
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState(allChats)
-    const unreadChat = filteredChat
-        .filter(chat =>
-            chat?.chat?.messages.some(
-                message =>
-                    message.receiver_id === user?.id && // Check if the message is received by the user
-                    !message.read // Check if the message is not read
-            )
-        )
-        .map(chat => chat.chat_id);
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -115,6 +104,10 @@ const ChatMessages = () => {
         setReviewModalOpen((prevReviewModalOpen) => !prevReviewModalOpen);
     };
 
+    const toggleChatActionOptions = () => {
+        setShowChatActionOptions(!showChatActionOptions)
+    }
+
 
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
@@ -123,12 +116,24 @@ const ChatMessages = () => {
         }
     };
 
-    //This code will execute handleOfferOptions whenever offerStatus changes.
-    // useEffect(() => {
-    //     if (offerStatus) {
-    //       handleOfferOptions();
-    //     }
-    //   }, [offerStatus]);
+    const notificationRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                notificationRef.current &&
+                !notificationRef.current.contains(e.target) &&
+                !e.target.closest('.three-dots-container')
+            ) {
+                setShowChatActionOptions(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -659,8 +664,18 @@ const ChatMessages = () => {
                                             <span className='chat-user-status'>Online</span>
                                         </div>
                                     </div>
-                                    <div className='three-dots-chat'>
-                                        <ThreeDots />
+                                    <div className="three-dots-container" onClick={toggleChatActionOptions}>
+                                        <div className='three-dots-chat'>
+                                            <ThreeDots />
+                                        </div>
+                                        {showChatActionOptions &&
+                                            <div className="chat-action-options" ref={notificationRef}>
+                                                <ul>
+                                                    <li>Archive Chat</li>
+                                                    <li>Delete Chat</li>
+                                                </ul>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className="chat-right-row2">
