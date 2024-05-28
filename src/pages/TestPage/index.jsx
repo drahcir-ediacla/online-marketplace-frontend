@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import ReportModal from '../../components/Modal/ReportModal';
 import Notification from '../../components/Notification'
+import CustomSelect from '../../components/FormField/CustomSelect';
+import genderData from '../../data/genderData';
+import './style.scss'
 
 function ImageUploader() {
   const [images, setImages] = useState([]);
@@ -44,6 +47,7 @@ function ImageUploader() {
           ))}
         </ul>
       </div>
+      <CustomSelect data={genderData} />
     </div>
   );
 }

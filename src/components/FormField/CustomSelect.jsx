@@ -1,10 +1,15 @@
 // CustomSelect.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CustomSelect.css'; // Import your CSS file for styling
 
-const CustomSelect = ({ data, onSelect }) => {
+const CustomSelect = ({ data, onSelect, className, defaultSelected }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    const defaultOption = data.find(option => option.value === defaultSelected);
+    setSelectedOption(defaultOption);
+  }, [defaultSelected, data]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -12,15 +17,16 @@ const CustomSelect = ({ data, onSelect }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
-    onSelect(option);
+    // onSelect(option);
     setIsOpen(false);
   };
 
   return (
-    <div className={`custom-select ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
+    <div className={`custom-select ${className} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
       <div className="selected-option">
         {selectedOption ? selectedOption.label : 'Select an option'}
       </div>
+      <div className='arrow-down'></div>
       <div className="options">
         {data.map((option) => (
           <div

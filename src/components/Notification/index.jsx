@@ -91,7 +91,7 @@ const NotificationComponent = () => {
   return (
     <div className='notification'>
       <div className='bell-icon' onClick={toggleDropdown}><BellIcon /></div>
-      {unreadNotifications.length > 0 ? <div className="red-counter">{unreadNotifications.length}</div> : null}
+      {unreadNotifications.length > 0 ? <div className="red-counter" onClick={toggleDropdown}>{unreadNotifications.length}</div> : null}
       {isDropdownVisible && (
         <div className="notification-dropdown-container" ref={notificationRef}>
           <div className="notification-dropdown">

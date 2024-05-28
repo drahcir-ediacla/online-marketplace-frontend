@@ -22,6 +22,7 @@ import NoImage from '../../assets/images/no-item-image-chat.png'
 import BtnClear from '../../components/Button/BtnClear';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal'
 import ReviewModal from '../../components/Modal/ReviewModal'
+import CustomSelect from '../../components/FormField/CustomSelect';
 
 
 
@@ -55,6 +56,10 @@ const ChatMessages = () => {
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    const filterChatOptions = ['Inbox', 'Archived', 'Unread'].map(option => ({
+        label: option,
+        value: option.toLowerCase()
+      }));
 
 
     const isOfferPrice = (content) => {
@@ -254,14 +259,28 @@ const ChatMessages = () => {
     const fetchAllUserChat = async () => {
         try {
             const response = await axios.get('/api/get-all/user-chat');
-
-            setAllChats(response.data);
-            setFilteredChat(response.data);
-
+            const sortedChats = response.data.map(chat => {
+                // Sort messages in descending order based on timestamp
+                chat.chat.messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                return chat;
+            });
+    
+            // Sort chats based on the most recent message timestamp
+            sortedChats.sort((a, b) => {
+                const latestMessageA = a.chat.messages[0];
+                const latestMessageB = b.chat.messages[0];
+                return new Date(latestMessageB.timestamp) - new Date(latestMessageA.timestamp);
+            });
+    
+            setAllChats(sortedChats);
+            setFilteredChat(sortedChats);
+    
         } catch (error) {
             console.error('Error fetching all chats:', error);
         }
     };
+    
+    
 
 
     useEffect(() => {
@@ -503,31 +522,58 @@ const ChatMessages = () => {
     };
 
 
-    // Function to format the timestamp to '0:00 PM' format
     function formatTime(timestamp) {
         // Check if timestamp is valid
         if (!timestamp) {
             return 'Invalid Timestamp';
         }
-
+    
         // Parse the timestamp using Date constructor
         const date = new Date(timestamp);
-
+    
         // Check if date is valid
         if (isNaN(date.getTime())) {
             return 'Invalid Date';
         }
-
-        // Extract hours, minutes, and AM/PM
-        const hours = date.getHours();
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const period = hours >= 12 ? 'PM' : 'AM';
-
-        // Convert hours to 12-hour format
-        const formattedHours = hours % 12 || 12;
-
-        return `${formattedHours}:${minutes} ${period}`;
+    
+        // Get the current date and time
+        const now = new Date();
+    
+        // Check if the timestamp is within the same day
+        const isSameDay = date.toDateString() === now.toDateString();
+    
+        if (isSameDay) {
+            // Extract hours, minutes, and AM/PM
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const period = hours >= 12 ? 'PM' : 'AM';
+    
+            // Convert hours to 12-hour format
+            hours = hours % 12 || 12;
+    
+            // Format hours with leading zeros if necessary
+            const formattedHours = String(hours).padStart(2, '0');
+    
+            // Return the formatted time
+            return `${formattedHours}:${minutes} ${period}`;
+        } else {
+            // Extract month, day, and year
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+    
+            // Return the formatted date
+            return `${month}/${day}/${year}`;
+        }
     }
+    
+    // Example usage
+    const formattedTimeToday = formatTime(Date.now());
+    console.log(formattedTimeToday); // Output example: "03:45 PM"
+    
+    const formattedTimePast = formatTime(new Date('2023-05-25').getTime());
+    console.log(formattedTimePast); // Output example: "05/25/2023"
+    
 
 
 
@@ -595,7 +641,7 @@ const ChatMessages = () => {
                         <div className="chat-left-row1">
                             <div className='chat-left-row1-header'>
                                 <h3>Chat</h3>
-                                <FilterBy label='Inbox' className='message-collections-btn' />
+                                <CustomSelect data={filterChatOptions} defaultSelected="inbox" className='custom-select' />
                             </div>
                             <div className='chat-search-box-container'>
                                 <Input

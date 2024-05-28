@@ -1,23 +1,36 @@
 /* CustomSelect.css */
 .custom-select {
     position: relative;
-    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+    gap: 30px;
     cursor: pointer;
+    height: 30px;
   }
   
   .selected-option {
-    background-color: DodgerBlue;
-    color: white;
-    padding: 8px;
+    color: var(--black-101);
+    font-weight: 500;
+  }
+
+  .arrow-down:after {
+    content: "\f078";
+    font-family: FontAwesome;
+    color: var(--gray-500);
+    text-align: right;
   }
   
   .options {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 30px;
     left: 0;
     right: 0;
-    background-color: DodgerBlue;
+    background: white;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1;
   }
   
   .open .options {
@@ -25,16 +38,17 @@
   }
   
   .option {
-    color: white;
+    color: var(--black-101);
+    font-weight: 500;
     padding: 8px;
     cursor: pointer;
   }
   
   .option:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--gray-100);
   }
   
   .selected {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--gray-100);
   }
   
