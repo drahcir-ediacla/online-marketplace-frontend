@@ -2,29 +2,33 @@
 import React, { useState, useEffect } from 'react';
 import './CustomSelect.css'; // Import your CSS file for styling
 
-const CustomSelect = ({ data, onSelect, className, defaultSelected }) => {
+const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  console.log('selectedOption123:', selectedOption)
 
-  useEffect(() => {
-    const defaultOption = data.find(option => option.value === defaultSelected);
-    setSelectedOption(defaultOption);
-  }, [defaultSelected, data]);
+  // useEffect(() => {
+  //   const defaultOption = data[0].find(option => option.value === defaultSelected);
+  //   setSelectedOption(defaultOption);
+  // }, [defaultSelected, data]);
 
-  const toggleDropdown = () => {
+
+   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
-    // onSelect(option);
     setIsOpen(false);
+    if (onOptionSelect) {
+      onOptionSelect(option);
+    }
   };
 
   return (
     <div className={`custom-select ${className} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
       <div className="selected-option">
-        {selectedOption ? selectedOption.label : 'Select an option'}
+        {selectedOption ? selectedOption.label : 'Inbox'}
       </div>
       <div className='arrow-down'></div>
       <div className="options">

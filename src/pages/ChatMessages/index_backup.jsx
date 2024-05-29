@@ -9,7 +9,6 @@ import Header from '../../layouts/Header'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import BtnGreen from '../../components/Button/BtnGreen'
-import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
@@ -22,6 +21,7 @@ import NoImage from '../../assets/images/no-item-image-chat.png'
 import BtnClear from '../../components/Button/BtnClear';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal'
 import ReviewModal from '../../components/Modal/ReviewModal'
+import CustomSelect from '../../components/FormField/CustomSelect';
 
 
 
@@ -37,6 +37,9 @@ const ChatMessages = () => {
     const [sendOffer, setSendOffer] = useState(false);
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
+    const [showChatActionOptions, setShowChatActionOptions] = useState(false)
+    const [selectedOption, setSelectedOption] = useState(null);
+    console.log('selectedOption:', selectedOption)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -45,7 +48,6 @@ const ChatMessages = () => {
     const sender_id = user?.id;
     const authUserDisplayName = user?.display_name;
     const profileImg = user?.profile_pic;
-    console.log('profileImg:', profileImg)
     const product_id = chatInfo?.product_id;
     const offer = chatInfo?.offers?.[0]?.offer_price;
     const offerCurrentStatus = chatInfo?.offers?.[0]?.offer_status;
@@ -55,6 +57,10 @@ const ChatMessages = () => {
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    const filterChatOptions = ['Inbox', 'Archived', 'Unread'].map(option => ({
+        label: option,
+        value: option.toLowerCase()
+    }));
 
 
     const isOfferPrice = (content) => {
@@ -79,7 +85,6 @@ const ChatMessages = () => {
 
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState(allChats)
-    console.log('filteredChat:', filteredChat)
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -105,6 +110,10 @@ const ChatMessages = () => {
         setReviewModalOpen((prevReviewModalOpen) => !prevReviewModalOpen);
     };
 
+    const toggleChatActionOptions = () => {
+        setShowChatActionOptions(!showChatActionOptions)
+    }
+
 
     const handleKeyPress = (e) => {
         // Check if the pressed key is Enter
@@ -113,12 +122,24 @@ const ChatMessages = () => {
         }
     };
 
-    //This code will execute handleOfferOptions whenever offerStatus changes.
-    // useEffect(() => {
-    //     if (offerStatus) {
-    //       handleOfferOptions();
-    //     }
-    //   }, [offerStatus]);
+    const notificationRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                notificationRef.current &&
+                !notificationRef.current.contains(e.target) &&
+                !e.target.closest('.three-dots-container')
+            ) {
+                setShowChatActionOptions(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -188,6 +209,15 @@ const ChatMessages = () => {
         // Connect to the WebSocket server
         socketRef.current = io(process.env.REACT_APP_BASE_URL);
 
+
+        // Extract all chat_ids from filteredChat
+        const filteredChatIds = filteredChat.map(chat => chat.chat_id);
+
+        // Join all chat rooms based on their chat_ids
+        filteredChatIds.forEach(chatId => {
+            socketRef.current.emit('joinChat', chatId);
+        });
+
         // Join the chat room based on chat_id when component mounts
         socketRef.current.emit('joinChat', chat_id);
 
@@ -201,6 +231,16 @@ const ChatMessages = () => {
                     setMessages(prevMessages => [...prevMessages, data]);
                 }
             }
+            // Update the filtered chat
+            setFilteredChat(prevChats => prevChats.map(chat => {
+                return {
+                    ...chat,
+                    chat: {
+                        ...chat.chat,
+                        messages: chat.chat_id === data.chat_id ? [...chat.chat.messages, data] : chat.chat.messages
+                    }
+                };
+            }));
         });
 
         return () => {
@@ -220,14 +260,28 @@ const ChatMessages = () => {
     const fetchAllUserChat = async () => {
         try {
             const response = await axios.get('/api/get-all/user-chat');
+            const sortedChats = response.data.map(chat => {
+                // Sort messages in descending order based on timestamp
+                chat.chat.messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                return chat;
+            });
 
-            setAllChats(response.data);
-            setFilteredChat(response.data);
+            // Sort chats based on the most recent message timestamp
+            sortedChats.sort((a, b) => {
+                const latestMessageA = a.chat.messages[0];
+                const latestMessageB = b.chat.messages[0];
+                return new Date(latestMessageB.timestamp) - new Date(latestMessageA.timestamp);
+            });
+
+            setAllChats(sortedChats);
+            setFilteredChat(sortedChats);
 
         } catch (error) {
             console.error('Error fetching all chats:', error);
         }
     };
+
+
 
 
     useEffect(() => {
@@ -392,6 +446,7 @@ const ChatMessages = () => {
                 // Clear the input field after sending the message
                 setInput('');
                 setPriceOffer('');
+                // fetchAllUserChat();
 
             } catch (error) {
                 // Handle error
@@ -468,7 +523,6 @@ const ChatMessages = () => {
     };
 
 
-    // Function to format the timestamp to '0:00 PM' format
     function formatTime(timestamp) {
         // Check if timestamp is valid
         if (!timestamp) {
@@ -483,16 +537,44 @@ const ChatMessages = () => {
             return 'Invalid Date';
         }
 
-        // Extract hours, minutes, and AM/PM
-        const hours = date.getHours();
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const period = hours >= 12 ? 'PM' : 'AM';
+        // Get the current date and time
+        const now = new Date();
 
-        // Convert hours to 12-hour format
-        const formattedHours = hours % 12 || 12;
+        // Check if the timestamp is within the same day
+        const isSameDay = date.toDateString() === now.toDateString();
 
-        return `${formattedHours}:${minutes} ${period}`;
+        if (isSameDay) {
+            // Extract hours, minutes, and AM/PM
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const period = hours >= 12 ? 'PM' : 'AM';
+
+            // Convert hours to 12-hour format
+            hours = hours % 12 || 12;
+
+            // Format hours with leading zeros if necessary
+            const formattedHours = String(hours).padStart(2, '0');
+
+            // Return the formatted time
+            return `${formattedHours}:${minutes} ${period}`;
+        } else {
+            // Extract month, day, and year
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+
+            // Return the formatted date
+            return `${month}/${day}/${year}`;
+        }
     }
+
+    // Example usage
+    const formattedTimeToday = formatTime(Date.now());
+    console.log(formattedTimeToday); // Output example: "03:45 PM"
+
+    const formattedTimePast = formatTime(new Date('2023-05-25').getTime());
+    console.log(formattedTimePast); // Output example: "05/25/2023"
+
 
 
 
@@ -522,7 +604,7 @@ const ChatMessages = () => {
             return;
         }
 
-        const filtered = allChats.filter(chat => {
+        const searchFiltered = allChats.filter(chat => {
             const productNameMatch = chat?.chat?.product && chat.chat.product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
             const sellerDisplayNameMatch = chat?.otherParticipant && chat?.otherParticipant?.display_name.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -531,8 +613,56 @@ const ChatMessages = () => {
 
         });
 
-        setFilteredChat(filtered);
+        setFilteredChat(searchFiltered);
     }
+
+
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+
+        if (option.value === 'unread') {
+            const unreadChat = allChats.filter(chat =>
+                chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
+            );
+            setFilteredChat(unreadChat);
+        }
+
+        if (option.value === 'inbox') {
+            setFilteredChat(allChats);
+        }
+
+        if (option.value === 'archived') {
+            try {
+
+                // Filter and sort messages within each chat
+                const filteredChats = allChats.map(chat => {
+                    const filteredMessages = chat.chat.messages.filter(message => message.receiver_id === user?.id && message.archived);
+
+                    // If there are no archived messages, we exclude this chat from the result
+                    if (filteredMessages.length === 0) {
+                        return null;
+                    }
+
+                    // Sort messages in descending order based on timestamp
+                    filteredMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    chat.chat.messages = filteredMessages;
+                    return chat;
+                }).filter(chat => chat !== null); // Remove null chats
+
+                // Sort chats based on the most recent message timestamp
+                filteredChats.sort((a, b) => {
+                    const latestMessageA = a.chat.messages[0];
+                    const latestMessageB = b.chat.messages[0];
+                    return new Date(latestMessageB.timestamp) - new Date(latestMessageA.timestamp);
+                });
+
+                setFilteredChat(filteredChats);
+
+            } catch (error) {
+                console.error('Error filtering archived chats:', error);
+            }
+        }
+    };
 
 
     const markMessageAsRead = async (chatId) => {
@@ -560,7 +690,7 @@ const ChatMessages = () => {
                         <div className="chat-left-row1">
                             <div className='chat-left-row1-header'>
                                 <h3>Chat</h3>
-                                <FilterBy label='Inbox' className='message-collections-btn' />
+                                <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
                             </div>
                             <div className='chat-search-box-container'>
                                 <Input
@@ -629,8 +759,18 @@ const ChatMessages = () => {
                                             <span className='chat-user-status'>Online</span>
                                         </div>
                                     </div>
-                                    <div className='three-dots-chat'>
-                                        <ThreeDots />
+                                    <div className="three-dots-container" onClick={toggleChatActionOptions}>
+                                        <div className='three-dots-chat'>
+                                            <ThreeDots />
+                                        </div>
+                                        {showChatActionOptions &&
+                                            <div className="chat-action-options" ref={notificationRef}>
+                                                <ul>
+                                                    <li>Archive Chat</li>
+                                                    <li>Delete Chat</li>
+                                                </ul>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className="chat-right-row2">
@@ -929,6 +1069,7 @@ const ChatMessages = () => {
                                         value={input}
                                         onKeyDown={handleKeyPress}
                                         onChange={(e) => setInput(e.target.value)}
+                                        onFocus={() => markMessageAsRead(chat_id)}
                                     />
                                     <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
                                         <div className='chat-send-icon'>

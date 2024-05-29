@@ -9,7 +9,6 @@ import Header from '../../layouts/Header'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import BtnGreen from '../../components/Button/BtnGreen'
-import FilterBy from '../../components/Button/FilterBy'
 import Input from '../../components/FormField/Input'
 import { ReactComponent as ThreeDots } from '../../assets/images/three-dots.svg'
 import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-icon.svg'
@@ -39,6 +38,8 @@ const ChatMessages = () => {
     const [showEmotePicker, setShowEmotePicker] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false)
     const [showChatActionOptions, setShowChatActionOptions] = useState(false)
+    const [selectedOption, setSelectedOption] = useState(null);
+    console.log('selectedOption:', selectedOption)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -59,7 +60,21 @@ const ChatMessages = () => {
     const filterChatOptions = ['Inbox', 'Archived', 'Unread'].map(option => ({
         label: option,
         value: option.toLowerCase()
-      }));
+    }));
+
+
+    const archivedChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && message.archived)
+    );
+    
+    const unreadChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
+    );
+
+
+    const inboxChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.archived)
+    );
 
 
     const isOfferPrice = (content) => {
@@ -264,23 +279,23 @@ const ChatMessages = () => {
                 chat.chat.messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 return chat;
             });
-    
+
             // Sort chats based on the most recent message timestamp
             sortedChats.sort((a, b) => {
                 const latestMessageA = a.chat.messages[0];
                 const latestMessageB = b.chat.messages[0];
                 return new Date(latestMessageB.timestamp) - new Date(latestMessageA.timestamp);
             });
-    
+
             setAllChats(sortedChats);
             setFilteredChat(sortedChats);
-    
+
         } catch (error) {
             console.error('Error fetching all chats:', error);
         }
     };
-    
-    
+
+
 
 
     useEffect(() => {
@@ -527,33 +542,33 @@ const ChatMessages = () => {
         if (!timestamp) {
             return 'Invalid Timestamp';
         }
-    
+
         // Parse the timestamp using Date constructor
         const date = new Date(timestamp);
-    
+
         // Check if date is valid
         if (isNaN(date.getTime())) {
             return 'Invalid Date';
         }
-    
+
         // Get the current date and time
         const now = new Date();
-    
+
         // Check if the timestamp is within the same day
         const isSameDay = date.toDateString() === now.toDateString();
-    
+
         if (isSameDay) {
             // Extract hours, minutes, and AM/PM
             let hours = date.getHours();
             const minutes = String(date.getMinutes()).padStart(2, '0');
             const period = hours >= 12 ? 'PM' : 'AM';
-    
+
             // Convert hours to 12-hour format
             hours = hours % 12 || 12;
-    
+
             // Format hours with leading zeros if necessary
             const formattedHours = String(hours).padStart(2, '0');
-    
+
             // Return the formatted time
             return `${formattedHours}:${minutes} ${period}`;
         } else {
@@ -561,19 +576,19 @@ const ChatMessages = () => {
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
             const day = String(date.getDate()).padStart(2, '0');
             const year = date.getFullYear();
-    
+
             // Return the formatted date
             return `${month}/${day}/${year}`;
         }
     }
-    
+
     // Example usage
     const formattedTimeToday = formatTime(Date.now());
     console.log(formattedTimeToday); // Output example: "03:45 PM"
-    
+
     const formattedTimePast = formatTime(new Date('2023-05-25').getTime());
     console.log(formattedTimePast); // Output example: "05/25/2023"
-    
+
 
 
 
@@ -599,11 +614,11 @@ const ChatMessages = () => {
         setSearchTerm(searchTerm);
 
         if (searchTerm === '') {
-            setFilteredChat(allChats);
+            setFilteredChat(inboxChat);
             return;
         }
 
-        const filtered = allChats.filter(chat => {
+        const searchFiltered = inboxChat.filter(chat => {
             const productNameMatch = chat?.chat?.product && chat.chat.product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
             const sellerDisplayNameMatch = chat?.otherParticipant && chat?.otherParticipant?.display_name.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -612,8 +627,25 @@ const ChatMessages = () => {
 
         });
 
-        setFilteredChat(filtered);
+        setFilteredChat(searchFiltered);
     }
+
+
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+
+        if (option.value === 'unread') {
+            setFilteredChat(unreadChat);
+        }
+
+        if (option.value === 'inbox') {
+            setFilteredChat(inboxChat);
+        }
+
+        if (option.value === 'archived') {
+            setFilteredChat(archivedChat);
+        }   
+    };
 
 
     const markMessageAsRead = async (chatId) => {
@@ -641,7 +673,7 @@ const ChatMessages = () => {
                         <div className="chat-left-row1">
                             <div className='chat-left-row1-header'>
                                 <h3>Chat</h3>
-                                <CustomSelect data={filterChatOptions} defaultSelected="inbox" className='custom-select' />
+                                <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
                             </div>
                             <div className='chat-search-box-container'>
                                 <Input
