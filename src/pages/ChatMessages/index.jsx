@@ -39,7 +39,6 @@ const ChatMessages = () => {
     const [showSpinner, setShowSpinner] = useState(false)
     const [showChatActionOptions, setShowChatActionOptions] = useState(false)
     const [selectedOption, setSelectedOption] = useState(null);
-    console.log('selectedOption:', selectedOption)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -139,13 +138,13 @@ const ChatMessages = () => {
 
 
     useEffect(() => {
-        if (allChats.length > 0 && user?.id) {
+        if (allChats.length > 0 && user?.id && (selectedOption === null || selectedOption?.value === 'inbox')) {
             const inboxChat = allChats.filter(chat =>
                 chat?.chat?.messages.some(message => message.receiver_id === user.id && !message.archived)
             );
             setFilteredChat(inboxChat);
         }
-    }, [allChats, user]);
+    }, [allChats, user, selectedOption]);
 
 
     const notificationRef = useRef();
@@ -275,7 +274,7 @@ const ChatMessages = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id]); // Dependencies updated to include chat_id
+    }, [chat_id, filteredChat, messages]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
@@ -322,7 +321,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id, sendOffer, user?.id]);
+    }, [chat_id, sendOffer, user?.id, sender_id]);
 
 
 
@@ -483,10 +482,6 @@ const ChatMessages = () => {
 
     const handleOfferOptions = async (offerStatus) => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
-        console.log('offerPriceToSend:', offerPriceToSend)
-        // const offerStatus = pendingStatus || cancelStatus;
-        // console.log('offerStatus:', offerStatus)
-
 
         let messageContent;
         if (offerStatus === 'Pending') {
@@ -624,8 +619,13 @@ const ChatMessages = () => {
         const searchTerm = e.target.value;
         setSearchTerm(searchTerm);
 
-        if (searchTerm === '') {
+        if (searchTerm === '' && selectedOption === null) {
             setFilteredChat(inboxChat);
+            return;
+        }
+
+        if (searchTerm === '' && selectedOption?.value === 'archived') {
+            setFilteredChat(archivedChat);
             return;
         }
 
@@ -672,19 +672,33 @@ const ChatMessages = () => {
         }
     }
 
-    const moveChatToArchive = async (chatId) => {
-        try {
-            await axios.put(`/api/archive-message/${chatId}`, { archived: true });
+    const toggleArchive = async (chatId) => {
+    try {
+        await axios.put(`/api/archive-message/${chatId}`);
 
-            setAllChats(filteredChat.map(chat =>
-                chat.chat_id === chatId ? { ...filteredChat, archived: true } : filteredChat
-            ));
-            fetchAllUserChat();
-        }
-        catch (error) {
-            console.error('Error marking message as read:', error);
-        }
+        // if (response.status === 200) {
+        //     // Get the new archived status from the response
+        //     const newArchivedStatus = response.data.newArchivedStatus;
+
+        //     // // Update the archived status in allChats
+        //     const updatedChats = allChats.map(chat =>
+        //         chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+        //     );
+        //     setAllChats(updatedChats);
+
+        //     // Optionally, you can also update filteredChat if needed
+        //     // const updatedFilteredChats = filteredChat.map(chat =>
+        //     //     chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+        //     // );
+        //     // setFilteredChat(updatedFilteredChats);
+        //     fetchAllUserChat();
+        // }
+        fetchAllUserChat();
+    } catch (error) {
+        console.error('Error toggling archive status:', error);
     }
+};
+
 
     const isChatArchived = (chatId) => {
         const chat = archivedChat.find(chat => chat.chat_id === chatId);
@@ -780,10 +794,10 @@ const ChatMessages = () => {
                                             <div className="chat-action-options" ref={notificationRef}>
                                                 <ul>
                                                     {!isChatArchived(chat_id) &&
-                                                        <li onClick={() => moveChatToArchive(chat_id)}>Archive Chat</li>
+                                                        <li onClick={() => toggleArchive(chat_id)}>Archive Chat</li>
                                                     }
                                                     {isChatArchived(chat_id) &&
-                                                        <li>Unarchive Chat</li>
+                                                        <li onClick={() => toggleArchive(chat_id)}>Unarchive Chat</li>
                                                     }
                                                     <li>Delete Chat</li>
                                                 </ul>
