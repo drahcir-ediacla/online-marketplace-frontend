@@ -66,7 +66,7 @@ const ChatMessages = () => {
     const archivedChat = allChats.filter(chat =>
         chat?.chat?.messages.some(message => message.receiver_id === user?.id && message.archived)
     );
-    
+
     const unreadChat = allChats.filter(chat =>
         chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
     );
@@ -98,7 +98,8 @@ const ChatMessages = () => {
     };
 
     const [searchTerm, setSearchTerm] = useState('')
-    const [filteredChat, setFilteredChat] = useState(allChats)
+    const [filteredChat, setFilteredChat] = useState([])
+    console.log('filteredChat:', filteredChat)
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -135,6 +136,17 @@ const ChatMessages = () => {
             sendMessage();
         }
     };
+
+
+    useEffect(() => {
+        if (allChats.length > 0 && user?.id) {
+            const inboxChat = allChats.filter(chat =>
+                chat?.chat?.messages.some(message => message.receiver_id === user.id && !message.archived)
+            );
+            setFilteredChat(inboxChat);
+        }
+    }, [allChats, user]);
+
 
     const notificationRef = useRef();
 
@@ -288,7 +300,6 @@ const ChatMessages = () => {
             });
 
             setAllChats(sortedChats);
-            setFilteredChat(sortedChats);
 
         } catch (error) {
             console.error('Error fetching all chats:', error);
@@ -644,7 +655,7 @@ const ChatMessages = () => {
 
         if (option.value === 'archived') {
             setFilteredChat(archivedChat);
-        }   
+        }
     };
 
 
@@ -660,6 +671,25 @@ const ChatMessages = () => {
             console.error('Error marking message as read:', error);
         }
     }
+
+    const moveChatToArchive = async (chatId) => {
+        try {
+            await axios.put(`/api/archive-message/${chatId}`, { archived: true });
+
+            setAllChats(filteredChat.map(chat =>
+                chat.chat_id === chatId ? { ...filteredChat, archived: true } : filteredChat
+            ));
+            fetchAllUserChat();
+        }
+        catch (error) {
+            console.error('Error marking message as read:', error);
+        }
+    }
+
+    const isChatArchived = (chatId) => {
+        const chat = archivedChat.find(chat => chat.chat_id === chatId);
+        return chat ? true : false;
+    };
 
 
     return (
@@ -749,7 +779,12 @@ const ChatMessages = () => {
                                         {showChatActionOptions &&
                                             <div className="chat-action-options" ref={notificationRef}>
                                                 <ul>
-                                                    <li>Archive Chat</li>
+                                                    {!isChatArchived(chat_id) &&
+                                                        <li onClick={() => moveChatToArchive(chat_id)}>Archive Chat</li>
+                                                    }
+                                                    {isChatArchived(chat_id) &&
+                                                        <li>Unarchive Chat</li>
+                                                    }
                                                     <li>Delete Chat</li>
                                                 </ul>
                                             </div>
