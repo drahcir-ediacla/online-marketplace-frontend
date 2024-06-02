@@ -167,11 +167,13 @@ const ChatMessages = () => {
     }, []);
 
 
+
+    // Scroll to bottom when messages change
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [messages]); // Add other dependencies as needed
+    }, [messages, allChats]); // Runs when messages change
 
 
     useEffect(() => {
@@ -673,37 +675,47 @@ const ChatMessages = () => {
     }
 
     const toggleArchive = async (chatId) => {
-    try {
-        await axios.put(`/api/archive-message/${chatId}`);
+        try {
+            await axios.put(`/api/archive-message/${chatId}`);
 
-        // if (response.status === 200) {
-        //     // Get the new archived status from the response
-        //     const newArchivedStatus = response.data.newArchivedStatus;
+            // if (response.status === 200) {
+            //     // Get the new archived status from the response
+            //     const newArchivedStatus = response.data.newArchivedStatus;
 
-        //     // // Update the archived status in allChats
-        //     const updatedChats = allChats.map(chat =>
-        //         chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
-        //     );
-        //     setAllChats(updatedChats);
+            //     // // Update the archived status in allChats
+            //     const updatedChats = allChats.map(chat =>
+            //         chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+            //     );
+            //     setAllChats(updatedChats);
 
-        //     // Optionally, you can also update filteredChat if needed
-        //     // const updatedFilteredChats = filteredChat.map(chat =>
-        //     //     chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
-        //     // );
-        //     // setFilteredChat(updatedFilteredChats);
-        //     fetchAllUserChat();
-        // }
-        fetchAllUserChat();
-    } catch (error) {
-        console.error('Error toggling archive status:', error);
-    }
-};
+            //     // Optionally, you can also update filteredChat if needed
+            //     // const updatedFilteredChats = filteredChat.map(chat =>
+            //     //     chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+            //     // );
+            //     // setFilteredChat(updatedFilteredChats);
+            //     fetchAllUserChat();
+            // }
+            fetchAllUserChat();
+        } catch (error) {
+            console.error('Error toggling archive status:', error);
+        }
+    };
 
 
     const isChatArchived = (chatId) => {
         const chat = archivedChat.find(chat => chat.chat_id === chatId);
         return chat ? true : false;
     };
+
+
+const deleteChat = async (chatId) => {
+    try {
+       await axios.put(`/api/delete-chat/${chatId}`)
+       fetchAllUserChat();
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+    }
+}
 
 
     return (
@@ -770,300 +782,300 @@ const ChatMessages = () => {
                         </div>
                     </div>
                     <div className="chat-right">
-                        {!chat_id ? (
-                            null
-                        ) : (
+                        {allChats.some(chat => chat.chat_id === chat_id) ? (
                             <>
-                                <div className='chat-right-row1'>
-                                    <div className='user-chat-info-container'>
-                                        <Link to={`/profile/${receiverInfo?.id}`}>
-                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                            <div className='chat-right-row1'>
+                                <div className='user-chat-info-container'>
+                                    <Link to={`/profile/${receiverInfo?.id}`}>
+                                        <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                    </Link>
+                                    <div className='chat-user-name-messages'>
+                                        <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
+                                            {receiverInfo?.display_name}
                                         </Link>
-                                        <div className='chat-user-name-messages'>
-                                            <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
-                                                {receiverInfo?.display_name}
-                                            </Link>
-                                            <span className='chat-user-status'>Online</span>
-                                        </div>
-                                    </div>
-                                    <div className="three-dots-container" onClick={toggleChatActionOptions}>
-                                        <div className='three-dots-chat'>
-                                            <ThreeDots />
-                                        </div>
-                                        {showChatActionOptions &&
-                                            <div className="chat-action-options" ref={notificationRef}>
-                                                <ul>
-                                                    {!isChatArchived(chat_id) &&
-                                                        <li onClick={() => toggleArchive(chat_id)}>Archive Chat</li>
-                                                    }
-                                                    {isChatArchived(chat_id) &&
-                                                        <li onClick={() => toggleArchive(chat_id)}>Unarchive Chat</li>
-                                                    }
-                                                    <li>Delete Chat</li>
-                                                </ul>
-                                            </div>
-                                        }
+                                        <span className='chat-user-status'>Online</span>
                                     </div>
                                 </div>
-                                <div className="chat-right-row2">
-                                    <div className='selling-item-container'>
+                                <div className="three-dots-container" onClick={toggleChatActionOptions}>
+                                    <div className='three-dots-chat'>
+                                        <ThreeDots />
+                                    </div>
+                                    {showChatActionOptions &&
+                                        <div className="chat-action-options" ref={notificationRef}>
+                                            <ul>
+                                                {!isChatArchived(chat_id) &&
+                                                    <li onClick={() => toggleArchive(chat_id)}>Archive Chat</li>
+                                                }
+                                                {isChatArchived(chat_id) &&
+                                                    <li onClick={() => toggleArchive(chat_id)}>Unarchive Chat</li>
+                                                }
+                                                <li onClick={() => deleteChat(chat_id)}>Delete Chat</li>
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div className="chat-right-row2">
+                                <div className='selling-item-container'>
+                                    <Link
+                                        to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
+                                        className='chat-selling-item-img-box'
+                                        target="_blank"
+                                        rel="noopener noreferrer" // Add these lines for security best practices
+                                    >
+                                        {productStatus === 'Sold' && (
+                                            <div className='sold-ribbon-label'>
+                                                <span>SOLD</span>
+                                            </div>
+                                        )}
+                                        <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
+                                    </Link>
+                                    <div className='chat-item-info'>
                                         <Link
                                             to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
-                                            className='chat-selling-item-img-box'
+                                            className='chat-item-name'
                                             target="_blank"
                                             rel="noopener noreferrer" // Add these lines for security best practices
                                         >
-                                            {productStatus === 'Sold' && (
-                                                <div className='sold-ribbon-label'>
-                                                    <span>SOLD</span>
-                                                </div>
-                                            )}
-                                            <img src={productInfo?.images && productInfo.images.length > 0 ? productInfo.images[0].image_url : (NoImage)} alt="" />
+                                            {!productInfo?.product_name ? 'The item has been removed' : productInfo?.product_name}
                                         </Link>
-                                        <div className='chat-item-info'>
-                                            <Link
-                                                to={`/productdetails/${productInfo?.id}/${encodeURIComponent(productInfo?.product_name)}`}
-                                                className='chat-item-name'
-                                                target="_blank"
-                                                rel="noopener noreferrer" // Add these lines for security best practices
-                                            >
-                                                {!productInfo?.product_name ? 'The item has been removed' : productInfo?.product_name}
-                                            </Link>
-                                            <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
-                                        </div>
+                                        <span className='chat-item-price'>{formatPrice(productInfo?.price || '')}</span>
                                     </div>
+                                </div>
 
-                                    {!productInfo ?
-                                        (
-                                            null
-                                        ) :
-                                        (
-                                            offerCurrentStatus === 'Pending' || offerCurrentStatus === 'Accepted' ?
-                                                (
-                                                    sellerId === sender_id ?
-                                                        (
-                                                            productStatus === 'Sold' ?
+                                {!productInfo ?
+                                    (
+                                        null
+                                    ) :
+                                    (
+                                        offerCurrentStatus === 'Pending' || offerCurrentStatus === 'Accepted' ?
+                                            (
+                                                sellerId === sender_id ?
+                                                    (
+                                                        productStatus === 'Sold' ?
+                                                            (
+                                                                <div className='offer-buttons'>
+                                                                    <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                </div>
+                                                            ) :
+                                                            (
+                                                                offerCurrentStatus === 'Pending' ?
+                                                                    (
+                                                                        <div className='offer-buttons'>
+                                                                            <BtnGreen label='Accept Offer' onClick={() => { handleOfferOptions('Accepted'); }} />
+                                                                            <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Declined'); }} />
+                                                                            <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                        </div>
+                                                                    ) :
+                                                                    (
+                                                                        <div className='offer-buttons'>
+                                                                            {existingReview && existingReview.length === 0 ? (
+                                                                                <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
+                                                                            ) : (
+                                                                                <>
+                                                                                    <span>Review Submitted &nbsp;&nbsp;</span>
+                                                                                </>
+                                                                            )}
+                                                                            <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                        </div>
+                                                                    )
+                                                            )
+                                                    ) :
+                                                    (
+                                                        <div className='offer-buttons'>
+                                                            {isChangeOfferBtn ?
                                                                 (
-                                                                    <div className='offer-buttons'>
-                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                                    </div>
-                                                                ) :
-                                                                (
-                                                                    offerCurrentStatus === 'Pending' ?
+                                                                    productStatus === 'Sold' ?
                                                                         (
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen label='Accept Offer' onClick={() => { handleOfferOptions('Accepted'); }} />
-                                                                                <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Declined'); }} />
-                                                                                <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                                <BtnClear className='item-sold-btn' label='Item Sold' disabled />
                                                                             </div>
                                                                         ) :
                                                                         (
-                                                                            <div className='offer-buttons'>
-                                                                                {existingReview && existingReview.length === 0 ? (
+                                                                            offerCurrentStatus === 'Pending' ? (
+                                                                                <>
+                                                                                    <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
+                                                                                    <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Cancelled'); }} />
+                                                                                </>
+                                                                            ) : (
+                                                                                existingReview && existingReview.length === 0 ? (
                                                                                     <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
                                                                                 ) : (
                                                                                     <>
-                                                                                        <span>Review Submitted &nbsp;&nbsp;</span>
+                                                                                        <span>Review Submitted</span>
                                                                                     </>
-                                                                                )}
-                                                                                <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
-                                                                            </div>
-                                                                        )
-                                                                )
-                                                        ) :
-                                                        (
-                                                            <div className='offer-buttons'>
-                                                                {isChangeOfferBtn ?
-                                                                    (
-                                                                        productStatus === 'Sold' ?
-                                                                            (
-                                                                                <div className='offer-buttons'>
-                                                                                    <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                                                </div>
-                                                                            ) :
-                                                                            (
-                                                                                offerCurrentStatus === 'Pending' ? (
-                                                                                    <>
-                                                                                        <BtnGreen className='change-offer-btn' label='Change Offer' onClick={toggleChangeOfferBtn} />
-                                                                                        <BtnClear label='Cancel Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Cancelled'); }} />
-                                                                                    </>
-                                                                                ) : (
-                                                                                    existingReview && existingReview.length === 0 ? (
-                                                                                        <BtnGreen className='change-offer-btn' label='Leave Review' onClick={toggleReviewModal} />
-                                                                                    ) : (
-                                                                                        <>
-                                                                                            <span>Review Submitted</span>
-                                                                                        </>
-                                                                                    )
                                                                                 )
                                                                             )
-                                                                    ) :
-                                                                    (
-                                                                        <>
-                                                                            <div className='input-offer-container'>
-                                                                                <span className='php-symbol'>₱</span>
-                                                                                <Input
-                                                                                    type='number'
-                                                                                    value={priceOffer || '0.00'}
-                                                                                    className='input-offer'
-                                                                                    onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
-                                                                                />
-                                                                            </div>
-                                                                            <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
-                                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
-                                                                        </>
-                                                                    )
-                                                                }
-                                                            </div>
-                                                        )
-                                                ) :
-                                                (
-                                                    sellerId === sender_id ?
-                                                        (
-                                                            productStatus === 'Sold' ?
-                                                                (
-                                                                    <div className='offer-buttons'>
-                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                                    </div>
+                                                                        )
                                                                 ) :
                                                                 (
-                                                                    <div className='offer-buttons'>
-                                                                        <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
-                                                                    </div>
+                                                                    <>
+                                                                        <div className='input-offer-container'>
+                                                                            <span className='php-symbol'>₱</span>
+                                                                            <Input
+                                                                                type='number'
+                                                                                value={priceOffer || '0.00'}
+                                                                                className='input-offer'
+                                                                                onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
+                                                                            />
+                                                                        </div>
+                                                                        <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                        <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                                    </>
                                                                 )
-                                                        ) :
-                                                        (
-                                                            productStatus === 'Sold' ?
-                                                                (
-                                                                    <div className='offer-buttons'>
-                                                                        <BtnClear className='item-sold-btn' label='Item Sold' disabled />
-                                                                    </div>
-                                                                ) :
-                                                                (
-                                                                    <div className='offer-buttons'>
-                                                                        {isMakeOfferBtn ?
-                                                                            (
-                                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
-                                                                            ) :
-                                                                            (
-                                                                                <>
-                                                                                    <div className='input-offer-container'>
-                                                                                        <span className='php-symbol'>₱</span>
-                                                                                        <Input
-                                                                                            type='number'
-                                                                                            value={priceOffer || '0.00'}
-                                                                                            className='input-offer'
-                                                                                            onChange={(e) => setPriceOffer(e.target.value)}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
-                                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
-                                                                                </>
-                                                                            )
-                                                                        }
-                                                                    </div>
-                                                                )
-                                                        )
-                                                )
-                                        )}
-                                </div>
-                            </>
+                                                            }
+                                                        </div>
+                                                    )
+                                            ) :
+                                            (
+                                                sellerId === sender_id ?
+                                                    (
+                                                        productStatus === 'Sold' ?
+                                                            (
+                                                                <div className='offer-buttons'>
+                                                                    <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                </div>
+                                                            ) :
+                                                            (
+                                                                <div className='offer-buttons'>
+                                                                    <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
+                                                                </div>
+                                                            )
+                                                    ) :
+                                                    (
+                                                        productStatus === 'Sold' ?
+                                                            (
+                                                                <div className='offer-buttons'>
+                                                                    <BtnClear className='item-sold-btn' label='Item Sold' disabled />
+                                                                </div>
+                                                            ) :
+                                                            (
+                                                                <div className='offer-buttons'>
+                                                                    {isMakeOfferBtn ?
+                                                                        (
+                                                                            <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
+                                                                        ) :
+                                                                        (
+                                                                            <>
+                                                                                <div className='input-offer-container'>
+                                                                                    <span className='php-symbol'>₱</span>
+                                                                                    <Input
+                                                                                        type='number'
+                                                                                        value={priceOffer || '0.00'}
+                                                                                        className='input-offer'
+                                                                                        onChange={(e) => setPriceOffer(e.target.value)}
+                                                                                    />
+                                                                                </div>
+                                                                                <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            )
+                                                    )
+                                            )
+                                    )}
+                            </div>
+                        </>
+                        ) : (
+                            null
                         )}
                         <div className="chat-right-row3" ref={scrollRef}>
-                            {!chat_id ? (
+                            {allChats.some(chat => chat.chat_id === chat_id) ? (
+                                <>
+                                <div className="date-messages">
+                                    <span>22/05 9:45 AM</span>
+                                </div>
+                                {messages.map((message, index) => {
+                                    // Format the timestamp for each message
+                                    const formattedTime = formatTime(message.timestamp);
+
+                                    return message.sender_id === sender_id ? (
+                                        <div className="chat-sent-messages" key={index}>
+                                            <div className='chat-sent-message-info-container'>
+                                                <div className='row1'>
+                                                    <div className='chat-sent-message-data'>
+                                                        {isImage(message.content) && (
+                                                            <div>
+                                                                <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                            </div>
+                                                        )}
+
+                                                        {!isImage(message.content) && (
+                                                            <div className="chat-sent-message-box">
+                                                                {isOfferPrice(message.content) ? (
+                                                                    <>
+                                                                        <div className='offered-price-label'><h6>Offered Price</h6></div>
+                                                                        <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                    </>
+                                                                ) : isCancelledOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : isAcceptedOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : isDeclinedOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : (
+                                                                    <span className='normal-chat-text'>{message.content}</span>
+                                                                )}
+                                                            </div>
+                                                        )}
+
+                                                        <img src={user?.profile_pic || AvatarIcon} alt="" />
+                                                    </div>
+                                                    <small className='chat-time-sent-message'>{formattedTime}</small>
+                                                    {index === messages.length - 1 && showSpinner && (
+                                                        <div className='loading-spinner-container'>
+                                                            <ImageLoadingSpinner />
+                                                        </div>
+                                                    )}
+                                                    {messages.length === 0 && showSpinner && (
+                                                        <ImageLoadingSpinner />
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="chat-received-messages" key={index}>
+                                            <div className='chat-received-message-info-container'>
+                                                <div className='row1'>
+                                                    <div className='chat-received-message-data'>
+                                                        <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
+                                                        {isImage(message.content) && (
+                                                            <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                        )}
+                                                        {!isImage(message.content) && (
+                                                            <div className="chat-received-message-box">
+                                                                {isOfferPrice(message.content) ? (
+                                                                    <>
+                                                                        <div className='offered-price-label'><h6>Offered Price</h6></div>
+                                                                        <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
+                                                                    </>
+                                                                ) : isCancelledOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : isAcceptedOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : isDeclinedOffer(message.content) ? (
+                                                                    <span dangerouslySetInnerHTML={{ __html: message.content }} />
+                                                                ) : (
+                                                                    <span className='normal-chat-text'>{message.content}</span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <small className='chat-time-received-message'>{formattedTime}</small>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </>
+                            ) : (
                                 <>
                                     <div className='no-chat-selected'>
                                         No Chat Selected
                                     </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="date-messages">
-                                        <span>22/05 9:45 AM</span>
-                                    </div>
-                                    {messages.map((message, index) => {
-                                        // Format the timestamp for each message
-                                        const formattedTime = formatTime(message.timestamp);
-
-                                        return message.sender_id === sender_id ? (
-                                            <div className="chat-sent-messages" key={index}>
-                                                <div className='chat-sent-message-info-container'>
-                                                    <div className='row1'>
-                                                        <div className='chat-sent-message-data'>
-                                                            {isImage(message.content) && (
-                                                                <div>
-                                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
-                                                                </div>
-                                                            )}
-
-                                                            {!isImage(message.content) && (
-                                                                <div className="chat-sent-message-box">
-                                                                    {isOfferPrice(message.content) ? (
-                                                                        <>
-                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
-                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
-                                                                        </>
-                                                                    ) : isCancelledOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : isAcceptedOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : isDeclinedOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : (
-                                                                        <span className='normal-chat-text'>{message.content}</span>
-                                                                    )}
-                                                                </div>
-                                                            )}
-
-                                                            <img src={user?.profile_pic || AvatarIcon} alt="" />
-                                                        </div>
-                                                        <small className='chat-time-sent-message'>{formattedTime}</small>
-                                                        {index === messages.length - 1 && showSpinner && (
-                                                            <div className='loading-spinner-container'>
-                                                                <ImageLoadingSpinner />
-                                                            </div>
-                                                        )}
-                                                        {messages.length === 0 && showSpinner && (
-                                                            <ImageLoadingSpinner />
-                                                        )}
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="chat-received-messages" key={index}>
-                                                <div className='chat-received-message-info-container'>
-                                                    <div className='row1'>
-                                                        <div className='chat-received-message-data'>
-                                                            <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
-                                                            {isImage(message.content) && (
-                                                                <img src={message.content} className='chat-uploaded-image' alt="" />
-                                                            )}
-                                                            {!isImage(message.content) && (
-                                                                <div className="chat-received-message-box">
-                                                                    {isOfferPrice(message.content) ? (
-                                                                        <>
-                                                                            <div className='offered-price-label'><h6>Offered Price</h6></div>
-                                                                            <span dangerouslySetInnerHTML={{ __html: formatPrice(message.content) }} />
-                                                                        </>
-                                                                    ) : isCancelledOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : isAcceptedOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : isDeclinedOffer(message.content) ? (
-                                                                        <span dangerouslySetInnerHTML={{ __html: message.content }} />
-                                                                    ) : (
-                                                                        <span className='normal-chat-text'>{message.content}</span>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <small className='chat-time-received-message'>{formattedTime}</small>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
                                 </>
                             )}
                         </div>
@@ -1101,7 +1113,7 @@ const ChatMessages = () => {
                                         value={input}
                                         onKeyDown={handleKeyPress}
                                         onChange={(e) => setInput(e.target.value)}
-                                        onFocus={() => markMessageAsRead(chat_id)}
+                                        // onFocus={() => markMessageAsRead(chat_id)}
                                     />
                                     <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
                                         <div className='chat-send-icon'>
