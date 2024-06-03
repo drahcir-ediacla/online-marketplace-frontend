@@ -4,16 +4,18 @@
 
     .contentbox {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         width: 980px;
-        height: 102px;
-        margin: 20px 0;
-        padding: 50px 30px;
+        height: 100%;
+        margin: 20px 16px;
+        padding: 30px 30px;
         background-color: #D6DA1A;
+        flex-wrap: wrap;
 
         .col-left {
             display: flex;
+            flex: 1;
 
             .dollar-box {
                 display: flex;

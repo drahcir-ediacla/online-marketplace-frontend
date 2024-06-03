@@ -7,6 +7,7 @@ import { GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
+import { ReactComponent as BurgerBtn } from '../../assets/images/burger-btn.svg'
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 import SlidingNavSkeleton from '../../components/SkeletonLoader/SlidingNavSkeleton';
 
@@ -127,6 +128,9 @@ const SlidingSideNav = () => {
           <div className='grid-icon'><GridIcon /></div>
           All Categories
         </Link>
+        <div className="burger-btn-icon">
+          <BurgerBtn />
+        </div>
       </div>
       <div id='SlidingMenu' style={{ right: isMenuOpen ? '0' : '-435px' }}>
         <div id='menuBkgrnd' style={{ right: isMenuOpen ? '0' : '-100%' }} onClick={toggleMenu}></div>

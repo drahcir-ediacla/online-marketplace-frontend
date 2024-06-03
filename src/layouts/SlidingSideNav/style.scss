@@ -5,6 +5,11 @@
 //     }
 // }
 
+.btm-border {
+    .burger-btn-icon {
+        display: none;
+    }
+}
 #SlidingMenu {
     position: fixed;
     right: 0;
@@ -257,6 +262,21 @@
                     }
                 }
             }
+        }
+    }
+}
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1199px) {
+
+    .btm-border {
+        .parent-menu {
+            display: none;
+        }
+        .burger-btn-icon {
+            display: block;
         }
     }
 }

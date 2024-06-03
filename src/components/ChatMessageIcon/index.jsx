@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 
 
 
-const ChatMessageIcon = () => {
+const ChatMessageIcon = ({ className, counterStyle}) => {
 
     const [allChats, setAllChats] = useState([]);
     const { user } = useAuthentication();
@@ -53,11 +53,11 @@ const ChatMessageIcon = () => {
 
     return (
         <div className='message-notif'>
-            <div className='message-icon'>
+            <div className={`message-icon ${className}`}>
                 <MessageIcon />
             </div>
             {unreadChat.length > 0 && (
-                <div className="unread-chat-counter">
+                <div className={`unread-chat-counter ${counterStyle}`}>
                     {unreadChat.length}
                 </div>
             )}

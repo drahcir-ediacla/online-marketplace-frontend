@@ -13,6 +13,7 @@ import NavMenu from './NavMenu';
 import StickyHeader from './StickyHeader';
 import NotificationBell from '../../components/Notification';
 import ChatMessageIcon from '../../components/ChatMessageIcon';
+import TabletHeader from './TabletHeader';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
@@ -112,6 +113,7 @@ function Header() {
   return (
     <>
       <header>
+        <div className="desktop-header">
         <div><StickyHeader authenticated={user} /></div>
         <div className='row1'>
           <div className='container'>
@@ -191,11 +193,12 @@ function Header() {
         </div>
         <div className='row3'>
           <div className='container'>
-            <div>
               <NavMenu />
-            </div>
           </div>
         </div>
+        </div>
+        
+        <TabletHeader />
       </header>
     </>
   )

@@ -7,6 +7,7 @@ footer {
     ul {
         padding-left: 0;
         margin-bottom: 1rem;
+        min-width: 180px;
 
         li {
             margin-bottom: 5px;
@@ -21,20 +22,27 @@ footer {
     .container {
         display: block;
 
-        .row1 {
+        .footer-row1 {
             display: flex;
-            gap: 100px;
+            gap: 30px;
+            margin: 0 16px;
+            flex-wrap: wrap;
 
-            .col1 {
-                width: 345px;
+            .footer-col1 {
+                text-align: center;
+                flex: 1;
 
                 img {
-                    width: 188px;
+                    width: 160px;
                 }
 
                 p {
                     margin: 16px 0;
                 }
+            }
+
+            .footer-col2 {
+                
             }
         }
     }
@@ -43,5 +51,23 @@ footer {
         text-align: center;
         border-top: 1px solid white;
         padding: 10px 0;
+    }
+}
+
+
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 540px) {
+
+    footer {
+        .container {
+            .footer-row1 {
+                .footer-col2 {
+                    
+                }
+            }
+        }
     }
 }
