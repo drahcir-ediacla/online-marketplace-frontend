@@ -38,7 +38,7 @@ const Footer = () => {
                                 <li>Sitemap</li>
                             </ul>
                         </div>
-                        <div className='footer-col2-col4'>
+                        <div className='footer-col4'>
                             <h5>Useful Links</h5>
                             <ul>
                                 <li>Coupons</li>

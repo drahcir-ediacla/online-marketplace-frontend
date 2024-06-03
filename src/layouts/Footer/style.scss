@@ -41,8 +41,9 @@ footer {
                 }
             }
 
-            .footer-col2 {
-                
+            .footer-col2, .footer-col3, .footer-col4 {
+                text-align: center;
+                flex: 1;
             }
         }
     }
