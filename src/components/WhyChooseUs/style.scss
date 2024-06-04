@@ -22,8 +22,9 @@
 
         .row1 {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             flex-wrap: wrap;
+            gap: 30px;
 
             .why-choose-us-card {
                 text-decoration: none;
@@ -31,7 +32,6 @@
                 display: block;
                 text-align: center;
                 width: 240px;
-                margin-bottom: 20px;
 
                 img {
                     margin-bottom: 13px;
