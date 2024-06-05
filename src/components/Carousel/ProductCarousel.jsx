@@ -11,12 +11,12 @@ import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.sv
 import NoImage from '../../assets/images/no-image-available.png'
 
 const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) => {
-  
+
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
-  
+
 
   // Use useCallback to memoize the function
   const getWishlistCount = useCallback((productId) => {
@@ -104,9 +104,9 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
   };
 
 
-  
 
- 
+
+
   return (
     <>
       <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
@@ -123,31 +123,31 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           console.log('userId:', userId);
           console.log('isProductInWishlist:', isProductInWishlist);
           console.log('product.wishlist:', product.wishlist);
-          
+
           const handleWishlistClick = async (productId) => {
             try {
               const isAdded = productStates[productId] || false;
-          
+
               if (isAdded) {
                 await removeFromWishlist(productId);
               } else {
                 await addToWishlist(productId);
               }
-          
-              
-              
+
+
+
               // Update the local state immediately after the action is dispatched
               setProductStates((prevStates) => ({
                 ...prevStates,
                 [productId]: !isAdded,
               }));
-              
+
               // Update wishlist count for all products after state changes
               const updatedWishlistCounts = {};
               data.forEach((prod) => {
                 updatedWishlistCounts[prod.id] = getWishlistCount(prod.id);
               });
-              
+
               // Set the updated wishlist counts
               setWishlistCount(updatedWishlistCounts);
             } catch (error) {
@@ -157,14 +157,15 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
 
           return (
             <div className="thumbnail-container">
-              <div>
-                <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='image-holder'>
-                  {product.images && product.images[0] && (
-                    <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' />
-                  )}
-                  {!product.images && (
-                    <img src={NoImage} alt={`No Images Available`} className='product-img' />
-                  )}
+                <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`}>
+                  <div className='image-holder'>
+                    {product.images && product.images[0] && (
+                      <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' />
+                    )}
+                    {!product.images && (
+                      <img src={NoImage} alt={`No Images Available`} className='product-img' />
+                    )}
+                  </div>
                 </Link>
                 <div className='product-info'>
                   <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 55)}</p></Link>
@@ -176,7 +177,6 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                     <small>{formatDistanceToNow(createdAtDate, { addSuffix: true, locale: enUS })}</small>
                   </div>
                 </div>
-              </div>
               <div className='prod-condition-price'>
                 <div className='col-price'>
                   <small>{product.product_condition}</small>

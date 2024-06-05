@@ -187,3 +187,13 @@ hr {
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 520px) {
+
+  .product-section-container {
+    padding: 30px 8px 0px 8px;
+  }
+}

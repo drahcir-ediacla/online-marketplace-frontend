@@ -8,13 +8,14 @@
     flex-direction: column;
     justify-content: space-between;
     width: 240px;
-    height: 406px;
+    height: 446px;
     background: white;
     border-radius: 5px;
     margin-bottom: 20px;
     text-decoration: none;
     color: var(--gray-500);
     border: 1px solid var(--gray-100);
+    overflow: hidden;
 
     p {
         margin-bottom: 0;
@@ -29,11 +30,15 @@
 
     .image-holder {
         margin: 0;
+        width: 100%;
+        height: 240px;
+        overflow: hidden;
 
         .product-img {
             border-radius: 5px 5px 0 0;
-            width: 240px;
-            height: 200px;
+            max-width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
 
@@ -456,5 +461,20 @@
     .follower-card-container:hover {
         cursor: pointer;
         box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
+    }
+}
+
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 520px) {
+
+    .thumbnail-container {
+        width: 145px;
+        height: 100%;
+        .image-holder {
+            height: 150px;
+        }
     }
 }

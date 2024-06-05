@@ -139,14 +139,15 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
 
         return (
           <div key={index} className="thumbnail-container">
-            <div>
-              <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='image-holder'>
+              <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} >
+                <div className='image-holder'>
                 {product.images && product.images[0] && (
                   <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
                 )}
                 {!product.images && (
                   <img src={NoImage} alt={`No Images Available`} className='product-img' />
                 )}
+                </div>
               </Link>
               <div className='product-info'>
                 <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 55)}</p></Link>
@@ -156,7 +157,6 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
                   <small>{formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</small>
                 </div>
               </div>
-            </div>
             <div className='prod-condition-price'>
               <div className='col-price'>
                 <small>{product.product_condition}</small>
