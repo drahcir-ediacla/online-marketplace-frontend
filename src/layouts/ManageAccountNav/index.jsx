@@ -25,7 +25,7 @@ const ManageAccountNav = ({ className }) => {
           <div><NavLink activeClassName="active" to='/notifications'>Notifications</NavLink></div>
         </div>
         <div className='row3'>
-          <div className='nav-title'><NavLink to={`/wishlist/${user?.id}`}>Wishlist & Favorites</NavLink></div>
+          <div className='nav-title'><NavLink to='/wishlist'>Wishlist & Favorites</NavLink></div>
         </div>
         <div className='row4'>
           <NavLink to='/addlisting' className='nav-title'>Sell Now</NavLink>
