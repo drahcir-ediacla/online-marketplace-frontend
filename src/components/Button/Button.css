@@ -20,6 +20,7 @@
   background: white;
   cursor: pointer;
   outline: none;
+  flex-shrink: 0;
 }
 
 .active,
@@ -173,4 +174,42 @@
   font-family: FontAwesome;
   color: var(--gray-500);
   text-align: right;
+}
+
+
+/* SELL BUTTON */
+.sell-btn-small-device {
+  display: none;
+  border-radius: 50%;
+  height: 40px;
+  background-color: var(--green-400);
+  color: white;
+  font-size: 25px;
+  width: 40px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  align-content: center;
+}
+
+.sell-btn-small-device:after {
+  content: "\f067";
+  font-family: Fontawesome;
+}
+
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 520px) {
+  .seemore-button {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .sell-btn-small-device {
+    display: block;
+  }
 }

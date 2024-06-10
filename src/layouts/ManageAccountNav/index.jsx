@@ -1,12 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.scss'
-import useAuthentication from '../../hooks/authHook'
 
-const ManageAccountNav = ({ className }) => {
-
-  const { user } = useAuthentication();
-
+const ManageAccountNav = () => {
 
   return (
     <>

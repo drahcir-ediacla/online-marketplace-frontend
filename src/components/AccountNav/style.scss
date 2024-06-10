@@ -1,0 +1,78 @@
+.account-navigation-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    z-index: 999;
+
+    .anc-row1 {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        padding: 0px 15px;
+        border: none;
+        text-align: right;
+        font-size: 30px;
+        color: var(--black-101);
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .anc-row2 {
+        text-align: center;
+        padding: 30px 0;
+    }
+
+    .anc-row3 {
+        ul {
+            padding: 0;
+            margin: 0;
+
+            li {
+                display: flex;
+                justify-content: space-between;
+                padding: 11px 16px;
+                border-bottom: 1px solid var(--gray-200);
+                font-size: 16px;
+                font-weight: 500;
+
+                a {
+                    color: var(--black-101)
+                }
+
+                .notification-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    .notification-counter {
+                        font-size: 13px;
+                        text-align: center;
+                        align-content: center;
+                        width: 21px;
+                        height: 21px;
+                        border-radius: 50%;
+                        background-color: red;
+                        color: white;
+                    }
+                }
+            }
+
+            li:last-child {
+                border: none;
+            }
+
+            li:after {
+                content: "\f054";
+                font-family: FontAwesome;
+            }
+
+            li:last-child:after {
+                border: none;
+                content: "";
+            }
+        }
+    }
+}

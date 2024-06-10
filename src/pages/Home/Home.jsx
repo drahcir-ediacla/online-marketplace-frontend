@@ -10,15 +10,17 @@ import RecommendedItems from '../../components/RecommendedItems'
 import WhyChooseUs from '../../components/WhyChooseUs'
 import Footer from '../../layouts/Footer'
 import useAuthentication from '../../hooks/authHook'
+import SellBtn from '../../components/Button/SellBtn'
+import thumbnailPic from '../../assets/images/sub-category-1.png'
 
 function Home() {
 
   const [categories, setCategories] = useState([]);
-  const {user} = useAuthentication();
+  const { user } = useAuthentication();
 
 
   useEffect(() => {
-    const fetchCategories = async() => {
+    const fetchCategories = async () => {
       try {
         const response = await GetAllCategories();
         setCategories(response.data);
@@ -32,14 +34,65 @@ function Home() {
 
   return (
     <>
-        <Header />
-        <HeroBanner />
-        <GainGreenBanner user={user} />
-        <PopularItems data={categories} />
-        <NewItems data={categories} />
-        <RecommendedItems />
-        <WhyChooseUs />
-        <Footer />
+      <Header />
+      <HeroBanner />
+      <div className="top-category-container">
+        <div className="top-category-container-row1">
+          <ul>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Mobile and Electronics</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Furniture</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Women's Fashion</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Men's Fashion</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Sports & Leisure</div>
+            </li>
+          </ul>
+        </div>
+        <div className="top-category-container-row2">
+          <ul>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Games, Hobbies & Crafts</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Mobile and Electronics</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Mobile and Electronics</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Mobile and Electronics</div>
+            </li>
+            <li>
+              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
+              <div className='category-name'>Mobile and Electronics</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <GainGreenBanner user={user} />
+      <PopularItems data={categories} />
+      <NewItems data={categories} />
+      <RecommendedItems />
+      <WhyChooseUs />
+      <Footer />
+      <SellBtn />
     </>
   )
 }

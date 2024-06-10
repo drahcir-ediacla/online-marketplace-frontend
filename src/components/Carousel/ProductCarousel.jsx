@@ -109,7 +109,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
 
   return (
     <>
-      <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
+      <Carousel responsive={responsive} draggable={true} removeArrowOnDeviceType={['mobile', 'tablet']} autoPlay containerClass="carousel-container">
         {data.map((product, index) => {
           const createdAtDate = new Date(product.createdAt);
 

@@ -33,9 +33,9 @@ import BtnGreen from '../../components/Button/BtnGreen'
 import Input from '../../components/FormField/Input'
 import MoreFromSeller from '../../components/MoreFromSeller'
 import RelatedListings from '../../components/RelatedListings'
-import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import ListedInMap from '../../assets/images/pro-details-map.png'
 import AvatarIcon from '../../assets/images/profile-avatar.png'
+import SellBtn from '../../components/Button/SellBtn';
 
 
 let postsPerPage = 5;
@@ -578,6 +578,7 @@ const ProductDetails = ({ userId }) => {
                 </div >
             </div >
             <Footer />
+            <SellBtn />
         </>
     )
 }

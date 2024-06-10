@@ -143,18 +143,25 @@ const SlidingSideNav = () => {
           <div className='col-right'>
             <div className='row1'>
               {user ? (
-                <div>
-                  {user.profile_pic && user.profile_pic.length > 0 ? (
-                    <div className="avatar-icon">
-                      <Link onClick={myProfile}><img src={user.profile_pic} alt="" /></Link>
+                <>
+                  <div>
+                    {user.profile_pic && user.profile_pic.length > 0 ? (
+                      <div className="avatar-icon">
+                        <Link onClick={myProfile}><img src={user.profile_pic} alt="" /></Link>
+                      </div>
+                    ) : (
+                      <div className="avatar-icon">
+                        <Link onClick={myProfile}><img src={AvatarIcon} alt="" /></Link>
+                      </div>
+                    )}
+                    <Link onClick={myProfile}><h5>{user.display_name || 'Anonymous'}</h5></Link>
+                  </div>
+                  <div className="small-device-close-btn">
+                    <div id="closeBtn" onClick={toggleMenu}>
+                      <i className="fa fa-times"></i>
                     </div>
-                  ) : (
-                    <div className="avatar-icon">
-                      <Link onClick={myProfile}><img src={AvatarIcon} alt="" /></Link>
-                    </div>
-                  )}
-                  <Link onClick={myProfile}><h5>{user.display_name || 'Anonymous'}</h5></Link>
-                </div>
+                  </div>
+                </>
               ) : (
                 <div>
                   <div className="avatar-icon">
@@ -165,7 +172,7 @@ const SlidingSideNav = () => {
               )}
             </div>
             <div className='row2'>
-              <div>
+              <div style={{ width: '100%' }}>
                 <h5>All Categories</h5>
                 <div className='search-container'>
                   <input

@@ -11,6 +11,7 @@ import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
 import Breadcrumb from '../../components/Breadcrumb'
+import SellBtn from '../../components/Button/SellBtn'
 
 
 
@@ -190,6 +191,7 @@ const MainCategory = ({ userId }) => {
         </div>
       </div>
       <Footer />
+      <SellBtn />
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './style.scss'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
@@ -6,9 +6,8 @@ import Logo from '../../assets/images/Yogeek-logo-gray.png';
 import LogoIcon from '../../assets/images/yogeek-icon-logo.png'
 import SearchBox from '../../components/SearchBox'
 import ChatMessageIcon from '../../components/ChatMessageIcon';
-import { ReactComponent as UserIcon } from '../../assets/images/user-icon.svg'
-import { ReactComponent as BurgerBtn } from '../../assets/images/burger-btn.svg'
 import SlidingSideNav from '../SlidingSideNav';
+import AccountNav from '../../components/AccountNav';
 
 const TabletHeader = () => {
 
@@ -66,9 +65,8 @@ const TabletHeader = () => {
                             <ChatMessageIcon className='custom-message-icon' counterStyle='message-counter' />
                         </div>
                         <div className="user-account-icon">
-                            <UserIcon />
+                            <AccountNav />
                         </div>
-
                         <SlidingSideNav />
                     </div>
                 </div>
@@ -80,6 +78,7 @@ const TabletHeader = () => {
                 </div> */}
 
             </div>
+
         </>
     )
 }

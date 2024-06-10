@@ -59,3 +59,19 @@
         }
     }
 }
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 397px) {
+
+    .container {
+        .contentbox {
+            .col-left {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    }
+
+}
