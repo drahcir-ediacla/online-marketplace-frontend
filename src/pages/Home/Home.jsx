@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './style.scss'
 import { GetAllCategories } from '../../apicalls/products'
 import HeroBanner from '../../components/HeroBanner'
@@ -11,7 +12,6 @@ import WhyChooseUs from '../../components/WhyChooseUs'
 import Footer from '../../layouts/Footer'
 import useAuthentication from '../../hooks/authHook'
 import SellBtn from '../../components/Button/SellBtn'
-import thumbnailPic from '../../assets/images/sub-category-1.png'
 
 function Home() {
 
@@ -31,61 +31,46 @@ function Home() {
     fetchCategories();
   }, [])
 
+  const firstRowTopCategories = ["Mobile and Electronics", "Furniture", "Home, Garden & DIY", "Baby & Kids", "Women's Fashion"];
+  const secondRowTopCategories = ["Men's Fashion", "Beauty & Personal Care", "Sports & Leisure", "Games, Hobbies & Crafts", "Book, Music & Tickets"];
+
+  // Filter the categories based on the included labels
+  const filteredFirstRowCategories = categories.filter(category => firstRowTopCategories.includes(category.label));
+  const filteredSecondRowCategories = categories.filter(category => secondRowTopCategories.includes(category.label));
+
+
 
   return (
     <>
       <Header />
       <HeroBanner />
+      <div className="top-categories-title"><h3>Top Categories</h3></div>
       <div className="top-category-container">
         <div className="top-category-container-row1">
           <ul>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Mobile and Electronics</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Furniture</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Women's Fashion</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Men's Fashion</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Sports & Leisure</div>
-            </li>
+            {filteredFirstRowCategories.map((category, index) => (
+              <li key={index}>
+                <Link to={`/category/${category.id}/${category.label}`}>
+                  <img src={category.thumbnail_image} className='top-category-thumbnail-img' alt="" />
+                  <div className='category-name'>{category.label}</div>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="top-category-container-row2">
           <ul>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Games, Hobbies & Crafts</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Mobile and Electronics</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Mobile and Electronics</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Mobile and Electronics</div>
-            </li>
-            <li>
-              <img src={thumbnailPic} className='top-category-thumbnail-img' alt="" />
-              <div className='category-name'>Mobile and Electronics</div>
-            </li>
+            {filteredSecondRowCategories.map((category, index) => (
+              <li>
+                <Link to={`/category/${category.id}/${category.label}`}>
+                  <img src={category.thumbnail_image} className='top-category-thumbnail-img' alt="" />
+                  <div className='category-name'>{category.label}</div>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-      </div>
+      </div >
       <GainGreenBanner user={user} />
       <PopularItems data={categories} />
       <NewItems data={categories} />

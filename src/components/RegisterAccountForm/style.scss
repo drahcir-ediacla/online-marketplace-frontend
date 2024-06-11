@@ -3,10 +3,11 @@
     flex-direction: column;
     gap: 33px;
     width: 832px;
+    min-width: 200px;
     height: auto;
     background: white;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
-    padding: 38px 42px;
+    padding: 38px 20px;
 
     a {
         color: var(--blue);
@@ -33,6 +34,8 @@
         .facebook-btn {
             background: var(--fb-blue);
             cursor: pointer;
+            flex-basis: 50%;
+            min-width: 280px;
         }
 
         .fb-icon {
@@ -47,6 +50,8 @@
         .google-btn {
             background: var(--google-red);
             cursor: pointer;
+            flex-basis: 50%;
+            min-width: 280px;
         }
 
         .google-icon {
@@ -98,7 +103,8 @@
         font-family: 'Poppins', sans-serif;
         border: 1px solid var(--gray-300);
         border-radius: 3px;
-        width: 360px;
+        width: 100%;
+        min-width: 280px;
         height: 42px;
         padding: 0 15px;
         outline: none;
@@ -108,6 +114,8 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        flex-basis: 45%;
+        flex-grow: 1;
     }
 
     .row1 {
@@ -123,7 +131,8 @@
 
     .row2 {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 25px;
 
         .instructions {
             color: red;
@@ -142,6 +151,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            flex-basis: 45%;
+            flex-grow: 1;
 
             .row1 {
                 display: flex;
@@ -222,7 +233,8 @@
 
     .row3 {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 25px;
 
         .col1 {
             .row1 {
@@ -274,10 +286,14 @@
         .reset-pswrd-btn {
             background-color: var(--green-400);
             cursor: pointer;
+            flex-basis: 50%;
+            min-width: 280px;
         }
 
         .reset-pswrd-btn:disabled {
             background-color: var(--gray-300);
+            flex-basis: 50%;
+            min-width: 280px;
         }
     }
 
@@ -302,6 +318,8 @@
         .facebook-btn {
             background: var(--fb-blue);
             cursor: pointer;
+            flex-basis: 50%;
+            min-width: 280px;
         }
 
         .fb-icon {

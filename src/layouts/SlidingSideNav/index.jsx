@@ -163,12 +163,19 @@ const SlidingSideNav = () => {
                   </div>
                 </>
               ) : (
-                <div>
-                  <div className="avatar-icon">
-                    <img src={AvatarIcon} alt="" />
+                <>
+                  <div>
+                    <div className="avatar-icon">
+                      <img src={AvatarIcon} alt="" />
+                    </div>
+                    <Link to='/LoginEmail'><h5>Hello, sign in</h5></Link>
                   </div>
-                  <Link to='/LoginEmail'><h5>Hello, sign in</h5></Link>
-                </div>
+                  <div className="small-device-close-btn">
+                    <div id="closeBtn" onClick={toggleMenu}>
+                      <i className="fa fa-times"></i>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
             <div className='row2'>

@@ -1,11 +1,9 @@
 .form-body{
-    height: 100vh;
     align-items: center;
     display: flex;
     flex-direction: column;
 
     .container {
-        height: 100%;
         .form-box{
             display: flex;
             align-items: center;
@@ -13,4 +11,19 @@
             height: 100vh;
         }
     }
+}
+
+
+
+//-----------------MEDIA QUERY -----------------------//
+
+@media only screen and (max-width: 500px) {
+    .form-body{
+        .container {
+            .form-box{
+                height: none;
+            }
+        }
+    }
+    
 }
