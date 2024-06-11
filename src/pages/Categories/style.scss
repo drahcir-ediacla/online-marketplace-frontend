@@ -20,6 +20,7 @@
         display: flex;
         height: 40px;
         align-items: center;
+        padding: 0 16px;
 
         .breadcrumb {
             margin: 0;
@@ -51,6 +52,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        text-align: center;
         color: red;
         font-size: 62px;
         width: 100%;
@@ -220,3 +222,16 @@
         }
     }
 }
+
+
+
+//------------------------------- MEDIA QUERY ---------------------------------------//
+
+@media only screen and (width: 500px) {
+    .main-category-body {
+        .main-category-banner {
+            font-size: 20px;
+        }
+    }
+}
+

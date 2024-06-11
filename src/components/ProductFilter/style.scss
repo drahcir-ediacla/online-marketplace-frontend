@@ -310,3 +310,17 @@
         }
     }
 }
+
+//-------------------------------MEDIA QUERY ------------------------------------//
+
+@media only screen and (width: 800px) {
+    .main-category-body {
+        .main-category-newly-listed {
+            .main-category-newly-listed-row2 {
+                .prod-filter-container {
+                    display: none;
+                }
+            }
+        }
+    }
+}
