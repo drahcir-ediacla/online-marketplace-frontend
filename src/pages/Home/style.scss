@@ -1,4 +1,5 @@
 .top-categories-title {
+    display: none;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     text-align: start;
     width: 100%;
@@ -58,6 +59,9 @@
 
 @media only screen and (max-width: 1199px) {
 
+    .top-categories-title {
+        display: block;
+    }
     .top-category-container {
         display: block;
     }
