@@ -9,6 +9,7 @@ import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
+import { SmallScreenProductFilter } from '../../components/ProductFilter/SmallScreenProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
 import Breadcrumb from '../../components/Breadcrumb'
 import SellBtn from '../../components/Button/SellBtn'
@@ -175,6 +176,7 @@ const MainCategory = ({ userId }) => {
                 value={value}
                 updateCategoryData={setCategory}
               />
+              <SmallScreenProductFilter />
             </div>
             <div className='main-category-newly-listed-row3'>
               <ProductCard

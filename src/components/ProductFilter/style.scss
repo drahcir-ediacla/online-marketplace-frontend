@@ -311,16 +311,40 @@
     }
 }
 
+//------------------------------- Small Screen Product Filter ------------------------------------//
+
+.small-screen-prod-filter-container {
+    display: none;
+
+    .custom-filter-button {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        height: 40px;
+        padding: 0 10px;
+        border-radius: 5px;
+        border: 1px solid var(--gray-300);
+        color: var(--black-101);
+        background-color: white;
+        outline: none;
+
+        .filter-icon {
+            width: 20px;
+            fill: var(--black-101);
+        }
+    }
+}
+
 //-------------------------------MEDIA QUERY ------------------------------------//
 
-@media only screen and (width: 800px) {
-    .main-category-body {
-        .main-category-newly-listed {
-            .main-category-newly-listed-row2 {
-                .prod-filter-container {
-                    display: none;
-                }
-            }
-        }
+
+@media only screen and (max-width: 870px) {
+
+    .small-screen-prod-filter-container {
+        display: block;
+    }
+
+    .prod-filter-container {
+        display: none;
     }
 }
