@@ -33,6 +33,12 @@ const SmallScreenSearchByLoc = () => {
         setSelectedRegion([])
     }
 
+    const applySelectedRegion = () => {
+        setSelectRegionOpen((prevSelectRegionOpen) => !prevSelectRegionOpen)
+        setSelectedRegion(selectedRegion)
+        setActiveOption('')
+    }
+
 
     return (
         <>
@@ -100,7 +106,7 @@ const SmallScreenSearchByLoc = () => {
                         </ul>
                         <div className="select-region-btns">
                             <BtnClear label='Clear' disabled={selectedRegion.length === 0} onClick={clearSelectedRegion} />
-                            <BtnGreen label='Apply' disabled={selectedRegion.length === 0} />
+                            <BtnGreen label='Apply' disabled={selectedRegion.length === 0} onClick={applySelectedRegion}/>
                         </div>
                     </div>
                 </div>
