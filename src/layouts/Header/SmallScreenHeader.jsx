@@ -8,8 +8,9 @@ import SearchBox from '../../components/SearchBox'
 import ChatMessageIcon from '../../components/ChatMessageIcon';
 import SlidingSideNav from '../SlidingSideNav';
 import AccountNav from '../../components/AccountNav';
+import SmallScreenSearchByLoc from './SmallScreenSearchByLoc';
 
-const TabletHeader = () => {
+const SmallScreenHeader = () => {
 
     const [isSticky, setIsSticky] = useState(false);
     const navigate = useNavigate();
@@ -60,7 +61,7 @@ const TabletHeader = () => {
                     </div>
 
                     <div className='tablet-header-row1-col2'>
-                        <div className='magnifying-glass'><MagnifyingGlass /></div>
+                        <div><SmallScreenSearchByLoc /></div>
                         <div className="message-icon-container" onClick={messages}>
                             <ChatMessageIcon className='custom-message-icon' counterStyle='message-counter' />
                         </div>
@@ -83,4 +84,4 @@ const TabletHeader = () => {
     )
 }
 
-export default TabletHeader
+export default SmallScreenHeader

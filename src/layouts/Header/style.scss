@@ -933,7 +933,7 @@ header {
 
 }
 
-//-------------------------TABLET HEADER--------------------------------//
+//-------------------------SMALL SCREEN HEADER--------------------------------//
 
 .tablet-header {
     display: none;
@@ -1019,6 +1019,184 @@ header {
     position: fixed;
     z-index: 10;
 }
+
+
+//------------------------- SMALL SCREEN SEARCH BY LOCATION --------------------------------//
+
+.small-screen-magnifying-glass {
+    fill: var(--black-101);
+    width: 23px;
+}
+
+.ss-search-location-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    z-index: 999;
+
+    .ss-search-location-row1 {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--gray-300);
+
+        .back-arrow::after {
+            content: "\f060";
+            font-size: 30px;
+            font-family: Fontawesome;
+            color: var(--black-101);
+        }
+
+        .search-box-container {
+            position: relative;
+            width: 100%;
+
+            .search-input {
+                width: 100%;
+                height: 40px;
+                border: 1px solid var(--gray-300);
+                border-radius: 5px;
+                padding: 10px;
+                outline: none;
+            }
+
+            button {
+                position: absolute;
+                background: var(--green-400);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                top: 0;
+                right: 0;
+                border: none;
+                border-radius: 0 5px 5px 0;
+
+                .btn-magnifying-glass {
+                    width: 21px;
+                    fill: white;
+                }
+            }
+        }
+    }
+
+    .ss-search-location-row2 {
+        padding: 17px 0;
+
+        small,
+        .selected-region {
+            padding: 0 16px;
+        }
+
+        .selected-region {
+            font-weight: 500;
+            margin: 0;
+        }
+
+        ul {
+            margin-bottom: 0;
+            padding: 0;
+
+            li {
+                display: flex;
+                padding: 8px 12px;
+                align-items: center;
+                justify-content: space-between;
+                background-color: white;
+                color: var(--black-101);
+
+                .location-option {
+                    display: flex;
+                    text-align: center;
+                    gap: 10px;
+                }
+            }
+
+            .active {
+                background-color: var(--gray-200);
+            }
+
+            .active:after {
+                content: "\f00c";
+                font-family: Fontawesome;
+                color: var(--green-400);
+                ;
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+.ss-select-region-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    z-index: 1000;
+
+    .ss-select-region-row1 {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--gray-300);
+
+        .back-arrow::after {
+            content: "\f060";
+            font-size: 30px;
+            font-family: Fontawesome;
+            color: var(--black-101);
+        }
+
+        span {
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+
+    .ss-select-region-row2 {
+        padding: 17px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        ul {
+            padding: 0;
+            height: 500px;
+            overflow: hidden;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+
+
+            li {
+                display: flex;
+                padding: 5px 12px;
+                align-items: center;
+                justify-content: space-between;
+                color: var(--black-101);
+            }
+
+            .active {
+                background-color: var(--gray-200);
+            }
+
+            .active:after {
+                content: "\f00c";
+                font-family: Fontawesome;
+                color: var(--green-400);
+                font-size: 15px;
+            }
+        }
+    }
+}
+
 
 
 /*-------------------- MEDIA QUERY ------------------------------*/

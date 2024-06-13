@@ -54,13 +54,13 @@ const AccountNav = () => {
                     </div>
                     <div className="anc-row3">
                         <ul>
-                            <li onClick={toggleAccountNav}>
+                            <li >
                                 <Link to='/editprofile'>Manage Account</Link>
                             </li>
-                            <li onClick={toggleAccountNav}>
+                            <li>
                                 <Link to={`/profile/${user?.id}`}> My Profile & Listings</Link>
                             </li>
-                            <li onClick={toggleAccountNav}>
+                            <li>
                                 <Link to='/notificationlist'>
                                     <div className='notification-btn'>
                                         Notifications
@@ -70,14 +70,13 @@ const AccountNav = () => {
                                             </div>
                                             : null
                                         }
-
                                     </div>
                                 </Link>
                             </li>
-                            <li onClick={toggleAccountNav}>
+                            <li>
                                 <Link to='/wishlist'>My Wishlist</Link>
                             </li>
-                            <li onClick={toggleAccountNav}>
+                            <li>
                                 <Link to='/deactivateaccount'>Settings</Link>
                             </li>
                             <li onClick={logout}>

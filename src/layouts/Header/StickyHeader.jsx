@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/Yogeek-logo-gray.png';
-import SearchBox from '../Header/HeaderSearchBox';
+import SearchBox from './SearchByLoc';
 import BtnGreen from '../../components/Button/BtnGreen'
 import SlidingSideNav from '../SlidingSideNav'
 

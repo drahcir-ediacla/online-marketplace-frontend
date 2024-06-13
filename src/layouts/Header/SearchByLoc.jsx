@@ -94,7 +94,6 @@ const HeaderSearchBox = () => {
     setSelectedRegion(selectedRegion);
     setSelectedCity([]);
     setCityCheckedState({});
-    
   }
 
   const handleRegionChange = (event) => {

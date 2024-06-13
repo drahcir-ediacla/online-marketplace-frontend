@@ -8,12 +8,12 @@ import { ReactComponent as GlobeIcon } from '../../assets/images/globe-regular.s
 import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.svg';
 import Logo from '../../assets/images/Yogeek-logo.png';
 import RangeSlider from './RangeSlider';
-import SearchBox from './HeaderSearchBox';
+import SearchBox from './SearchByLoc';
 import NavMenu from './NavMenu';
 import StickyHeader from './StickyHeader';
 import NotificationBell from '../../components/Notification';
 import ChatMessageIcon from '../../components/ChatMessageIcon';
-import TabletHeader from './TabletHeader';
+import SmallScreenHeader from './SmallScreenHeader';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
@@ -197,7 +197,7 @@ function Header() {
           </div>
         </div>
         </div>
-        <TabletHeader />
+        <SmallScreenHeader />
       </header>
     </>
   )
