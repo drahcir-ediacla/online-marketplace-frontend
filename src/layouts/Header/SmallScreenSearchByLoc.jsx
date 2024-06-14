@@ -148,7 +148,7 @@ const SmallScreenSearchByLoc = () => {
                                 onKeyDown={handleKeyPress}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            <button><div className='btn-magnifying-glass'><MagnifyingGlass /></div></button>
+                            <button onClick={handleSearch}><div className='btn-magnifying-glass'><MagnifyingGlass /></div></button>
                         </div>
                     </div>
                     <div className="ss-search-location-row2">

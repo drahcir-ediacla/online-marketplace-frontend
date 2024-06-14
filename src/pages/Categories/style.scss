@@ -236,3 +236,11 @@
     } 
 }
 
+
+@media only screen and (max-width: 870px) {
+    .main-category-body {
+        .product-section-title {
+            text-align: center;
+        }
+    }
+}
