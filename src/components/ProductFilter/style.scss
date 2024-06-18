@@ -346,7 +346,7 @@
     width: 100%;
     height: 100vh;
     background-color: white;
-    z-index: 999;
+    z-index: 1000;
 
     .ss-product-filter-form-row1 {
         display: flex;
@@ -377,12 +377,15 @@
     }
 
     .ss-product-filter-form-row2 {
-        span {
-            font-size: 20px;
+        .filter-options-label {
+            font-size: 16px;
             color: var(--green-400);
         }
 
-        .sortby-container, .filterby-condition-container {
+        .sortby-container,
+        .filterby-condition-container,
+        .deal-options-container,
+        .filter-price-input {
             padding: 10px 16px;
         }
 
@@ -390,7 +393,8 @@
             .sortby-options {
                 ul {
                     padding-left: 16px;
-    
+                    margin: 0;
+
                     li {
                         padding: 5px 0;
                     }
@@ -400,10 +404,61 @@
 
         .filterby-condition-container {
             .filter-condition-options {
+                padding-left: 16px;
+                margin: 0;
+
                 li {
                     padding: 5px 0;
                 }
             }
+        }
+
+        .deal-options-container {
+            .filter-deal-options {
+                padding-left: 16px;
+                margin: 0;
+
+                li {
+                    padding: 5px 0;
+                }
+            }
+        }
+
+        .filter-price-input {
+            .filter-price-row1 {
+                padding: 5px 0;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+
+                .input-price-filter-container {
+                    position: relative;
+                    width: 100%;
+
+                    .php-symbol {
+                        position: absolute;
+                        top: 10px;
+                        left: 10px;
+                    }
+
+                    .input-price-filter {
+                        max-width: 300px;
+                        width: 100%;
+                        padding-left: 25px;
+                    }
+                }
+            }
+        }
+
+        .filter-buttons {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            bottom: 0;
+            background: white;
+            padding: 20px 16px;
         }
     }
 }

@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { ReactComponent as FilterIcon } from '../../assets/images/filter-icon.svg'
 import RadioButton from '../FormField/RadioButton';
 import CheckBox from '../FormField/CheckBox/CheckBox';
+import Input from '../FormField/Input'
+import BtnGreen from '../Button/BtnGreen'
+import BtnClear from '../Button/BtnClear'
 
 export const SmallScreenProductFilter = () => {
 
@@ -28,7 +31,7 @@ export const SmallScreenProductFilter = () => {
                     </div>
                     <div className='ss-product-filter-form-row2'>
                         <div className="sortby-container">
-                            <span>Sort By</span>
+                            <span className='filter-options-label'>Sort By</span>
                             <div className="sortby-options">
                                 <ul className='filter-sortby-options'>
                                     <li>
@@ -59,7 +62,7 @@ export const SmallScreenProductFilter = () => {
                             </div>
                         </div>
                         <div className="filterby-condition-container">
-                            <span>Conditions</span>
+                            <span className='filter-options-label'>Conditions</span>
                             <ul className='filter-condition-options'>
                                 <li>
                                     <CheckBox
@@ -97,6 +100,40 @@ export const SmallScreenProductFilter = () => {
                                     />
                                 </li>
                             </ul>
+                        </div>
+                        <div className="deal-options-container">
+                            <span className='filter-options-label'>Deal Options</span>
+                            <ul className='filter-deal-options'>
+                                <li><CheckBox label='Meet Up' value='Meet Up' /></li>
+                                <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
+                            </ul>
+                        </div>
+                        <div className='filter-price-input'>
+                            <span className='filter-options-label'>Show item price from</span>
+                            <div className='filter-price-row1'>
+                                <div className='input-price-filter-container'>
+                                    <span className='php-symbol'>₱</span>
+                                    <Input
+                                        type='number'
+                                        name="minPrice"
+                                        className='input-price-filter'
+                                        placeholder='Minimum'
+                                    />
+                                </div>
+                                <div className='input-price-filter-container'>
+                                    <span className='php-symbol'>₱</span>
+                                    <Input
+                                        type='number'
+                                        name="maxPrice"
+                                        className='input-price-filter'
+                                        placeholder='Maximum'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="filter-buttons">
+                            <BtnClear label='Clear' />
+                            <BtnGreen label='Apply' />
                         </div>
                     </div>
                 </div>
