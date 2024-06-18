@@ -54,17 +54,20 @@ const AccountNav = () => {
                     </div>
                     <div className="anc-row3">
                         <ul>
-                            <Link to='/editprofile'>
-                                <li >
-                                    Manage Account
-                                </li>
-                            </Link>
                             <li>
-                                <Link to={`/profile/${user?.id}`}> My Profile & Listings</Link>
+                                <Link to='/editprofile'>
+                                    Manage Account
+                                </Link>
                             </li>
-                            <Link to='/notificationlist'>
-                                <li>
+                            <li>
+                                <Link to={`/profile/${user?.id}`}>
+                                    My Profile & Listings
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='/notificationlist'>
                                     <div className='notification-btn'>
+
                                         Notifications
                                         {unreadNotifications.length > 0 ?
                                             <div className="notification-counter">
@@ -73,18 +76,18 @@ const AccountNav = () => {
                                             : null
                                         }
                                     </div>
-                                </li>
-                            </Link>
-                            <Link to='/wishlist'>
-                                <li>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='/wishlist'>
                                     My Wishlist
-                                </li>
-                            </Link>
-                            <Link to='/deactivateaccount'>
-                                <li>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='/deactivateaccount'>
                                     Settings
-                                </li>
-                            </Link>
+                                </Link>
+                            </li>
                             <li onClick={logout}>
                                 Logout
                             </li>
