@@ -99,131 +99,132 @@ export const SmallScreenProductFilter = ({ categoryId, value, updateCategoryData
                         </div>
                     </div>
                     <div className='ss-product-filter-form-row2'>
-                        <div className="sortby-container">
-                            <span className='filter-options-label'>Sort By</span>
-                            <div className="sortby-options">
-                                <ul className='filter-sortby-options'>
+                        <div className="all-filter-options-container">
+                            <div className="sortby-container">
+                                <span className='filter-options-label'>Sort By</span>
+                                <div className="sortby-options">
+                                    <ul className='filter-sortby-options'>
+                                        <li>
+                                            <RadioButton
+                                                id="mostRecent"
+                                                name="sort"
+                                                value="recent"
+                                                label="Most Recent"
+                                                checked={sortBy === 'Most Recent' || filters.sort.includes('recent')}
+                                                onChange={handleSortByChange}
+                                            />
+                                        </li>
+                                        <li>
+                                            <RadioButton
+                                                id="priceHighToLow"
+                                                name="sort"
+                                                value="highToLow"
+                                                label="Price - High to Low"
+                                                checked={sortBy === 'Price - High to Low' || filters.sort.includes('highToLow')}
+                                                onChange={handleSortByChange}
+                                            />
+                                        </li>
+                                        <li>
+                                            <RadioButton
+                                                id="priceLowtoHigh"
+                                                name="sort"
+                                                value="lowToHigh"
+                                                label="Price - Low to High"
+                                                checked={sortBy === 'Price - Low to High' || filters.sort.includes('lowToHigh')}
+                                                onChange={handleSortByChange}
+                                            />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="filterby-condition-container">
+                                <span className='filter-options-label'>Conditions</span>
+                                <ul className='filter-condition-options'>
                                     <li>
-                                        <RadioButton
-                                            id="mostRecent"
-                                            name="sort"
-                                            value="recent"
-                                            label="Most Recent"
-                                            checked={sortBy === 'Most Recent' || filters.sort.includes('recent')}
-                                            onChange={handleSortByChange}
+                                        <CheckBox
+                                            name='condition'
+                                            label='Brand New'
+                                            value='Brand New'
+                                            checked={filters.condition.includes('Brand New')}
+                                            onChange={handleFilterChange}
                                         />
                                     </li>
                                     <li>
-                                        <RadioButton
-                                            id="priceHighToLow"
-                                            name="sort"
-                                            value="highToLow"
-                                            label="Price - High to Low"
-                                            checked={sortBy === 'Price - High to Low' || filters.sort.includes('highToLow')}
-                                            onChange={handleSortByChange}
+                                        <CheckBox
+                                            name='condition'
+                                            label='Like New'
+                                            value='Like New'
+                                            checked={filters.condition.includes('Like New')}
+                                            onChange={handleFilterChange}
                                         />
                                     </li>
                                     <li>
-                                        <RadioButton
-                                            id="priceLowtoHigh"
-                                            name="sort"
-                                            value="lowToHigh"
-                                            label="Price - Low to High"
-                                            checked={sortBy === 'Price - Low to High' || filters.sort.includes('lowToHigh')}
-                                            onChange={handleSortByChange}
+                                        <CheckBox
+                                            name='condition'
+                                            label='Lightly Used'
+                                            value='Lightly Used'
+                                            checked={filters.condition.includes('Lightly Used')}
+                                            onChange={handleFilterChange}
+                                        />
+                                    </li>
+                                    <li>
+                                        <CheckBox
+                                            name='condition'
+                                            label='Well Used'
+                                            value='Well Used'
+                                            checked={filters.condition.includes('Well Used')}
+                                            onChange={handleFilterChange}
+                                        />
+                                    </li>
+                                    <li>
+                                        <CheckBox
+                                            name='condition'
+                                            label='Heavily Used'
+                                            value='Heavily Used'
+                                            checked={filters.condition.includes('Heavily Used')}
+                                            onChange={handleFilterChange}
                                         />
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                        <div className="filterby-condition-container">
-                            <span className='filter-options-label'>Conditions</span>
-                            <ul className='filter-condition-options'>
-                                <li>
-                                    <CheckBox
-                                        name='condition'
-                                        label='Brand New'
-                                        value='Brand New'
-                                        checked={filters.condition.includes('Brand New')}
-                                        onChange={handleFilterChange}
-                                    />
-                                </li>
-                                <li>
-                                    <CheckBox
-                                        name='condition'
-                                        label='Like New'
-                                        value='Like New'
-                                        checked={filters.condition.includes('Like New')}
-                                        onChange={handleFilterChange}
-                                    />
-                                </li>
-                                <li>
-                                    <CheckBox
-                                        name='condition'
-                                        label='Lightly Used'
-                                        value='Lightly Used'
-                                        checked={filters.condition.includes('Lightly Used')}
-                                        onChange={handleFilterChange}
-                                    />
-                                </li>
-                                <li>
-                                    <CheckBox
-                                        name='condition'
-                                        label='Well Used'
-                                        value='Well Used'
-                                        checked={filters.condition.includes('Well Used')}
-                                        onChange={handleFilterChange}
-                                    />
-                                </li>
-                                <li>
-                                    <CheckBox
-                                        name='condition'
-                                        label='Heavily Used'
-                                        value='Heavily Used'
-                                        checked={filters.condition.includes('Heavily Used')}
-                                        onChange={handleFilterChange}
-                                    />
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="deal-options-container">
-                            <span className='filter-options-label'>Deal Options</span>
-                            <ul className='filter-deal-options'>
-                                <li><CheckBox label='Meet Up' value='Meet Up' /></li>
-                                <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
-                            </ul>
-                        </div>
-                        <div className='filter-price-input'>
-                            <span className='filter-options-label'>Show item price from</span>
-                            <div className='filter-price-row1'>
-                                <div className='input-price-filter-container'>
-                                    <span className='php-symbol'>₱</span>
-                                    <Input
-                                        type='number'
-                                        name="minPrice"
-                                        className='input-price-filter'
-                                        placeholder='Minimum'
-                                        value={filterPrice.minPrice}
-                                        onChange={handlePriceChange}
-                                    />
-                                </div>
-                                <div className='input-price-filter-container'>
-                                    <span className='php-symbol'>₱</span>
-                                    <Input
-                                        type='number'
-                                        name="maxPrice"
-                                        className='input-price-filter'
-                                        placeholder='Maximum'
-                                        value={filterPrice.maxPrice}
-                                        onChange={handlePriceChange}
-                                    />
+                            <div className="deal-options-container">
+                                <span className='filter-options-label'>Deal Options</span>
+                                <ul className='filter-deal-options'>
+                                    <li><CheckBox label='Meet Up' value='Meet Up' /></li>
+                                    <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
+                                </ul>
+                            </div>
+                            <div className='filter-price-input'>
+                                <span className='filter-options-label'>Show item price from</span>
+                                <div className='filter-price-row1'>
+                                    <div className='input-price-filter-container'>
+                                        <span className='php-symbol'>₱</span>
+                                        <Input
+                                            type='number'
+                                            name="minPrice"
+                                            className='input-price-filter'
+                                            placeholder='Minimum'
+                                            value={filterPrice.minPrice}
+                                            onChange={handlePriceChange}
+                                        />
+                                    </div>
+                                    <div className='input-price-filter-container'>
+                                        <span className='php-symbol'>₱</span>
+                                        <Input
+                                            type='number'
+                                            name="maxPrice"
+                                            className='input-price-filter'
+                                            placeholder='Maximum'
+                                            value={filterPrice.maxPrice}
+                                            onChange={handlePriceChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="filter-buttons">
                             <BtnClear label='Reset' onClick={resetFilters} />
                             <BtnGreen label='Apply' onClick={() => { fetchData(); toggleFilter(); }} />
-
                         </div>
                     </div>
                 </div>

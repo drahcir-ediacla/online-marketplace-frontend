@@ -398,66 +398,69 @@
             padding: 10px 16px;
         }
 
-        .sortby-container {
-            .sortby-options {
-                ul {
+        .all-filter-options-container {
+            .sortby-container {
+                .sortby-options {
+                    ul {
+                        padding-left: 16px;
+                        margin: 0;
+    
+                        li {
+                            padding: 5px 0;
+                        }
+                    }
+                }
+            }
+    
+            .filterby-condition-container {
+                .filter-condition-options {
                     padding-left: 16px;
                     margin: 0;
-
+    
                     li {
                         padding: 5px 0;
                     }
                 }
             }
-        }
-
-        .filterby-condition-container {
-            .filter-condition-options {
-                padding-left: 16px;
-                margin: 0;
-
-                li {
-                    padding: 5px 0;
-                }
-            }
-        }
-
-        .deal-options-container {
-            .filter-deal-options {
-                padding-left: 16px;
-                margin: 0;
-
-                li {
-                    padding: 5px 0;
-                }
-            }
-        }
-
-        .filter-price-input {
-            .filter-price-row1 {
-                padding: 5px 0;
-                display: flex;
-                gap: 10px;
-                flex-wrap: wrap;
-
-                .input-price-filter-container {
-                    position: relative;
-                    width: 100%;
-
-                    .php-symbol {
-                        position: absolute;
-                        top: 10px;
-                        left: 10px;
+    
+            .deal-options-container {
+                .filter-deal-options {
+                    padding-left: 16px;
+                    margin: 0;
+    
+                    li {
+                        padding: 5px 0;
                     }
-
-                    .input-price-filter {
-                        max-width: 300px;
+                }
+            }
+    
+            .filter-price-input {
+                .filter-price-row1 {
+                    padding: 5px 0;
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+    
+                    .input-price-filter-container {
+                        position: relative;
                         width: 100%;
-                        padding-left: 25px;
+    
+                        .php-symbol {
+                            position: absolute;
+                            top: 10px;
+                            left: 10px;
+                        }
+    
+                        .input-price-filter {
+                            max-width: 300px;
+                            width: 100%;
+                            padding-left: 25px;
+                        }
                     }
                 }
             }
         }
+        
 
         .filter-buttons {
             position: fixed;
