@@ -220,33 +220,6 @@ export const SmallScreenProductFilter = ({ categoryId, value, updateCategoryData
                                 </div>
                             </div>
                         </div>
-                        <div className='filter-price-input'>
-                            <span className='filter-options-label'>Show item price from</span>
-                            <div className='filter-price-row1'>
-                                <div className='input-price-filter-container'>
-                                    <span className='php-symbol'>₱</span>
-                                    <Input
-                                        type='number'
-                                        name="minPrice"
-                                        className='input-price-filter'
-                                        placeholder='Minimum'
-                                        value={filterPrice.minPrice}
-                                        onChange={handlePriceChange}
-                                    />
-                                </div>
-                                <div className='input-price-filter-container'>
-                                    <span className='php-symbol'>₱</span>
-                                    <Input
-                                        type='number'
-                                        name="maxPrice"
-                                        className='input-price-filter'
-                                        placeholder='Maximum'
-                                        value={filterPrice.maxPrice}
-                                        onChange={handlePriceChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
                         <div className="filter-buttons">
                             <BtnClear label='Reset' onClick={resetFilters} />
                             <BtnGreen label='Apply' onClick={() => { fetchData(); toggleFilter(); }} />

@@ -347,6 +347,7 @@
     height: 100vh;
     background-color: white;
     padding: 55px 0 135px 0;
+    overflow: scroll;
     z-index: 1000;
 
     .ss-product-filter-form-row1 {
@@ -358,6 +359,8 @@
         right: 0;
         top: 0;
         width: 100%;
+        background: white;
+        z-index: 1;
 
         span {
             text-align: center;
@@ -382,7 +385,6 @@
     }
 
     .ss-product-filter-form-row2 {
-        padding-bottom: 135px;
 
         .filter-options-label {
             font-size: 16px;
