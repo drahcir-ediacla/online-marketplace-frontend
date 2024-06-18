@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
-import { GetCategoryByID, AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
+import { AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -22,8 +21,6 @@ const MainCategory = ({ userId }) => {
   const { id, value } = useParams();
   const [category, setCategory] = useState({});
   const [categories, setCategories] = useState([]);
-  const [setErr] = useState(false);
-  const dispatch = useDispatch();
   const { user } = useAuthentication();
 
   const [productStates, setProductStates] = useState({});
@@ -82,36 +79,6 @@ const MainCategory = ({ userId }) => {
     fetchCategories();
   }, []);
 
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     dispatch(Setloader(true));
-
-  //     try {
-  //       // Fetch the category's data
-  //       const response = await GetCategoryByID(id, value);
-
-  //       setCategory(response.data);
-  //       dispatch(Setloader(false));
-
-
-  //     } catch (error) {
-  //       dispatch(Setloader(false));
-  //       console.error('Error fetching category data:', error);
-
-  //       // Check if the error is due to unauthorized access
-  //       if (error.response && error.response.status === 500) {
-  //         return error.message;
-  //         // Handle unauthorized access, e.g., redirect to login
-  //       } else {
-  //         // Handle other errors
-  //         setErr(true); // Depending on your requirements
-  //       }
-  //     }
-  //   };
-  //   fetchData();
-  // }, [id, value, dispatch, setErr]);
 
 
 
@@ -176,18 +143,29 @@ const MainCategory = ({ userId }) => {
                 value={value}
                 updateCategoryData={setCategory}
               />
-              <SmallScreenProductFilter />
+              <SmallScreenProductFilter
+                categoryId={id}
+                value={value}
+                updateCategoryData={setCategory}
+              />
             </div>
             <div className='main-category-newly-listed-row3'>
-              <ProductCard
-                data={allProducts || []}
-                addToWishlist={addToWishlist}
-                removeFromWishlist={removeFromWishlist}
-                userId={user?.id}
-                wishlistCount={wishlistCount}
-                setWishlistCount={setWishlistCount}
-                getWishlistCount={getWishlistCount}
-              />
+              {allProducts.length > 0 ? (
+                <ProductCard
+                  data={allProducts || []}
+                  addToWishlist={addToWishlist}
+                  removeFromWishlist={removeFromWishlist}
+                  userId={user?.id}
+                  wishlistCount={wishlistCount}
+                  setWishlistCount={setWishlistCount}
+                  getWishlistCount={getWishlistCount}
+                />
+              ) : (
+                <>
+                  <h4>No result found!</h4>
+                </>
+              )}
+
             </div>
           </div>
         </div>
