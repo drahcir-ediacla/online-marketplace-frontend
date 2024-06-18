@@ -187,13 +187,6 @@ export const SmallScreenProductFilter = ({ categoryId, value, updateCategoryData
                                     </li>
                                 </ul>
                             </div>
-                            <div className="deal-options-container">
-                                <span className='filter-options-label'>Deal Options</span>
-                                <ul className='filter-deal-options'>
-                                    <li><CheckBox label='Meet Up' value='Meet Up' /></li>
-                                    <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
-                                </ul>
-                            </div>
                             <div className='filter-price-input'>
                                 <span className='filter-options-label'>Show item price from</span>
                                 <div className='filter-price-row1'>
@@ -220,6 +213,13 @@ export const SmallScreenProductFilter = ({ categoryId, value, updateCategoryData
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div className="deal-options-container">
+                                <span className='filter-options-label'>Deal Options</span>
+                                <ul className='filter-deal-options'>
+                                    <li><CheckBox label='Meet Up' value='Meet Up' /></li>
+                                    <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
+                                </ul>
                             </div>
                         </div>
                         <div className="filter-buttons">
