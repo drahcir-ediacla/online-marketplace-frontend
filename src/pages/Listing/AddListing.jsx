@@ -14,7 +14,6 @@ import Input from '../../components/FormField/Input';
 import RadioButton from '../../components/FormField/RadioButton'
 import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
-import CheckboxWithInput from '../../components/FormField/CheckBox/CheckboxWithInput'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
 
@@ -503,7 +502,7 @@ const AddListing = () => {
                     <b>2. Create Youtube Embed URL:</b>
                     <p>Use the YouTube video ID to create the YouTube embed URL. See sample URL below.</p>
                     <span className='sample-embed-url-label'>Sample Youtube Embed URL:</span>
-                    <p className='sample-embed-url'>https://www.youtube.com/embed/VIDEO_ID</p>
+                    <p className='sample-embed-url'>https://youtube.com/embed/VIDEO_ID</p>
                   </div>
                 </div>
               </div>
