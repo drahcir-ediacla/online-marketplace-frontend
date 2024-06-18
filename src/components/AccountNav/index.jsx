@@ -54,14 +54,16 @@ const AccountNav = () => {
                     </div>
                     <div className="anc-row3">
                         <ul>
-                            <li >
-                                <Link to='/editprofile'>Manage Account</Link>
-                            </li>
+                            <Link to='/editprofile'>
+                                <li >
+                                    Manage Account
+                                </li>
+                            </Link>
                             <li>
                                 <Link to={`/profile/${user?.id}`}> My Profile & Listings</Link>
                             </li>
-                            <li>
-                                <Link to='/notificationlist'>
+                            <Link to='/notificationlist'>
+                                <li>
                                     <div className='notification-btn'>
                                         Notifications
                                         {unreadNotifications.length > 0 ?
@@ -71,14 +73,18 @@ const AccountNav = () => {
                                             : null
                                         }
                                     </div>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/wishlist'>My Wishlist</Link>
-                            </li>
-                            <li>
-                                <Link to='/deactivateaccount'>Settings</Link>
-                            </li>
+                                </li>
+                            </Link>
+                            <Link to='/wishlist'>
+                                <li>
+                                    My Wishlist
+                                </li>
+                            </Link>
+                            <Link to='/deactivateaccount'>
+                                <li>
+                                    Settings
+                                </li>
+                            </Link>
                             <li onClick={logout}>
                                 Logout
                             </li>
