@@ -8,18 +8,25 @@ import BtnGreen from '../../components/Button/BtnGreen'
 
 const DeactivateAccount = () => {
 
+    const openManageAccountNav = () => {
+        window.location.href = '/manage-account'
+      }
+
     return (
     <>
         <Header />
         <div className="deactivate-accnt-body">
             <div className="container">
-                <h3>Manage Account</h3>
+                <h3>Settings</h3>
                 <div className="box">
                     <div className="col-left"><ManageAccountNav /></div>
                     <div className="col-right">
                         <div className="accnt-deactivation-content">
                             <div className="row1">
-                                <span>ACCOUNT DEACTIVATION</span>
+                                <div className='label-btn'>
+                                    <div className="back-arrow" onClick={openManageAccountNav}></div>
+                                    <span>ACCOUNT DEACTIVATION</span>
+                                </div>
                                 <div>
                                     <span>What happens when you deactivate your account?</span>
                                     <ul className="accnt-deactivation-info">

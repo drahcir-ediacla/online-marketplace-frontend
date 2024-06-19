@@ -84,7 +84,9 @@ const SetPassword = () => {
     };
 
 
-
+    const openManageAccountNav = () => {
+        window.location.href = '/manage-account'
+    }
 
     return (
         <>{successAlert && <AlertMessage type='success' message={alertMsg} />}
@@ -92,12 +94,15 @@ const SetPassword = () => {
             <Header />
             <div className="set-password-body">
                 <div className="container">
-                    <h3>Manage Account</h3>
+                    <h3>Settings</h3>
                     <div className="box">
                         <div className="col-left"><ManageAccountNav /></div>
                         <div className="col-right">
                             <form className='set-password-form' onSubmit={handleChangePassword}>
-                                <span>SET PASSWORD</span>
+                                <div className='label-btn'>
+                                    <div className="back-arrow" onClick={openManageAccountNav}></div>
+                                    <span>SET PASSWORD</span>
+                                </div>
                                 <hr />
                                 <div className='form-field'>
                                     <label>Old Password <span className='asterisk'>*</span></label>
@@ -110,12 +115,11 @@ const SetPassword = () => {
                                 </div>
                                 <div className='form-field'>
                                     <label htmlFor="password">
-                                        New Password
-                                        <span className='asterisk'>*</span>
+                                        New Password <span className='asterisk'>*</span>
                                         <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
                                         <FontAwesomeIcon icon={faTimes} className={validPwd || !newPassword ? "hide" : "invalid"} />
                                     </label>
-                                    <div>
+                                    <div style={{ width: "100%", maxWidth: "557px" }}>
                                         <input
                                             type="password"
                                             id="password"
@@ -135,16 +139,14 @@ const SetPassword = () => {
                                             <span> Must be 8 to 24 characters.</span>
                                         </p>
                                     </div>
-
                                 </div>
                                 <div className='form-field'>
                                     <label htmlFor="confirm_pwd">
-                                        Confirm Password
-                                        <span className='asterisk'>*</span>
+                                        Confirm Password <span className='asterisk'>*</span>
                                         <FontAwesomeIcon icon={faCheck} className={validMatch && confirmPassword ? "valid" : "hide"} />
                                         <FontAwesomeIcon icon={faTimes} className={validMatch || !confirmPassword ? "hide" : "invalid"} />
                                     </label>
-                                    <div>
+                                    <div style={{ width: "100%", maxWidth: "557px" }}>
                                         <input
                                             type="password"
                                             id="confirm_pwd"
@@ -163,12 +165,12 @@ const SetPassword = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div><BtnGreen label="Save Changes" onClick={() => {setSuccessAlert(false); setErrorAlert(false);}} disabled={!validPwd || !validMatch} /></div>
+                                <div><BtnGreen label="Save Changes" onClick={() => { setSuccessAlert(false); setErrorAlert(false); }} disabled={!validPwd || !validMatch} /></div>
                             </form>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
             <Footer />
         </>
     )

@@ -6,7 +6,6 @@ import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
 import ManageAccountNav from '../../layouts/ManageAccountNav';
-import { ReactComponent as ToolTip } from '../../assets/images/tool-tip.svg';
 import ProfileAvatar from '../../assets/images/profile-avatar.png';
 import BtnClear from '../../components/Button/BtnClear';
 import BtnGreen from '../../components/Button/BtnGreen';
@@ -279,6 +278,10 @@ const EditProfile = () => {
   const counterClassName =
     updatedUserData.bio.length > maxCharacterCount ? 'counter-exceeded' : '';
 
+    const openManageAccountNav = () => {
+      window.location.href = '/manage-account'
+    }
+
 
 
   return (
@@ -293,7 +296,8 @@ const EditProfile = () => {
             <div className="col-right">
               <form className="edit-profile-form" onSubmit={handleFormSubmit}>
                 <div className='row1'>
-                  <h5>Edit Profile</h5>
+                  <div className="back-arrow" onClick={openManageAccountNav}></div>
+                  <h5>ACCOUNT INFORMATION</h5>
                   <hr />
                   {error && <div className="error">{error}</div>}
                 </div>
@@ -349,8 +353,8 @@ const EditProfile = () => {
                 </div>
 
                 <div className='row3 flex'>
-                  <label htmlFor='displaynameID' className='field-name'>DISPLAY NAME / SHOP NAME <ToolTip /></label >
-                  <div>
+                  <label htmlFor='displaynameID' className='field-name tool-tip'>DISPLAY NAME / SHOP NAME</label>
+                  <div className='form-field-container'>
                     <Input
                       type='text'
                       id='displaynameID'
@@ -362,8 +366,8 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div className='row4 flex'>
-                  <label htmlFor='bioID' className='field-name'>BIO</label>
-                  <div>
+                  <label htmlFor='bioID' className='field-name tool-tip'>BIO</label>
+                  <div className='form-field-container'>
                     <TextArea
                       id='bioID'
                       name='bio'
@@ -378,7 +382,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row5 flex'>
                   <label htmlFor='firstnameID' className='field-name'>FIRST NAME <span className='asterisk'>*</span></label>
-                  <div>
+                  <div className='form-field-container'>
                     <Input
                       type='text'
                       id='firstnameID'
@@ -393,7 +397,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row6 flex'>
                   <label htmlFor='lastnameID' className='field-name'>LAST NAME <span className='asterisk'>*</span></label>
-                  <div>
+                  <div className='form-field-container'>
                     <Input
                       type='text'
                       id='lastnameID'
@@ -412,7 +416,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row8 flex'>
                   <label htmlFor='countryID' className='field-name'>Country</label>
-                  <div>
+                  <div className='form-field-container'>
                     <Input
                       type='text'
                       id='countryID'
@@ -426,7 +430,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row9 flex'>
                   <label htmlFor='regionID' className='field-name'>Region <span className='asterisk'>*</span></label>
-                  <div>
+                  <div className='form-field-container'>
                     <DependentSelect
                       id="regionID"
                       name='region'
@@ -441,7 +445,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row10 flex'>
                   <label htmlFor='cityID' className='field-name'>City <span className='asterisk'>*</span></label>
-                  <div>
+                  <div className='form-field-container'>
                     <DependentSelect
                       id="cityID"
                       name="city"
@@ -462,7 +466,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row12 flex'>
                   <label htmlFor="emailID" className='field-name'>Email <span className='asterisk'>*</span></label>
-                  <div>
+                  <div className='form-field-container'>
                     <Input
                       type="email"
                       id="emailID"
@@ -478,7 +482,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row13 flex'>
                   <label htmlFor="phoneID" className='field-name'>Phone Number</label>
-                  <div>
+                  <div className='form-field-container'>
                     <Input
                       type="text"
                       id="phoneID"
@@ -492,7 +496,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row14 flex'>
                   <label htmlFor="genderID" className='field-name'>Gender</label>
-                  <div>
+                  <div className='form-field-container'>
                     <Select
                       id="genderID"
                       name="gender"
@@ -505,7 +509,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row15 flex'>
                   <label htmlFor="birthdayID" className='field-name'>Birthday</label>
-                  <div>
+                  <div className='form-field-container'>
                     <DatePicker
                       id="birthdayID"
                       name="birthday"

@@ -10,7 +10,7 @@ import SlidingSideNav from '../SlidingSideNav';
 import AccountNav from '../../components/AccountNav';
 import SmallScreenSearchByLoc from './SmallScreenSearchByLoc';
 
-const SmallScreenHeader = () => {
+const StickySmallScreenHeader = () => {
 
     const [isSticky, setIsSticky] = useState(false);
     const navigate = useNavigate();
@@ -84,4 +84,4 @@ const SmallScreenHeader = () => {
     )
 }
 
-export default SmallScreenHeader
+export default StickySmallScreenHeader

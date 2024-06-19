@@ -74,7 +74,22 @@
         .wishlist-items {
             display: flex;
             flex-wrap: wrap;
-            gap: 19px;
+            justify-content: space-between;
+        }
+    }
+}
+
+
+//------------------------------------- MEDIA QUERY -------------------------------------//
+
+@media only screen and (max-width: 768px) {
+    .wishlist-body {
+        .wishlist-row2 {
+            padding: 30px 16px 0px 16px;
+
+            .wishlist-items {
+                justify-content: space-evenly;
+            }
         }
     }
 }

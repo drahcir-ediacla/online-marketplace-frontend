@@ -147,6 +147,10 @@ const NotificationList = () => {
         }
     }
 
+    const openManageAccountNav = () => {
+        window.location.href = '/manage-account'
+      }
+
 
     return (
         <>
@@ -158,7 +162,10 @@ const NotificationList = () => {
                         <div className="col-left"><ManageAccountNav /></div>
                         <div className="col-right">
                             <div className="notification-list-container">
-                                <h5>NOTIFICATIONS</h5>
+                                <div className="label-btn">
+                                    <div className="back-arrow" onClick={openManageAccountNav}></div>
+                                    <h5>NOTIFICATION LIST</h5>
+                                </div>
                                 <div className="notification-btns">
                                     <div className='view-options-btn-container'>
                                         <button className={`all-btn ${activeTab === 0 ? 'active' : ''}`} onClick={() => openContent(0)}>ALL</button>
@@ -211,7 +218,7 @@ const NotificationList = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {notifications.length > displayedNotificationsCount && 
+                                        {notifications.length > displayedNotificationsCount &&
                                             <div className='view-more'>
                                                 <button className='view-more-btn' onClick={loadMoreNotifications}>View more</button>
                                             </div>
@@ -245,7 +252,7 @@ const NotificationList = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {unreadNotifications.length > displayedUnreadNotificationsCount && 
+                                        {unreadNotifications.length > displayedUnreadNotificationsCount &&
                                             <div className='view-more'>
                                                 <button className='view-more-btn' onClick={loadMoreUnreadNotifications}>View more</button>
                                             </div>
