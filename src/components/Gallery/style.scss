@@ -153,7 +153,6 @@
 
             .selected-prod-large-img {
                 position: absolute;
-                overflow: auto;
             }
 
             .video-preview-container {
@@ -246,4 +245,25 @@
 
 .hide {
     display: none;
+}
+
+
+
+// -------------------------------- MEDIA QUERY ------------------------------------------- //
+@media only screen and (max-width: 1200px) {
+    .product-details-body {
+        .row2 {
+            .col-left {
+                .prod-img-gallery {
+                    .desktop-img-gallery {
+                        display: none;
+                    }
+                    .small-devices-img-gallery {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+
 }

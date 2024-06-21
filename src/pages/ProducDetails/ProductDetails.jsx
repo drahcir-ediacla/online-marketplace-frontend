@@ -13,6 +13,7 @@ import Footer from '../../layouts/Footer'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import ItemImgGallery from '../../components/Gallery/ItemImgGallery'
+import ItemImgGalleryV2 from '../../components/Gallery/ItemImgGalleryV2'
 import Pagination from '../../components/Pagination/Pagination'
 import CustomerReviews from '../../components/CustomerReviews/CustomerReviews'
 import { ReactComponent as ShareIcon } from '../../assets/images/share-icon.svg'
@@ -351,11 +352,12 @@ const ProductDetails = ({ userId }) => {
                     <div className='row2'>
                         <div className='col-left'>
                             <ItemImgGallery gallery={gallery} />
+                            {/* <ItemImgGalleryV2 gallery={gallery} /> */}
                         </div>
                         <div className='col-right'>
                             <div className='prod-details-title'><span>{product.product_name}</span></div>
                             <div className='prod-details-price'><span>₱{Number(product.price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span></div>
-                            <div style={{ display: 'flex', gap: '20px' }}>
+                            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                                 <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                                 <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
                             </div>
@@ -400,7 +402,7 @@ const ProductDetails = ({ userId }) => {
                             </div>
                         </div>
                     </div>
-                    <div className='row3'>
+                    {/* <div className='row3'>
                         <h2>Product Details</h2>
                         <hr />
                         <div className='product-details'>
@@ -572,7 +574,7 @@ const ProductDetails = ({ userId }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <RelatedListings data={product} />
                     <div><MoreFromSeller data={product} /></div>
                 </div >
