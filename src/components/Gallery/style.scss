@@ -259,6 +259,24 @@
     }
 }
 
+.owl-carousel {
+    .owl-item {
+        img {
+            width: 444px;
+            height: 444px;
+            object-fit: cover;
+        }
+    }
+}
+
+.owl-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 150px;
+}
+
+
+
 
 // -------------------------------- MEDIA QUERY ------------------------------------------- //
 @media only screen and (max-width: 1200px) {
@@ -283,6 +301,21 @@
 
     .small-device-carousel-container {
         display: block;
+        width: 444px;
+        height: 444px;
+
+        .video-preview-container {
+
+            .selected-prod-img {
+                width: 444px;
+                height: 444px;
+            }
+
+            .selected-prod-vid {
+                width: 444px;
+                height: 444px;
+            }
+        }
     }
 
 }

@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactImageMagnify from 'react-image-magnify';
 import './style.scss';
 import Carousel from 'react-multi-carousel';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
 
 const ItemImgGallery = ({ gallery, index }) => {
   const [productImgSrc, setProductImgSrc] = useState(gallery[0]);
@@ -204,15 +207,17 @@ const ItemImgGallery = ({ gallery, index }) => {
       {/* --------------------------------- PRODUCT IMAGE CAROUSEL FOR SMALL DEVICES ---------------------------*/}
 
       <div className='small-device-carousel-container'>
-        <Carousel responsive={responsive} draggable={true} containerClass="carousel-box">
+        <OwlCarousel className='owl-theme' items="1" dots>
           {gallery.map((mediaSrc, index) => (
             <>
               {getMediaType(mediaSrc) === 'image' ? (
-                <img
-                  key={index}
-                  src={mediaSrc}
-                  className='selected-prod-img'
-                />
+                <div>
+                  <img
+                    key={index}
+                    src={mediaSrc}
+                    className='selected-prod-img'
+                  />
+                </div>
               ) : getMediaType(mediaSrc) === 'youtube' ? (
                 <div>
                   <iframe width="444" height="444" src={mediaSrc} frameborder="0" allowfullscreen ></iframe>
@@ -233,7 +238,7 @@ const ItemImgGallery = ({ gallery, index }) => {
               )}
             </>
           ))}
-        </Carousel>
+        </OwlCarousel>
       </div>
 
 
