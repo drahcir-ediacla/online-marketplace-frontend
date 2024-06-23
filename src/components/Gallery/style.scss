@@ -247,6 +247,17 @@
     display: none;
 }
 
+.small-device-carousel-container {
+    display: none;
+
+    .carousel-box {
+        .selected-prod-img {
+            width: 444px !important;
+            height: 444px !important;
+            object-fit: cover;
+        }
+    }
+}
 
 
 // -------------------------------- MEDIA QUERY ------------------------------------------- //
@@ -255,15 +266,23 @@
         .row2 {
             .col-left {
                 .prod-img-gallery {
-                    .desktop-img-gallery {
+                    display: none;
+
+                    .desktop-img-gallery,
+                    .group-prod-img-thumb {
                         display: none;
                     }
+
                     .small-devices-img-gallery {
                         display: block;
                     }
                 }
             }
         }
+    }
+
+    .small-device-carousel-container {
+        display: block;
     }
 
 }

@@ -18,6 +18,7 @@ const HeroBanner = () => {
     animateIn: 'fadeIn',
     autoplayTimeout: 5000,
     autoplayHoverPause: false,
+    dots: true,
   }
 
 

@@ -203,36 +203,39 @@ const ItemImgGallery = ({ gallery, index }) => {
       </div>
       {/* --------------------------------- PRODUCT IMAGE CAROUSEL FOR SMALL DEVICES ---------------------------*/}
 
-      {/* <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
-              {gallery.map((mediaSrc, index) => (
-                <>
-                  {getMediaType(mediaSrc) === 'image' ? (
-                    <img
-                      key={index}
-                      src={mediaSrc}
-                      className='selected-prod-img'
-                    />
-                  ) : getMediaType(mediaSrc) === 'youtube' ? (
-                    <div>
-                      <iframe width="444" height="444" src={mediaSrc} frameborder="0" allowfullscreen ></iframe>
-                    </div>
-                  ) : (
-                    <div className='video-preview-container'>
-                      <video
-                        id="ProductVideo"
-                        src={mediaSrc}
-                        className='selected-prod-vid'
-                        disablepictureinpicture
-                        noplaybackrate
-                        controls
-                        controlslist="nodownload"
-                        onContextMenu={handleContextMenu}
-                      />
-                    </div>
-                  )}
-                </>
-              ))}
-      </Carousel> */}
+      <div className='small-device-carousel-container'>
+        <Carousel responsive={responsive} draggable={true} containerClass="carousel-box">
+          {gallery.map((mediaSrc, index) => (
+            <>
+              {getMediaType(mediaSrc) === 'image' ? (
+                <img
+                  key={index}
+                  src={mediaSrc}
+                  className='selected-prod-img'
+                />
+              ) : getMediaType(mediaSrc) === 'youtube' ? (
+                <div>
+                  <iframe width="444" height="444" src={mediaSrc} frameborder="0" allowfullscreen ></iframe>
+                </div>
+              ) : (
+                <div className='video-preview-container'>
+                  <video
+                    id="ProductVideo"
+                    src={mediaSrc}
+                    className='selected-prod-vid'
+                    disablepictureinpicture
+                    noplaybackrate
+                    controls
+                    controlslist="nodownload"
+                    onContextMenu={handleContextMenu}
+                  />
+                </div>
+              )}
+            </>
+          ))}
+        </Carousel>
+      </div>
+
 
     </>
   );

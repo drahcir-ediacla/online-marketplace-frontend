@@ -402,7 +402,7 @@ const ProductDetails = ({ userId }) => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className='row3'>
+                    <div className='row3'>
                         <h2>Product Details</h2>
                         <hr />
                         <div className='product-details'>
@@ -574,7 +574,7 @@ const ProductDetails = ({ userId }) => {
                                 </div>
                             </div>
                         </div>
-                    </div> */}
+                    </div>
                     <RelatedListings data={product} />
                     <div><MoreFromSeller data={product} /></div>
                 </div >

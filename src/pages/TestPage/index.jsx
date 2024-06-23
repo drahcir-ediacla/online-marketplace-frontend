@@ -4,6 +4,11 @@ import Notification from '../../components/Notification'
 import CustomSelect from '../../components/FormField/CustomSelect';
 import genderData from '../../data/genderData';
 import './style.scss'
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import HeroBanner1 from '../../assets/images/hero-banner1.webp'
+import HeroBanner2 from '../../assets/images/hero-banner2.webp'
 
 function ImageUploader() {
   const [images, setImages] = useState([]);
@@ -47,8 +52,25 @@ function ImageUploader() {
           ))}
         </ul>
       </div>
+      
       <CustomSelect data={genderData} />
+
+      <div className="container">
+        <div className='hero-banner'>
+        <OwlCarousel className='owl-theme' items="1" dots>
+          <div style={{width: '444px', height: '444px'}}>
+            <img src={HeroBanner1} alt="" />
+          </div>
+          <div style={{width: '444px', height: '444px'}}>
+            <img src={HeroBanner2} alt="" />
+          </div>
+        </OwlCarousel>
+        </div>
+        
+      </div>
     </div>
+
+
   );
 }
 
