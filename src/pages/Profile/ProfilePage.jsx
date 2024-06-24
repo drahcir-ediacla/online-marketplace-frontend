@@ -275,7 +275,7 @@ const ProfilePage = ({ userId }) => {
                                             </div>
                                             <div className='listing-content' style={{ display: activeTab === 0 ? 'block' : 'none' }}>
                                                 <div className='row1'>
-                                                    <div><h5>{user?.id !== authenticatedUser?.id ? (user?.display_name) : ('You')} have {user?.products?.length || 0} listing(s)</h5></div>
+                                                    <h5>{user?.id !== authenticatedUser?.id ? (user?.display_name) : ('You')} have {user?.products?.length || 0} listing(s)</h5>
                                                     <div className='col-right'>
                                                         <SearchBox
                                                             placeholder='Search item name...'

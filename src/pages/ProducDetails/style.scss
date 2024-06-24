@@ -340,6 +340,7 @@
 
                         .col-left,
                         .col-right {
+                            min-width: 0;
                             width: auto;
                         }
 
@@ -468,6 +469,23 @@
         .row2 {
             .col-right {
                 min-width: 280px;
+                .prod-details-title, .prod-details-price {
+                    font-size: 24px;
+                }
+            }
+        }
+        .row3 {
+            h2 {
+                font-size: 24px;
+            }
+            .product-details {
+                .col-left {
+                    .prod-details-title-desc {
+                        h2 {
+                            font-size: 20px;
+                        }
+                    }
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ const ProfileInfoCard = ({ data, avgRating, totalReviews, authenticatedUser, all
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     const stars = Array(5).fill(0);
 
-    
+
 
     useEffect(() => {
         const fetchFollowingUser = async () => {
@@ -104,47 +104,54 @@ const ProfileInfoCard = ({ data, avgRating, totalReviews, authenticatedUser, all
     return (
         <>
             <div className='profile-info-box'>
-                <img src={data?.profile_pic || DefaultProfilePic} alt="" className="profile-pic" />
-                <span className='profile-name'>{data?.display_name}</span>
-                <div className="seller-rating">
-                    <span>{avgRating === 0 ? ("") : (avgRating)}</span>
-                    <div style={{ display: 'flex', gap: '3px' }}>
-                        {stars.map((_, index) => {
-                            return (
-                                <FaStar
-                                    key={index}
-                                    size={17}
-                                    color={(avgRating || 0) > index ? '#FFD800' : '#bcbcbc'}
-                                />
-                            )
-                        })}
-                    </div>
-                    <span>|</span><span>{totalReviews || 0} Review(s)</span>
+                <div className='profile-info-box-row1'>
+                    <img src={data?.profile_pic || DefaultProfilePic} alt="" className="profile-pic" />
+                    <div className='profile-name'>{data?.display_name}</div>
                 </div>
-                <div className='joined-date-loc'><span>{data?.city}</span> · <span>{formattedDate}</span></div>
-                {/* <div className="profile-social-media">
+                <div className='profile-info-box-row2'>
+                    <div className="seller-rating">
+                        <span>{avgRating === 0 ? ("") : (avgRating)}</span>
+                        <div style={{ display: 'flex', gap: '3px' }}>
+                            {stars.map((_, index) => {
+                                return (
+                                    <FaStar
+                                        key={index}
+                                        size={17}
+                                        color={(avgRating || 0) > index ? '#FFD800' : '#bcbcbc'}
+                                    />
+                                )
+                            })}
+                        </div>
+                        <span>|</span><span>{totalReviews || 0} Review(s)</span>
+                    </div>
+                    <div className='joined-date-loc'><span>{data?.city}</span> · <span>Joined in {formattedDate}</span></div>
+                    {/* <div className="profile-social-media">
                     <span>Social Media:</span>
                     <div className='fb-icon'><FBIcon /></div>
                     <div className='google-icon'><GoogleIcon /></div>
-                </div> */}
-                <div className="profile-desc"><p>{data?.bio}</p></div>
-                {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
-                    <>
-                        <div className="follow-message-buttons">
-                            {!following ? (
-                                <BtnClear label='Follow' onClick={followUser} />
-                            ) : (
-                                <BtnClear label='Unfollow' className='unfollowing-btn' onClick={unfollowUser} />
-                            )}
+                        </div> */}
+                    <div className="profile-desc"><p>{data?.bio}</p></div>
+                    <div className='follow-component-container'>
+                        {(authenticatedUser && authenticatedUser?.id !== data?.id) && (
+                            <>
+                                <div className="follow-message-buttons">
+                                    {!following ? (
+                                        <BtnClear label='Follow' onClick={followUser} />
+                                    ) : (
+                                        <BtnClear label='Unfollow' className='unfollowing-btn' onClick={unfollowUser} />
+                                    )}
 
+                                </div>
+                            </>
+                        )}
+                        <div className='follow'>
+                            <div className='follow-counter' onClick={allFollowersList}><p>Followers</p><span>{allFollower.length}</span></div>
+                            <div className='counter-divider'></div>
+                            <div className='follow-counter' onClick={allFollowingList}><p>Following</p><span>{allFollowing.length}</span></div>
                         </div>
-                    </>
-                )}
-                <div className='follow'>
-                    <div className='follow-counter' onClick={allFollowersList}><p>Followers</p><span>{allFollower.length}</span></div>
-                    <div className='counter-divider'></div>
-                    <div className='follow-counter' onClick={allFollowingList}><p>Following</p><span>{allFollowing.length}</span></div>
+                    </div>
                 </div>
+
             </div>
         </>
     )

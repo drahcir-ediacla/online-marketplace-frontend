@@ -138,25 +138,78 @@
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
     margin-bottom: 150px;
 
-    .profile-pic {
-        width: 160px;
-        height: 160px;
-        border-radius: 100%;
+    .profile-info-box-row1 {
+        display: block;
+        text-align: center;
+
+        .profile-pic {
+            width: 160px;
+            height: 160px;
+            border-radius: 100%;
+            margin-bottom: 16px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+        }
     }
 
-    .profile-name {
-        font-size: 24px;
-    }
-
-    .seller-rating {
+    .profile-info-box-row2 {
         display: flex;
-        gap: 3px;
+        flex-direction: column;
         align-items: center;
-    }
+        gap: 16px;
 
-    .joined-date-loc {
-        font-size: 12px;
-        font-style: italic;
+        .seller-rating {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .joined-date-loc {
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .follow-component-container {
+            .follow-message-buttons {
+                display: flex;
+                gap: 16px;
+
+                .unfollowing-btn {
+                    border-color: var(--green-400);
+                    color: var(--green-400);
+                }
+            }
+
+            .follow {
+                display: flex;
+                gap: 30px;
+                padding-top: 10px;
+
+                .counter-divider {
+                    width: 1px;
+                    background: var(--gray-300);
+                }
+
+                .follow-counter {
+                    text-align: center;
+                    cursor: pointer;
+
+                    p {
+                        margin-bottom: 8px;
+                        font-weight: 500;
+                    }
+
+                    span {
+                        font-size: 20px;
+                        color: var(--green-400);
+                        text-align: center;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
     }
 
     .profile-social-media {
@@ -176,43 +229,7 @@
         }
     }
 
-    .follow-message-buttons {
-        display: flex;
-        gap: 16px;
 
-        .unfollowing-btn {
-            border-color: var(--green-400);
-            color: var(--green-400);
-        }
-    }
-
-    .follow {
-        display: flex;
-        gap: 30px;
-        padding-top: 10px;
-
-        .counter-divider {
-            width: 1px;
-            background: var(--gray-300);
-        }
-
-        .follow-counter {
-            text-align: center;
-            cursor: pointer;
-
-            p {
-                margin-bottom: 8px;
-                font-weight: 500;
-            }
-
-            span {
-                font-size: 20px;
-                color: var(--green-400);
-                text-align: center;
-                font-weight: 500;
-            }
-        }
-    }
 }
 
 
@@ -473,8 +490,32 @@
     .thumbnail-container {
         width: 145px;
         height: fit-content;
+
         .image-holder {
             height: 150px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .profile-info-box {
+        .profile-info-box-row1 {
+            .profile-name {
+                font-size: 20px;
+            }
+        }
+
+        .profile-info-box-row2 {
+            align-items: flex-start;
+            width: 100%;
+
+            .follow-component-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 16px;
+            }
         }
     }
 }
