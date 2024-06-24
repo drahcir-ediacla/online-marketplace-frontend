@@ -249,30 +249,10 @@
 
 .small-device-carousel-container {
     display: none;
-
-    .carousel-box {
-        .selected-prod-img {
-            width: 444px !important;
-            height: 444px !important;
-            object-fit: cover;
-        }
-    }
 }
 
-.owl-carousel {
-    .owl-item {
-        img {
-            width: 444px;
-            height: 444px;
-            object-fit: cover;
-        }
-    }
-}
-
-.owl-dots {
-    position: absolute;
-    bottom: 20px;
-    left: 150px;
+.owl-item {
+    background: none;
 }
 
 
@@ -302,13 +282,13 @@
     .small-device-carousel-container {
         display: block;
         width: 444px;
-        height: 444px;
 
         .video-preview-container {
 
             .selected-prod-img {
                 width: 444px;
                 height: 444px;
+                object-fit: cover;
             }
 
             .selected-prod-vid {
@@ -316,6 +296,36 @@
                 height: 444px;
             }
         }
+    }
+
+}
+
+@media only screen and (max-width: 475px) {
+    .small-device-carousel-container {
+        display: block;
+        width: 320px;
+
+        .video-preview-container {
+
+            .selected-prod-img {
+                width: 320px;
+            }
+
+            iframe {
+                width: 320px;
+                height: 320px;
+            }
+
+            .selected-prod-vid {
+                width: 320px;
+                height: 320px;
+            }
+        }
+    }
+
+    .youtube-frame {
+        width: 320px;
+                height: 320px;
     }
 
 }

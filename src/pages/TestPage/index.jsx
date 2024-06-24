@@ -58,10 +58,10 @@ function ImageUploader() {
       <div className="container">
         <div className='hero-banner'>
         <OwlCarousel className='owl-theme' items="1" dots>
-          <div style={{width: '444px', height: '444px'}}>
+          <div>
             <img src={HeroBanner1} alt="" />
           </div>
-          <div style={{width: '444px', height: '444px'}}>
+          <div>
             <img src={HeroBanner2} alt="" />
           </div>
         </OwlCarousel>

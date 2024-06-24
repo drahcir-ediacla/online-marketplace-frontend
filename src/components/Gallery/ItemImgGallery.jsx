@@ -220,7 +220,7 @@ const ItemImgGallery = ({ gallery, index }) => {
                 </div>
               ) : getMediaType(mediaSrc) === 'youtube' ? (
                 <div>
-                  <iframe width="444" height="444" src={mediaSrc} frameborder="0" allowfullscreen ></iframe>
+                  <iframe src={mediaSrc} frameborder="0" allowfullscreen className='youtube-frame' ></iframe>
                 </div>
               ) : (
                 <div className='video-preview-container'>
