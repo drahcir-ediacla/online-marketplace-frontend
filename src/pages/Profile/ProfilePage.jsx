@@ -288,6 +288,7 @@ const ProfilePage = ({ userId }) => {
                                                             filteredListings={setFilteredListings}
                                                             authenticatedUser={setAuthenticatedUser}
                                                             err={setErr}
+                                                            className='filter-item'
                                                         />
                                                     </div>
                                                 </div>
@@ -441,7 +442,7 @@ const ProfilePage = ({ userId }) => {
                                                                 <button className={`review-tab ${role === 'Buyer' ? 'active' : ''}`} onClick={() => openReviews('Buyer')}>Buyer Reviews</button>
                                                                 <button className={`review-tab ${role === 'Seller' ? 'active' : ''}`} onClick={() => openReviews('Seller')}>Seller Reviews</button>
                                                             </div>
-                                                            <div style={{ display: role === '' ? 'block' : 'none' }}>
+                                                            <div className='reviews-container' style={{ display: role === '' ? 'block' : 'none' }}>
                                                                 <CustomerReviews posts={currentReviewData} />
                                                                 <div className='pagination-container'>
                                                                     <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={reviewsData.length} currentPage={currentPage} />
@@ -454,7 +455,7 @@ const ProfilePage = ({ userId }) => {
                                                             <h5>{user?.display_name} does not yet have any reviews.</h5>
                                                         </div>
                                                     )}
-                                                    <div style={{ display: role === 'Buyer' ? 'block' : 'none' }}>
+                                                    <div className='reviews-container' style={{ display: role === 'Buyer' ? 'block' : 'none' }}>
                                                         {reviewsData && reviewsData.length > 0 ? (
                                                             <>
                                                                 <CustomerReviews posts={currentReviewData} />
@@ -469,7 +470,7 @@ const ProfilePage = ({ userId }) => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div style={{ display: role === 'Seller' ? 'block' : 'none' }}>
+                                                    <div className='reviews-container' style={{ display: role === 'Seller' ? 'block' : 'none' }}>
                                                         {reviewsData && reviewsData.length > 0 ? (
                                                             <>
                                                                 <CustomerReviews posts={currentReviewData} />

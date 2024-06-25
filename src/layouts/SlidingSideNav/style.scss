@@ -70,6 +70,7 @@
             background: white;
             width: 400px;
             overflow-y: scroll;
+            scrollbar-width: none;
 
             .row1 {
                 display: flex;

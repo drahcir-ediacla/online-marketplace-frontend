@@ -192,7 +192,7 @@ header {
                             right: 0px;
                             width: 220px;
                             padding-top: 10px;
-                            z-index: 1;
+                            z-index: 2;
 
                             .my-account-dropdown {
                                 width: 220px;
@@ -535,6 +535,7 @@ header {
             .container {
                 max-width: 1352px;
                 display: flex;
+                justify-content: center;
 
                 .nav-menu {
                     display: flex;
@@ -589,7 +590,7 @@ header {
                                     text-align: left;
                                     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
                                     display: none;
-                                    z-index: 1;
+                                    z-index: 2;
 
                                     ul {
                                         align-items: flex-start;
@@ -1258,6 +1259,7 @@ header {
 
     .tablet-header {
         display: block;
+        margin-bottom: 10px;
     }
 }
 

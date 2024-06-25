@@ -287,6 +287,7 @@
                         box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
 
                         .profile-tab-header {
+                            display: flex;
                             border-bottom: 1px solid var(--gray-300);
 
                             .tab-name {
@@ -341,8 +342,11 @@
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
+                                flex-wrap: wrap;
                                 width: 100%;
                                 gap: 28px;
+                                margin: 0;
+                                padding: 0 16px;
 
                                 .overall-rating {
                                     .avg-rate-box {
@@ -442,6 +446,7 @@
                                     display: flex;
                                     gap: 10px;
                                     margin: 20px 0;
+                                    scrollbar-width: none;
 
                                     .review-tab {
                                         padding: 5px 20px;
@@ -449,6 +454,7 @@
                                         color: var(--gray-500);
                                         border-radius: 50px;
                                         background: white;
+                                        flex-shrink: 0;
                                     }
 
                                     .active {
@@ -536,6 +542,16 @@
             }
         }
     }
+
+    .profile-body {
+        .myprofile-body {
+            .container {
+                .row1 {
+                    margin: 20px 16px;
+                }
+            }
+        }
+    }
 }
 
 
@@ -600,9 +616,122 @@
                             padding: 10px 0;
                             width: 100%;
 
+                            .followers-list {
+                                h5 {
+                                    margin: 15px 16px 8px 16px
+                                }
+                            }
+
                             .listing-content {
-                                .row1, .prod-listing-container  {
+
+                                .row1,
+                                .prod-listing-container {
                                     padding: 0 20px;
+                                }
+                            }
+
+                            .reviews-content {
+                                .profile-review-container {
+                                    .review-btns {
+                                        margin: 20px 16px;
+                                        overflow: scroll;
+                                    }
+                                    .reviews-container {
+                                        padding: 0 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .profile-body {
+        .myprofile-body {
+            .container {
+                .box-body {
+                    .col-right {
+                        .profile-tab-box {
+                            .listing-content {
+                                .row1 {
+                                    align-items: flex-start;
+                                    flex-direction: column;
+
+                                    .col-right {
+                                        flex-wrap: wrap;
+                                        width: 100%;
+
+                                        .search-box-container {
+                                            width: 100%;
+
+                                            .search-box-input {
+                                                width: 100%;
+                                            }
+                                        }
+
+                                        .filter-item {
+                                            display: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .profile-body {
+        .myprofile-body {
+            .container {
+                .box-body {
+                    .col-left {
+                        .profile-info-box {
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            padding: 30px 16px;
+                            gap: 10px;
+
+                            .profile-info-box-row2 {
+                                align-items: center;
+                                gap: 10px;
+                            }
+                        }
+                    }
+
+                    .col-right {
+                        .profile-tab-box {
+                            .profile-tab-header {
+                                overflow: scroll;
+                                scrollbar-width: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 617px) {
+    .profile-body {
+        .myprofile-body {
+            .container {
+                .box-body {
+                    .col-right {
+                        .profile-tab-box {
+                            .reviews-content {
+                                .row1 {
+                                    .vl {
+                                        display: none;
+                                    }
                                 }
                             }
                         }
