@@ -840,7 +840,7 @@ const ChatMessages = () => {
                             <div className="chat-left">
                                 <div className="chat-left-row1">
                                     <div className='chat-left-row1-header'>
-                                        <div className="back-arrow"></div>
+                                        <NavLink to='/' className="back-arrow"></NavLink>
                                         <h3>Chat List</h3>
                                         <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
                                     </div>
