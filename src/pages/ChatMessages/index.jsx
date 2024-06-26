@@ -1107,9 +1107,9 @@ const ChatMessages = () => {
                         <div className="chat-right-row3" ref={scrollRef}>
                             {allChats.some(chat => chat.chat_id === chat_id) ? (
                                 <>
-                                    <div className="date-messages">
+                                    {/* <div className="date-messages">
                                         <span>22/05 9:45 AM</span>
-                                    </div>
+                                    </div> */}
                                     {messages.map((message, index) => {
                                         // Format the timestamp for each message
                                         const formattedTime = formatTime(message.timestamp);
