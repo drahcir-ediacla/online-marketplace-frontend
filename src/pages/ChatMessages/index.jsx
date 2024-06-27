@@ -43,6 +43,8 @@ const ChatMessages = () => {
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
+    const [userStatuses, setUserStatuses] = useState({});
+    console.log('userStatuses:', userStatuses)
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const authUserDisplayName = user?.display_name;
@@ -279,7 +281,9 @@ const ChatMessages = () => {
 
     useEffect(() => {
         // Connect to the WebSocket server
-        socketRef.current = io(process.env.REACT_APP_BASE_URL);
+        socketRef.current = io(process.env.REACT_APP_BASE_URL, {
+            query: { id: user?.id }
+        });
 
 
         // Extract all chat_ids from filteredChat
@@ -315,13 +319,21 @@ const ChatMessages = () => {
             }));
         });
 
+        // Listen for 'updateUserStatus' events
+        socketRef.current.on('updateUserStatus', (statusUpdate) => {
+            setUserStatuses(prevStatuses => ({
+                ...prevStatuses,
+                [statusUpdate.id]: statusUpdate.status
+            }));
+        });
+
         return () => {
             // Disconnect the socket when the component unmounts
             if (socketRef.current) {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id, filteredChat, messages]); // Dependencies updated to include chat_id
+    }, [chat_id, filteredChat, messages, receiver_id]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
@@ -912,7 +924,7 @@ const ChatMessages = () => {
                                             <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
                                                 {receiverInfo?.display_name}
                                             </Link>
-                                            <span className='chat-user-status'>Online</span>
+                                            <span className='chat-user-status'>{userStatuses[receiverInfo?.id] || receiverInfo?.status }</span>
                                         </div>
                                     </div>
                                     <div className="three-dots-container" onClick={toggleChatActionOptions}>

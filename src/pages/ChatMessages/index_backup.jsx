@@ -39,7 +39,6 @@ const ChatMessages = () => {
     const [showSpinner, setShowSpinner] = useState(false)
     const [showChatActionOptions, setShowChatActionOptions] = useState(false)
     const [selectedOption, setSelectedOption] = useState(null);
-    console.log('selectedOption:', selectedOption)
     const [lastImageMessageIndex, setLastImageMessageIndex] = useState(null);
     const [chatInfo, setChatInfo] = useState(null);
     const [allChats, setAllChats] = useState([]);
@@ -63,6 +62,20 @@ const ChatMessages = () => {
     }));
 
 
+    const archivedChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && message.archived)
+    );
+
+    const unreadChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
+    );
+
+
+    const inboxChat = allChats.filter(chat =>
+        chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.archived)
+    );
+
+
     const isOfferPrice = (content) => {
         const offerPricePattern = /Offered Price/;
         return offerPricePattern.test(content);
@@ -84,13 +97,31 @@ const ChatMessages = () => {
     };
 
     const [searchTerm, setSearchTerm] = useState('')
-    const [filteredChat, setFilteredChat] = useState(allChats)
+    const [filteredChat, setFilteredChat] = useState([])
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
 
     const [isMakeOfferBtn, setIsMakeOfferBtn] = useState(true);
     const [isChangeOfferBtn, setIsChangeOfferBtn] = useState(true);
+    const [showChatMessage, setShowChatMessage] = useState(true)
+    const [showSmallScreenChatList, setSmallScreenChatList] = useState(false)
+    const [showLargeScreenChatList, setLargeScreenChatList] = useState(true)
+
+
+    // const toggleSmallChatMessage = () => {
+    //     setShowChatMessage((prevShowChatMessage) => !prevShowChatMessage)
+    // }
+
+    const clickShowChatMessage = () => {
+        setShowChatMessage(true)
+        setSmallScreenChatList(false)
+    }
+
+    const clickShowChatList = () => {
+        setShowChatMessage(false)
+        setSmallScreenChatList(true)
+    }
 
     const toggleMakeOfferBtn = () => {
         setIsMakeOfferBtn(!isMakeOfferBtn);
@@ -122,6 +153,45 @@ const ChatMessages = () => {
         }
     };
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 1024px)');
+
+        // Function to handle media query change
+        const handleMediaQueryChange = (e) => {
+            if (e.matches) {
+                setSmallScreenChatList(true)
+                setLargeScreenChatList(false)
+                setShowChatMessage(false); // Set state to false if screen width is <= 1024px
+            } else {
+                setSmallScreenChatList(false)
+                setLargeScreenChatList(true)
+                setShowChatMessage(true); // Set state to true if screen width is > 1024px
+            }
+        };
+
+        // Set initial state based on current screen width
+        handleMediaQueryChange(mediaQuery);
+
+        // Add event listener for media query change
+        mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+        // Clean up event listener on component unmount
+        return () => {
+            mediaQuery.removeEventListener('change', handleMediaQueryChange);
+        };
+    }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+
+    useEffect(() => {
+        if (allChats.length > 0 && user?.id && (selectedOption === null || selectedOption?.value === 'inbox')) {
+            const inboxChat = allChats.filter(chat =>
+                chat?.chat?.messages.some(message => message.receiver_id === user.id && !message.archived)
+            );
+            setFilteredChat(inboxChat);
+        }
+    }, [allChats, user, selectedOption]);
+
+
     const notificationRef = useRef();
 
     useEffect(() => {
@@ -142,11 +212,13 @@ const ChatMessages = () => {
     }, []);
 
 
+
+    // Scroll to bottom when messages change
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [messages]); // Add other dependencies as needed
+    }, [messages, allChats]); // Runs when messages change
 
 
     useEffect(() => {
@@ -249,7 +321,7 @@ const ChatMessages = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id]); // Dependencies updated to include chat_id
+    }, [chat_id, filteredChat, messages]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
@@ -274,7 +346,6 @@ const ChatMessages = () => {
             });
 
             setAllChats(sortedChats);
-            setFilteredChat(sortedChats);
 
         } catch (error) {
             console.error('Error fetching all chats:', error);
@@ -297,7 +368,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id, sendOffer, user?.id]);
+    }, [chat_id, sendOffer, user?.id, sender_id]);
 
 
 
@@ -458,10 +529,6 @@ const ChatMessages = () => {
 
     const handleOfferOptions = async (offerStatus) => {
         const offerPriceToSend = priceOffer.trim() !== '' ? priceOffer : offer;
-        console.log('offerPriceToSend:', offerPriceToSend)
-        // const offerStatus = pendingStatus || cancelStatus;
-        // console.log('offerStatus:', offerStatus)
-
 
         let messageContent;
         if (offerStatus === 'Pending') {
@@ -599,12 +666,17 @@ const ChatMessages = () => {
         const searchTerm = e.target.value;
         setSearchTerm(searchTerm);
 
-        if (searchTerm === '') {
-            setFilteredChat(allChats);
+        if (searchTerm === '' && selectedOption === null) {
+            setFilteredChat(inboxChat);
             return;
         }
 
-        const searchFiltered = allChats.filter(chat => {
+        if (searchTerm === '' && selectedOption?.value === 'archived') {
+            setFilteredChat(archivedChat);
+            return;
+        }
+
+        const searchFiltered = inboxChat.filter(chat => {
             const productNameMatch = chat?.chat?.product && chat.chat.product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
             const sellerDisplayNameMatch = chat?.otherParticipant && chat?.otherParticipant?.display_name.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -621,46 +693,15 @@ const ChatMessages = () => {
         setSelectedOption(option);
 
         if (option.value === 'unread') {
-            const unreadChat = allChats.filter(chat =>
-                chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
-            );
             setFilteredChat(unreadChat);
         }
 
         if (option.value === 'inbox') {
-            setFilteredChat(allChats);
+            setFilteredChat(inboxChat);
         }
 
         if (option.value === 'archived') {
-            try {
-
-                // Filter and sort messages within each chat
-                const filteredChats = allChats.map(chat => {
-                    const filteredMessages = chat.chat.messages.filter(message => message.receiver_id === user?.id && message.archived);
-
-                    // If there are no archived messages, we exclude this chat from the result
-                    if (filteredMessages.length === 0) {
-                        return null;
-                    }
-
-                    // Sort messages in descending order based on timestamp
-                    filteredMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    chat.chat.messages = filteredMessages;
-                    return chat;
-                }).filter(chat => chat !== null); // Remove null chats
-
-                // Sort chats based on the most recent message timestamp
-                filteredChats.sort((a, b) => {
-                    const latestMessageA = a.chat.messages[0];
-                    const latestMessageB = b.chat.messages[0];
-                    return new Date(latestMessageB.timestamp) - new Date(latestMessageA.timestamp);
-                });
-
-                setFilteredChat(filteredChats);
-
-            } catch (error) {
-                console.error('Error filtering archived chats:', error);
-            }
+            setFilteredChat(archivedChat);
         }
     };
 
@@ -678,76 +719,191 @@ const ChatMessages = () => {
         }
     }
 
+    const toggleArchive = async (chatId) => {
+        try {
+            await axios.put(`/api/archive-message/${chatId}`);
+
+            // if (response.status === 200) {
+            //     // Get the new archived status from the response
+            //     const newArchivedStatus = response.data.newArchivedStatus;
+
+            //     // // Update the archived status in allChats
+            //     const updatedChats = allChats.map(chat =>
+            //         chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+            //     );
+            //     setAllChats(updatedChats);
+
+            //     // Optionally, you can also update filteredChat if needed
+            //     // const updatedFilteredChats = filteredChat.map(chat =>
+            //     //     chat.chat_id === chatId ? { ...chat, chat: { ...chat.chat, archived: newArchivedStatus } } : chat
+            //     // );
+            //     // setFilteredChat(updatedFilteredChats);
+            //     fetchAllUserChat();
+            // }
+            fetchAllUserChat();
+        } catch (error) {
+            console.error('Error toggling archive status:', error);
+        }
+    };
+
+
+    const isChatArchived = (chatId) => {
+        const chat = archivedChat.find(chat => chat.chat_id === chatId);
+        return chat ? true : false;
+    };
+
+
+    const deleteChat = async (chatId) => {
+        try {
+            await axios.put(`/api/delete-chat/${chatId}`)
+            fetchAllUserChat();
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+        }
+    }
+
 
     return (
         <>
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
             {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} profileImg={profileImg} />}
-            <Header />
+            <div className='header-container'>
+                <Header />
+            </div>
             <div className="container">
                 <div className="chat-container">
-                    <div className="chat-left">
-                        <div className="chat-left-row1">
-                            <div className='chat-left-row1-header'>
-                                <h3>Chat</h3>
-                                <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
-                            </div>
-                            <div className='chat-search-box-container'>
-                                <Input
-                                    className='chat-search-box'
-                                    placeholder='Search user name or item name...'
-                                    value={searchTerm}
-                                    onChange={handleSearchChange}
-                                />
-                                <div className='magnifying-glass'><MagnifyingGlass /></div>
-                            </div>
-                        </div>
-                        <div className='user-chat-list-container'>
-                            {Array.isArray(filteredChat) && filteredChat.length > 0 ? (
-                                filteredChat.map((chat, index) => {
-                                    const isActive = chat?.chat_id === chat_id;
-                                    return (
-                                        <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index} >
-                                            <div className={`select-user-conversation ${isActive ? "active" : ""}`} onClick={() => markMessageAsRead(chat.chat_id)}>
-                                                <div className='user-chat-info-container'>
-                                                    <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
-                                                    <div className='chat-user-name-messages'>
-                                                        <span className='chat-user-name'>
-                                                            {chat?.otherParticipant?.display_name || 'Unknown'}
-                                                        </span>
-                                                        <span className='chat-product-name'>
-                                                            {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
-                                                        </span>
-                                                        <span className='chat-user-messages'>
-                                                            <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className='chat-time-container'>
-                                                    <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
-                                                    {chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read) && (
-                                                        <div className="circle-container">
-                                                            <div className="circle"></div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </NavLink>
-                                    );
-                                })
-                            ) : (
-                                <div className='no-chat-messages'>
-                                    <p>No Chats Available...</p>
+                    {showLargeScreenChatList ? (
+                        <>
+                            <div className="chat-left">
+                                <div className="chat-left-row1">
+                                    <div className='chat-left-row1-header'>
+                                        <h3>Chat</h3>
+                                        <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
+                                    </div>
+                                    <div className='chat-search-box-container'>
+                                        <Input
+                                            className='chat-search-box'
+                                            placeholder='Search user name or item name...'
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                        />
+                                        <div className='magnifying-glass'><MagnifyingGlass /></div>
+                                    </div>
                                 </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="chat-right">
-                        {!chat_id ? (
-                            null
-                        ) : (
+                                <div className='user-chat-list-container'>
+                                    {Array.isArray(filteredChat) && filteredChat.length > 0 ? (
+                                        filteredChat.map((chat, index) => {
+                                            const isActive = chat?.chat_id === chat_id;
+                                            return (
+                                                <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index} >
+                                                    <div className={`select-user-conversation ${isActive ? "active" : ""}`} onClick={() => markMessageAsRead(chat.chat_id)}>
+                                                        <div className='user-chat-info-container'>
+                                                            <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
+                                                            <div className='chat-user-name-messages'>
+                                                                <span className='chat-user-name'>
+                                                                    {chat?.otherParticipant?.display_name || 'Unknown'}
+                                                                </span>
+                                                                <span className='chat-product-name'>
+                                                                    {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
+                                                                </span>
+                                                                <span className='chat-user-messages'>
+                                                                    <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className='chat-time-container'>
+                                                            <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                            {chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read) && (
+                                                                <div className="circle-container">
+                                                                    <div className="circle"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </NavLink>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className='no-chat-messages'>
+                                            <p>No Chats Available...</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        null
+                    )}
+
+                    {showSmallScreenChatList ? (
+                        <>
+                            <div className="chat-left">
+                                <div className="chat-left-row1">
+                                    <div className='chat-left-row1-header'>
+                                        <NavLink to='/' className="back-arrow"></NavLink>
+                                        <h3>Chat List</h3>
+                                        <CustomSelect data={filterChatOptions} onOptionSelect={handleOptionSelect} className='custom-select' />
+                                    </div>
+                                    <div className='chat-search-box-container'>
+                                        <Input
+                                            className='chat-search-box'
+                                            placeholder='Search user name or item name...'
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                        />
+                                        <div className='magnifying-glass'><MagnifyingGlass /></div>
+                                    </div>
+                                </div>
+                                <div className='user-chat-list-container'>
+                                    {Array.isArray(filteredChat) && filteredChat.length > 0 ? (
+                                        filteredChat.map((chat, index) => {
+                                            const isActive = chat?.chat_id === chat_id;
+                                            return (
+                                                <NavLink to={`/messages/${chat?.chat_id}`} className='user-chat-list' key={index} >
+                                                    <div className={`select-user-conversation ${isActive ? "active" : ""}`} onClick={() => { markMessageAsRead(chat.chat_id); clickShowChatMessage() }}>
+                                                        <div className='user-chat-info-container'>
+                                                            <img src={chat?.otherParticipant?.profile_pic || AvatarIcon} alt="User Chat" />
+                                                            <div className='chat-user-name-messages'>
+                                                                <span className='chat-user-name'>
+                                                                    {chat?.otherParticipant?.display_name || 'Unknown'}
+                                                                </span>
+                                                                <span className='chat-product-name'>
+                                                                    {!chat?.chat?.product?.product_name ? 'The item has been removed' : (limitCharacters(chat?.chat?.product?.product_name, 25))}
+                                                                </span>
+                                                                <span className='chat-user-messages'>
+                                                                    <span dangerouslySetInnerHTML={{ __html: getLastMessageContent(chat?.chat?.messages) }} />
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className='chat-time-container'>
+                                                            <small className='last-message-time'>{formatTime(getLastMessageTime(chat?.chat?.messages))}</small>
+                                                            {chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read) && (
+                                                                <div className="circle-container">
+                                                                    <div className="circle"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </NavLink>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className='no-chat-messages'>
+                                            <p>No Chats Available...</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        null
+                    )}
+
+                    <div className="chat-right" style={{ display: showChatMessage ? 'flex' : 'none' }}>
+                        {allChats.some(chat => chat.chat_id === chat_id) ? (
                             <>
                                 <div className='chat-right-row1'>
+                                    <NavLink to='/messages' className='back-arrow' onClick={clickShowChatList}></NavLink>
                                     <div className='user-chat-info-container'>
                                         <Link to={`/profile/${receiverInfo?.id}`}>
                                             <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
@@ -756,7 +912,7 @@ const ChatMessages = () => {
                                             <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
                                                 {receiverInfo?.display_name}
                                             </Link>
-                                            <span className='chat-user-status'>Online</span>
+                                            <span className='chat-user-status'>{receiverInfo?.status}</span>
                                         </div>
                                     </div>
                                     <div className="three-dots-container" onClick={toggleChatActionOptions}>
@@ -766,8 +922,13 @@ const ChatMessages = () => {
                                         {showChatActionOptions &&
                                             <div className="chat-action-options" ref={notificationRef}>
                                                 <ul>
-                                                    <li>Archive Chat</li>
-                                                    <li>Delete Chat</li>
+                                                    {!isChatArchived(chat_id) &&
+                                                        <li onClick={() => toggleArchive(chat_id)}>Archive Chat</li>
+                                                    }
+                                                    {isChatArchived(chat_id) &&
+                                                        <li onClick={() => toggleArchive(chat_id)}>Unarchive Chat</li>
+                                                    }
+                                                    <li onClick={() => deleteChat(chat_id)}>Delete Chat</li>
                                                 </ul>
                                             </div>
                                         }
@@ -877,8 +1038,10 @@ const ChatMessages = () => {
                                                                                     onChange={(e) => { setPriceOffer(e.target.value); setSendOffer(false); }}
                                                                                 />
                                                                             </div>
-                                                                            <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
-                                                                            <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                                            <div className='offer-buttons'>
+                                                                                <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                                <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
+                                                                            </div>
                                                                         </>
                                                                     )
                                                                 }
@@ -924,8 +1087,10 @@ const ChatMessages = () => {
                                                                                             onChange={(e) => setPriceOffer(e.target.value)}
                                                                                         />
                                                                                     </div>
-                                                                                    <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
-                                                                                    <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
+                                                                                    <div className='offer-buttons'>
+                                                                                        <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                        <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
+                                                                                    </div>
                                                                                 </>
                                                                             )
                                                                         }
@@ -936,19 +1101,15 @@ const ChatMessages = () => {
                                         )}
                                 </div>
                             </>
+                        ) : (
+                            null
                         )}
                         <div className="chat-right-row3" ref={scrollRef}>
-                            {!chat_id ? (
+                            {allChats.some(chat => chat.chat_id === chat_id) ? (
                                 <>
-                                    <div className='no-chat-selected'>
-                                        No Chat Selected
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="date-messages">
+                                    {/* <div className="date-messages">
                                         <span>22/05 9:45 AM</span>
-                                    </div>
+                                    </div> */}
                                     {messages.map((message, index) => {
                                         // Format the timestamp for each message
                                         const formattedTime = formatTime(message.timestamp);
@@ -1033,6 +1194,12 @@ const ChatMessages = () => {
                                         );
                                     })}
                                 </>
+                            ) : (
+                                <>
+                                    <div className='no-chat-selected'>
+                                        No Chat Selected
+                                    </div>
+                                </>
                             )}
                         </div>
                         {!chat_id ? (
@@ -1069,7 +1236,7 @@ const ChatMessages = () => {
                                         value={input}
                                         onKeyDown={handleKeyPress}
                                         onChange={(e) => setInput(e.target.value)}
-                                        onFocus={() => markMessageAsRead(chat_id)}
+                                    // onFocus={() => markMessageAsRead(chat_id)}
                                     />
                                     <button onClick={sendMessage} disabled={!input.trim()} className='chat-send-icon-btn'>
                                         <div className='chat-send-icon'>
