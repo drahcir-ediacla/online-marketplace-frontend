@@ -8,6 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: scroll;
     z-index: 1002;
     /* Ensure it's above other content */
 
@@ -184,7 +185,9 @@
 
 .modal-container {
     .report-modal-box {
-        max-width: 550px;
+        width: auto;
+        height: auto;
+        margin: auto;
         background-color: white;
         border-radius: 8px;
 
@@ -225,6 +228,7 @@
         .report-reasons-options {
             display: flex;
             flex-wrap: wrap;
+            max-width: 550px;
             padding: 10px 20px;
             gap: 10px;
 
@@ -262,9 +266,8 @@
 
             .counter-container {
                 text-align: end;
-                pad
 
-                .character-count {
+                pad .character-count {
                     color: red;
                 }
             }
