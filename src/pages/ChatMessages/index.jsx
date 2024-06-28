@@ -47,6 +47,7 @@ const ChatMessages = () => {
     console.log('userStatuses:', userStatuses)
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
+    const authStatus = userStatuses[receiverInfo?.id] || receiverInfo?.status;
     const authUserDisplayName = user?.display_name;
     const profileImg = user?.profile_pic;
     const product_id = chatInfo?.product_id;
@@ -924,7 +925,7 @@ const ChatMessages = () => {
                                             <Link to={`/profile/${receiverInfo?.id}`} className='chat-user-name'>
                                                 {receiverInfo?.display_name}
                                             </Link>
-                                            <span className='chat-user-status'>{userStatuses[receiverInfo?.id] || receiverInfo?.status }</span>
+                                            <span className={`chat-user-status ${authStatus}`}>{authStatus}</span>
                                         </div>
                                     </div>
                                     <div className="three-dots-container" onClick={toggleChatActionOptions}>

@@ -205,8 +205,15 @@
                         }
 
                         .chat-user-status {
-                            color: var(--green-400);
                             font-weight: 500;
+                        }
+
+                        .chat-user-status.online {
+                            color: var(--green-400);
+                        }
+
+                        .chat-user-status.offline {
+                            color: var(--gray-400);
                         }
                     }
                 }
@@ -595,6 +602,13 @@
 
 
 //----------------------------------------- MEDIA QUERY -----------------------------------//
+@media only screen and (max-width: 1199px) {
+    .container {
+        .chat-container {
+            height: calc(100vh - 75px);
+        }
+    }
+}
 
 @media only screen and (max-width: 1024px) {
     .header-container {
