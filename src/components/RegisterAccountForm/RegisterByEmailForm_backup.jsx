@@ -9,7 +9,6 @@ import LoginBtn from '../../components/Button/LoginBtn'
 import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
-import { ReactComponent as SendOtpSpinner } from '../../assets/images/loading-spinner.svg'
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import AlertMessage from '../AlertMessage';
@@ -29,10 +28,6 @@ const RegisterByEmailForm = () => {
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
-  const [otp, setOtp] = useState('')
-  const [validOtp, setValidOtp] = useState(false);
-  const [otpFocus, setOtpFocus] = useState(false);
-
   const [pwd, setPwd] = useState('');
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
@@ -43,9 +38,6 @@ const RegisterByEmailForm = () => {
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
-
-  const [otpTimer, setOtpTimer] = useState(0);
-  const [otpSpinner, setOtpSpinner] = useState(false);
 
   const dispatch = useDispatch()
 
@@ -73,24 +65,10 @@ const RegisterByEmailForm = () => {
     setErrMsg('');
   }, [email, pwd, matchPwd])
 
-  useEffect(() => {
-    setValidOtp(otp.length > 0)
-  }, [otp])
-
-  useEffect(() => {
-    if (otpTimer > 0) {
-      const timer = setTimeout(() => {
-        setOtpTimer(otpTimer - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [otpTimer]);
-
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    otp: '',
   });
 
   const handleChange = (e) => {
@@ -99,30 +77,9 @@ const RegisterByEmailForm = () => {
   };
 
 
-  const sendOTPCode = async (e) => {
-    e.preventDefault();
-    try {
-      setShowAlert(false);
-      setOtpSpinner(true)
-      const response = await axios.post('/api/send-registration-otp', formData)
-
-      if (response.status === 201) {
-        setOtpSpinner(false)
-        setOtpTimer(120); // Start the OTP expiration timer
-      }
-
-    } catch (err) {
-      if (err.response.status === 409) {
-        setErrMsg('Account already exists for this email.')
-        setSuccess(false);
-        setOtpSpinner(false)
-        setShowAlert(true);
-      }
-    }
-  }
 
 
-  const createAccount = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // if button enabled with JS hack
@@ -146,33 +103,31 @@ const RegisterByEmailForm = () => {
         setEmail('');
         setPwd('');
         setMatchPwd('');
-        setOtp('');
       }
     } catch (err) {
       dispatch(Setloader(false))
-      let errorMessage = 'An error occurred during registration';
-
-      if (err.response) {
-        switch (err.response.status) {
-          case 409:
-            errorMessage = 'Account already exists for this email.';
-            break;
-          case 401:
-            errorMessage = 'Invalid or expired verification code.';
-            break;
-          case 404:
-            errorMessage = 'Invalid verification code.';
-            break;
-          default:
-            console.error('Error:', err);
-        }
-      } else {
-        console.error('Error:', err);
+      if (err.response?.status === 409) {
+        setSuccess(false);
+        setErrMsg('Account already exists for this email.');
+        setShowAlert(true);
       }
-
-      setSuccess(false);
-      setErrMsg(errorMessage);
-      setShowAlert(true);
+      if (err.response?.status === 401) {
+        setSuccess(false);
+        setErrMsg('Invalid or expired OTP.');
+        setShowAlert(true);
+      }
+      if (err.response?.status === 404) {
+        setSuccess(false);
+        setErrMsg('Invalid email.');
+        setShowAlert(true);
+      }
+      else {
+        console.error('Error:', err);
+        // Update the error message for network or unexpected errors
+        setSuccess(false);
+        setErrMsg('An error occurred during registration');
+        setShowAlert(true);
+      }
     }
     if (errRef.current) {
       errRef.current.focus();
@@ -214,7 +169,7 @@ const RegisterByEmailForm = () => {
       ) : (
         <>{showAlert && <AlertMessage type="error" message={errMsg} />}
           <div className='register-form-container'>
-            <form className='register-form' onSubmit={createAccount}>
+            <form className='register-form' onSubmit={handleSubmit}>
               <div className='row1'>
                 <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
                 <div className='col2'><h4>Create an account</h4></div>
@@ -257,30 +212,8 @@ const RegisterByEmailForm = () => {
                 </div>
                 <div className='col2 input-container'>
                   <div className='row1'><b>Verification Code</b></div>
-                  <div className='row2'>
-                    <input
-                      type="text"
-                      placeholder='Enter the verification code'
-                      name="otp"
-                      value={otp}
-                      onChange={(e) => {
-                        setOtp(e.target.value);
-                        handleChange(e);
-                      }}
-                    />
-                    {otpTimer > 0 ? (
-                      <div className='instructions'>
-                        <span>OTP expires in: {otpTimer}s</span>
-                      </div>
-                    ) : (otpSpinner ? (
-                      <div className='send-otp-spinner'>
-                        <SendOtpSpinner />
-                      </div>
-                    ) : (
-                      <>
-                        <BtnClear type="button" label='Send Code' onClick={sendOTPCode} className='send-code' disabled={!validEmail} />
-                      </>
-                    ))}
+                  <div className='row2'><input type="text" placeholder='Enter the verification code' />
+                    <BtnClear label='Send Code' className='send-code' disabled={!validEmail} />
                   </div>
                 </div>
               </div>
@@ -343,7 +276,7 @@ const RegisterByEmailForm = () => {
                   </div>
                 </div>
               </div>
-              <div className='row4'><LoginBtn onClick={() => setShowAlert(false)} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validOtp || !validPwd || !validMatch} /></div>
+              <div className='row4'><LoginBtn onClick={() => setShowAlert(false)} label="Continue" className='reset-pswrd-btn' disabled={!validEmail || !validPwd || !validMatch} /></div>
             </form>
             <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
             <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
