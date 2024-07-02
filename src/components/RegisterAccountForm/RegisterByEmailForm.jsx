@@ -270,7 +270,7 @@ const RegisterByEmailForm = () => {
                     />
                     {otpTimer > 0 ? (
                       <div className='instructions'>
-                        <span>OTP expires in: {otpTimer}s</span>
+                        <span>OTP sent to your email expires in: {otpTimer}s</span>
                       </div>
                     ) : (otpSpinner ? (
                       <div className='send-otp-spinner'>

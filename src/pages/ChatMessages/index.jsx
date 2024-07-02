@@ -73,11 +73,9 @@ const ChatMessages = () => {
         chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.read)
     );
 
-
     const inboxChat = allChats.filter(chat =>
         chat?.chat?.messages.some(message => message.receiver_id === user?.id && !message.archived)
     );
-
 
     const isOfferPrice = (content) => {
         const offerPricePattern = /Offered Price/;
@@ -188,7 +186,7 @@ const ChatMessages = () => {
     useEffect(() => {
         if (allChats.length > 0 && user?.id && (selectedOption === null || selectedOption?.value === 'inbox')) {
             const inboxChat = allChats.filter(chat =>
-                chat?.chat?.messages.some(message => message.receiver_id === user.id && !message.archived)
+                chat?.chat?.messages.some(message => message.receiver_id === user.id && !message.archived || message.sender_id === user.id && !message.archived)
             );
             setFilteredChat(inboxChat);
         }
