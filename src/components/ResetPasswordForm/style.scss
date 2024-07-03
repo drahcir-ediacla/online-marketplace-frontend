@@ -56,6 +56,36 @@
     flex-direction: column;
     gap: 33px;
 
+    .invalid {
+        color: red;
+        margin-left: 0.25rem;
+    }
+
+    .valid {
+        color: limegreen;
+        margin-left: 0.25rem;
+    }
+
+    label {
+        font-weight: 700;
+    }
+
+    .instructions {
+        color: red;
+        margin-bottom: 0;
+        position: absolute;
+        font-size: 13px;
+    }
+
+    .offscreen {
+        position: absolute;
+        display: none;
+    }
+
+    .hide {
+        display: none;
+    }
+
     input {
         font-size: 15px;
         font-family: 'Poppins', sans-serif;
@@ -109,9 +139,33 @@
             }
 
             .send-code {
+                font-size: 15px;
+                font-family: "Poppins", sans-serif;
                 position: absolute;
-                top: 10px;
+                top: 2px;
+                right: 0px;
+                width: auto;
+                height: auto;
+                border: none;
+                font-weight: 500;
+                color: blue;
+                background: none;
+            }
+
+            .send-code:disabled {
+                font-size: 15px;
+                font-family: "Poppins", sans-serif;
+                color: var(--gray-300);
+            }
+
+            .send-otp-spinner {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                width: 40px;
+                height: 40px;
                 right: 20px;
+                top: 0;
             }
         }
     }
@@ -120,6 +174,8 @@
         .col1 {
             font-size: 13px;
         }
+
+        .col2 {}
     }
 
     .row5 {
@@ -129,9 +185,14 @@
     }
 
     .row6 {
-        .continue-btn {
+        .reset-btn {
             background-color: var(--green-400);
             cursor: pointer;
+        }
+
+        .reset-btn:disabled {
+            background-color: var(--gray-300);
+            flex-basis: 50%;
         }
     }
 

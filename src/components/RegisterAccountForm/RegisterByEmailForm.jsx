@@ -26,12 +26,12 @@ const RegisterByEmailForm = () => {
   const errRef = useRef();
 
   const [email, setEmail] = useState('');
+  console.log('email:', email)
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
   const [otp, setOtp] = useState('')
   const [validOtp, setValidOtp] = useState(false);
-  const [otpFocus, setOtpFocus] = useState(false);
 
   const [pwd, setPwd] = useState('');
   const [validPwd, setValidPwd] = useState(false);
