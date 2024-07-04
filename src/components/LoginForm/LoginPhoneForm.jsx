@@ -37,7 +37,10 @@ const LoginPhoneForm = () => {
         </div>
         <div className='row2'>
           <div className='col1'><b>Phone Number</b><Link to="/LoginEmail">Sign in with email</Link></div>
-          <div className='col2'><input type="text" placeholder='Enter your phone number' /></div>
+          <div className='col2'>
+            <input type="number" placeholder='Enter your phone number' />
+            <div className="plus63">+63</div>
+            </div>
         </div>
         <div className='row3'>
           <div className='col1'><b>Password</b><Link to="/ResetByEmail">Forgot the password?</Link></div>

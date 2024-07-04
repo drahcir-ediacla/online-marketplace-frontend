@@ -130,6 +130,32 @@
         }
     }
 
+    .row2 {
+        .col2 {
+            position: relative;
+
+            input {
+                padding: 0 15px 0 65px;
+            }
+
+            .input-email {
+                padding: 0 15px;
+            }
+
+            .plus63 {
+                position: absolute;
+                height: 42px;
+                width: 57px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: 0;
+                left: 0;
+                border-right: 1px solid var(--gray-300);
+            }
+        }
+    }
+
     .row3 {
         .col2 {
             position: relative;

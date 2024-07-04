@@ -484,7 +484,7 @@ const EditProfile = () => {
                   <label htmlFor="phoneID" className='field-name'>Phone Number</label>
                   <div className='form-field-container'>
                     <Input
-                      type="text"
+                      type="number"
                       id="phoneID"
                       name="phone"
                       placeholder="Enter Phone Number"

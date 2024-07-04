@@ -16,7 +16,7 @@ import AlertMessage from '../AlertMessage';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^.{8,24}$/;
-const REGISTER_URL = '/api/register';
+const REGISTER_URL = '/api/email-register';
 
 const RegisterByEmailForm = () => {
 
@@ -26,7 +26,6 @@ const RegisterByEmailForm = () => {
   const errRef = useRef();
 
   const [email, setEmail] = useState('');
-  console.log('email:', email)
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
@@ -104,7 +103,7 @@ const RegisterByEmailForm = () => {
     try {
       setShowAlert(false);
       setOtpSpinner(true)
-      const response = await axios.post('/api/send-registration-otp', formData)
+      const response = await axios.post('/api/send-email-registration-otp', formData)
 
       if (response.status === 201) {
         setOtpSpinner(false)

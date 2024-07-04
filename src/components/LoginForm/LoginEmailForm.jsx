@@ -144,6 +144,7 @@ const LoginEmailForm = () => {
                 type="email"
                 placeholder='Enter your email'
                 value={email}
+                className='input-email'
                 onChange={handleEmailChange}
                 onFocus={clearErrors}
               />

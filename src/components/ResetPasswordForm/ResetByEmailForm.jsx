@@ -227,6 +227,7 @@ const ResetByEmailForm = () => {
                     placeholder='Enter your email address'
                     id="emailAddress"
                     name="email"
+                    className='input-email'
                     ref={emailRef}
                     autoComplete="off"
                     onChange={(e) => {
