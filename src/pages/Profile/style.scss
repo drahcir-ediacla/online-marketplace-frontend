@@ -77,8 +77,25 @@
                         gap: 20px;
 
                         .form-field-container {
+                            position: relative;
                             max-width: 557px;
                             width: 100%;
+
+                            .input-phone {
+                                padding: 0 15px 0 65px;
+                            }
+
+                            .plus63 {
+                                position: absolute;
+                                height: 42px;
+                                width: 57px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                top: 0;
+                                left: 0;
+                                border-right: 1px solid var(--gray-300);
+                            }
                         }
                     }
 
@@ -636,6 +653,7 @@
                                         margin: 20px 16px;
                                         overflow: scroll;
                                     }
+
                                     .reviews-container {
                                         padding: 0 16px;
                                     }

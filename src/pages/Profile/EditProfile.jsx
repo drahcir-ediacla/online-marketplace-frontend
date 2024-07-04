@@ -489,9 +489,10 @@ const EditProfile = () => {
                       name="phone"
                       placeholder="Enter Phone Number"
                       value={updatedUserData.phone}
-                      className='profile-data-input'
+                      className='profile-data-input input-phone'
                       onChange={handleInputChange}
                     />
+                    <div className="plus63">+63</div>
                   </div>
                 </div>
                 <div className='row14 flex'>
