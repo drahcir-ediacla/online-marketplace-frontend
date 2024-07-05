@@ -57,6 +57,24 @@
     gap: 33px;
     height: auto;
 
+    .hide {
+        display: none;
+    }
+
+    .valid {
+        color: limegreen;
+        margin-left: 0.25rem;
+    }
+
+    .invalid {
+        color: red;
+        margin-left: 0.25rem;
+    }
+
+    .offscreen {
+        position: absolute;
+    }
+
     .error-msg {
         color: red;
     }
@@ -109,6 +127,17 @@
         .col2 {
             position: relative;
 
+            .instructions {
+                color: red;
+                margin-bottom: 0;
+                position: absolute;
+                font-size: 13px;
+            }
+
+            .offscreen {
+                display: none;
+            }
+
             input {
                 padding: 0 15px 0 65px;
             }
@@ -141,8 +170,17 @@
 
             .send-code {
                 position: absolute;
-                top: 10px;
-                right: 20px;
+                color: blue;
+                width: auto;
+                height: auto;
+                top: 1px;
+                right: 0px;
+                border: none;
+                background: none;
+            }
+
+            .send-code:disabled {
+                color: var(--gray-300);
             }
         }
 
@@ -184,4 +222,12 @@
             width: 100%;
         }
     }
+}
+
+
+/* For webkit-based browsers (Chrome, Safari) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
 }

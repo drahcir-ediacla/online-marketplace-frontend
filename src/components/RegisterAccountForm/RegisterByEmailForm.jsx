@@ -46,6 +46,8 @@ const RegisterByEmailForm = () => {
   const [otpTimer, setOtpTimer] = useState(0);
   const [otpSpinner, setOtpSpinner] = useState(false);
 
+  const [resendOTP, setResendOTP] = useState(false)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -107,6 +109,7 @@ const RegisterByEmailForm = () => {
 
       if (response.status === 201) {
         setOtpSpinner(false)
+        setResendOTP(true)
         setOtpTimer(120); // Start the OTP expiration timer
       }
 
@@ -267,19 +270,20 @@ const RegisterByEmailForm = () => {
                         handleChange(e);
                       }}
                     />
-                    {otpTimer > 0 ? (
+                    {otpTimer > 0 && (
                       <div className='instructions'>
                         <span>OTP sent to your email expires in: {otpTimer}s</span>
                       </div>
-                    ) : (otpSpinner ? (
+                    )}
+                    {otpSpinner ? (
                       <div className='send-otp-spinner'>
                         <SendOtpSpinner />
                       </div>
                     ) : (
                       <>
-                        <BtnClear type="button" label='Send Code' onClick={sendOTPCode} className='send-code' disabled={!validEmail} />
+                        <BtnClear type="button" label={!resendOTP ? 'Send Code' : 'Resend Code'} onClick={sendOTPCode} className='send-code' disabled={!validEmail || otpTimer} />
                       </>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>

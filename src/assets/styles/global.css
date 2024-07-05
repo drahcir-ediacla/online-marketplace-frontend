@@ -154,6 +154,7 @@ hr {
 
 .errmsg {
   color: red;
+  font-size: 13px;
 }
 
 .fa-star,

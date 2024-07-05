@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from "../../apicalls/axios";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from 'react-router-dom'
 import './style.scss'
 import LoginBtn from '../Button/LoginBtn'
@@ -148,7 +150,7 @@ const LoginEmailForm = () => {
                 onChange={handleEmailChange}
                 onFocus={clearErrors}
               />
-              {emailError && <div className="errmsg">{emailError}</div>}
+              {emailError && <div className="errmsg"><FontAwesomeIcon icon={faInfoCircle} color='red' /> {emailError}</div>}
             </div>
           </div>
           <div className='row3'>
@@ -161,7 +163,7 @@ const LoginEmailForm = () => {
                 onChange={handlePasswordChange}
                 onFocus={clearErrors}
               />
-              {passwordError && <div className="errmsg">{passwordError}</div>}
+              {passwordError && <div className="errmsg"><FontAwesomeIcon icon={faInfoCircle} color='red' /> {passwordError}</div>}
             </div>
           </div>
           <div className='row4'><LoginBtn type='submit' label="Continue" className='continue-btn' onClick={() => setShowAlert(false)} /></div>

@@ -28,7 +28,6 @@ const ResetByEmailForm = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   const [email, setEmail] = useState('');
-  console.log('email:', email)
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
@@ -48,6 +47,8 @@ const ResetByEmailForm = () => {
 
   const [otpTimer, setOtpTimer] = useState(0);
   const [otpSpinner, setOtpSpinner] = useState(false);
+
+  const [resendOTP, setResendOTP] = useState(false)
 
   useEffect(() => {
     emailRef.current.focus();
@@ -104,10 +105,11 @@ const ResetByEmailForm = () => {
     try {
       setShowAlert(false);
       setOtpSpinner(true)
-      const response = await axios.put('/api/reset-password-otp', formData)
+      const response = await axios.put('/api/reset-password-otp-email', formData)
 
       if (response.status === 201) {
         setOtpSpinner(false)
+        setResendOTP(true)
         setOtpTimer(120); // Start the OTP expiration timer
       }
 
@@ -135,7 +137,7 @@ const ResetByEmailForm = () => {
 
     try {
       dispatch(Setloader(true))
-      const response = await axios.put('/api/reset-password', formData);
+      const response = await axios.put('/api/reset-password-email', formData);
 
       if (response.status === 201) {
         dispatch(Setloader(false))
@@ -260,19 +262,20 @@ const ResetByEmailForm = () => {
                       handleChange(e);
                     }}
                   />
-                  {otpTimer > 0 ? (
+                  {otpTimer > 0 && (
                     <div className='instructions'>
                       <span>OTP sent to your email expires in: {otpTimer}s</span>
                     </div>
-                  ) : (otpSpinner ? (
+                  )}
+                  {otpSpinner ? (
                     <div className='send-otp-spinner'>
                       <SendOtpSpinner />
                     </div>
                   ) : (
                     <>
-                      <BtnClear type="button" label='Send Code' onClick={sendOTPCode} className='send-code' disabled={!validEmail} />
+                      <BtnClear type="button" label={!resendOTP ? 'Send Code' : 'Resend Code'} onClick={sendOTPCode} className='send-code' disabled={!validEmail || otpTimer} />
                     </>
-                  ))}
+                  )}
                 </div>
               </div>
               <div className='row4 input-container'>

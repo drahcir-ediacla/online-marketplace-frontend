@@ -24,6 +24,7 @@ const RegisterByPhoneForm = () => {
 
   const [phone, setPhone] = useState('');
   const [validPhone, setValidPhone] = useState(false)
+  console.log('validPhone:', validPhone)
   const [phoneFocus, setPhoneFocus] = useState(false)
 
   const [otp, setOtp] = useState('')
@@ -42,6 +43,8 @@ const RegisterByPhoneForm = () => {
 
   const [otpTimer, setOtpTimer] = useState(0);
   const [otpSpinner, setOtpSpinner] = useState(false);
+
+  const [resendOTP, setResendOTP] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -97,6 +100,7 @@ const RegisterByPhoneForm = () => {
 
       if (response.status === 201) {
         setOtpSpinner(false)
+        setResendOTP(true)
         setOtpTimer(120); // Start the OTP expiration timer
       }
 
@@ -115,8 +119,9 @@ const RegisterByPhoneForm = () => {
     e.preventDefault();
 
     // if button enabled with JS hack
+    const isPhoneValid = PHONE_REGEX.test(phone);
     const isPasswordValid = PWD_REGEX.test(pwd);
-    if (!isPasswordValid) {
+    if (!isPasswordValid || isPhoneValid) {
       setErrMsg("Invalid Entry");
       return;
     }
@@ -233,7 +238,7 @@ const RegisterByPhoneForm = () => {
                     />
                     <p id="uidnote" className={phoneFocus && phone && !validPhone ? "instructions" : "offscreen"}>
                       <FontAwesomeIcon icon={faInfoCircle} color='red' />
-                      <span> Must be 10 digits</span>
+                      <span> Phone number format must be 10 digits</span>
                     </p>
                     <div className="plus63">+63</div></div>
                 </div>
@@ -250,19 +255,20 @@ const RegisterByPhoneForm = () => {
                         handleChange(e);
                       }}
                     />
-                    {otpTimer > 0 ? (
+                    {otpTimer > 0 && (
                       <div className='instructions'>
                         <span>OTP sent to your phone number expires in: {otpTimer}s</span>
                       </div>
-                    ) : (otpSpinner ? (
+                    )}
+                    {otpSpinner ? (
                       <div className='send-otp-spinner'>
                         <SendOtpSpinner />
                       </div>
                     ) : (
                       <>
-                        <BtnClear type="button" label='Send Code' onClick={sendOTPCode} className='send-code' disabled={!validPhone} />
+                        <BtnClear type="button" label={!resendOTP ? 'Send Code' : 'Resend Code'} onClick={sendOTPCode} className='send-code' disabled={!validPhone || otpTimer} />
                       </>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
