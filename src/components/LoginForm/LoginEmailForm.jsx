@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from "../../apicalls/axios";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,18 +12,31 @@ import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import AlertMessage from '../AlertMessage';
 
-const LOGIN_URL = '/api/login';
+const LOGIN_URL = '/api/login-email';
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const LoginEmailForm = () => {
+  const navigate = useNavigate();
+  const emailRef = useRef();
+  const errRef = useRef();
   const [showAlert, setShowAlert] = useState(false);
   const [email, setEmail] = useState('');
+  const [validEmail, setValidEmail] = useState(false)
+  const [emailFocus, setEmailFocus] = useState(false)
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [error, setError] = useState('');
+  const [errMsg, setErrMsg] = useState('');
   const dispatch = useDispatch()
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    emailRef.current.focus();
+  }, [])
+
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(email)
+    setValidEmail(result);
+  }, [email])
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -56,7 +69,7 @@ const LoginEmailForm = () => {
 
 
   // LOCAL LOGIN METHOD
-  const handleSubmit = async (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -78,35 +91,24 @@ const LoginEmailForm = () => {
       dispatch(Setloader(false))
       // Handle login error based on the response from the backend.
       if (err.response) {
-        setError(err.response.data.message);
+        setErrMsg(err.response.data.message);
       } else {
-        setError('An error occurred. Please try again later.');
+        setErrMsg('An error occurred. Please try again later.');
       }
       setShowAlert(true);
+    }
+    if (errRef.current) {
+      errRef.current.focus();
     }
   };
 
   const clearErrors = () => {
     setEmailError('');
     setPasswordError('');
-    setError('');
+    setErrMsg('');
     setShowAlert(false);
   };
 
-
-
-  //SOCIAL LOGIN REDIRECT PAGE
-  // const redirectToUrl = (url) => {
-  //   window.location.href = url;
-  // };
-
-  // const google = () => {
-  //   redirectToUrl("http://localhost:8081/auth/google");
-  // };
-
-  // const facebook = () => {
-  //   redirectToUrl("http://localhost:8081/auth/facebook/callback");
-  // };
 
   const google = () => {
     const BaseUrl = process.env.REACT_APP_BASE_URL;
@@ -130,9 +132,9 @@ const LoginEmailForm = () => {
 
   return (
     <>
-      {showAlert && <AlertMessage type="error" message={error} />}
+      {showAlert && <AlertMessage type="error" message={errMsg} />}
       <div className='login-form-container'>
-        <form className='login-form' onSubmit={handleSubmit}>
+        <form className='login-form' onSubmit={loginUser}>
           <div className='row1'>
             <div className="col1"><Link to="/"><img src={LogoGray} alt="" /></Link></div>
             <div className="col2">Sign in to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
@@ -140,25 +142,45 @@ const LoginEmailForm = () => {
           {/* {error && <p className='error-msg'>{error}</p>} */}
 
           <div className='row2'>
-            <div className='col1'><b>Email</b><Link to="/LoginPhone">Sign in with phone number</Link></div>
+            <div className='col1'>
+              <label htmlFor='emailAddress'>
+                <b>Email</b>
+                <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
+                <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
+              </label>
+              <Link to="/LoginPhone">Sign in with phone number</Link></div>
             <div className='col2'>
               <input
                 type="email"
-                placeholder='Enter your email'
+                id="emailAddress"
+                name="email"
+                ref={emailRef}
                 value={email}
+                autoComplete="off"
                 className='input-email'
                 onChange={handleEmailChange}
-                onFocus={clearErrors}
+                aria-invalid={validEmail ? "false" : "true"}
+                aria-describedby="uidnote"
+                onFocus={() => { setEmailFocus(true); clearErrors(); }}
+                onBlur={() => setEmailFocus(false)}
+                placeholder='Enter your email address'
               />
               {emailError && <div className="errmsg"><FontAwesomeIcon icon={faInfoCircle} color='red' /> {emailError}</div>}
+              <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+                <FontAwesomeIcon icon={faInfoCircle} color='red' />
+                <span> Invalid email address format!</span>
+              </p>
             </div>
           </div>
           <div className='row3'>
-            <div className='col1'><b>Password</b><Link to="/ResetByEmail">Forgot the password?</Link></div>
+            <div className='col1'>
+              <b>Password</b>
+              <Link to="/ResetByEmail">Forgot the password?</Link></div>
             <div className='col2'>
               <input
                 type="password"
                 placeholder='Enter your password'
+                className='input-password'
                 value={password}
                 onChange={handlePasswordChange}
                 onFocus={clearErrors}

@@ -234,7 +234,7 @@ const RegisterByEmailForm = () => {
                   </div>
                   <div className='row2'>
                     <input
-                      type="text"
+                      type="email"
                       id="emailAddress"
                       name="email"
                       ref={emailRef}

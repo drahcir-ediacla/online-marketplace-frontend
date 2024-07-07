@@ -168,6 +168,10 @@
                 padding: 0 110px 0 15px;
             }
 
+            .input-password {
+                padding: 0 15px 0 15px;
+            }
+
             .send-code {
                 position: absolute;
                 color: blue;
@@ -181,6 +185,22 @@
 
             .send-code:disabled {
                 color: var(--gray-300);
+            }
+
+            .instructions {
+                color: red;
+                margin-bottom: 0;
+                font-size: 13px;
+            }
+
+            .send-otp-spinner {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                width: 40px;
+                height: 40px;
+                right: 20px;
+                top: 0;
             }
         }
 

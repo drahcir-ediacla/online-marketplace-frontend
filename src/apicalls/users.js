@@ -11,9 +11,9 @@ export const RegisterUser = async (payload) => {
 }
 
 //login user
-export const LoginUser = async (payload) => {
+export const LoginUserByEmail = async (payload) => {
     try{
-        const response = await axios.post('/api/login', payload);
+        const response = await axios.post('/api/login-email', payload);
         return response.data;
     } catch (error) {
         return error.message

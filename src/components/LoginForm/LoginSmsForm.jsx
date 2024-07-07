@@ -32,7 +32,6 @@ const LoginSmsForm = () => {
   const [phoneError, setPhoneError] = useState('')
 
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
 
   const [otpTimer, setOtpTimer] = useState(0);
   const [otpSpinner, setOtpSpinner] = useState(false);
@@ -96,7 +95,7 @@ const LoginSmsForm = () => {
     try {
       setShowAlert(false);
       setOtpSpinner(true)
-      const response = await axios.put('/api/reset-password-otp-phone', formData)
+      const response = await axios.post('/api/send-login-otp', formData)
 
       if (response.status === 201) {
         setOtpSpinner(false)
@@ -107,7 +106,6 @@ const LoginSmsForm = () => {
     } catch (err) {
       if (err.response.status === 404) {
         setErrMsg('Phone not found.')
-        setSuccess(false);
         setOtpSpinner(false)
         setShowAlert(true);
       }
@@ -249,7 +247,7 @@ const LoginSmsForm = () => {
             </div>
             <div className='col3'><small><Link to="/LoginPhone">Sign in with password</Link></small></div>
           </div>
-          <div className='row4'><LoginBtn label="Continue" className='continue-btn' /></div>
+          <div className='row4'><LoginBtn onClick={() => setShowAlert(false)} label="Continue" className='continue-btn' /></div>
         </form>
         <div className='row5'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
         <div className='row6'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
