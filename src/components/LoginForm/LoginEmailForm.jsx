@@ -121,7 +121,7 @@ const LoginEmailForm = () => {
 
   const facebook = () => {
     const BaseUrl = process.env.REACT_APP_BASE_URL;
-    const facebookAuthPath = '/auth/facebook/callback';
+    const facebookAuthPath = '/auth/facebook';
 
     const facebookCallback = `${BaseUrl}${facebookAuthPath}`;
 
