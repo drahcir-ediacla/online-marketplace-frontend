@@ -6,6 +6,7 @@ import './style.scss'
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import SuccessRegistrationModal from '../../components/Modal/SuccessRegistrationModal'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import LoginBtn from '../../components/Button/LoginBtn'
 import BtnClear from '../../components/Button/BtnClear'
@@ -192,16 +193,16 @@ const RegisterByPhoneForm = () => {
     window.open(facebookCallback, '_self');
   };
 
+  const NavigateLogin = () => {
+    console.log("Navigating to LoginPhone");
+    window.location.href = '/LoginPhone';
+  }
+  
+  
+
   return (
     <>
-      {success ? (
-        <section>
-          <h1>Success!</h1>
-          <p>
-            <Link to="/LoginEmail">Sign In</Link>
-          </p>
-        </section>
-      ) : (
+      {success && <SuccessRegistrationModal onClick={NavigateLogin} />}
         <>{showAlert && <AlertMessage type="error" message={errMsg} />}
           <div className='register-form-container'>
             <form className='register-form' onSubmit={createAccount}>
@@ -340,7 +341,6 @@ const RegisterByPhoneForm = () => {
             <div className="row9"><small>Already have an account? <Link to="/LoginEmail">Sign in here!</Link></small></div>
           </div>
         </>
-      )}
     </>
 
   )

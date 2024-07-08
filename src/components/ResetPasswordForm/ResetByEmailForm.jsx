@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import './style.scss'
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SuccessResetPassword from '../../components/Modal/SuccessResetPassword'
 import LoginBtn from '../Button/LoginBtn'
 import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
 import BtnClear from '../../components/Button/BtnClear'
@@ -197,16 +198,14 @@ const ResetByEmailForm = () => {
     window.open(facebookCallback, '_self');
   };
 
+  const NavigateLogin = () => {
+    console.log("Navigating to LoginPhone");
+    window.location.href = '/LoginEmail';
+  }
+
   return (
     <>
-      {success ? (
-        <section>
-          <h1>Success!</h1>
-          <p>
-            <Link to="/LoginEmail">Sign In</Link>
-          </p>
-        </section>
-      ) : (
+      {success && <SuccessResetPassword onClick={NavigateLogin} />}
         <>
           {showAlert && <AlertMessage type="error" message={errMsg} />}
           <div className="reset-form-container">
@@ -343,7 +342,6 @@ const ResetByEmailForm = () => {
             <div className='row10'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
           </div>
         </>
-      )}
     </>
   )
 }

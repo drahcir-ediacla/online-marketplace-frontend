@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReportModal from '../../components/Modal/ReportModal';
+import SuccessRegistrationModal from '../../components/Modal/SuccessRegistrationModal';
 import Notification from '../../components/Notification'
 import CustomSelect from '../../components/FormField/CustomSelect';
 import genderData from '../../data/genderData';
@@ -34,6 +34,7 @@ function ImageUploader() {
 
   return (
     <div>
+      <SuccessRegistrationModal />
       <Notification />
       <h1>Image Uploader</h1>
       <input type="file" multiple onChange={handleImageChange} />

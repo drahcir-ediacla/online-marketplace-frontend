@@ -136,7 +136,7 @@ const LoginPhoneForm = () => {
           <div className='row2'>
             <div className='col1'>
               <label htmlFor='phoneNumber'>
-                Phone Number
+                <b>Phone Number</b>
                 <FontAwesomeIcon icon={faCheck} className={validPhone ? "valid" : "hide"} />
                 <FontAwesomeIcon icon={faTimes} className={validPhone || !phone ? "hide" : "invalid"} />
               </label>
