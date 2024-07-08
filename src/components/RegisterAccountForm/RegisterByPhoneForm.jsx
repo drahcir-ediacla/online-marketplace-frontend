@@ -121,14 +121,14 @@ const RegisterByPhoneForm = () => {
     // if button enabled with JS hack
     const isPhoneValid = PHONE_REGEX.test(phone);
     const isPasswordValid = PWD_REGEX.test(pwd);
-    if (!isPasswordValid || isPhoneValid) {
+    if (!isPhoneValid || !isPasswordValid) {
       setErrMsg("Invalid Entry");
       return;
     }
 
     try {
       dispatch(Setloader(true))
-      const response = await axios.put('/api/phone-register', formData);
+      const response = await axios.post('/api/phone-register', formData);
 
       if (response.status === 201) {
         dispatch(Setloader(false))
