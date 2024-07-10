@@ -9,7 +9,7 @@ import BtnClear from '../Button/BtnClear'
 import BtnGreen from '../Button/BtnGreen'
 import RadioButton from '../FormField/RadioButton'
 
-const CategoryProductFilter = ({ searchTerm, searchFilterLocation, searchResultsData }) => {
+const SearchResultFilter = ({ searchTerm, searchFilterLocation, searchResultsData }) => {
 
     const location = useLocation();
     // const searchTerm = new URLSearchParams(location.search).get('keyword');
@@ -304,4 +304,4 @@ const CategoryProductFilter = ({ searchTerm, searchFilterLocation, searchResults
     )
 }
 
-export default CategoryProductFilter
+export default SearchResultFilter
