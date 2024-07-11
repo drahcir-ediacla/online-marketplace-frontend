@@ -1,0 +1,180 @@
+{
+    "Metro Manila (NCR)": {
+        "Caloocan City": {"latitude": 14.6584, "longitude": 120.9721},
+        "Las Piñas City": {"latitude": 14.4506, "longitude": 120.9822},
+        "Makati City": {"latitude": 14.5547, "longitude": 121.0244},
+        "Malabon City": {"latitude": 14.6687, "longitude": 120.9654},
+        "Mandaluyong City": {"latitude": 14.5794, "longitude": 121.0359},
+        "Manila City": {"latitude": 14.5995, "longitude": 120.9842},
+        "Marikina City": {"latitude": 14.6507, "longitude": 121.1029},
+        "Muntinlupa City": {"latitude": 14.4081, "longitude": 121.0415},
+        "Navotas City": {"latitude": 14.6753, "longitude": 120.9412},
+        "Parañaque City": {"latitude": 14.4793, "longitude": 121.0198},
+        "Pasay City": {"latitude": 14.5378, "longitude": 120.9820},
+        "Pasig City": {"latitude": 14.5764, "longitude": 121.0851},
+        "Pateros City": {"latitude": 14.5441, "longitude": 121.0660},
+        "Quezon City": {"latitude": 14.6760, "longitude": 121.0437},
+        "San Juan City": {"latitude": 14.6016, "longitude": 121.0305},
+        "Taguig City": {"latitude": 14.5176, "longitude": 121.0509},
+        "Valenzuela City": {"latitude": 14.7011, "longitude": 120.9830}
+    },
+    "Ilocos Region": {
+        "Batac City": {"latitude": 18.0565, "longitude": 120.5643},
+        "Laoag City": {"latitude": 18.1977, "longitude": 120.5959},
+        "Candon City": {"latitude": 17.1941, "longitude": 120.4493},
+        "Vigan City": {"latitude": 17.5747, "longitude": 120.3869},
+        "San Fernando City": {"latitude": 16.6187, "longitude": 120.3194},
+        "Alaminos City": {"latitude": 16.1555, "longitude": 119.9806},
+        "Dagupan City": {"latitude": 16.0431, "longitude": 120.3330},
+        "San Carlos City": {"latitude": 15.9288, "longitude": 120.3482},
+        "Urdaneta City": {"latitude": 15.9764, "longitude": 120.5711}
+    },
+    "Cagayan Valley": {
+        "Tuguegarao City": {"latitude": 17.6131, "longitude": 121.7269},
+        "Cauayan City": {"latitude": 16.9496, "longitude": 121.7747},
+        "Ilagan City": {"latitude": 17.1485, "longitude": 121.8892},
+        "Santiago City": {"latitude": 16.6881, "longitude": 121.5482}
+    },
+    "Central Luzon": {
+        "Balanga City": {"latitude": 14.6760, "longitude": 120.5367},
+        "Malolos City": {"latitude": 14.8448, "longitude": 120.8104},
+        "Meycauayan City": {"latitude": 14.7365, "longitude": 120.9608},
+        "San Jose del Monte City": {"latitude": 14.8139, "longitude": 121.0453},
+        "Cabanatuan City": {"latitude": 15.4861, "longitude": 120.9717},
+        "Gapan City": {"latitude": 15.3078, "longitude": 120.9481},
+        "Muñoz City": {"latitude": 15.7167, "longitude": 120.9030},
+        "Palayan City": {"latitude": 15.5412, "longitude": 121.0830},
+        "Angeles City": {"latitude": 15.1448, "longitude": 120.5894},
+        "Mabalacat City": {"latitude": 15.2202, "longitude": 120.5797},
+        "San Fernando City": {"latitude": 15.0343, "longitude": 120.6847},
+        "Tarlac City": {"latitude": 15.4802, "longitude": 120.5974},
+        "Olongapo City": {"latitude": 14.8310, "longitude": 120.2826},
+        "San Jose City": {"latitude": 15.7910, "longitude": 120.9878}
+    },
+    "CALABARZON": {
+        "Batangas City": {"latitude": 13.756465, "longitude": 121.058308},
+        "Lipa City": {"latitude": 13.941876, "longitude": 121.16442},
+        "Tanauan City": {"latitude": 14.083545, "longitude": 121.147615},
+        "Bacoor City": {"latitude": 14.412993, "longitude": 120.973679},
+        "Cavite City": {"latitude": 14.47913, "longitude": 120.896963},
+        "Dasmariñas City": {"latitude": 14.299018, "longitude": 120.95897},
+        "Imus City": {"latitude": 14.406422, "longitude": 120.940506},
+        "Tagaytay City": {"latitude": 14.115412, "longitude": 120.962036},
+        "Trece Martires City": {"latitude": 14.282222, "longitude": 120.868383},
+        "Biñan City": {"latitude": 14.303635, "longitude": 121.078149},
+        "Cabuyao City": {"latitude": 14.247142, "longitude": 121.136672},
+        "San Pablo City": {"latitude": 14.064218, "longitude": 121.32328},
+        "Santa Rosa City": {"latitude": 14.284302, "longitude": 121.088893},
+        "Lucena City": {"latitude": 13.941396, "longitude": 121.623447},
+        "Tayabas City": {"latitude": 14.036387, "longitude": 121.653269},
+        "Antipolo City": {"latitude": 14.625483, "longitude": 121.124485},
+        "Calamba City": {"latitude": 14.212678, "longitude": 121.163853}
+    },
+    "MIMAROPA Region": {
+        "Calapan City": {"latitude": 13.377094, "longitude": 121.164571},
+        "Puerto Princesa City": {"latitude": 9.763843, "longitude": 118.74733}
+    },
+    "Bicol Region": {
+        "Legazpi City": {"latitude": 13.139062, "longitude": 123.7438},
+        "Ligao City": {"latitude": 13.240749, "longitude": 123.537979},
+        "Tabaco City": {"latitude": 13.324096, "longitude": 123.645139},
+        "Iriga City": {"latitude": 13.420537, "longitude": 123.418047},
+        "Naga City": {"latitude": 13.621775, "longitude": 123.194824},
+        "Masbate City": {"latitude": 12.357435, "longitude": 123.550408},
+        "Sorsogon City": {"latitude": 12.99271, "longitude": 124.014746}
+    },
+    "Western Visayas": {
+        "Roxas City": {"latitude": 11.552882, "longitude": 122.740723},
+        "Iloilo City": {"latitude": 10.72015, "longitude": 122.562106},
+        "Passi City": {"latitude": 11.168797, "longitude": 122.650351},
+        "Bacolod City": {"latitude": 10.67134, "longitude": 122.951072},
+        "Bago City": {"latitude": 10.503405, "longitude": 122.966302},
+        "Cadiz City": {"latitude": 10.806006, "longitude": 123.213851},
+        "Escalante City": {"latitude": 10.829146, "longitude": 123.505602},
+        "Himamaylan City": {"latitude": 10.090218, "longitude": 122.868368},
+        "Kabankalan City": {"latitude": 9.913412, "longitude": 122.853576},
+        "La Carlota City": {"latitude": 10.411769, "longitude": 123.000095},
+        "Sagay City": {"latitude": 10.878345, "longitude": 123.408176},
+        "San Carlos City": {"latitude": 10.483734, "longitude": 123.412896},
+        "Silay City": {"latitude": 10.752818, "longitude": 123.087562},
+        "Sipalay City": {"latitude": 9.719789, "longitude": 122.492009},
+        "Talisay City": {"latitude": 10.732505, "longitude": 123.011357},
+        "Victorias City": {"latitude": 10.869824, "longitude": 123.090154}
+    },
+    "Central Visayas": {
+        "Tagbilaran City": {"latitude": 9.672948, "longitude": 123.873002},
+        "Bogo City": {"latitude": 11.012829, "longitude": 123.986149},
+        "Carcar City": {"latitude": 10.115111, "longitude": 123.639956},
+        "Cebu City": {"latitude": 10.315699, "longitude": 123.885437},
+        "Danao City": {"latitude": 10.54175, "longitude": 123.952703},
+        "Lapu-Lapu City": {"latitude": 10.316865, "longitude": 123.96491},
+        "Mandaue City": {"latitude": 10.332171, "longitude": 123.935479},
+        "Naga City": {"latitude": 10.208498, "longitude": 123.757294},
+        "Talisay City": {"latitude": 10.252449, "longitude": 123.839234},
+        "Bais City": {"latitude": 9.591569, "longitude": 123.121179},
+        "Bayawan City": {"latitude": 9.449891, "longitude": 122.853576},
+        "Canlaon City": {"latitude": 10.360478, "longitude": 123.191372},
+        "Dumaguete City": {"latitude": 9.30684, "longitude": 123.305447},
+        "Guihulngan City": {"latitude": 10.120603, "longitude": 123.271659},
+        "Tanjay City": {"latitude": 9.495788, "longitude": 122.966302},
+        "Toledo City": {"latitude": 10.38701, "longitude": 123.650279}
+    },
+    "Eastern Visayas": {
+        "Borongan City": {"latitude": 11.607991, "longitude": 125.43285},
+        "Baybay City": {"latitude": 10.652141, "longitude": 124.852563},
+        "Ormoc City": {"latitude": 11.038428, "longitude": 124.61927},
+        "Tacloban City": {"latitude": 11.254339, "longitude": 124.961687},
+        "Calbayog City": {"latitude": 12.067575, "longitude": 124.592957},
+        "Catbalogan City": {"latitude": 11.824043, "longitude": 124.840341},
+        "Maasin City": {"latitude": 10.165355, "longitude": 124.840341}
+    },
+    "Zamboanga Peninsula": {
+        "Isabela City": {"latitude": 6.702945, "longitude": 121.969},
+        "Dapitan City": {"latitude": 8.625319, "longitude": 123.394571},
+        "Dipolog City": {"latitude": 8.514274, "longitude": 123.337392},
+        "Pagadian City": {"latitude": 7.839703, "longitude": 123.434345},
+        "Zamboanga City": {"latitude": 6.921442, "longitude": 122.079027}
+    },
+    "Northern Mindanao": {
+        "Malaybalay City": {"latitude": 8.147858, "longitude": 125.132093},
+        "Valencia City": {"latitude": 7.86319, "longitude": 125.170874},
+        "Iligan City": {"latitude": 8.228021, "longitude": 124.245242},
+        "Oroquieta City": {"latitude": 8.48597, "longitude": 123.798256},
+        "Ozamiz City": {"latitude": 8.145996, "longitude": 123.845871},
+        "Tangub City": {"latitude": 8.09592, "longitude": 123.684699},
+        "Cagayan de Oro City": {"latitude": 8.480273, "longitude": 124.649764},
+        "El Salvador City": {"latitude": 8.561777, "longitude": 124.524571},
+        "Gingoog City": {"latitude": 8.82299, "longitude": 125.097636}
+    },
+    "Davao Region": {
+        "Panabo City": {"latitude": 7.308707, "longitude": 125.684118},
+        "Samal City": {"latitude": 7.103312, "longitude": 125.718846},
+        "Tagum City": {"latitude": 7.447173, "longitude": 125.809347},
+        "Davao City": {"latitude": 7.073611, "longitude": 125.611025},
+        "Digos City": {"latitude": 6.757509, "longitude": 125.352398},
+        "Mati City": {"latitude": 6.952168, "longitude": 126.217312}
+    },
+    "SOCCSKSARGEN": {
+        "Kidapawan City": {"latitude": 7.010607, "longitude": 125.091134},
+        "Cotabato City": {"latitude": 7.204667, "longitude": 124.231044},
+        "General Santos City": {"latitude": 6.116386, "longitude": 125.171618},
+        "Koronadal City": {"latitude": 6.497396, "longitude": 124.847163},
+        "Tacurong City": {"latitude": 6.687966, "longitude": 124.678774}
+    },
+    "Caraga Region": {
+        "Butuan City": {"latitude": 8.947538, "longitude": 125.540623},
+        "Cabadbaran City": {"latitude": 9.122192, "longitude": 125.537603},
+        "Bayugan City": {"latitude": 8.713976, "longitude": 125.74859},
+        "Surigao City": {"latitude": 9.790196, "longitude": 125.493098},
+        "Bislig City": {"latitude": 8.210056, "longitude": 126.284775},
+        "Tandag City": {"latitude": 9.101171, "longitude": 126.158877}
+    },
+    "ARMM (Autonomous Region in Muslim Mindanao)": {
+        "Lamitan City": {"latitude": 6.661519, "longitude": 122.106467},
+        "Marawi City": {"latitude":  8.010621, "longitude": 124.297718}
+    },
+    "CAR (Cordillera Administrative Region)": {
+        "Baguio City": {"latitude": 16.402333, "longitude": 120.596007},
+        "Tabuk City": {"latitude":  17.411735, "longitude": 121.43845}
+    }
+}

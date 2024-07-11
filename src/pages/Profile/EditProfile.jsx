@@ -16,6 +16,7 @@ import DependentSelect from '../../components/FormField/DependentSelect';
 import DatePicker from '../../components/FormField/DatePicker';
 import genderData from '../../data/genderData';
 import userLocationData from '../../data/userLocationData.json'
+import locationData from '../../data/locationData.json'
 import AlertMessage from '../../components/AlertMessage';
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 
@@ -107,7 +108,12 @@ const EditProfile = () => {
     setUpdatedUserData({ ...updatedUserData, city: selectedCity });
   };
 
-
+  const getCoordinates = (region, city) => {
+    if (locationData[region] && locationData[region][city]) {
+      return locationData[region][city];
+    }
+    return null;
+  };
 
 
   const handleProfileImageUpload = async (e) => {
@@ -233,6 +239,9 @@ const EditProfile = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    const coordinates = getCoordinates(selectedRegion, selectedCity);
+    console.log("Coordinates:", coordinates); // or use coordinates in your logic
 
     // Check for required fields
     const requiredFields = ['first_name', 'last_name', 'region', 'city', 'email'];
@@ -435,7 +444,7 @@ const EditProfile = () => {
                       id="regionID"
                       name='region'
                       value={selectedRegion}
-                      data={Object.keys(userLocationData)}
+                      data={Object.keys(locationData)}
                       defaultOption="Select your region --"
                       onChange={handleRegionChange}
                       className='profile-data-select'
@@ -450,7 +459,7 @@ const EditProfile = () => {
                       id="cityID"
                       name="city"
                       value={selectedCity}
-                      data={selectedRegion ? userLocationData[selectedRegion] : []}
+                      data={selectedRegion ? Object.keys(locationData[selectedRegion]) : []}
                       defaultOption="Select your city --"
                       noOptionCaption="Please choose your region first --"
                       onChange={handleCityChange}

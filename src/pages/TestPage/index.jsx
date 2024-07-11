@@ -1,78 +1,77 @@
-import React, { useState } from 'react';
-import SuccessRegistrationModal from '../../components/Modal/SuccessRegistrationModal';
-import Notification from '../../components/Notification'
-import CustomSelect from '../../components/FormField/CustomSelect';
-import genderData from '../../data/genderData';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLoadScript } from '@react-google-maps/api';
 import './style.scss'
-import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-import HeroBanner1 from '../../assets/images/hero-banner1.webp'
-import HeroBanner2 from '../../assets/images/hero-banner2.webp'
 
-function ImageUploader() {
-  const [images, setImages] = useState([]);
-  const [readyToUploadCount, setReadyToUploadCount] = useState(0);
+const libraries = ['places'];
 
-  const handleImageChange = (e) => {
-    const selectedImages = Array.from(e.target.files);
+function TestPage() {
 
-    // Filter out already uploaded images
-    const newImages = selectedImages.filter(image => !images.some(existingImage => existingImage.name === image.name));
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyCz3j-xPDm9jPy3KSzgdCZq5InfNuE3xsE', // Replace with your API key
+    libraries,
+  });
 
-    setImages(prevImages => [...prevImages, ...newImages]);
-    setReadyToUploadCount(prevCount => prevCount + newImages.length);
-  };
+  const inputRef = useRef(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [addressComponents, setAddressComponents] = useState({});
 
-  const handleUpload = () => {
-    // Perform upload logic here
-    console.log("Uploading images:", images);
-    // After successful upload, reset state
-    setImages([]);
-    setReadyToUploadCount(0);
-  };
+  useEffect(() => {
+    if (isLoaded && !loadError) {
+      const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+        types: ['(cities)'],
+        componentRestrictions: { country: 'PH' },
+      });
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+          alert("No details available for input: '" + place.name + "'");
+          return;
+        }
+        setSelectedPlace(place);
+        console.log('Selected city:', place.name);
+      
+        // Extract address components
+        const components = place.address_components.reduce((acc, component) => {
+          component.types.forEach(type => {
+            acc[type] = component.long_name;
+          });
+          return acc;
+        }, {});
+        setAddressComponents(components);
+      });
+    }
+  }, [isLoaded, loadError]);
+
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading Maps</div>;
+  }
 
   return (
     <div>
-      <SuccessRegistrationModal />
-      <Notification />
-      <h1>Image Uploader</h1>
-      <input type="file" multiple onChange={handleImageChange} />
-      <br />
-      <br />
-      <div>
-        {readyToUploadCount > 0 && (
-          <div>
-            <p>Ready to Upload: {readyToUploadCount} images</p>
-            <button onClick={handleUpload}>Upload</button>
-          </div>
-        )}
-        <ul>
-          {images.map((image, index) => (
-            <li key={index}>{image.name}</li>
-          ))}
-        </ul>
-      </div>
-      
-      <CustomSelect data={genderData} />
-
       <div className="container">
-        <div className='hero-banner'>
-        <OwlCarousel className='owl-theme' items="1" dots>
-          <div>
-            <img src={HeroBanner1} alt="" />
-          </div>
-          <div>
-            <img src={HeroBanner2} alt="" />
-          </div>
-        </OwlCarousel>
-        </div>
-        
+        <input ref={inputRef} type="text" placeholder="Enter a city in the Philippines" />
       </div>
+      {selectedPlace && (
+        <div>
+          <h3>Selected Place Details:</h3>
+          <p><strong>Name:</strong> {selectedPlace.name}</p>
+          <p><strong>Address:</strong> {selectedPlace.formatted_address}</p>
+          <p><strong>Location:</strong> {selectedPlace.geometry.location.lat()}, {selectedPlace.geometry.location.lng()}</p>
+          <p><strong>Administrative Area Level 1:</strong> {addressComponents.administrative_area_level_1}</p>
+          <p><strong>Locality:</strong> {addressComponents.locality}</p>
+        </div>
+      )}
     </div>
 
 
   );
 }
 
-export default ImageUploader;
+export default TestPage;
