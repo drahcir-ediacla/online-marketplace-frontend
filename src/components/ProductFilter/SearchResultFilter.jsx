@@ -9,7 +9,7 @@ import BtnClear from '../Button/BtnClear'
 import BtnGreen from '../Button/BtnGreen'
 import RadioButton from '../FormField/RadioButton'
 
-const SearchResultFilter = ({ searchTerm, searchFilterLocation, searchResultsData }) => {
+const SearchResultFilter = ({ searchTerm, searchFilterLocation, searchResultsData, latitude, longitude, radius }) => {
 
     const location = useLocation();
     // const searchTerm = new URLSearchParams(location.search).get('keyword');
@@ -67,12 +67,17 @@ const SearchResultFilter = ({ searchTerm, searchFilterLocation, searchResultsDat
         const fetchSearchResults = async () => {
             try {
                 const params = { ...filters, ...filterPrice, sort: filters.sort };
-                const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`, {
-                    params: params,
-                });
-
-                searchResultsData(response.data);
-                console.log('searchResultsData:', searchResultsData)
+                if (searchFilterLocation === 'Listings Nearby') {
+                    const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}&latitude=${latitude}&longitude=${longitude}&radius=${radius}`, {
+                        params: params,
+                    });
+                    searchResultsData(response.data);
+                } else {
+                    const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`, {
+                        params: params,
+                    });
+                    searchResultsData(response.data);
+                }
             } catch (error) {
                 console.error('Error fetching search results:', error);
             }

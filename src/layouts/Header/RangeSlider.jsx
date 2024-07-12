@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ReactComponent as LocationIcon } from '../../assets/images/location-solid-icon.svg'
+import { ReactComponent as LocationPinIcon } from '../../assets/images/location-pin-solid.svg'
 
 const RangeSlider = () => {
   const [rangeValue, setRangeValue] = useState(50);
@@ -10,9 +12,14 @@ const RangeSlider = () => {
 
   return (
     <>
-    <div className='location-container'>
-      <div className='user-location'>Location: Oranbo, Pasig, Metro Manila</div>
-      <div className='slidecontainer'>
+      <div className='location-container'>
+        <div className='user-location'>
+          <div className='location-icon'>
+            <LocationIcon />
+          </div>
+          <span>Set Your Location Radius</span>
+        </div>
+        {/* <div className='slidecontainer'>
         <small>Expand Range: </small>
         <input
           type='range'
@@ -23,8 +30,8 @@ const RangeSlider = () => {
           onChange={handleRangeChange}
         />
         <span id='demo'>{rangeValue}km</span>
+      </div> */}
       </div>
-    </div>
     </>
   );
 };

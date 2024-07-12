@@ -41,6 +41,8 @@ const EditProfile = () => {
     country: '',
     region: '',
     city: '',
+    latitude: '',
+    longitude: '',
     phone: '',
     gender: '',
     birthday: '',
@@ -81,6 +83,8 @@ const EditProfile = () => {
         country: user.country || '',
         region: user.region || '',
         city: user.city || '',
+        latitude: user.latitude || '',
+        longitude: user.longitude || '',
         phone: user.phone || '',
         gender: user.gender || '',
         birthday: user.birthday || '',
@@ -92,6 +96,7 @@ const EditProfile = () => {
       setSelectedCity(user.city || '');
     }
   }, [user]);
+  console.log('User Latitude:', user.latitude)
 
 
 
@@ -104,8 +109,14 @@ const EditProfile = () => {
 
   const handleCityChange = (event) => {
     const selectedCity = event.target.value;
+    const coordinates = getCoordinates(selectedRegion, selectedCity);
     setSelectedCity(selectedCity);
-    setUpdatedUserData({ ...updatedUserData, city: selectedCity });
+    setUpdatedUserData({ 
+      ...updatedUserData, 
+      city: selectedCity,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+    });
   };
 
   const getCoordinates = (region, city) => {
@@ -239,9 +250,7 @@ const EditProfile = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    const coordinates = getCoordinates(selectedRegion, selectedCity);
-    console.log("Coordinates:", coordinates); // or use coordinates in your logic
+    
 
     // Check for required fields
     const requiredFields = ['first_name', 'last_name', 'region', 'city', 'email'];

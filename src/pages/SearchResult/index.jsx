@@ -19,6 +19,9 @@ const SearchResult = ({ userId }) => {
 
   const searchTerm = new URLSearchParams(location.search).get('keyword');
   const searchFilterLocation = new URLSearchParams(location.search).get('location');
+  const latitude = new URLSearchParams(location.search).get('latitude');
+  const longitude = new URLSearchParams(location.search).get('longitude');
+  const radius = new URLSearchParams(location.search).get('radius');
 
   // useEffect(() => {
 
@@ -113,6 +116,9 @@ const SearchResult = ({ userId }) => {
               searchTerm={searchTerm}
               searchFilterLocation={searchFilterLocation}
               searchResultsData={setProducts}
+              latitude={latitude}
+              longitude={longitude}
+              radius={radius}
               />
               </div>
             <div className='search-result-newly-listed-row3'>

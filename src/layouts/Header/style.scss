@@ -303,10 +303,19 @@ header {
                             .location-icon {
                                 position: absolute;
                                 display: flex;
-                                top: 9px;
+                                top: 11px;
                                 left: 8px;
                                 width: 16px;
                                 fill: var(--gray-500);
+                            }
+
+                            .nearby-icon {
+                                position: absolute;
+                                display: flex;
+                                top: 11px;
+                                left: 6px;
+                                width: 21px;
+                                stroke: var(--gray-500);
                             }
 
                             button {
@@ -476,10 +485,21 @@ header {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
-                        width: 286px;
 
                         .user-location {
-                            font-size: 14px;
+                            font-size: 15px;
+                            display: flex;
+                            justify-content: flex-end;
+                            gap: 10px;
+
+                            .location-icon {
+                                width: 14px;
+                                fill: #ffffff;
+                            }
+                            span:hover {
+                                text-decoration: underline;
+                                cursor: pointer;
+                            }
                         }
 
                         .slidecontainer {
@@ -718,10 +738,19 @@ header {
 
                             .location-icon {
                                 position: absolute;
-                                top: 8px;
+                                top: 11px;
                                 left: 8px;
                                 width: 16px;
                                 fill: var(--gray-500);
+                            }
+
+                            .nearby-icon {
+                                position: absolute;
+                                display: flex;
+                                top: 11px;
+                                left: 6px;
+                                width: 21px;
+                                stroke: var(--gray-500);
                             }
 
                             button {

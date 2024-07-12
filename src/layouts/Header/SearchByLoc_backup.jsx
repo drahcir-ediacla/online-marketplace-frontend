@@ -8,6 +8,7 @@ import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import RegionIcon from '../../assets/images/region-icon.png'
 import CityIcon from '../../assets/images/city-icon.png'
 import userLocationData from '../../data/userLocationData.json'
+import locationData from '../../data/locationData.json'
 
 const HeaderSearchBox = () => {
 
@@ -22,7 +23,10 @@ const HeaderSearchBox = () => {
   const filterBoxRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
   const [searchFilterLocation, setSearchFilterLocation] = useState('');
-  
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [radius, setRadius] = useState(10); // Default radius in kilometers
+
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -54,7 +58,7 @@ const HeaderSearchBox = () => {
       setSelectedCity([]);    // Reset selectedCity
       setSelectedFilter(filterText);
       setCityCheckedState({}); // Reset checkbox for all cities
-      
+
     } else {
       if (selectedCity.includes(cityName)) {
         setSelectedCity(prevSelectedCity => prevSelectedCity.filter(city => city !== cityName));
@@ -185,7 +189,7 @@ const HeaderSearchBox = () => {
                 <li className='region'>
                   <div className='icon'><img src={RegionIcon} alt="" />Region</div><i className='fa fa-angle-right'></i>
                   <ul className='region-list'>
-                    {Object.keys(userLocationData).map((region) => (
+                    {Object.keys(locationData).map((region) => (
                       <li
                         key={region}
                         value={region}
@@ -202,8 +206,8 @@ const HeaderSearchBox = () => {
                   <li className='city'>
                     <div className='icon'><img src={CityIcon} alt="" />City</div><i className='fa fa-angle-right'></i>
                     <ul className='city-list'>
-                      {selectedRegion && Array.isArray(userLocationData[selectedRegion]) && (
-                        userLocationData[selectedRegion].map((city) => (
+                      {selectedRegion && locationData[selectedRegion] &&
+                        Object.keys(locationData[selectedRegion]).map((city) => (
                           <li key={city}>
                             <CheckBox
                               label={city}
@@ -213,7 +217,7 @@ const HeaderSearchBox = () => {
                             />
                           </li>
                         ))
-                      )}
+                      }
                     </ul>
                   </li>
                 }

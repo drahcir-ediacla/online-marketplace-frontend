@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import { ReactComponent as LocationIcon } from '../../assets/images/location-icon.svg'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
+import { ReactComponent as NearbyIcon } from '../../assets/images/nearby-icon.svg';
 import NearLocIcon from '../../assets/images/near-loc-icon.png'
 import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import RegionIcon from '../../assets/images/region-icon.png'
 import CityIcon from '../../assets/images/city-icon.png'
-import userLocationData from '../../data/userLocationData.json'
 import locationData from '../../data/locationData.json'
 
 const HeaderSearchBox = () => {
@@ -17,17 +17,42 @@ const HeaderSearchBox = () => {
   // const [initialLocation, setInitialLocation] = useState(queryParams.get('location')); // <-- Extract location from query params
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(queryParams.get('location') || 'All of the Philippines');
+  console.log('selectedFilter:', selectedFilter)
   const [selectedRegion, setSelectedRegion] = useState([]);
   const [selectedCity, setSelectedCity] = useState([]);
   const [cityCheckedState, setCityCheckedState] = useState({});
   const filterBoxRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
   const [searchFilterLocation, setSearchFilterLocation] = useState('');
+  console.log('searchFilterLocation:', searchFilterLocation)
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [radius, setRadius] = useState(10); // Default radius in kilometers
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (selectedFilter === 'Listings Nearby') {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      });
+    }
+  }, [])
+
   const handleSearch = () => {
-    navigate(`/search-results?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}`);
+    const searchParams = new URLSearchParams();
+
+    if (latitude && longitude) {
+      searchParams.append('latitude', latitude);
+      searchParams.append('longitude', longitude);
+      searchParams.append('radius', radius);
+
+      navigate(`/search-results?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}&latitude=${latitude}&longitude=${longitude}&radius=${radius}`);
+
+    } else {
+      navigate(`/search-results?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}`);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -49,13 +74,33 @@ const HeaderSearchBox = () => {
       [cityName]: !prevState[cityName]
     }));
 
-    // Resetting selectedRegion and selectedCity if either 'Listing Near Me' or 'All of the Philippines' is selected
-    if (filterText === 'Listing Near Me' || filterText === 'All of the Philippines') {
+    // Store the current search filter location
+    const currentSearchFilterLocation = searchFilterLocation;
+    const currentSelectedFilter = selectedFilter;
+
+    // Resetting selectedRegion and selectedCity if either 'Listing Nearby' or 'All of the Philippines' is selected
+    if (filterText === 'Listings Nearby' || filterText === 'All of the Philippines') {
       setSelectedRegion([]);  // Reset selectedRegion
       setSelectedCity([]);    // Reset selectedCity
       setSelectedFilter(filterText);
       setCityCheckedState({}); // Reset checkbox for all cities
 
+      if (filterText === 'Listings Nearby') {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+          },
+          (error) => {
+            // Handle error case
+            setSearchFilterLocation(currentSearchFilterLocation);
+            setSelectedFilter(currentSelectedFilter)
+          }
+        );
+      } else {
+        setLatitude(null);
+        setLongitude(null);
+      }
     } else {
       if (selectedCity.includes(cityName)) {
         setSelectedCity(prevSelectedCity => prevSelectedCity.filter(city => city !== cityName));
@@ -153,7 +198,15 @@ const HeaderSearchBox = () => {
             onChange={(e) => setSearchFilterLocation(e.target.value)}
             readOnly
           />
-          <div className='location-icon'><LocationIcon /></div>
+          {searchFilterLocation === 'Listings Nearby' ? (
+            <div className='nearby-icon'>
+              <NearbyIcon />
+            </div>
+          ) : (
+            <div className='location-icon'>
+              <LocationIcon />
+            </div>
+          )}
           <button onClick={handleSearch}><div className='magnifying-glass'><MagnifyingGlass /></div></button>
           {showFilterOptions && (
             <div className='filter-list-option'>
@@ -181,7 +234,7 @@ const HeaderSearchBox = () => {
                 </div>
               }
               <ul>
-                <li onClick={() => handleFilterItemClick('Listing Near Me')}><div className='icon'><img src={NearLocIcon} alt="" />Listing Near Me</div></li>
+                <li onClick={() => handleFilterItemClick('Listings Nearby')}><div className='icon'><img src={NearLocIcon} alt="" />Listings Nearby</div></li>
                 <li onClick={() => handleFilterItemClick('All of the Philippines')}><div className='icon'><img src={AllPhIcon} alt="" />All of the Philippines</div></li>
                 <li className='region'>
                   <div className='icon'><img src={RegionIcon} alt="" />Region</div><i className='fa fa-angle-right'></i>
