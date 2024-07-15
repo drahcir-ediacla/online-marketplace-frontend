@@ -177,8 +177,99 @@
             margin: 20px 20px 30px 20px;
         }
     }
-}
 
+
+    // Location Radius //
+    
+    .location-radius-row1 {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 48px;
+        padding: 8px 8px 0 8px;
+
+        .closebtn {
+            border: none;
+            background: none;
+            width: 25px;
+            height: 25px;
+            display: flex;
+        }
+
+        .fa-times {
+            color: var(--gray-500);
+            font-size: 20px;
+            margin: auto;
+        }
+    }
+
+    .modal-box-title {
+        text-align: center;
+        padding: 0 20px;
+        margin-bottom: 20px;
+
+        h5 {
+            font-weight: 600;
+        }
+
+        span {
+            font-weight: 500;
+        }
+
+        .current-location {
+            color: var(--green-400);
+        }
+    }
+
+    .slidecontainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+        padding: 0 16px;
+        gap: 10px;
+
+        .slider {
+            appearance: none;
+            width: 100%;
+            height: 1px;
+            border-radius: 5px;
+            background: #555;
+            outline: none;
+            opacity: 1;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--green-400);
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--green-400);
+            cursor: pointer;
+        }
+
+        #demo {
+            width: auto;
+        }
+    }
+
+    .buttons {
+        .apply-btn {
+            width: 100%;
+        }
+    }
+}
 
 
 // REPORT MODAL //

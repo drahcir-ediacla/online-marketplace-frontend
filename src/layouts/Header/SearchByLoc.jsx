@@ -9,25 +9,25 @@ import AllPhIcon from '../../assets/images/all-ph-icon.png'
 import RegionIcon from '../../assets/images/region-icon.png'
 import CityIcon from '../../assets/images/city-icon.png'
 import locationData from '../../data/locationData.json'
+import AlertMessage from '../../components/AlertMessage';
 
-const HeaderSearchBox = () => {
+const HeaderSearchBox = ({ radius }) => {
 
   const location = useLocation(); // <-- Use the useLocation hook
   const queryParams = new URLSearchParams(location.search);
   // const [initialLocation, setInitialLocation] = useState(queryParams.get('location')); // <-- Extract location from query params
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(queryParams.get('location') || 'All of the Philippines');
-  console.log('selectedFilter:', selectedFilter)
   const [selectedRegion, setSelectedRegion] = useState([]);
   const [selectedCity, setSelectedCity] = useState([]);
   const [cityCheckedState, setCityCheckedState] = useState({});
   const filterBoxRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
   const [searchFilterLocation, setSearchFilterLocation] = useState('');
-  console.log('searchFilterLocation:', searchFilterLocation)
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [radius, setRadius] = useState(10); // Default radius in kilometers
+  const [showAlert, setShowAlert] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
   const navigate = useNavigate();
 
@@ -68,7 +68,7 @@ const HeaderSearchBox = () => {
 
 
   const handleFilterItemClick = (filterText, cityName) => {
-
+    setShowAlert(false)
     setCityCheckedState(prevState => ({
       ...prevState,
       [cityName]: !prevState[cityName]
@@ -93,8 +93,23 @@ const HeaderSearchBox = () => {
           },
           (error) => {
             // Handle error case
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                setErrMsg("You denied Yogeek to use your current location.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                setErrMsg("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                setErrMsg("The request to get user location timed out.");
+                break;
+              case error.UNKNOWN_ERROR:
+                setErrMsg("An unknown error occurred.");
+                break;
+            }
             setSearchFilterLocation(currentSearchFilterLocation);
             setSelectedFilter(currentSelectedFilter)
+            setShowAlert(true)
           }
         );
       } else {
@@ -178,6 +193,7 @@ const HeaderSearchBox = () => {
 
   return (
     <>
+      {showAlert && <AlertMessage type="error" message={errMsg} className='alert-box' />}
       <div className='search-container'>
         <div className='search-box'>
           <input

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ReactComponent as LocationIcon } from '../../assets/images/location-solid-icon.svg'
-import { ReactComponent as LocationPinIcon } from '../../assets/images/location-pin-solid.svg'
 
 const RangeSlider = () => {
   const [rangeValue, setRangeValue] = useState(50);
@@ -19,7 +18,7 @@ const RangeSlider = () => {
           </div>
           <span>Set Your Location Radius</span>
         </div>
-        {/* <div className='slidecontainer'>
+        <div className='slidecontainer'>
         <small>Expand Range: </small>
         <input
           type='range'
@@ -30,7 +29,7 @@ const RangeSlider = () => {
           onChange={handleRangeChange}
         />
         <span id='demo'>{rangeValue}km</span>
-      </div> */}
+      </div>
       </div>
     </>
   );

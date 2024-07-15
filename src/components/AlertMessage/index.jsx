@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.scss';
 
-const AlertMessage = ({ type, message }) => {
+const AlertMessage = ({ type, message, className }) => {
   const [showClass, setShowClass] = useState(true); // Add state for the 'show' class
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const AlertMessage = ({ type, message }) => {
   }, [showClass]);
 
   return (
-    <div className="alert-container">
+    <div className={`alert-container ${className}`}>
       <div className={`alert ${type} ${showClass ? 'show' : ''}`}>
         {message}
       </div>

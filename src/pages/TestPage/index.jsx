@@ -77,68 +77,16 @@
 // export default TestPage;
 
 
-import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, useLoadScript, Marker, Circle } from '@react-google-maps/api';
+import React from 'react';
+import LocationRadiusModal from '../../components/Modal/SetLocationRadiusModal';
 
-const libraries = ['geometry'];
-
-const MapWithMarkerAndCircle = ({ center, radiusInMeters }) => {
-  const mapRef = useRef(null);
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries,
-  });
-
-  const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
-  const [circle, setCircle] = useState(null);
-
-  useEffect(() => {
-    if (isLoaded) {
-      setMap(new window.google.maps.Map(mapRef.current, {
-        center: center,
-        zoom: 8,
-      }));
-    }
-  }, [isLoaded, center]);
-
-  useEffect(() => {
-    if (map) {
-      setMarker(new window.google.maps.Marker({
-        position: center,
-        map: map,
-        title: 'Marker',
-      }));
-    }
-  }, [map, center]);
-
-  useEffect(() => {
-    if (map && marker) {
-      drawCircle(center, radiusInMeters);
-    }
-  }, [map, marker, center, radiusInMeters]);
-
-  const drawCircle = (center, radius) => {
-    setCircle(new window.google.maps.Circle({
-      strokeColor: '#FFFFFF',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FFFFF',
-      fillOpacity: 0.35,
-      map: map,
-      center: center,
-      radius: radius,
-    }));
-  };
-
-  if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading...</div>;
+const MapWithMarkerAndCircle = () => {
 
   return (
-    <div
-      ref={mapRef}
-      style={{ height: '400px', width: '100%', marginBottom: '20px' }}
-    />
+    <>
+      <LocationRadiusModal />
+    </>
+
   );
 };
 

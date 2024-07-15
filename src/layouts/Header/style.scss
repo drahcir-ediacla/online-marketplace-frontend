@@ -265,6 +265,14 @@ header {
                 .col2 {
                     flex: 1;
 
+                    .alert-box {
+                        position: relative;
+
+                        .error {
+                            top: 20px;
+                        }
+                    }
+
                     .search-container {
                         display: flex;
                         gap: 2px;
@@ -496,7 +504,14 @@ header {
                                 width: 14px;
                                 fill: #ffffff;
                             }
-                            span:hover {
+
+                            button {
+                                background: none;
+                                border: none;
+                                color: white;
+                            }
+
+                            button:hover {
                                 text-decoration: underline;
                                 cursor: pointer;
                             }
