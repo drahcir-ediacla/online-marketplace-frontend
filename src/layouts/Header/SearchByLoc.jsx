@@ -11,8 +11,7 @@ import CityIcon from '../../assets/images/city-icon.png'
 import locationData from '../../data/locationData.json'
 import AlertMessage from '../../components/AlertMessage';
 
-const HeaderSearchBox = ({ radius }) => {
-
+const HeaderSearchBox = ({ radius, placeName, setPlaceName }) => {
   const location = useLocation(); // <-- Use the useLocation hook
   const queryParams = new URLSearchParams(location.search);
   // const [initialLocation, setInitialLocation] = useState(queryParams.get('location')); // <-- Extract location from query params
@@ -66,6 +65,25 @@ const HeaderSearchBox = ({ radius }) => {
     setShowFilterOptions(true);
   };
 
+  const getPlaceName = async (latitude, longitude) => {
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Replace with your actual API key
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    try {
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+      if (data.status === 'OK') {
+        const placeRoute = data.results[0].address_components[1].long_name;
+        const placeLocality = data.results[0].address_components[2].long_name;
+        setPlaceName(`${placeRoute}, ${placeLocality}`)
+        // Do something with the place name
+      } else {
+        console.error('Geocoding error:', data.status);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
 
   const handleFilterItemClick = (filterText, cityName) => {
     setShowAlert(false)
@@ -90,6 +108,7 @@ const HeaderSearchBox = ({ radius }) => {
           (position) => {
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
+            getPlaceName(position.coords.latitude, position.coords.longitude);
           },
           (error) => {
             // Handle error case
@@ -188,7 +207,6 @@ const HeaderSearchBox = ({ radius }) => {
           : selectedFilter
     );
   }, [selectedCity, selectedRegion, selectedFilter]);
-
 
 
   return (

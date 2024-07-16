@@ -17,18 +17,24 @@ import LocationRadiusModal from '../../components/Modal/SetLocationRadiusModal';
 import AlertMessage from '../../components/AlertMessage';
 
 const GET_USER_LOGIN = '/auth/check-auth';
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 
 function Header() {
 
   const [soldModalOpen, setSoldModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [radius, setRadius] = useState(() => {
-    // Retrieve radius from localStorage if it exists, otherwise default to 15
     const savedRadius = localStorage.getItem('radius');
     return savedRadius ? JSON.parse(savedRadius) : 15;
   });
+  console.log('radius:', radius)
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [placeName, setPlaceName] = useState(() => {
+    const savedPlaceName = localStorage.getItem('placeName');
+    return savedPlaceName ? JSON.parse(savedPlaceName) : null;
+  });
+  console.log('placeName:', placeName)
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
@@ -116,12 +122,33 @@ function Header() {
     };
   }, []);
 
+  const getPlaceName = async (latitude, longitude) => {
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Replace with your actual API key
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+    try {
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+      if (data.status === 'OK') {
+        const placeRoute = data.results[0].address_components[1].long_name;
+        const placeLocality = data.results[0].address_components[2].long_name;
+        setPlaceName(`${placeRoute}, ${placeLocality}`)
+        // Do something with the place name
+      } else {
+        console.error('Geocoding error:', data.status);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+
 
   const openLocationRadiusModal = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
+        getPlaceName(position.coords.latitude, position.coords.longitude);
         setSoldModalOpen(true); // Set soldModalOpen to true on success
       },
       (error) => {
@@ -149,10 +176,40 @@ function Header() {
     setSoldModalOpen((prevSoldModalOpen) => !prevSoldModalOpen);
   }
 
-  const handleRadiusChange = (newRadius) => {
-    setRadius(newRadius);
+  const checkLocationPermission = async () => {
+    if (!navigator.permissions) return false;
+    try {
+      const permission = await navigator.permissions.query({ name: 'geolocation' });
+      return permission.state === 'granted';
+    } catch (error) {
+      console.error('Error checking location permission:', error);
+      return false;
+    }
   };
 
+  // Effect to check permission and update state accordingly
+useEffect(() => {
+  const updateStateAndLocalStorage = async () => {
+    const hasLocationAccess = await checkLocationPermission();
+    if (hasLocationAccess) {
+      localStorage.setItem('radius', JSON.stringify(radius));
+      localStorage.setItem('placeName', JSON.stringify(placeName));
+      const savedPlaceName = localStorage.getItem('placeName');
+      if (savedPlaceName && !placeName) {
+        setPlaceName(() => {
+          const savedPlaceName = localStorage.getItem('placeName');
+          return savedPlaceName ? JSON.parse(savedPlaceName) : null;
+        });
+      }
+    } else {
+      localStorage.removeItem('radius');
+      localStorage.removeItem('placeName');
+      setRadius(15);
+      setPlaceName(null);
+    }
+  };
+  updateStateAndLocalStorage();
+}, [radius, placeName]);
 
 
   return (
@@ -161,7 +218,7 @@ function Header() {
       {soldModalOpen &&
         <LocationRadiusModal
           onClick={toggleSoldModal}
-          onRadiusChange={handleRadiusChange}
+          onRadiusChange={setRadius}
           currentRadius={radius}
           latitude={latitude}
           longitude={longitude}
@@ -239,7 +296,7 @@ function Header() {
                 </Link>
               </div>
               <div className='col2'>
-                <SearchBox radius={radius} />
+                <SearchBox radius={radius} placeName={placeName} setPlaceName={setPlaceName} />
               </div>
               <div className='col3'>
                 <div className='location-container'>
@@ -247,7 +304,11 @@ function Header() {
                     <div className='location-icon'>
                       <LocationIcon />
                     </div>
-                    <button onClick={openLocationRadiusModal}>Set Your Location Radius</button>
+                    {placeName === null ? (
+                      <button onClick={openLocationRadiusModal}>Set Your Location Radius</button>
+                    ) : (
+                      <button onClick={openLocationRadiusModal}>{`${placeName} · ${radius}km`}</button>
+                    )}
                   </div>
                 </div>
               </div>
