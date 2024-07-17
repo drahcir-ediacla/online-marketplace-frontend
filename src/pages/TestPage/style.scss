@@ -165,3 +165,9 @@ $g09: #edf0f5;
   position: absolute; 
   width: 100%;
 }
+
+
+/* Add this to your style.scss or equivalent CSS file */
+.pac-item.highlight {
+  background-color: #f0f8ff; /* Light blue background for highlighted items */
+}

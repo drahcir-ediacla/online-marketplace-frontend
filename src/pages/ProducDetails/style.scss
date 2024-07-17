@@ -93,15 +93,16 @@
                 flex-wrap: wrap;
 
                 .col1 {
+                    flex-shrink: 0;
                     margin-right: 5px;
                 }
 
                 .col2 {
-                    gap: 8px;
                     display: flex;
                     flex-direction: column;
 
                     .deal-method-label {
+                        flex-shrink: 0;
                         color: lightslategray;
                     }
 

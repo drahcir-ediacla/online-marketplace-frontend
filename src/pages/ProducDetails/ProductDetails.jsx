@@ -367,7 +367,7 @@ const ProductDetails = ({ userId }) => {
                                 <div className='prod-details-deal-method'>
                                     <div className='col1'><b>Deal Method:</b></div>
                                     <div className='col2'>
-                                        {/* <div><span className='deal-method-label'>Meet Up - </span><img src={AllPhIcon} alt="" className='deal-method-loc-icon' /><span> MCU-Monumento, Morning Breeze Subdivision</span></div> */}
+                                        <div><span className='deal-method-label'>Meet Up - </span><span> MCU-Monumento, Morning Breeze | MCU-Monumento, Morning Breeze</span></div>
                                         <div><span className='deal-method-label'>Delivery - </span><span> {product.mailing_delivery}</span></div>
                                     </div>
                                 </div>
