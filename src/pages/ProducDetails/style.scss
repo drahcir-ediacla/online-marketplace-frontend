@@ -116,6 +116,13 @@
                 font-style: italic;
             }
 
+            .map-container {
+                display: flex;
+                height: 200px;
+                overflow: hidden;
+                align-items: center;
+            }
+
             .prod-details-icon-btn {
                 position: relative;
                 display: flex;
@@ -470,15 +477,19 @@
         .row2 {
             .col-right {
                 min-width: 280px;
-                .prod-details-title, .prod-details-price {
+
+                .prod-details-title,
+                .prod-details-price {
                     font-size: 24px;
                 }
             }
         }
+
         .row3 {
             h2 {
                 font-size: 24px;
             }
+
             .product-details {
                 .col-left {
                     .prod-details-title-desc {
@@ -509,11 +520,13 @@
                 }
 
                 .col-right {
-                    min-width: 215px; 
+                    min-width: 215px;
                     margin: 0;
+
                     .prod-details-ads {
                         display: none;
                     }
+
                     .prod-details-inquiry-form {
                         padding: 23px 0;
                     }
@@ -523,4 +536,3 @@
         }
     }
 }
-

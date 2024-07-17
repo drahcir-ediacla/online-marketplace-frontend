@@ -78,13 +78,15 @@
 
 
 import React from 'react';
-import LocationRadiusModal from '../../components/Modal/SetLocationRadiusModal';
+import SellerLocationMap from '../../components/Map/SellerLocationMap';
 
 const MapWithMarkerAndCircle = () => {
 
+  const center = { lat: 14.6016, lng: 121.031 };
+
   return (
     <>
-      <LocationRadiusModal />
+      <SellerLocationMap center={center} radiusInMeters='100' />
     </>
 
   );

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
+const SellerLocationMap = ({ latitude, longitude }) => {
   const [staticMapUrl, setStaticMapUrl] = useState('');
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const center = { lat: latitude, lng: longitude };
+  const radiusInMeters = '3000'
 
   useEffect(() => {
     const createStaticMapUrl = () => {
       const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
       const size = '600x400';
-      const zoom = calculateZoomLevel(radiusInKilometers);
+      const zoom = calculateZoomLevel(radiusInMeters);
       const params = [
         `center=${center.lat},${center.lng}`,
         `zoom=${zoom}`,
@@ -16,17 +18,17 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
         `maptype=roadmap`,
         `key=${apiKey}`,
         `markers=color:red|label:C|${center.lat},${center.lng}`,
-        `path=color:0x162F2C|weight:2|fillcolor:0x6c757d|enc:${generateEncodedCirclePath(center, radiusInKilometers)}`,
+        `path=color:0x162F2C|weight:2|fillcolor:0x6c757d|enc:${generateEncodedCirclePath(center, radiusInMeters)}`,
       ];
 
       return `${baseUrl}?${params.join('&')}`;
     };
 
     setStaticMapUrl(createStaticMapUrl());
-  }, [center, radiusInKilometers, apiKey]);
+  }, [center, radiusInMeters, apiKey]);
 
   const calculateZoomLevel = (radius) => {
-    const scale = radius * 1000 / 500; // Convert radius to meters for scale
+    const scale = radius / 500; // 500 is an arbitrary distance in meters
     const zoom = Math.floor(16 - Math.log(scale) / Math.log(2));
     return Math.max(1, Math.min(20, zoom)); // Ensure zoom level is between 1 and 20
   };
@@ -34,11 +36,10 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
   const generateEncodedCirclePath = (center, radius) => {
     const circlePoints = [];
     const numPoints = 100;
-    const radiusInMeters = radius * 1000; // Convert radius to meters
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * 2 * Math.PI;
-      const dx = radiusInMeters * Math.cos(angle) / 111320; // Longitude distance (meters to degrees)
-      const dy = radiusInMeters * Math.sin(angle) / 110540; // Latitude distance (meters to degrees)
+      const dx = radius * Math.cos(angle) / 111320; // Longitude distance (meters to degrees)
+      const dy = radius * Math.sin(angle) / 110540; // Latitude distance (meters to degrees)
       circlePoints.push([center.lat + dy, center.lng + dx]);
     }
 
@@ -72,18 +73,18 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
   };
 
   return (
-    <div>
+    <>
       {staticMapUrl ? (
         <img
           src={staticMapUrl}
           alt="Static Google Map"
-          style={{ height: '400px', width: '100%', marginBottom: '20px' }}
+          style={{ height: 'auto', width: '100%' }}
         />
       ) : (
         <div>Loading...</div>
       )}
-    </div>
+    </>
   );
 };
 
-export default MapWithMarkerAndCircle;
+export default SellerLocationMap;

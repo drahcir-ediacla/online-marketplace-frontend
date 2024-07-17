@@ -222,6 +222,7 @@ useEffect(() => {
           currentRadius={radius}
           latitude={latitude}
           longitude={longitude}
+          placeName={placeName}
         />
       }
       <header>

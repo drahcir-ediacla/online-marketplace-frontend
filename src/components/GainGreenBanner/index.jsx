@@ -7,7 +7,7 @@ import SellArrow from '../../assets/images/sell-arrow.png'
 const GainGreenBanner = ({ user }) => {
   return (
     <>
-      <div className="container">
+      <div className="green-banner-container">
         <div className="contentbox">
           <div className="col-left">
             <div className='dollar-box'><img src={DollarBox} alt="" /></div>

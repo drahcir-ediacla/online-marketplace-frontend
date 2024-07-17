@@ -23,6 +23,7 @@ import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import { ReactComponent as NoReviewIcon } from '../../assets/images/group-messages-icon.svg'
 import WishlistButton from '../../components/WishlistButton';
 import { Setloader } from '../../redux/reducer/loadersSlice';
+import SellerLocationMap from '../../components/Map/SellerLocationMap';
 import ShareListing from '../../components/ShareListing';
 import DeleteItemModal from '../../components/Modal/DeleteItemModal';
 import MarkSoldModal from '../../components/Modal/MarkSoldModal';
@@ -343,7 +344,7 @@ const ProductDetails = ({ userId }) => {
                 {/* <meta property="og:url" content={productUrl} /> */}
             </Helmet>
             <Header />
-            <div className='container '>
+            <div className='container'>
                 <div className="product-details-body">
                     <div className='row1'>
                         <Breadcrumb categories={categories} selectedCategory={categoryId} />
@@ -372,7 +373,10 @@ const ProductDetails = ({ userId }) => {
                                 </div>
                             )}
                             < div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
-                            <div><img src={ListedInMap} alt="" /></div>
+                            <div className='map-container'>
+                                {/* <img src={ListedInMap} alt="" /> */}
+                                <SellerLocationMap latitude={product?.seller.latitude} longitude={product?.seller.longitude}/>
+                            </div>
                             <div>
                                 <div className='prod-details-icon-btn'>
                                     {/* {showShareOptions && <ShareListing ref={shareRef} />} */}

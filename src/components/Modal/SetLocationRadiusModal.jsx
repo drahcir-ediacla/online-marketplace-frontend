@@ -4,7 +4,7 @@ import UserLocationMap from '../Map/UserLocationMap';
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
 
-const LocationRadiusModal = ({ onClick, onRadiusChange, currentRadius, latitude, longitude }) => {
+const LocationRadiusModal = ({ onClick, onRadiusChange, currentRadius, latitude, longitude, placeName }) => {
 
     
     const [isModalOpen, setIsModalOpen] = useState(true);
@@ -45,7 +45,7 @@ const LocationRadiusModal = ({ onClick, onRadiusChange, currentRadius, latitude,
                         </div>
                         <div className='modal-box-title'>
                             <h5>SET DISTANCE RADIUS</h5>
-                            <span>Your current location is: </span><span className='current-location'>Ortigas Pasig</span>
+                            <span>Your current location is: </span><span className='current-location'>{placeName}</span>
                         </div>
                         <dvi>
                             <UserLocationMap center={center} radiusInKilometers={radiusInKilometers} />
