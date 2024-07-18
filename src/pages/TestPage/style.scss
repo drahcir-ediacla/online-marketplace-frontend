@@ -1,3 +1,5 @@
+
+
 html * {
   box-sizing: border-box;
 }
@@ -167,7 +169,32 @@ $g09: #edf0f5;
 }
 
 
-/* Add this to your style.scss or equivalent CSS file */
+// Custom style for autocomplete dropdown items
+.pac-item {
+  background-color: #f8f9fa; // Light grey background
+  border-bottom: 1px solid #dee2e6; // Light grey border
+  font-size: 14px; // Smaller font size
+  padding: 10px; // Padding inside the item
+  position: relative; // Make sure the position is relative for the icon positioning
+}
+
+.pac-item:hover {
+  background-color: #e9ecef; // Slightly darker grey on hover
+  cursor: pointer;
+}
+
+.pac-item.highlight::after {
+  content: "\f00c"; // Font Awesome check icon
+  font-family: "FontAwesome";
+  font-weight: 900;
+  position: absolute;
+  right: 10px; // Adjust the position as needed
+  top: 50%;
+  transform: translateY(-50%);
+  color: green; // Color of the check icon
+}
+
+
 .pac-item.highlight {
-  background-color: #f0f8ff; /* Light blue background for highlighted items */
+  background-color: #e9ecef;
 }

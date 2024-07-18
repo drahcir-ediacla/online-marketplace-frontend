@@ -16,6 +16,7 @@ import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
+import MeetUpSelector from '../../components/MeetUpSelector';
 
 const AddListing = () => {
 
@@ -200,11 +201,15 @@ const AddListing = () => {
     };
   }, []);
 
-
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [videoPreviews, setVideoPreviews] = useState([]);
+
+  const handleSelectedPlacesChange = (places) => {
+    setSelectedPlaces(places);
+  };
 
   const maxImages = 10; // Define the maximum number of images allowed
   const maxVideos = 1; // Allow only one video
@@ -323,7 +328,15 @@ const AddListing = () => {
     const productDetailsWithFiles = {
       ...productDetails,
       fileUrls: [...imageUrls, ...videoUrls],
+      meetupLocations: selectedPlaces.map(place => ({
+        name: place.name,
+        address: place.address,
+        latitude: place.location.lat,
+        longitude: place.location.lng,
+      })),
     };
+
+    console.log('productDetailsWithFiles:', productDetailsWithFiles)
 
 
     // Send the form data (including image URLs) to your backend
@@ -695,12 +708,8 @@ const AddListing = () => {
                     <div>
                       {/* <CheckBox label='Meet Up' />
                       <CheckboxWithTextarea label='Mailing & Delivery' /> */}
-                      <label>Meet Up</label>
-                      <Input
-                        type='text'
-                        placeholder='Add Location'
-                        className='listing-add-location-input-field'
-                      />
+                      <label>Meet Up</label><span style={{fontSize: '14px'}}> (Maximum of 4 locations)</span>
+                      <MeetUpSelector onSelectedPlacesChange={handleSelectedPlacesChange} />
                     </div>
                     <div>
                       <label>Mailing & Delivery</label>

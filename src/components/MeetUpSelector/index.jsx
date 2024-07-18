@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import './style.scss';
-import Input from '../FormField/Input';
 
 const libraries = ['places'];
+const MAX_SELECTED_PLACES = 5;
 
-const MeetUpSelector = () => {
+const MeetUpSelector = ({ onSelectedPlacesChange }) => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // Replace with your API key
         libraries,
@@ -53,16 +53,26 @@ const MeetUpSelector = () => {
                     locality: components.locality || '',
                 };
 
+                let updatedPlaces;
                 if (selectedPlaceIds.has(newPlace.placeId)) {
                     // Remove the place if it is already selected
-                    const updatedPlaces = selectedPlaces.filter(p => p.placeId !== newPlace.placeId);
+                    updatedPlaces = selectedPlaces.filter(p => p.placeId !== newPlace.placeId);
                     setSelectedPlaces(updatedPlaces);
                     setSelectedPlaceIds(new Set(updatedPlaces.map(p => p.placeId)));
                 } else {
-                    // Add the new place
-                    setSelectedPlaces([...selectedPlaces, newPlace]);
-                    setSelectedPlaceIds(new Set([...selectedPlaceIds, newPlace.placeId]));
+                    // Add the new place if the limit is not reached
+                    if (selectedPlaces.length < MAX_SELECTED_PLACES) {
+                        updatedPlaces = [...selectedPlaces, newPlace];
+                        setSelectedPlaces(updatedPlaces);
+                        setSelectedPlaceIds(new Set([...selectedPlaceIds, newPlace.placeId]));
+                    } else {
+                        alert(`You can only select up to ${MAX_SELECTED_PLACES} places.`);
+                        return;
+                    }
                 }
+
+                // Notify the parent component of the change
+                onSelectedPlacesChange(updatedPlaces);
 
                 // Restore user input to the input field
                 setTimeout(() => {
@@ -100,6 +110,12 @@ const MeetUpSelector = () => {
         setUserInput(event.target.value);
     };
 
+    const handleRemovePlace = (placeId) => {
+        const updatedPlaces = selectedPlaces.filter(p => p.placeId !== placeId);
+        setSelectedPlaces(updatedPlaces);
+        setSelectedPlaceIds(new Set(updatedPlaces.map(p => p.placeId)));
+    };
+
     if (loadError) {
         return <div>Error loading maps</div>;
     }
@@ -110,46 +126,22 @@ const MeetUpSelector = () => {
 
     return (
         <>
-            <input ref={inputRef} type="text" value={userInput} placeholder="Add meetup locations" className='input-meetup-locations' onChange={handleInputChange} />
-            <div>
-                {selectedPlaces.length > 0 && (
-                    <div>
-                        <h3>Selected Places:</h3>
-                        {selectedPlaces.map((place, index) => (
-                            <div key={index} className="selected-place">
-                                <p><strong>Name:</strong> {place.name}</p>
-                                <p><strong>Address:</strong> {place.address}</p>
-                                <p><strong>Location:</strong> {place.location.lat}, {place.location.lng}</p>
-                                <p><strong>Administrative Area Level 1:</strong> {place.administrativeAreaLevel1}</p>
-                                <p><strong>Locality:</strong> {place.locality}</p>
+            <input ref={inputRef} type="text" value={userInput} placeholder="Type meetup locations" className='input-meetup-locations' onChange={handleInputChange} />
+            {selectedPlaces.length > 0 && (
+                <div className='selected-places-container'>
+                    {selectedPlaces.map((place, index) => (
+                        <div key={index} className="selected-place">
+                            <div className='selected-place-row1'>
+                                <h6>{place.name}</h6>
+                                <button className="delete-place-btn" type='button' onClick={() => handleRemovePlace(place.placeId)}><i class="fa fa-times"></i></button>
                             </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+                            <p>{place.address}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </>
     );
 }
 
 export default MeetUpSelector;
-
-
-
-
-
-// import React from 'react';
-// import SellerLocationMap from '../../components/Map/SellerLocationMap';
-
-// const MapWithMarkerAndCircle = () => {
-
-//   const center = { lat: 14.6016, lng: 121.031 };
-
-//   return (
-//     <>
-//       <SellerLocationMap center={center} radiusInMeters='100' />
-//     </>
-
-//   );
-// };
-
-// export default MapWithMarkerAndCircle;

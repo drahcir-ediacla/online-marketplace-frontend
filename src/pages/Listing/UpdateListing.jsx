@@ -338,7 +338,7 @@ const AddListing = () => {
     }, []);
 
 
-
+    const [selectedPlaces, setSelectedPlaces] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedVideos, setSelectedVideos] = useState([]);
@@ -463,6 +463,12 @@ const AddListing = () => {
         const productDetailsWithFiles = {
             ...productDetails,
             fileUrls: [...imageUrls, ...videoUrls],
+            meetupLocations: selectedPlaces.map(place => ({
+                name: place.name,
+                address: place.address,
+                latitude: place.location.lat,
+                longitude: place.location.lng,
+              })),
         };
 
 
