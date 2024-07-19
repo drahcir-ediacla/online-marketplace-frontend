@@ -101,6 +101,14 @@
                     display: flex;
                     flex-direction: column;
 
+                    a {
+                        color: var(--black-101);
+                    }
+
+                    a:hover {
+                        text-decoration: underline;
+                    }
+
                     .deal-method-label {
                         flex-shrink: 0;
                         color: lightslategray;

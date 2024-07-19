@@ -15,9 +15,10 @@ import Input from '../../components/FormField/Input';
 import RadioButton from '../../components/FormField/RadioButton'
 import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
-import CheckboxWithInput from '../../components/FormField/CheckBox/CheckboxWithInput'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
+import MeetUpSelector from '../../components/MeetUpSelector';
+import QuillEditor from '../../components/QuillEditor';
 
 const AddListing = () => {
 
@@ -57,6 +58,10 @@ const AddListing = () => {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     }
+
+    const handleDescriptionChange = (content) => {
+        setProductDetails({ ...productDetails, description: content });
+    };
 
     const handleConditionChange = (event) => {
         const selectedCondition = event.target.value;
@@ -136,14 +141,8 @@ const AddListing = () => {
         return selectedLabel;
     };
 
-    // ...
-
     // In your component, you can use this function to get the label for productDetails.category_id
     const selectedLabel = getCategoryLabelById(productDetails.category_id);
-
-    console.log('selectedLabel:', selectedLabel)
-
-
 
     useEffect(() => {
         if (selectedLabel) {
@@ -291,6 +290,16 @@ const AddListing = () => {
                 const response2 = await GetCurrentUser();
                 const currentUser = response2.data.user;
 
+                const meetupData = productDetails.meetup.map(place => ({
+                    placeId: place.placeId,
+                    name: place.name,
+                    address: place.address,
+                    latitude: place.latitude,
+                    longitude: place.longitude,
+                }))
+
+                setSelectedPlaces(meetupData)
+
                 // Extract image URLs from the images array
                 const imageUrls = productDetails.images.map(image => image.image_url);
                 const videoUrls = productDetails.videos.map(video => video.video_url);
@@ -339,10 +348,15 @@ const AddListing = () => {
 
 
     const [selectedPlaces, setSelectedPlaces] = useState([]);
+    console.log('Updated selectedPlaces:', selectedPlaces)
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedVideos, setSelectedVideos] = useState([]);
     const [videoPreviews, setVideoPreviews] = useState([]);
+
+    const handleSelectedPlacesChange = (places) => {
+        setSelectedPlaces(places);
+    };
 
     const maxImages = 10; // Define the maximum number of images allowed
     const maxVideos = 1; // Allow only one video
@@ -464,11 +478,12 @@ const AddListing = () => {
             ...productDetails,
             fileUrls: [...imageUrls, ...videoUrls],
             meetupLocations: selectedPlaces.map(place => ({
+                placeId: place.placeId,
                 name: place.name,
                 address: place.address,
-                latitude: place.location.lat,
-                longitude: place.location.lng,
-              })),
+                latitude: place.latitude,
+                longitude: place.longitude,
+            })),
         };
 
 
@@ -834,6 +849,15 @@ const AddListing = () => {
                                         <div>
                                             <label>Description</label>
                                             <div>
+                                                <QuillEditor
+                                                    id='listingDescID'
+                                                    name='description'
+                                                    className='listing-description'
+                                                    value={productDetails.description}
+                                                    onChange={handleDescriptionChange}
+                                                />
+                                            </div>
+                                            {/* <div>
                                                 <TextArea
                                                     id='listingDescID'
                                                     name='description'
@@ -843,18 +867,12 @@ const AddListing = () => {
                                                     rows='7'
                                                     onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <h3>Deal Method</h3>
                                         <div>
-                                            {/* <CheckBox label='Meet Up' />
-                      <CheckboxWithTextarea label='Mailing & Delivery' /> */}
                                             <label>Meet Up</label>
-                                            <Input
-                                                type='text'
-                                                placeholder='Add Location'
-                                                className='listing-add-location-input-field'
-                                            />
+                                            <MeetUpSelector onSelectedPlacesChange={handleSelectedPlacesChange} fetchedMeetupPlaces={selectedPlaces} />
                                         </div>
                                         <div>
                                             <label>Mailing & Delivery</label>

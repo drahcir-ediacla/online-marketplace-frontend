@@ -501,6 +501,7 @@ header {
                             gap: 10px;
 
                             .location-icon {
+                                display: flex;
                                 width: 14px;
                                 fill: #ffffff;
                             }
@@ -509,6 +510,8 @@ header {
                                 background: none;
                                 border: none;
                                 color: white;
+                                max-width: 250px;
+                                text-align: left;
                             }
 
                             button:hover {

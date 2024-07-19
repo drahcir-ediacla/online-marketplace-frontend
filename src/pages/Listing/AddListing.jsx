@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products'
@@ -17,13 +19,13 @@ import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
 import MeetUpSelector from '../../components/MeetUpSelector';
+import QuillEditor from '../../components/QuillEditor';
 
 const AddListing = () => {
 
   const dispatch = useDispatch()
   const { user } = useAuthentication();
   const userId = user?.id;
-  console.log('userId:', userId)
   const [activeRadio, setActiveRadio] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
@@ -57,6 +59,11 @@ const AddListing = () => {
     setSearchTerm(e.target.value);
   }
 
+
+  const handleDescriptionChange = (content) => {
+    setProductDetails({ ...productDetails, description: content });
+};
+
   const handleConditionChange = (event) => {
     const selectedCondition = event.target.value;
     setCondition(selectedCondition); // Update the local state
@@ -67,7 +74,8 @@ const AddListing = () => {
     });
   };
 
-  
+
+
   const selectedDelivery = delivery.join(' | ');
 
   const handleCheckboxDeliveryChange = (event) => {
@@ -329,10 +337,11 @@ const AddListing = () => {
       ...productDetails,
       fileUrls: [...imageUrls, ...videoUrls],
       meetupLocations: selectedPlaces.map(place => ({
+        placeId: place.placeId,
         name: place.name,
         address: place.address,
-        latitude: place.location.lat,
-        longitude: place.location.lng,
+        latitude: place.latitude,
+        longitude: place.longitude,
       })),
     };
 
@@ -693,6 +702,15 @@ const AddListing = () => {
                     <div>
                       <label>Description</label>
                       <div>
+                        <QuillEditor
+                          id='listingDescID'
+                          name='description'
+                          className='listing-description'
+                          value={productDetails.description}
+                          onChange={handleDescriptionChange}
+                        />
+                      </div>
+                      {/* <div>
                         <TextArea
                           id='listingDescID'
                           name='description'
@@ -702,13 +720,11 @@ const AddListing = () => {
                           rows='7'
                           onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <h3>Deal Method</h3>
                     <div>
-                      {/* <CheckBox label='Meet Up' />
-                      <CheckboxWithTextarea label='Mailing & Delivery' /> */}
-                      <label>Meet Up</label><span style={{fontSize: '14px'}}> (Maximum of 4 locations)</span>
+                      <label>Meet Up</label><span style={{ fontSize: '14px' }}> (Maximum of 4 locations)</span>
                       <MeetUpSelector onSelectedPlacesChange={handleSelectedPlacesChange} />
                     </div>
                     <div>

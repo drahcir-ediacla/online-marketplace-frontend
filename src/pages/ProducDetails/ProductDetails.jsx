@@ -34,7 +34,6 @@ import BtnGreen from '../../components/Button/BtnGreen'
 import Input from '../../components/FormField/Input'
 import MoreFromSeller from '../../components/MoreFromSeller'
 import RelatedListings from '../../components/RelatedListings'
-import ListedInMap from '../../assets/images/pro-details-map.png'
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 import SellBtn from '../../components/Button/SellBtn';
 
@@ -73,6 +72,12 @@ const ProductDetails = ({ userId }) => {
         window.location.href = `/messages/${chatId}`;
     }
 
+    const meetupLocations = product?.meetup?.map((p, index) => (
+        <span key={index}>
+          <a href={`https://www.google.com/maps/place/${p.latitude},${p.longitude}`} target="_blank" rel="noopener noreferrer">{p.name}</a>
+          {index < product.meetup.length - 1 && ' | '}
+        </span>
+      ));
     const imageUrls = product?.images?.map(image => image.image_url) || [];
     const videoUrls = product?.videos?.map(video => video.video_url) || [];
     const youtubeUrls = product?.youtube_link || null;
@@ -367,7 +372,7 @@ const ProductDetails = ({ userId }) => {
                                 <div className='prod-details-deal-method'>
                                     <div className='col1'><b>Deal Method:</b></div>
                                     <div className='col2'>
-                                        <div><span className='deal-method-label'>Meet Up - </span><span> MCU-Monumento, Morning Breeze | MCU-Monumento, Morning Breeze</span></div>
+                                        <div><span className='deal-method-label'>Meet Up - </span><span> {meetupLocations}</span></div>
                                         <div><span className='deal-method-label'>Delivery - </span><span> {product.mailing_delivery}</span></div>
                                     </div>
                                 </div>
@@ -412,8 +417,7 @@ const ProductDetails = ({ userId }) => {
                             <div className='col-left'>
                                 <span className='time-posted'><b>Posted:</b> {formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</span>
                                 <hr />
-                                <div className='prod-details-title-desc'><h2>{product.product_name}</h2></div>
-                                <div className='prod-details-spec'><p>{product.description}</p>
+                                <div className='prod-details-spec'><span dangerouslySetInnerHTML={{__html: product.description}}/>
                                 </div>
                                 <div className="product-details-review">
                                     <div className='review-for'>

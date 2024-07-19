@@ -27,14 +27,12 @@ function Header() {
     const savedRadius = localStorage.getItem('radius');
     return savedRadius ? JSON.parse(savedRadius) : 15;
   });
-  console.log('radius:', radius)
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [placeName, setPlaceName] = useState(() => {
     const savedPlaceName = localStorage.getItem('placeName');
     return savedPlaceName ? JSON.parse(savedPlaceName) : null;
   });
-  console.log('placeName:', placeName)
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 

@@ -5,7 +5,7 @@ import './style.scss';
 const libraries = ['places'];
 const MAX_SELECTED_PLACES = 5;
 
-const MeetUpSelector = ({ onSelectedPlacesChange }) => {
+const MeetUpSelector = ({ onSelectedPlacesChange, fetchedMeetupPlaces }) => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // Replace with your API key
         libraries,
@@ -14,9 +14,15 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
     const inputRef = useRef(null);
     const [userInput, setUserInput] = useState('');
     const [selectedPlaces, setSelectedPlaces] = useState([]);
-    const [selectedPlaceIds, setSelectedPlaceIds] = useState(new Set()); // Store selected place IDs
+    const [selectedPlaceIds, setSelectedPlaceIds] = useState(new Set());
     const autocompleteRef = useRef(null);
     const autocompleteServiceRef = useRef(null);
+
+    // Update state when fetchedMeetupPlaces changes
+    useEffect(() => {
+        setSelectedPlaces(fetchedMeetupPlaces || []);
+        setSelectedPlaceIds(new Set((fetchedMeetupPlaces || []).map(p => p.placeId)));
+    }, [fetchedMeetupPlaces]);
 
     useEffect(() => {
         if (isLoaded && !loadError) {
@@ -45,10 +51,8 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
                     placeId: place.place_id,
                     name: place.name,
                     address: place.formatted_address,
-                    location: {
-                        lat: place.geometry.location.lat(),
-                        lng: place.geometry.location.lng(),
-                    },
+                    latitude: place.geometry.location.lat(),
+                    longitude: place.geometry.location.lng(),
                     administrativeAreaLevel1: components.administrative_area_level_1 || '',
                     locality: components.locality || '',
                 };
@@ -82,14 +86,14 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
 
             const observer = new MutationObserver(() => {
                 const autocompleteItems = document.querySelectorAll('.pac-item');
-                const inputValue = inputRef.current.value;
+                const inputValue = inputRef.current?.value;
 
                 if (inputValue) {
                     autocompleteServiceRef.current.getPlacePredictions(
                         { input: inputValue, types: ['establishment'], componentRestrictions: { country: 'PH' } },
                         (predictions) => {
                             autocompleteItems.forEach(item => {
-                                const description = item.querySelector('.pac-item-query').textContent;
+                                const description = item.querySelector('.pac-item-query')?.textContent || '';
                                 const prediction = predictions.find(pred => pred.description.includes(description));
                                 if (prediction && selectedPlaces.some(selectedPlace => selectedPlace.placeId === prediction.place_id)) {
                                     item.classList.add('highlight');
@@ -103,6 +107,9 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
             });
 
             observer.observe(document.body, { childList: true, subtree: true });
+
+            // Cleanup observer on component unmount
+            return () => observer.disconnect();
         }
     }, [isLoaded, loadError, selectedPlaces, selectedPlaceIds, userInput]);
 
@@ -114,6 +121,7 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
         const updatedPlaces = selectedPlaces.filter(p => p.placeId !== placeId);
         setSelectedPlaces(updatedPlaces);
         setSelectedPlaceIds(new Set(updatedPlaces.map(p => p.placeId)));
+        onSelectedPlacesChange(updatedPlaces);
     };
 
     if (loadError) {
@@ -133,7 +141,7 @@ const MeetUpSelector = ({ onSelectedPlacesChange }) => {
                         <div key={index} className="selected-place">
                             <div className='selected-place-row1'>
                                 <h6>{place.name}</h6>
-                                <button className="delete-place-btn" type='button' onClick={() => handleRemovePlace(place.placeId)}><i class="fa fa-times"></i></button>
+                                <button className="delete-place-btn" type='button' onClick={() => handleRemovePlace(place.placeId)}><i className="fa fa-times"></i></button>
                             </div>
                             <p>{place.address}</p>
                         </div>

@@ -43,6 +43,7 @@
                 img {
                     width: 150px;
                     height: 150px;
+                    object-fit: cover;
                 }
 
                 .new-listed-info-col-left {
@@ -609,6 +610,8 @@
 
                         .listing-description {
                             width: 100%;
+                            height: 400px;
+                            margin-bottom: 40px;
                         }
 
                         .listing-add-location-input-field {
