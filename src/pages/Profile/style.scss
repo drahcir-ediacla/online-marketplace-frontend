@@ -36,7 +36,7 @@
                         font-weight: 500;
                         display: flex;
                         width: 228px;
-                        align-items: center;
+                        align-items: start;
                         gap: 8px;
 
                         .asterisk {
@@ -95,6 +95,16 @@
                                 top: 0;
                                 left: 0;
                                 border-right: 1px solid var(--gray-300);
+                            }
+                            .change-btn {
+                                position: absolute;
+                                color: blue;
+                                width: auto;
+                                height: auto;
+                                top: 1px;
+                                right: 0px;
+                                border: none;
+                                background: none;
                             }
                         }
                     }

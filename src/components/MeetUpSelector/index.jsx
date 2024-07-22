@@ -15,6 +15,7 @@ const MeetUpSelector = ({ onSelectedPlacesChange, fetchedMeetupPlaces }) => {
     const [userInput, setUserInput] = useState('');
     const [selectedPlaces, setSelectedPlaces] = useState([]);
     const [selectedPlaceIds, setSelectedPlaceIds] = useState(new Set());
+    console.log('selectedPlaceIds:', selectedPlaceIds)
     const autocompleteRef = useRef(null);
     const autocompleteServiceRef = useRef(null);
 

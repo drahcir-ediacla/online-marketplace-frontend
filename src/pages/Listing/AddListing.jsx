@@ -20,6 +20,7 @@ import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
 import MeetUpSelector from '../../components/MeetUpSelector';
 import QuillEditor from '../../components/QuillEditor';
+import CompleteProfileModal from '../../components/Modal/CompleteProfileModal';
 
 const AddListing = () => {
 
@@ -28,6 +29,7 @@ const AddListing = () => {
   const userId = user?.id;
   const [activeRadio, setActiveRadio] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [accountVerified, setAccountVerified] = useState(true)
   const [selectedOption, setSelectedOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
@@ -45,6 +47,11 @@ const AddListing = () => {
   });
 
 
+  useEffect(() => {
+    if(user?.account_verified === false) {
+      setAccountVerified(false)
+    }
+  })
 
   const openContent = (radioIndex) => {
     setActiveRadio(radioIndex);
@@ -416,6 +423,7 @@ const AddListing = () => {
 
   return (
     <>
+    {!accountVerified && <CompleteProfileModal />}
       <Header />
       <div className="add-listing-body" >
 

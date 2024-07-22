@@ -149,8 +149,6 @@ const AddListing = () => {
             // Find the corresponding category or subcategory based on selectedLabel
             const foundCategory = findCategoryByLabel(selectedLabel, categories);
 
-            console.log('foundCategory:', foundCategory);
-
             if (foundCategory) {
                 setSelectedOption(selectedLabel);
                 // Optionally, you can also set the category_id in productDetails if needed
@@ -499,7 +497,7 @@ const AddListing = () => {
                 console.log('productId:', productId)
                 console.log('productName:', productName)
 
-                window.location.href = `/addlistingsuccess/${productId}/${encodeURIComponent(productName)}`;
+                window.location.href = `/productdetails/${productId}/${encodeURIComponent(productName)}`;
                 dispatch(Setloader(false))
             })
             .catch((error) => {

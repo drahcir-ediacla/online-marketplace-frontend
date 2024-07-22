@@ -74,10 +74,12 @@ const ProductDetails = ({ userId }) => {
 
     const meetupLocations = product?.meetup?.map((p, index) => (
         <span key={index}>
-          <a href={`https://www.google.com/maps/place/${p.latitude},${p.longitude}`} target="_blank" rel="noopener noreferrer">{p.name}</a>
-          {index < product.meetup.length - 1 && ' | '}
+            <a href={`https://www.google.com/maps/place/${p.latitude},${p.longitude}`} target="_blank" rel="noopener noreferrer">{p.name}</a>
+            {index < product.meetup.length - 1 && ' | '}
         </span>
-      ));
+    ));
+
+    console.log('meetupLocations:', meetupLocations)
     const imageUrls = product?.images?.map(image => image.image_url) || [];
     const videoUrls = product?.videos?.map(video => video.video_url) || [];
     const youtubeUrls = product?.youtube_link || null;
@@ -365,22 +367,22 @@ const ProductDetails = ({ userId }) => {
                             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                                 <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                                 <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
-                            </div>
-                            {deliveryOption === "" ? (
-                                null
-                            ) : (
+                            </div> 
+                            {(meetupLocations && meetupLocations.length > 0) || product.mailing_delivery ? (
                                 <div className='prod-details-deal-method'>
                                     <div className='col1'><b>Deal Method:</b></div>
                                     <div className='col2'>
-                                        <div><span className='deal-method-label'>Meet Up - </span><span> {meetupLocations}</span></div>
-                                        <div><span className='deal-method-label'>Delivery - </span><span> {product.mailing_delivery}</span></div>
+                                        {meetupLocations && meetupLocations.length > 0 && (
+                                            <div><span className='deal-method-label'>Meet Up - </span><span> {meetupLocations}</span></div>
+                                        )}
+                                        {product.mailing_delivery && (<div><span className='deal-method-label'>Delivery - </span><span> {product.mailing_delivery}</span></div>)}
                                     </div>
                                 </div>
-                            )}
+                            ) : (null)}
                             < div className='prod-details-listed-in'><small>Listed in {product.seller?.city}, {product.seller?.region}, Philippines</small></div>
                             <div className='map-container'>
                                 {/* <img src={ListedInMap} alt="" /> */}
-                                <SellerLocationMap latitude={product?.seller.latitude} longitude={product?.seller.longitude}/>
+                                <SellerLocationMap latitude={product?.seller.latitude} longitude={product?.seller.longitude} />
                             </div>
                             <div>
                                 <div className='prod-details-icon-btn'>
@@ -417,7 +419,7 @@ const ProductDetails = ({ userId }) => {
                             <div className='col-left'>
                                 <span className='time-posted'><b>Posted:</b> {formatDistanceToNow(new Date(product.createdAt), { addSuffix: true, locale: enUS })}</span>
                                 <hr />
-                                <div className='prod-details-spec'><span dangerouslySetInnerHTML={{__html: product.description}}/>
+                                <div className='prod-details-spec'><span dangerouslySetInnerHTML={{ __html: product.description }} />
                                 </div>
                                 <div className="product-details-review">
                                     <div className='review-for'>

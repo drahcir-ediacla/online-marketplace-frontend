@@ -253,7 +253,7 @@ const EditProfile = () => {
     
 
     // Check for required fields
-    const requiredFields = ['first_name', 'last_name', 'region', 'city', 'email'];
+    const requiredFields = ['display_name', 'first_name', 'last_name', 'region', 'city', 'email', 'phone'];
     const errors = {};
     let hasErrors = false;
 
@@ -371,7 +371,7 @@ const EditProfile = () => {
                 </div>
 
                 <div className='row3 flex'>
-                  <label htmlFor='displaynameID' className='field-name tool-tip'>DISPLAY NAME / SHOP NAME</label>
+                  <label htmlFor='displaynameID' className='field-name tool-tip'>DISPLAY NAME / SHOP NAME <span className='asterisk'>*</span></label>
                   <div className='form-field-container'>
                     <Input
                       type='text'
@@ -381,6 +381,7 @@ const EditProfile = () => {
                       className='profile-data-input'
                       onChange={handleInputChange}
                     />
+                    {requiredFieldErrors.display_name && <div className="errmsg">{requiredFieldErrors.display_name}</div>}
                   </div>
                 </div>
                 <div className='row4 flex'>
@@ -496,10 +497,11 @@ const EditProfile = () => {
                       readOnly
                     />
                     {requiredFieldErrors.email && <div className="errmsg">{requiredFieldErrors.email}</div>}
+                    <BtnClear type="button" label='Change email' className='change-btn' />
                   </div>
                 </div>
                 <div className='row13 flex'>
-                  <label htmlFor="phoneID" className='field-name'>Phone Number</label>
+                  <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
                   <div className='form-field-container'>
                     <Input
                       type="number"
@@ -510,6 +512,7 @@ const EditProfile = () => {
                       className='profile-data-input input-phone'
                       onChange={handleInputChange}
                     />
+                    {requiredFieldErrors.phone && <div className="errmsg">{requiredFieldErrors.phone}</div>}
                     <div className="plus63">+63</div>
                   </div>
                 </div>
