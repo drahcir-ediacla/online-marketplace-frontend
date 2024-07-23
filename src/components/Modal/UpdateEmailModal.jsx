@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen';
-import SuccessEmailChanged from './SuccessEmailChanged';
+import SuccessEmailUpdated from './SuccessEmailUpdated';
 
 
 
@@ -185,7 +185,7 @@ const UpdateEmailModal = ({ onClick, length = 6 }) => {
                     </div>
                 </div>
             }
-            {successOpen && <SuccessEmailChanged />}
+            {successOpen && <SuccessEmailUpdated />}
         </>
     );
 }

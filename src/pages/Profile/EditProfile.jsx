@@ -243,9 +243,6 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Limit the character count to 255
-    const truncatedValue = value.slice(0, 255);
     setUpdatedUserData({ ...updatedUserData, [name]: value });
   };
 
@@ -495,14 +492,14 @@ const EditProfile = () => {
                       type="email"
                       id="emailID"
                       name="email"
-                      placeholder="Enter Your Email"
+                      placeholder="Add your email"
                       value={updatedUserData.email}
                       className='profile-data-input'
                       onChange={handleInputChange}
                       readOnly
                     />
                     {requiredFieldErrors.email && <div className="errmsg">{requiredFieldErrors.email}</div>}
-                    <BtnClear type="button" label='Change email' className='change-btn' onClick={toggleUpdateEmail} />
+                    <BtnClear type="button"  label={user.email === null ? 'Add email' : 'Change email'}  className='change-btn' onClick={toggleUpdateEmail} />
                   </div>
                 </div>
                 <div className='row13 flex'>

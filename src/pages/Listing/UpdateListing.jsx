@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from '../../apicalls/axios'
 import { useDispatch } from 'react-redux';
 import { GetAllCategories, GetProductsById } from '../../apicalls/products'
@@ -13,7 +13,6 @@ import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-
 import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-icon.svg';
 import Input from '../../components/FormField/Input';
 import RadioButton from '../../components/FormField/RadioButton'
-import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';
@@ -854,17 +853,6 @@ const AddListing = () => {
                                                     onChange={handleDescriptionChange}
                                                 />
                                             </div>
-                                            {/* <div>
-                                                <TextArea
-                                                    id='listingDescID'
-                                                    name='description'
-                                                    value={productDetails.description}
-                                                    className='listing-description'
-                                                    placeholder="Type the details of your product here..."
-                                                    rows='7'
-                                                    onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })}
-                                                />
-                                            </div> */}
                                         </div>
                                         <h3>Deal Method</h3>
                                         <div>

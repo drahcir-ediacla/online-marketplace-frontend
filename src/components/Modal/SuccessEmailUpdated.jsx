@@ -3,7 +3,7 @@ import './style.scss'
 import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import BtnGreen from '../Button/BtnGreen'
 
-const SuccessEmailChanged = () => {
+const SuccessEmailUpdated = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(true);
 
@@ -35,7 +35,7 @@ const SuccessEmailChanged = () => {
                         <div className='modal-sold-icon'><CheckIcon /></div>
                         <div className='are-you-sure'>
                             <h5>Success</h5>
-                            <span>Your email successfully changed!</span>
+                            <span>Your email successfully updated!</span>
                         </div>
                         <div className='buttons'>
                             <BtnGreen className='mark-sold-button' label='Ok' onClick={refreshPage} />
@@ -48,4 +48,4 @@ const SuccessEmailChanged = () => {
 }
 
 
-export default SuccessEmailChanged
+export default SuccessEmailUpdated
