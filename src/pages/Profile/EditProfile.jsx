@@ -15,9 +15,9 @@ import Select from '../../components/FormField/Select';
 import DependentSelect from '../../components/FormField/DependentSelect';
 import DatePicker from '../../components/FormField/DatePicker';
 import genderData from '../../data/genderData';
-import userLocationData from '../../data/userLocationData.json'
 import locationData from '../../data/locationData.json'
 import AlertMessage from '../../components/AlertMessage';
+import UpdateEmailModal from '../../components/Modal/UpdateEmailModal';
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 
 
@@ -25,6 +25,7 @@ import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loadi
 const EditProfile = () => {
 
   const [requiredFieldErrors, setRequiredFieldErrors] = useState({});
+  const [updateEmailOpen, setUpdateEmailOpen] = useState(false)
   const [showAlert, setShowAlert] = useState(false);
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
@@ -111,8 +112,8 @@ const EditProfile = () => {
     const selectedCity = event.target.value;
     const coordinates = getCoordinates(selectedRegion, selectedCity);
     setSelectedCity(selectedCity);
-    setUpdatedUserData({ 
-      ...updatedUserData, 
+    setUpdatedUserData({
+      ...updatedUserData,
       city: selectedCity,
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
@@ -250,7 +251,7 @@ const EditProfile = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
 
     // Check for required fields
     const requiredFields = ['display_name', 'first_name', 'last_name', 'region', 'city', 'email', 'phone'];
@@ -296,14 +297,18 @@ const EditProfile = () => {
   const counterClassName =
     updatedUserData.bio.length > maxCharacterCount ? 'counter-exceeded' : '';
 
-    const openManageAccountNav = () => {
-      window.location.href = '/manage-account'
-    }
+  const openManageAccountNav = () => {
+    window.location.href = '/manage-account'
+  }
 
+  const toggleUpdateEmail = () => {
+    setUpdateEmailOpen((prevUpdateEmailOpen) => !prevUpdateEmailOpen);
+  };
 
 
   return (
     <>
+      {updateEmailOpen && <UpdateEmailModal onClick={toggleUpdateEmail} />}
       {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body" id='edit-profile-body'>
@@ -497,7 +502,7 @@ const EditProfile = () => {
                       readOnly
                     />
                     {requiredFieldErrors.email && <div className="errmsg">{requiredFieldErrors.email}</div>}
-                    <BtnClear type="button" label='Change email' className='change-btn' />
+                    <BtnClear type="button" label='Change email' className='change-btn' onClick={toggleUpdateEmail} />
                   </div>
                 </div>
                 <div className='row13 flex'>

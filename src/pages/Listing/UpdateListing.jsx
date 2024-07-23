@@ -346,7 +346,6 @@ const AddListing = () => {
 
 
     const [selectedPlaces, setSelectedPlaces] = useState([]);
-    console.log('Updated selectedPlaces:', selectedPlaces)
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const [selectedVideos, setSelectedVideos] = useState([]);

@@ -427,7 +427,7 @@
 }
 
 
-// Update Modal
+// Update Email Modal
 
 .modal-container {
     position: fixed;
@@ -453,7 +453,6 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            height: 48px;
             padding: 8px 8px 0 8px;
 
             .closebtn {
@@ -462,6 +461,7 @@
                 width: 25px;
                 height: 25px;
                 display: flex;
+                padding: 0;
 
                 .fa-times {
                     color: var(--gray-500);
@@ -480,6 +480,53 @@
             }
         }
 
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 0 20px;
+
+            .input-code-box {
+                border-radius: 3px;
+                border: 1px solid var(--gray-300);
+                max-width: 70px;
+                height: 70px;
+                flex: 1;
+                font-size: 30px;
+                text-align: center;
+            }
+        }
+
+        .error {
+            padding: 0 20px;
+            color: red;
+        }
+
+        .verify-btn-container {
+            padding: 20px 20px;
+            display: flex;
+
+            .verify-btn {
+                width: 100%;
+            }
+        }
+
+        .resend-code-container {
+            padding: 0 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            
+            .resend-code-btn {
+                border: none;
+                color: blue;
+            }
+
+            .resend-code-btn:hover {
+                background: none;
+            }
+        }
+
         .email-label {
             display: flex;
             align-items: center;
@@ -487,20 +534,6 @@
 
             label {
                 font-weight: 500;
-            }
-
-            .valid {
-                color: limegreen;
-                margin-left: 0.25rem;
-            }
-
-            .invalid {
-                color: red;
-                margin-left: 0.25rem;
-            }
-
-            .hide {
-                display: none;
             }
         }
 
@@ -518,21 +551,13 @@
                 padding: 0 15px;
                 outline: none;
             }
-
-            .instructions {
-                color: red;
-                margin-bottom: 0;
-                position: absolute;
-                font-size: 13px;
-            }
-
-            .offscreen {
-                color: red;
-                position: absolute;
-                left: -9999px;
-            }
         }
-
+        
+        .error-email {
+            margin: 0;
+            padding: 0 20px;
+            color: red;
+        }
         .buttons {
             display: flex;
             justify-content: center;

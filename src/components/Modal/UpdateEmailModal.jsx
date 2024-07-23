@@ -1,32 +1,26 @@
 import React, { useRef, useState, useEffect } from 'react';
+import axios from '../../apicalls/axios';
 import './style.scss'
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch } from 'react-redux';
+import { Setloader } from '../../redux/reducer/loadersSlice';
 import BtnClear from '../Button/BtnClear';
-import BtnGreen from '../Button/BtnGreen'
-import Input from '../FormField/Input';
+import BtnGreen from '../Button/BtnGreen';
+import SuccessEmailChanged from './SuccessEmailChanged';
 
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const UpdateEmailModal = ({ onClick, productId, userId }) => {
 
+const UpdateEmailModal = ({ onClick, length = 6 }) => {
     const [isModalOpen, setIsModalOpen] = useState(true);
+    const [showVerifyForm, setShowVerifyForm] = useState(false);
+    const [successOpen, setSuccessOpen] = useState(false)
+    const [code, setCode] = useState(Array(length).fill(''));
+    const [error, setError] = useState('');
+    const inputRefs = useRef([]);
     const emailRef = useRef();
-    const errRef = useRef();
+    const dispatch = useDispatch()
 
-    const [email, setEmail] = useState('');
-    const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
-    useEffect(() => {
-        emailRef.current.focus();
-    }, [])
-
-    useEffect(() => {
-        const result = EMAIL_REGEX.test(email);
-        setValidEmail(result);
-    }, [email])
-
+    const [newEmail, setNewEmail] = useState('');
+    console.log('newEmail:', newEmail);
 
     useEffect(() => {
         // Update body overflow based on isMenuOpen
@@ -38,18 +32,89 @@ const UpdateEmailModal = ({ onClick, productId, userId }) => {
         };
     }, [isModalOpen]);
 
-
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        otp: '',
-    });
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        if (name === 'email') {
+            setNewEmail(value);
+            setError('');
+        }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            sendOTPCode();
+        }
+    };
+
+    const sendOTPCode = async (e) => {
+
+        try {
+            dispatch(Setloader(true))
+            const response = await axios.post('/api/send-email-update-otp', { newEmail });
+            if (response.status === 201) {
+                dispatch(Setloader(false))
+                setShowVerifyForm(true);
+            }
+        } catch (err) {
+            if (err.response.status === 409) {
+                dispatch(Setloader(false))
+                setError('Email already in use.');
+            } else {
+                dispatch(Setloader(false))
+                setError('Error sending OTP.');
+            }
+        }
+    };
+
+    const handleCodeChange = (e, index) => {
+        const value = e.target.value;
+        if (/^[0-9]$/.test(value) || value === '') {
+            const newCode = [...code];
+            newCode[index] = value;
+            setCode(newCode);
+            setError('');
+
+            if (value && index < length - 1) {
+                inputRefs.current[index + 1].focus();
+            }
+        }
+    };
+
+    const handleCodeKeyDown = (e, index) => {
+        if (e.key === 'Backspace' && !code[index] && index > 0) {
+            inputRefs.current[index - 1].focus();
+        }
+    };
+
+    const handleVerificationCodeSubmit = async (otp) => {
+        try {
+            dispatch(Setloader(true))
+            const response = await axios.put('/api/verify-email-update-otp', { otp });
+            if (response.status === 200) {
+                dispatch(Setloader(false))
+                setShowVerifyForm(false);
+                setIsModalOpen(false);
+                setSuccessOpen(true)
+            }
+        } catch (err) {
+            if (err.response.status === 401) {
+                dispatch(Setloader(false))
+                setError('Invalid or expired OTP.');
+            } else {
+                dispatch(Setloader(false))
+                setError('Error verifying OTP.');
+            }
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (code.every(char => char !== '')) {
+            handleVerificationCodeSubmit(code.join(''));
+        } else {
+            setError('Please enter the complete code');
+        }
+    };
 
     return (
         <>
@@ -58,53 +123,71 @@ const UpdateEmailModal = ({ onClick, productId, userId }) => {
                     <div className="update-modal-box">
                         <div className='update-modal-row1'>
                             <button className='closebtn' onClick={onClick}>
-                                <i class='fa fa-times'></i>
+                                <i className='fa fa-times'></i>
                             </button>
                         </div>
-                        <div className='modal-title'>
-                            <h5>Update email address</h5>
-                            <span>Enter an email and click "Send Code" to send verification code.</span>
-                        </div>
-                        {/* <div className='email-label'>
-                            <label>Email</label>
-                            <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
-                        </div> */}
-                        <div className='email-input-container'>
-                            <input
-                                type="email"
-                                id="emailAddress"
-                                name="email"
-                                ref={emailRef}
-                                autoComplete="off"
-                                onChange={(e) => {
-                                    setEmail(e.target.value);
-                                    handleChange(e); // Assuming handleChange is another function you want to call
-                                }}
-                                value={email}
-                                required
-                                aria-invalid={validEmail ? "false" : "true"}
-                                aria-describedby="uidnote"
-                                onFocus={() => setEmailFocus(true)}
-                                onBlur={() => setEmailFocus(false)}
-                                placeholder='Enter your new email address'
-                            />
-                            <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} color='red' />
-                                <span> Invalid email address format!</span>
-                            </p>
-                        </div>
+                        {!showVerifyForm ? (
+                            <>
+                                <div className='modal-title'>
+                                    <h5>Update email address</h5>
+                                    <span>Enter an email and click "Send Code" to send a verification code.</span>
+                                </div>
+                                <div className='email-input-container'>
+                                    <input
+                                        type="email"
+                                        id="emailAddress"
+                                        name="email"
+                                        ref={emailRef}
+                                        autoComplete="off"
+                                        onChange={handleChange}
+                                        onKeyDown={handleKeyDown}
+                                        value={newEmail}
+                                        required
+                                        placeholder='Enter your new email address'
+                                    />
+                                </div>
+                                {error && <p className="error-email">{error}</p>}
+                                <div className='buttons'>
+                                    <BtnGreen label='Send Code' onClick={sendOTPCode} />
+                                    <BtnClear label='Cancel' onClick={onClick} />
+                                </div>
+                            </>
+                        ) : (
+                            <form onSubmit={handleSubmit}>
+                                <div className='modal-title'>
+                                    <h5>Verification Required</h5>
+                                    <span>We sent a 6-digit verification code to your email.</span>
+                                </div>
+                                <div className="input-group">
+                                    {code.map((char, index) => (
+                                        <input
+                                            key={index}
+                                            type="text"
+                                            value={char}
+                                            onChange={(e) => handleCodeChange(e, index)}
+                                            onKeyDown={(e) => handleCodeKeyDown(e, index)}
+                                            maxLength={1}
+                                            ref={el => inputRefs.current[index] = el}
+                                            className='input-code-box'
+                                        />
+                                    ))}
+                                </div>
+                                {error && <p className="error">{error}</p>}
+                                <div className='verify-btn-container'>
+                                    <BtnGreen type="submit" label='Verify' className='verify-btn' />
+                                </div>
+                                <div className='resend-code-container'>
+                                    <span>Didn't get the code?</span><BtnClear type='button' label='Resend' className='resend-code-btn' onClick={sendOTPCode} />
+                                </div>
 
-                        <div className='buttons'>
-                            <BtnGreen label='Send Code' />
-                            <BtnClear label='Cancel' onClick={onClick} />
-                        </div>
+                            </form>
+                        )}
                     </div>
                 </div>
             }
+            {successOpen && <SuccessEmailChanged />}
         </>
-    )
+    );
 }
 
-
-export default UpdateEmailModal
+export default UpdateEmailModal;
