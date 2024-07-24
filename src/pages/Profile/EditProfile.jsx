@@ -271,6 +271,10 @@ const EditProfile = () => {
       return;
     }
 
+    if(user.email || user.phone === null) {
+      setShowAlert(true)
+    }
+      
     try {
       // Dispatch the action to update the user's profile
       dispatch(Setloader(true));
@@ -316,7 +320,8 @@ const EditProfile = () => {
       {updateEmailOpen && <UpdateEmailModal onClick={toggleUpdateEmail} />}
       {updatePhoneOpen && <UpdatePhoneModal onClick={toggleUpdatePhone} />}
       {showSuccess && <SuccessProfileUpdate />}
-      {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
+      {/* {showAlert && <AlertMessage type="success" message="Profile updated successfully" />} */}
+      {showAlert && <AlertMessage type="error" message="Invalid phone or email" />}
       <Header />
       <div className="edit-profile-body" id='edit-profile-body'>
         <div className="container">

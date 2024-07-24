@@ -35,8 +35,6 @@
                     .field-name {
                         font-weight: 500;
                         display: flex;
-                        width: 228px;
-                        align-items: start;
                         gap: 8px;
 
                         .asterisk {
@@ -71,14 +69,9 @@
                     }
 
                     .flex {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        gap: 20px;
 
                         .form-field-container {
                             position: relative;
-                            max-width: 557px;
                             width: 100%;
 
                             .input-phone {
