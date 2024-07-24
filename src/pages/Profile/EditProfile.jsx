@@ -18,6 +18,8 @@ import genderData from '../../data/genderData';
 import locationData from '../../data/locationData.json'
 import AlertMessage from '../../components/AlertMessage';
 import UpdateEmailModal from '../../components/Modal/UpdateEmailModal';
+import UpdatePhoneModal from '../../components/Modal/UpdatePhoneModal';
+import SuccessProfileUpdate from '../../components/Modal/SuccessProfileUpdate';
 import { ReactComponent as ImageLoadingSpinner } from "../../assets/images/loading-spinner.svg";
 
 
@@ -26,7 +28,9 @@ const EditProfile = () => {
 
   const [requiredFieldErrors, setRequiredFieldErrors] = useState({});
   const [updateEmailOpen, setUpdateEmailOpen] = useState(false)
+  const [updatePhoneOpen, setUpdatePhoneOpen] = useState(false)
   const [showAlert, setShowAlert] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const user = useSelector((state) => state.user.data);
   const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
@@ -277,7 +281,7 @@ const EditProfile = () => {
 
       // Show a success message or redirect the user to a different page upon successful update
       // (You can handle this as per your application's requirements)
-      setShowAlert(true);
+      setShowSuccess(true);
 
     } catch (error) {
       // Handle any errors, which are already handled in the action
@@ -302,10 +306,16 @@ const EditProfile = () => {
     setUpdateEmailOpen((prevUpdateEmailOpen) => !prevUpdateEmailOpen);
   };
 
+  const toggleUpdatePhone = () => {
+    setUpdatePhoneOpen((prevUpdatePhoneOpen) => !prevUpdatePhoneOpen);
+  };
+
 
   return (
     <>
       {updateEmailOpen && <UpdateEmailModal onClick={toggleUpdateEmail} />}
+      {updatePhoneOpen && <UpdatePhoneModal onClick={toggleUpdatePhone} />}
+      {showSuccess && <SuccessProfileUpdate />}
       {showAlert && <AlertMessage type="success" message="Profile updated successfully" />}
       <Header />
       <div className="edit-profile-body" id='edit-profile-body'>
@@ -513,8 +523,10 @@ const EditProfile = () => {
                       value={updatedUserData.phone}
                       className='profile-data-input input-phone'
                       onChange={handleInputChange}
+                      readOnly
                     />
                     {requiredFieldErrors.phone && <div className="errmsg">{requiredFieldErrors.phone}</div>}
+                    <BtnClear type="button"  label={user.phone === null ? 'Add phone' : 'Change phone'}  className='change-btn' onClick={toggleUpdatePhone} />
                     <div className="plus63">+63</div>
                   </div>
                 </div>

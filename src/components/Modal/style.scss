@@ -516,7 +516,7 @@
             padding: 0 20px;
             text-align: center;
             margin-bottom: 20px;
-            
+
             .resend-code-btn {
                 border: none;
                 color: blue;
@@ -538,6 +538,7 @@
         }
 
         .email-input-container {
+            position: relative;
             padding: 10px 20px 10px 20px;
 
             input {
@@ -551,13 +552,31 @@
                 padding: 0 15px;
                 outline: none;
             }
+
+            .phone-input-box {
+                text-align: start;
+                padding-left: 60px;
+            }
+
+            .plus63 {
+                position: absolute;
+                height: 40px;
+                width: 57px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: 10px;
+                left: 15px;
+                border-right: 1px solid var(--gray-300);
+            }
         }
-        
+
         .error-email {
             margin: 0;
             padding: 0 20px;
             color: red;
         }
+
         .buttons {
             display: flex;
             justify-content: center;
