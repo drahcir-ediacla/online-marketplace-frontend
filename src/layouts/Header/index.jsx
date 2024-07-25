@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../utils/i18n';
 import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
@@ -36,7 +38,11 @@ function Header() {
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
+  const { t } = useTranslation();
 
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -142,6 +148,7 @@ function Header() {
 
 
   const openLocationRadiusModal = () => {
+    setShowAlert(false);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLatitude(position.coords.latitude);
@@ -235,8 +242,8 @@ useEffect(() => {
                   <span><i className="arrow down"></i></span>
                   <div className='language-list'>
                     <ul>
-                      <li>English</li>
-                      <li>中國語</li>
+                      <li><button onClick={() => changeLanguage('en')}>English</button></li>
+                      <li><button onClick={() => changeLanguage('fr')}>中國語</button></li>
                       <li>한국어</li>
                       <li>日本語</li>
                     </ul>
@@ -260,7 +267,7 @@ useEffect(() => {
                         </div>
                       </div>
                     </div>
-                    <span><Link to='/addlisting' className='sell-btn'>Sell</Link></span>
+                    <span><Link to='/addlisting' className='sell-btn'>{t('Sell')}</Link></span>
                     <div className='my-account'>
                       <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
                       <div className="my-account-dropdown-container">
