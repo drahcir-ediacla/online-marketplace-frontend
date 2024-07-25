@@ -271,7 +271,7 @@ const EditProfile = () => {
       return;
     }
 
-    if(user.email || user.phone === null) {
+    if(user.email === null || user.phone === null) {
       setShowAlert(true)
     }
       

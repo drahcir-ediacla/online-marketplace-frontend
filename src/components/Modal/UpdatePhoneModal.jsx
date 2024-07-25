@@ -48,6 +48,17 @@ const UpdateEmailModal = ({ onClick, length = 6 }) => {
 
     const sendOTPCode = async (e) => {
 
+        if (!newPhone) {
+            setError('Phone number cannot be empty.');
+            return;
+        }
+
+        const phoneRegex = /^[0-9]{10,15}$/; // Adjust the regex as needed
+        if (!phoneRegex.test(newPhone)) {
+            setError('Invalid phone number format.');
+            return;
+        }
+
         try {
             dispatch(Setloader(true))
             const response = await axios.post('/api/send-phone-update-otp', { newPhone });
