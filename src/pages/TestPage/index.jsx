@@ -25,6 +25,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../utils/i18n';
+import GTranslate from '../../components/GTranslate';
 
 function App() {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ function App() {
       <button onClick={() => changeLanguage('fr')}>French</button>
       <h1>{t('welcome')}</h1>
       <p>{t('description')}</p>
+      <GTranslate />
     </div>
   );
 }

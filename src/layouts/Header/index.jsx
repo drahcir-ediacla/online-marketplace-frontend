@@ -17,6 +17,7 @@ import ChatMessageIcon from '../../components/ChatMessageIcon';
 import SmallScreenHeader from './SmallScreenHeader';
 import LocationRadiusModal from '../../components/Modal/SetLocationRadiusModal';
 import AlertMessage from '../../components/AlertMessage';
+import GTranslate from '../../components/GTranslate';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -238,7 +239,7 @@ useEffect(() => {
               <div className='col-left'>
                 <div className='language-selector'>
                   <div className='globe-icon'><GlobeIcon /></div>
-                  <span>English</span>
+                  {/* <span>English</span>
                   <span><i className="arrow down"></i></span>
                   <div className='language-list'>
                     <ul>
@@ -247,7 +248,8 @@ useEffect(() => {
                       <li>한국어</li>
                       <li>日本語</li>
                     </ul>
-                  </div>
+                  </div> */}
+                  <GTranslate />
                 </div>
               </div>
 

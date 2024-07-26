@@ -1,15 +1,31 @@
-.form-body{
+.form-body {
     align-items: center;
     display: flex;
     flex-direction: column;
 
     .container {
-        .form-box{
+        .form-box {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 60px 0;
+            margin: 30px 0;
             min-height: 735px;
+        }
+    }
+
+    .language-selector-container {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        padding: 0 20px;
+        margin-bottom: 30px;
+
+        .globe-icon {
+            fill: #555;
+            display: flex;
+            margin-right: 8px;
+            width: 20px;
         }
     }
 }
@@ -19,12 +35,16 @@
 //-----------------MEDIA QUERY -----------------------//
 
 @media only screen and (max-width: 500px) {
-    .form-body{
+    .form-body {
         .container {
-            .form-box{
+            .form-box {
                 height: none;
             }
         }
+
+        .language-selector-container {
+            justify-content: center;
+        }
     }
-    
+
 }
