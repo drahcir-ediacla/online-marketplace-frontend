@@ -29,9 +29,23 @@ header {
 
                         .globe-icon {
                             display: flex;
-                            margin-right: 8px;
+                            margin-right: 5px;
                             width: 15px;
                             fill: white;
+                        }
+
+                        .gtranslate_wrapper {
+                            .gt_selector {
+                                background: none;
+                                color: white;
+                                border: none;
+                                width: 90px;
+                                outline: none;
+
+                                option {
+                                    color: var(--black-101);
+                                }
+                            }
                         }
 
                         span {

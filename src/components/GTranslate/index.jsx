@@ -13,7 +13,8 @@ function GTranslate() {
             gtranslateSettingsScript.id = 'gtranslateSettingsScript';
             gtranslateSettingsScript.innerHTML = `window.gtranslateSettings = {
         "default_language": "en",
-        "languages": ["en", "ja", "ko", "zh-TW"],
+        "native_language_names": "true",
+        "languages": ["en", "ja", "ko", "zh-CN"],
         "wrapper_selector": ".gtranslate_wrapper"
       };`;
             document.body.appendChild(gtranslateSettingsScript);
