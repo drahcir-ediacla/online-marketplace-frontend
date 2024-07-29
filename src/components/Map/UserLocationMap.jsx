@@ -77,7 +77,7 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
         <img
           src={staticMapUrl}
           alt="Static Google Map"
-          style={{ height: '400px', width: '100%', marginBottom: '20px' }}
+          style={{ height: 'auto', width: '100%', marginBottom: '20px' }}
         />
       ) : (
         <div>Loading...</div>

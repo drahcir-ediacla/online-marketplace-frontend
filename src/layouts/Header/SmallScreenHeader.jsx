@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './style.scss'
-import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import Logo from '../../assets/images/Yogeek-logo-gray.png';
 import LogoIcon from '../../assets/images/yogeek-icon-logo.png'
-import SearchBox from '../../components/SearchBox'
 import ChatMessageIcon from '../../components/ChatMessageIcon';
 import SlidingSideNav from '../SlidingSideNav';
 import AccountNav from '../../components/AccountNav';
 import SmallScreenSearchByLoc from './SmallScreenSearchByLoc';
 
-const StickySmallScreenHeader = () => {
+const StickySmallScreenHeader = ({ user }) => {
 
     const [isSticky, setIsSticky] = useState(false);
     const navigate = useNavigate();
@@ -62,9 +60,11 @@ const StickySmallScreenHeader = () => {
 
                     <div className='tablet-header-row1-col2'>
                         <div><SmallScreenSearchByLoc /></div>
-                        <div className="message-icon-container" onClick={messages}>
-                            <ChatMessageIcon className='custom-message-icon' counterStyle='message-counter' />
-                        </div>
+                        {user &&
+                            <div className="message-icon-container" onClick={messages}>
+                                <ChatMessageIcon className='custom-message-icon' counterStyle='message-counter' />
+                            </div>
+                        }
                         <div className="user-account-icon">
                             <AccountNav />
                         </div>

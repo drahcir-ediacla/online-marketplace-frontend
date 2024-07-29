@@ -36,7 +36,7 @@ function Header() {
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
-  
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -186,28 +186,28 @@ function Header() {
   };
 
   // Effect to check permission and update state accordingly
-useEffect(() => {
-  const updateStateAndLocalStorage = async () => {
-    const hasLocationAccess = await checkLocationPermission();
-    if (hasLocationAccess) {
-      localStorage.setItem('radius', JSON.stringify(radius));
-      localStorage.setItem('placeName', JSON.stringify(placeName));
-      const savedPlaceName = localStorage.getItem('placeName');
-      if (savedPlaceName && !placeName) {
-        setPlaceName(() => {
-          const savedPlaceName = localStorage.getItem('placeName');
-          return savedPlaceName ? JSON.parse(savedPlaceName) : null;
-        });
+  useEffect(() => {
+    const updateStateAndLocalStorage = async () => {
+      const hasLocationAccess = await checkLocationPermission();
+      if (hasLocationAccess) {
+        localStorage.setItem('radius', JSON.stringify(radius));
+        localStorage.setItem('placeName', JSON.stringify(placeName));
+        const savedPlaceName = localStorage.getItem('placeName');
+        if (savedPlaceName && !placeName) {
+          setPlaceName(() => {
+            const savedPlaceName = localStorage.getItem('placeName');
+            return savedPlaceName ? JSON.parse(savedPlaceName) : null;
+          });
+        }
+      } else {
+        localStorage.removeItem('radius');
+        localStorage.removeItem('placeName');
+        setRadius(15);
+        setPlaceName(null);
       }
-    } else {
-      localStorage.removeItem('radius');
-      localStorage.removeItem('placeName');
-      setRadius(15);
-      setPlaceName(null);
-    }
-  };
-  updateStateAndLocalStorage();
-}, [radius, placeName]);
+    };
+    updateStateAndLocalStorage();
+  }, [radius, placeName]);
 
 
   return (
@@ -320,7 +320,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        <SmallScreenHeader />
+        <SmallScreenHeader user={user} />
       </header>
     </>
   )
