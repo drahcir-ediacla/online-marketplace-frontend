@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import i18n from '../../utils/i18n';
 import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
@@ -20,7 +18,6 @@ import AlertMessage from '../../components/AlertMessage';
 import GTranslate from '../../components/GTranslate';
 
 const GET_USER_LOGIN = '/auth/check-auth';
-const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 
 function Header() {
 
@@ -39,11 +36,7 @@ function Header() {
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
-  const { t } = useTranslation();
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
+  
 
   useEffect(() => {
     const getUser = async () => {
@@ -86,7 +79,6 @@ function Header() {
 
   const mywishlist = () => {
     if (user) {
-      const userId = user?.id;
       window.location.href = `/wishlist`;
     }
   };
@@ -243,8 +235,8 @@ useEffect(() => {
                   <span><i className="arrow down"></i></span>
                   <div className='language-list'>
                     <ul>
-                      <li><button onClick={() => changeLanguage('en')}>English</button></li>
-                      <li><button onClick={() => changeLanguage('fr')}>中國語</button></li>
+                      <li>English</li>
+                      <li>中國語</li>
                       <li>한국어</li>
                       <li>日本語</li>
                     </ul>
@@ -269,7 +261,7 @@ useEffect(() => {
                         </div>
                       </div>
                     </div>
-                    <span><Link to='/addlisting' className='sell-btn'>{t('Sell')}</Link></span>
+                    <Link to='/addlisting' className='sell-btn'><span>Sell</span></Link>
                     <div className='my-account'>
                       <Link to='/editprofile' className='sell-btn'><span>My Account</span></Link>
                       <div className="my-account-dropdown-container">

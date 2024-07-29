@@ -26,10 +26,6 @@ const MainCategory = ({ userId }) => {
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
-  // If parentId is null, use the id as the selected category
-  // const selectedCategory = parent_id !== null ? String(parent_id) : String(id);
-
-
 
   // Add and remove wishlist function
   const addToWishlist = async (productId) => {
@@ -51,18 +47,8 @@ const MainCategory = ({ userId }) => {
   };
 
 
-  // const allProducts = useMemo(() => {
-  //   const subCategoryProductsArray = Array.isArray(category?.subCategoryProducts) ? category?.subCategoryProducts : [];
-  //   const productsArray = Array.isArray(category?.products) ? category?.products : [];
-  //   return [...subCategoryProductsArray, ...productsArray];
-  // }, [category?.subCategoryProducts, category?.products]);
-
   const allProducts = Array.isArray(category?.allProducts) ? category?.allProducts : [];
   const subcategories = Array.isArray(category?.subcategories) ? category?.subcategories : [];
-
-
-
-
 
   // FETCH ALL CATEGORIES //
   useEffect(() => {

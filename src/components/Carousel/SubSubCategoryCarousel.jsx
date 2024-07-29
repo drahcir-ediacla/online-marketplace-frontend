@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import './style.scss'
 import NoImage from '../../assets/images/no-image-available.png'
 
-const SubCategoryCarousel = ({ data }) => {
+const SubSubCategoryCarousel = ({ data }) => {
 
 
     // Check if data is null or undefined
@@ -41,7 +41,7 @@ const SubCategoryCarousel = ({ data }) => {
             <Carousel responsive={responsive} draggable={true} containerClass="carousel-container">
                 {data.map((subcategory, subIndex) => (
                     <div key={subcategory.id}>
-                        <Link to={`/subcategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
+                        <Link to={`/subsubcategory/${subcategory.id}/${subcategory.label}`} className="sub-category-thumbnail">
                             <img src={subcategory.thumbnail_image || NoImage} alt="" className="sub-category-img" />
                             <div className="sub-category-thumbnail-name">{subcategory.label}</div>
                         </Link>
@@ -52,4 +52,4 @@ const SubCategoryCarousel = ({ data }) => {
     );
 }
 
-export default SubCategoryCarousel
+export default SubSubCategoryCarousel

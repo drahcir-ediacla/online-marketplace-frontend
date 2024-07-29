@@ -22,6 +22,7 @@ const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const ProductDetails = lazy(() => import('./pages/ProducDetails/ProductDetails'));
 const MainCategory = lazy(() => import('./pages/Categories/MainCategory'));
 const SubCategory = lazy(() => import('./pages/Categories/SubCategory'));
+const SubSubCategory = lazy(() => import('./pages/Categories/SubSubCategory'));
 const NotificationList = lazy(() => import('./pages/NotificationList'))
 const ResponsiveManageAccountNav = lazy(() => import('./components/ResponsiveManageAccountNav'));
 const DeactivateAccount = lazy(() => import('./pages/Settings/DeactivateAccount'));
@@ -73,6 +74,7 @@ function App() {
             <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
             <Route path='/category/:id/:value' element={<MainCategory />} />
             <Route path='/subcategory/:id/:label' element={<SubCategory />} />
+            <Route path='/subsubcategory/:id/:label' element={<SubSubCategory />} />
             <Route path='/search-results' element={<SearchResult />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test/:chat_id' element={<TestPage />} />

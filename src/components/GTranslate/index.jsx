@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import './style.scss'
+import './style.scss';
 
 function GTranslate() {
-
     useEffect(() => {
         // Function to check if a script is already present in the document
         const isScriptLoaded = (id) => !!document.getElementById(id);
@@ -11,12 +10,14 @@ function GTranslate() {
         if (!isScriptLoaded('gtranslateSettingsScript')) {
             const gtranslateSettingsScript = document.createElement('script');
             gtranslateSettingsScript.id = 'gtranslateSettingsScript';
-            gtranslateSettingsScript.innerHTML = `window.gtranslateSettings = {
-        "default_language": "en",
-        "native_language_names": "true",
-        "languages": ["en", "ja", "ko", "zh-CN"],
-        "wrapper_selector": ".gtranslate_wrapper"
-      };`;
+            gtranslateSettingsScript.innerHTML = `
+                window.gtranslateSettings = {
+                    "default_language": "en",
+                    "native_language_names": "true",
+                    "languages": ["en", "ja", "ko", "zh-CN"],
+                    "wrapper_selector": ".gtranslate_wrapper"
+                };
+            `;
             document.body.appendChild(gtranslateSettingsScript);
         }
 
@@ -30,6 +31,7 @@ function GTranslate() {
         }
 
         return () => {
+            // Clean up: Remove the scripts if they were added
             const gtranslateSettingsScript = document.getElementById('gtranslateSettingsScript');
             if (gtranslateSettingsScript) {
                 document.body.removeChild(gtranslateSettingsScript);
@@ -42,7 +44,6 @@ function GTranslate() {
     }, []);
 
     return <div className="gtranslate_wrapper"></div>;
-
 }
 
 export default GTranslate;
