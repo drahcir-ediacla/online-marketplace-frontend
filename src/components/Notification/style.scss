@@ -46,7 +46,7 @@
                 position: absolute;
                 top: -9px;
                 right: 200px;
-                fill: var(--green-400);
+                fill: var(--black-102);
                 width: 30px;
                 z-index: 2;
             }
@@ -57,7 +57,7 @@
                 font-weight: 500;
                 padding: 8px 12px 8px 12px;
                 justify-content: space-between;
-                background: var(--green-400);
+                background: var(--black-102);
 
                 a {
                     color: white;
@@ -109,7 +109,7 @@
                             width: 10px;
                             height: 10px;
                             border-radius: 50%;
-                            background-color: var(--green-400);
+                            background-color: var(--orange-200);
                         }
                     }
 

@@ -229,7 +229,7 @@
         }
 
         .current-location {
-            color: var(--green-400);
+            color: var(--orange-100);
         }
     }
 
@@ -259,7 +259,7 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: var(--green-400);
+            background: var(--orange-200);
             cursor: pointer;
         }
 
@@ -267,7 +267,7 @@
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: var(--green-400);
+            background: var(--orange-200);
             cursor: pointer;
         }
 
@@ -279,6 +279,8 @@
     .buttons {
         .apply-btn {
             width: 100%;
+            background-color: var(--black-102);
+            border: 1px solid var(--black-102);
         }
     }
 }

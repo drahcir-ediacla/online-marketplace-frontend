@@ -4,8 +4,8 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './style.scss';
 import BtnClear from '../Button/BtnClear';
-import HeroBanner1 from '../../assets/images/hero-banner1.webp'
-import HeroBanner2 from '../../assets/images/hero-banner2.webp'
+import HeroBanner1 from '../../assets/images/hero-banner1.jpg'
+import HeroBanner2 from '../../assets/images/hero-banner2.jpg'
 
 const HeroBanner = () => {
 

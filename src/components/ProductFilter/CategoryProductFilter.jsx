@@ -300,7 +300,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
                 <hr />
                 <div className='filter-price-row2'>
                   <BtnClear label='Reset' onClick={resetFilters} />
-                  <BtnGreen label='Apply' onClick={applyFilters} />
+                  <BtnGreen label='Apply' onClick={applyFilters} className="apply-price-range" />
                 </div>
               </div>
             )}

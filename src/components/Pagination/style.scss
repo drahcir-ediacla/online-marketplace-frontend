@@ -12,9 +12,9 @@
             margin: 0 4px;
         }
         .page-link.active{
-            background-color: var(--green-400);
+            background: var(--black-102);
             color: white;
-            border: 1px solid var(--green-400);
+            border: 1px solid var(--black-102);
         }
         .page-link:hover:not(.active){
             background-color: #ddd;

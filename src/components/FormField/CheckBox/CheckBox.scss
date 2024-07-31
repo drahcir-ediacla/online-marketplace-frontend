@@ -30,8 +30,8 @@
 }
 /* When the checkbox is checked, add a green background and border*/
 .checkbox:checked ~ .checkmark{
-    background-color: var(--green-400);
-    border: 1px solid var(--green-400);
+    background-color: var(--black-102);
+    border: 1px solid var(--black-102);
 }
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './style.scss'
-import Logo from '../../assets/images/Yogeek-logo.png';
+import Logo from '../../assets/images/yogeek-logo-white.png';
 
 const Footer = () => {
     return (

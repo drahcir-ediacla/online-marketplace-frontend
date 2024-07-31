@@ -177,6 +177,8 @@
 
     .view-chat-btn {
         margin-top: 10px;
+        background-image: linear-gradient(to right, #d53f3f, #dc6531);
+        border: 1px solid var(--orange-200);
     }
 
     .row3 {
@@ -191,9 +193,12 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            gap: 20px;
 
             .col-left {
-                width: 873px;
+                max-width: 1290px;
+                min-width: 900px;
+                flex: 1;
 
                 .time-posted {
                     font-size: 14px;
@@ -358,6 +363,7 @@
                         .col-left,
                         .col-right {
                             min-width: 0;
+                            max-width: max-content;
                             width: auto;
                         }
 
@@ -407,6 +413,8 @@
 
                         .send-message {
                             width: 100%;
+                            background-image: linear-gradient(to right, #d53f3f, #dc6531);
+                            border: 1px solid var(--orange-200);
                         }
 
                         .signin-make-offer {
@@ -437,6 +445,8 @@
                                 position: absolute;
                                 border-radius: 0 5px 5px 0;
                                 right: 0;
+                                background-image: linear-gradient(to right, #d53f3f, #dc6531);
+                                border: 1px solid var(--orange-200);
                             }
 
                             .php-symbol {
@@ -470,6 +480,12 @@
 
 
 // --------------------------- MEDIA QUERY ------------------------------------//
+
+@media only screen and (max-width: 1600px) {
+    .product-details-body {
+        margin: 0 16px;
+    }
+}
 
 @media only screen and (max-width: 1320px) {
     .product-details-body {

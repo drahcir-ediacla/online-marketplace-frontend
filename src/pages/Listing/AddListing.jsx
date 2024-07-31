@@ -770,7 +770,7 @@ const AddListing = () => {
                       </div>
                     </div>
                     <div className='update-listing-btns'>
-                      <BtnGreen label='List Now' onClick={handleFormSubmit} />
+                      <BtnGreen label='List Now' onClick={handleFormSubmit} className='list-now-btn' />
                       <BtnClear type='button' label='Cancel' onClick={ProfilePage} />
                     </div>
                   </div>

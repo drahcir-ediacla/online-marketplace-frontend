@@ -11,7 +11,7 @@ const GainGreenBanner = ({ user }) => {
         <div className="contentbox">
           <div className="col-left">
             <div className='dollar-box'><img src={DollarBox} alt="" /></div>
-            <h2>Gain more green, earn money quickly.</h2>
+            <h2>Make Space, Make Money: Sell Your Preloved Items Easily!</h2>
           </div>
           <div className="col-right">
             <Link to={`${user ? '/addlisting' : '/loginemail'}`} className="gain-more-btn">

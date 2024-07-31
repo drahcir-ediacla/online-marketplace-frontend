@@ -4,7 +4,7 @@ header {
         display: block;
 
         .row1 {
-            background-color: var(--green-600);
+            background-color: var(--gray-250);
             height: 37px;
             display: flex;
             font-size: 15px;
@@ -12,7 +12,7 @@ header {
             padding: 0 16px;
 
             .container {
-                width: 1320px;
+                width: 1600px;
                 display: flex;
                 justify-content: space-between;
 
@@ -31,13 +31,14 @@ header {
                             display: flex;
                             margin-right: 5px;
                             width: 15px;
-                            fill: white;
+                            fill: var(--black-101);
                         }
 
                         .gtranslate_wrapper {
                             .gt_selector {
                                 background: none;
-                                color: white;
+                                color: var(--black-101);
+                                font-weight: 500;
                                 border: none;
                                 width: 90px;
                                 outline: none;
@@ -121,7 +122,8 @@ header {
                     }
 
                     .sell-btn {
-                        color: white;
+                        color: var(--black-101);
+                        font-weight: 500;
                     }
 
                     .nav-tools {
@@ -140,7 +142,7 @@ header {
                                 display: flex;
                                 align-items: center;
                                 width: 19px;
-                                fill: white;
+                                fill: var(--black-101);
 
                                 a {
                                     fill: white;
@@ -160,7 +162,7 @@ header {
                             .bell-icon {
                                 display: flex;
                                 width: 18px;
-                                fill: white;
+                                fill: var(--black-101);
                             }
                         }
 
@@ -174,7 +176,7 @@ header {
                             .heart-icon {
                                 display: flex;
                                 width: 20px;
-                                fill: white;
+                                fill: var(--black-101);
                             }
                         }
                     }
@@ -189,15 +191,15 @@ header {
                         cursor: pointer;
 
                         a {
-                            color: var(--gray-500);
+                            color: var(--black-101);
                         }
 
                         a:hover {
-                            color: var(--green-400);
+                            color: var(--orange-200);
                         }
 
                         span {
-                            color: white;
+                            color: var(--black-101);
                         }
 
                         .my-account-dropdown-container {
@@ -239,7 +241,7 @@ header {
                                     }
 
                                     li:hover {
-                                        color: var(--green-400);
+                                        color: var(--orange-200);
                                     }
                                 }
                             }
@@ -252,12 +254,11 @@ header {
 
         .row2 {
             height: 76px;
-            background-color: var(--green-500);
             display: flex;
             padding: 0 16px;
 
             .container {
-                width: 1320px;
+                width: 1600px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -307,7 +308,7 @@ header {
                                 flex: 1;
                                 border-radius: 5px 0 0 5px;
                                 padding-left: 10px;
-                                border: none;
+                                border: 1px solid var(--black-102);
                             }
                         }
 
@@ -319,7 +320,7 @@ header {
                                 font-size: 15px;
                                 width: 250px;
                                 border-radius: 0 5px 5px 0;
-                                border: none;
+                                border: 1px solid var(--black-102);
                             }
 
                             .location-icon {
@@ -341,7 +342,7 @@ header {
                             }
 
                             button {
-                                background: var(--green-400);
+                                background: var(--black-102);
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
@@ -356,7 +357,7 @@ header {
                                 .magnifying-glass {
                                     display: flex;
                                     width: 21px;
-                                    background: var(--green-400);
+                                    background: none;
                                     fill: white;
                                 }
                             }
@@ -413,7 +414,7 @@ header {
                                     .reset-selected-cities {
                                         font-weight: 500;
                                         padding: 5px 10px;
-                                        color: var(--green-400);
+                                        color: var(--orange-200);
                                         cursor: pointer;
                                     }
                                 }
@@ -517,13 +518,14 @@ header {
                             .location-icon {
                                 display: flex;
                                 width: 14px;
-                                fill: #ffffff;
+                                fill: var(--black-101);
                             }
 
                             button {
                                 background: none;
                                 border: none;
-                                color: white;
+                                color: var(--black-101);
+                                font-weight: 500;
                                 max-width: 250px;
                                 text-align: left;
                             }
@@ -582,19 +584,20 @@ header {
         .row3 {
             display: flex;
             border-bottom: 1px solid var(--gray-300);
+            border-top: 1px solid var(--gray-300);
             padding: 0 16px;
 
             .container {
-                max-width: 1352px;
+                max-width: 1600px;
                 display: flex;
                 justify-content: center;
 
                 .nav-menu {
                     display: flex;
-                    width: 1320px;
+                    width: 1600px;
                     align-items: center;
                     justify-content: center;
-                    height: 60px;
+                    height: 40px;
 
                     ul {
                         display: flex;
@@ -611,15 +614,15 @@ header {
                                 position: relative;
 
                                 .parent-menu {
-                                    color: var(--gray-500);
+                                    color: var(--black-101);
                                     font-weight: 500;
                                     letter-spacing: 1px;
                                     text-decoration: none;
-                                    padding: 16px 0;
+                                    padding: 10px 0;
                                 }
 
                                 .parent-menu:hover {
-                                    border-bottom: 5px solid var(--green-400);
+                                    border-bottom: 5px solid #DC6531;
                                     // background: gray;
                                 }
 
@@ -635,8 +638,8 @@ header {
                                 .drop-menu {
                                     position: absolute;
                                     width: 240px;
-                                    top: 43px;
-                                    color: #555;
+                                    top: 36px;
+                                    color: var(--black-101);
                                     padding: 5px 0;
                                     background: white;
                                     text-align: left;
@@ -661,7 +664,7 @@ header {
                                             background-color: var(--gray-100);
 
                                             a {
-                                                color: var(--green-400);
+                                                color: var(--orange-200);
                                             }
                                         }
                                     }
@@ -669,7 +672,7 @@ header {
                             }
 
                             .btm-border:hover .parent-menu {
-                                border-bottom: 5px solid var(--green-400);
+                                border-bottom: 5px solid #DC6531;
                             }
 
                         }
@@ -753,8 +756,7 @@ header {
                                 flex: 1;
                                 border-radius: 5px 0 0 5px;
                                 padding-left: 10px;
-                                border: none;
-                                background-color: var(--gray-100);
+                                border: 1px solid var(--black-102);
                             }
                         }
 
@@ -764,8 +766,7 @@ header {
                             input {
                                 width: 250px;
                                 border-radius: 0 5px 5px 0;
-                                border: none;
-                                background-color: var(--gray-100);
+                                border: 1px solid var(--black-102);
                             }
 
                             .location-icon {
@@ -786,7 +787,7 @@ header {
                             }
 
                             button {
-                                background: var(--green-400);
+                                background: var(--black-102);
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
@@ -801,7 +802,7 @@ header {
                                 .magnifying-glass {
                                     display: flex;
                                     width: 21px;
-                                    background: var(--green-400);
+                                    background: var(--black-102);
                                     fill: white;
                                 }
                             }
@@ -969,6 +970,8 @@ header {
                     .sticky-header-sell-btn {
                         width: 83px;
                         height: 40px;
+                        background: var(--black-102);
+                        border: none;
                     }
                 }
             }

@@ -66,13 +66,13 @@
             width: 500px;
             border: none;
             padding: 5px;
-            background: var(--green-400);
+            background-image: linear-gradient(to right, #d53f3f, #dc6531);
             color: white;
             border-radius: 5px;
         }
 
         .load-more-button:hover {
-            background: #008774;
+            background-image: linear-gradient(to right, #dc6531, #dc6531);
         }
     }
 }

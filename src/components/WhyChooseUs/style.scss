@@ -1,5 +1,5 @@
 .why-choose-us-box {
-    background: var(--green-100);
+    background: var(--light-gray-101);
     padding: 50px 16px;
     margin-top: 100px;
     font-family: kanit, sans-serif;
@@ -24,11 +24,10 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 40px;
 
             .why-choose-us-card {
                 text-decoration: none;
-                color: var(--green-500);
                 display: block;
                 text-align: center;
                 width: 240px;

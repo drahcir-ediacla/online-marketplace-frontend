@@ -28,9 +28,9 @@
 .category-button:hover {
   font-family: 'Poppins', sans-serif;
   font-size: 15px;
-  background: var(--green-400);
+  background-image: linear-gradient(to right, #d53f3f, #dc6531);
   color: white;
-  border-color: var(--green-400);
+  border: 1px solid var(--orange-200);
 }
 
 
@@ -38,8 +38,9 @@
 .seemore-button {
   font-family: 'Poppins', sans-serif;
   font-size: 15px;
+  font-weight: 500;
   border: none;
-  color: var(--green-400);
+  color: var(--black-101);
   padding: 5px 0px;
   background: none;
   outline: none;
@@ -48,7 +49,7 @@
 .seemore-button:hover {
   border: none;
   background: none;
-  color: var(--green-400);
+  color: var(--orange-200);
   text-decoration: underline;
   cursor: pointer;
 }

@@ -6,12 +6,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 980px;
+        width: 1150px;
         height: 100%;
         margin: 20px 16px;
         padding: 30px 30px;
-        background-color: #D6DA1A;
         flex-wrap: wrap;
+        border: 1px solid var(--gray-300);
 
         .col-left {
             display: flex;
@@ -30,7 +30,7 @@
 
             h2 {
                 font-family: 'Kanit', sans-serif;
-                color: var(--green-500);
+                color: var(--black-101);
                 font-weight: 700;
             }
         }
@@ -44,7 +44,8 @@
                 justify-content: space-between;
                 padding: 9px 31px;
                 text-decoration: none;
-                border: 2px solid var(--green-500);
+                border: 2px solid var(--black-101);
+                border-radius: 5px;
 
                 .sell-arrow {
                     display: flex;
@@ -53,7 +54,7 @@
                 h5 {
                     font-family: 'Kanit', sans-serif;
                     margin: 0;
-                    color: var(--green-500);
+                    color: var(--black-101);
                 }
             }
         }
