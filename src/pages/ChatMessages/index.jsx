@@ -58,6 +58,8 @@ const ChatMessages = () => {
     const productStatus = productInfo?.status
     const sellerId = productInfo?.seller?.id
     const [receiver_id, setReceiverId] = useState(null); // State to store receiver_id
+    const [showPopupImg, setShowPopupImg] = useState(false);
+    const [largeImageSrc, setLargeImageSrc] = useState('');
     const isImage = (url) => /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
     const filterChatOptions = ['Inbox', 'Archived', 'Unread'].map(option => ({
         label: option,
@@ -145,6 +147,16 @@ const ChatMessages = () => {
     const toggleChatActionOptions = () => {
         setShowChatActionOptions(!showChatActionOptions)
     }
+
+    const handleImageClick = (src) => {
+        setLargeImageSrc(src);
+        setShowPopupImg(true);
+    };
+
+    const handleClosePopupImg = () => {
+        setShowPopupImg(false);
+        setLargeImageSrc('');
+    };
 
 
     const handleKeyPress = (e) => {
@@ -775,7 +787,16 @@ const ChatMessages = () => {
 
 
     return (
-        <>
+        <>{showPopupImg && (
+            <div className="popup" onClick={handleClosePopupImg}>
+                <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+                    <img src={largeImageSrc} alt="Large" className="large-image" />
+                    <button className="close-button" onClick={handleClosePopupImg}>
+                        <i class='fa fa-times'></i>
+                    </button>
+                </div>
+            </div>
+        )}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={product_id} productName={productInfo?.product_name} userId={user?.id} />}
             {reviewModalOpen && <ReviewModal onClick={toggleReviewModal} chatId={chat_id} productId={product_id} sellerId={sellerId} targetId={receiver_id} userId={user?.id} displayName={authUserDisplayName} profileImg={profileImg} />}
             <div className='header-container'>
@@ -1132,7 +1153,7 @@ const ChatMessages = () => {
                                                         <div className='chat-sent-message-data'>
                                                             {isImage(message.content) && (
                                                                 <div>
-                                                                    <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                                    <img src={message.content} className='chat-uploaded-image' alt="" onClick={() => handleImageClick(message.content)} />
                                                                 </div>
                                                             )}
 
@@ -1177,7 +1198,7 @@ const ChatMessages = () => {
                                                         <div className='chat-received-message-data'>
                                                             <img src={receiverInfo?.profile_pic || AvatarIcon} alt="" />
                                                             {isImage(message.content) && (
-                                                                <img src={message.content} className='chat-uploaded-image' alt="" />
+                                                                <img src={message.content} className='chat-uploaded-image' alt="" onClick={() => handleImageClick(message.content)} />
                                                             )}
                                                             {!isImage(message.content) && (
                                                                 <div className="chat-received-message-box">
