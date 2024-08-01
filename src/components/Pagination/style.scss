@@ -12,9 +12,9 @@
             margin: 0 4px;
         }
         .page-link.active{
-            background: var(--black-102);
+            background: linear-gradient(to right, #d53f3f, #dc6531);
             color: white;
-            border: 1px solid var(--black-102);
+            border: 1px solid var(--orange-200);
         }
         .page-link:hover:not(.active){
             background-color: #ddd;
