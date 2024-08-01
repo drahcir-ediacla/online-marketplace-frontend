@@ -25,7 +25,7 @@ const NavMenu = () => {
     }, []);
 
     // Specify the labels you want to include
-    const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Baby & Kids", "Beauty & Personal Care", "Furniture", "Games, Hobbies & Crafts", "Jewelry & Watches"];
+    const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Baby & Kids", "Beauty & Personal Care", "Furniture", "Games, Hobbies & Crafts", "Book, Music & Tickets"];
 
     // Filter the categories based on the included labels
     const filteredCategories = categories.filter(category => includedLabels.includes(category.label));
