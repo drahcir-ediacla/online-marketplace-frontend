@@ -514,7 +514,7 @@ header {
                             font-size: 15px;
                             display: flex;
                             justify-content: flex-end;
-                            gap: 10px;
+                            gap: 5px;
 
                             .location-icon {
                                 display: flex;
@@ -973,6 +973,10 @@ header {
                         height: 40px;
                         background: linear-gradient(to right, #d53f3f, #dc6531);
                         border: var(--orange-200);
+                    }
+
+                    .sticky-header-sell-btn:hover {
+                        background: linear-gradient(to right, #dc6531, #dc6531);
                     }
                 }
             }

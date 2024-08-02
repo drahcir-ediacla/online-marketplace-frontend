@@ -301,6 +301,11 @@
                         border: none;
                     }
 
+                    .accept-offer-btn {
+                        background: var(--green-400);
+                        border: var(--green-400);
+                    }
+
                     .item-sold-btn {
                         font-size: 15px;
                         font-family: 'Poppins', sans-serif;

@@ -9,11 +9,8 @@ const Breadcrumb = ({ categories, selectedCategory }) => {
 
     // Helper function to recursively find a category by ID in the hierarchy
     const findCategoryById = (categories, categoryId) => {
-        console.log('Finding category for ID:', categoryId);
         for (const category of categories) {
-            console.log('Checking category:', category);
             if (category.id === categoryId) {
-                console.log('Category found:', category);
                 return category;
             }
             if (category.subcategories && category.subcategories.length > 0) {
@@ -24,7 +21,6 @@ const Breadcrumb = ({ categories, selectedCategory }) => {
                 }
             }
         }
-        console.log('Category not found for ID:', categoryId);
         return null;
     };
 

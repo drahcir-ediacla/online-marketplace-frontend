@@ -14,6 +14,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
   const [sortBy, setSortBy] = useState('Most Recent');
   const [filters, setFilters] = useState({
     condition: [],
+    dealOption: [],
     sort: '',
   });
 
@@ -31,6 +32,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     // Reset filters when the category changes
     setFilters({
       condition: [],
+      dealOption: [],
       sort: '',
     });
     setFilterPrice({
@@ -99,10 +101,10 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: name === 'condition'
+      [name]: name === 'condition' || name === 'dealOption'
         ? checked
-          ? [...prevFilters.condition, value] // Add the value to the array if checked
-          : prevFilters.condition.filter((condition) => condition !== value) // Remove the value if unchecked
+          ? [...prevFilters[name], value] // Add the value to the array if checked
+          : prevFilters[name].filter((item) => item !== value) // Remove the value if unchecked
         : value,
     }));
   };
@@ -257,8 +259,24 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
               onClick={() => toggleFilterVisibility('dealOption')} />
             {activeFilter === 'dealOption' && (
               <ul className='filter-deal-options'>
-                <li><CheckBox label='Meet Up' value='Meet Up' /></li>
-                <li><CheckBox label='Mailing and Delivery' value='Mailing and Delivery' /></li>
+                <li>
+                  <CheckBox
+                    name='dealOption'
+                    label='Meet Up'
+                    value='Meet Up'
+                    checked={filters.dealOption.includes('Meet Up')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
+                <li>
+                  <CheckBox
+                    name='dealOption'
+                    label='Delivery'
+                    value='Delivery'
+                    checked={filters.dealOption.includes('Delivery')}
+                    onChange={handleFilterChange}
+                  />
+                </li>
               </ul>
             )}
           </div>

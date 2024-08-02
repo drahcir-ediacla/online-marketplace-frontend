@@ -1013,7 +1013,7 @@ const ChatMessages = () => {
                                                                     offerCurrentStatus === 'Pending' ?
                                                                         (
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen label='Accept Offer' onClick={() => { handleOfferOptions('Accepted'); }} />
+                                                                                <BtnGreen label='Accept Offer' className='accept-offer-btn' onClick={() => { handleOfferOptions('Accepted'); }} />
                                                                                 <BtnClear label='Decline Offer' onClick={() => { setSendOffer(false); handleOfferOptions('Declined'); }} />
                                                                                 <BtnClear label='Mark as Sold' onClick={toggleSoldModal} />
                                                                             </div>
@@ -1071,7 +1071,7 @@ const ChatMessages = () => {
                                                                                 />
                                                                             </div>
                                                                             <div className='offer-buttons'>
-                                                                                <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
+                                                                                <BtnGreen label='Send Offer' className='send-offer-btn' onClick={() => { handleOfferOptions('Pending'); toggleChangeOfferBtn(); }} disabled={!priceOffer?.trim()} />
                                                                                 <BtnClear label='Cancel' onClick={toggleChangeOfferBtn} />
                                                                             </div>
                                                                         </>
