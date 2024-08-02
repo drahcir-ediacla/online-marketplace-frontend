@@ -35,7 +35,7 @@ const SuccessRegistration = ({ onClick }) => {
                             <span>Congratulations, your account has been successfully created.</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='mark-sold-button' label='Continue Login' onClick={onClick} />
+                            <BtnGreen label='Continue Login' onClick={onClick} />
                         </div>
                     </div>
                 </div>

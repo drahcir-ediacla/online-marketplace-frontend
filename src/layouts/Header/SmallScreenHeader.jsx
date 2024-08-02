@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './style.scss'
-import Logo from '../../assets/images/Yogeek-logo-gray.png';
+import Logo from '../../assets/images/Yogeek-logo.png';
 import LogoIcon from '../../assets/images/yogeek-icon-logo.png'
 import ChatMessageIcon from '../../components/ChatMessageIcon';
 import SlidingSideNav from '../SlidingSideNav';
@@ -51,7 +51,7 @@ const StickySmallScreenHeader = ({ user }) => {
                 <div className="tablet-header-row1">
                     <div className='tablet-header-row1-col1'>
                         <Link to="/" onClick={handleHomePageClick}>
-                            <img src={Logo} alt='' className='logo' />
+                            <img src={Logo} alt='' className='small-screen-logo' />
                         </Link>
                         <Link to="/" onClick={handleHomePageClick}>
                             <img src={LogoIcon} alt='' className='logo-icon' />

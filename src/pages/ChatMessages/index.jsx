@@ -1106,7 +1106,7 @@ const ChatMessages = () => {
                                                                     <div className='offer-buttons'>
                                                                         {isMakeOfferBtn ?
                                                                             (
-                                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} />
+                                                                                <BtnGreen label='Make Offer' onClick={toggleMakeOfferBtn} className='make-offer-btn' />
                                                                             ) :
                                                                             (
                                                                                 <>
@@ -1120,7 +1120,7 @@ const ChatMessages = () => {
                                                                                         />
                                                                                     </div>
                                                                                     <div className='offer-buttons'>
-                                                                                        <BtnGreen label='Send Offer' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
+                                                                                        <BtnGreen label='Send Offer' className='send-offer-btn' onClick={() => { handleOfferOptions('Pending'); }} disabled={!priceOffer?.trim()} />
                                                                                         <BtnClear label='Cancel' onClick={toggleMakeOfferBtn} />
                                                                                     </div>
                                                                                 </>

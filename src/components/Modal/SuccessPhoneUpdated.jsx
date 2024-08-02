@@ -38,7 +38,7 @@ const SuccessEmailUpdated = () => {
                             <span>Your phone number successfully updated!</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='mark-sold-button' label='Ok' onClick={refreshPage} />
+                            <BtnGreen label='Ok' onClick={refreshPage} />
                         </div>
                     </div>
                 </div>

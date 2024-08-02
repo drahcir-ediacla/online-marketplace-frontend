@@ -82,6 +82,7 @@
 
             .user-chat-list {
                 color: var(--gray-500);
+                border: none;
 
                 .select-user-conversation {
                     display: flex;
@@ -150,14 +151,15 @@
                                 width: 10px;
                                 height: 10px;
                                 border-radius: 50%;
-                                background-color: var(--green-400);
+                                background-color: var(--orange-200);
                             }
                         }
                     }
                 }
 
                 .active {
-                    background-color: var(--gray-200);
+                    background: var(--gray-200);
+                    border: none;
                 }
             }
 
@@ -226,7 +228,7 @@
                     .three-dots-chat {
                         display: flex;
                         width: 5px;
-                        fill: var(--green-400);
+                        fill: var(--black-102);
                         rotate: 90deg;
                     }
 
@@ -281,6 +283,16 @@
                     display: flex;
                     gap: 5px;
                     align-items: center;
+
+                    .make-offer-btn {
+                        background: var(--green-400);
+                        border: var(--green-400);
+                    }
+
+                    .send-offer-btn {
+                        background: var(--green-400);
+                        border: var(--green-400);
+                    }
 
                     .change-offer-btn {
                         font-size: 15px;
@@ -581,7 +593,7 @@
                 .chat-send-icon-btn {
                     width: 40px;
                     height: 40px;
-                    background-color: var(--green-400);
+                    background: linear-gradient(to right, #d53f3f, #dc6531);
                     border-radius: 5px;
                     border: none;
                     cursor: pointer;
@@ -595,7 +607,7 @@
                 }
 
                 .chat-send-icon-btn:hover {
-                    background: #008774;
+                    background: linear-gradient(to right, #dc6531, #dc6531);
                 }
             }
         }

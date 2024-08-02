@@ -36,6 +36,8 @@
 
         .page-not-found-btn {
             float: none;
+            background: linear-gradient(to right, #d53f3f, #dc6531);
+            border: var(--orange-200);
         }
     }
 }

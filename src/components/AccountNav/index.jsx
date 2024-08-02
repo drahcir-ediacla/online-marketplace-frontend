@@ -3,7 +3,7 @@ import axios from '../../apicalls/axios';
 import { Link } from 'react-router-dom';
 import './style.scss'; // Ensure this imports your styling correctly
 import useAuthentication from '../../hooks/authHook';
-import Logo from '../../assets/images/Yogeek-logo-gray.png';
+import Logo from '../../assets/images/Yogeek-logo.png';
 import { ReactComponent as UserIcon } from '../../assets/images/user-icon.svg';
 
 const AccountNav = () => {

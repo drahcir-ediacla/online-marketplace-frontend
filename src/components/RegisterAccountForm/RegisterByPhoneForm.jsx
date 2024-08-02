@@ -7,7 +7,7 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import SuccessRegistrationModal from '../../components/Modal/SuccessRegistrationModal'
-import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
+import LogoGray from '../../assets/images/Yogeek-logo.png'
 import LoginBtn from '../../components/Button/LoginBtn'
 import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
@@ -207,7 +207,7 @@ const RegisterByPhoneForm = () => {
           <div className='register-form-container'>
             <form className='register-form' onSubmit={createAccount}>
               <div className='row1'>
-                <div className='col1'><Link to='/'><img src={LogoGray} alt="" /></Link></div>
+                <div className='col1'><Link to='/'><img src={LogoGray} alt="" className='auth-form-logo' /></Link></div>
                 <div className='col2'><h4>Create an account</h4></div>
               </div>
               <div className='row2'>

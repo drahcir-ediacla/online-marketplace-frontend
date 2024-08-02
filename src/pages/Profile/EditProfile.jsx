@@ -561,7 +561,7 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div></div>
-                <div><BtnGreen label='Save Changes' onClick={() => setShowAlert(false)} /></div>
+                <div><BtnGreen label='Save Changes' onClick={() => setShowAlert(false)} className='save-profile-info-btn' /></div>
               </form>
             </div>
           </div>

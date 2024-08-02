@@ -50,6 +50,7 @@
 
 import React, { useState } from 'react';
 import './style.scss';
+import SuccessEmailUpdated from '../../components/Modal/SuccessEmailUpdated';
 
 const App = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -67,6 +68,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <SuccessEmailUpdated />
       <h1>Image Popup Example</h1>
       <div className="thumbnail-container">
         <img

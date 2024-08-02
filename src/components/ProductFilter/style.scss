@@ -114,8 +114,8 @@
                     padding: 0 12px 0 12px;
 
                     .apply-price-range {
-                        background-color: var(--black-102);
-                        border: 1px solid var(--black-102);
+                        background: linear-gradient(to right, #d53f3f, #dc6531);
+                        border: 1px solid var(--orange-200);
                     }
                 }
             }
@@ -212,6 +212,7 @@
                         display: flex;
                         padding: 10px 12px 10px 14px;
                         justify-content: space-between;
+                        border: none;
                         border-bottom: 1px solid var(--gray-200);
 
                         .filter-arrow {
@@ -315,6 +316,11 @@
             gap: 10px;
             padding: 10px 20px;
             border-top: 1px solid var(--gray-200);
+
+            .apply-btn {
+                background: linear-gradient(to right, #d53f3f, #dc6531);
+                border: var(--orange-200);
+            }
         }
     }
 }

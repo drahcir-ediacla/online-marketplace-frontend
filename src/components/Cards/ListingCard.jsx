@@ -238,11 +238,11 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
                   </button>
                 </div>
               </div>
-              {(authenticatedUser?.id === userId) && (
+              {/* {(authenticatedUser?.id === userId) && (
                 <>
                   <div className='promote-btn-box'><BtnGreen label='Promote' className='promote-btn' /></div>
                 </>
-              )}
+              )} */}
             </div>
           </div>
         )

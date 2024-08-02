@@ -91,6 +91,10 @@
                             height: 27px;
                             border-radius: 100%;
                         }
+
+                        .avatar-image-icon {
+                            filter: grayscale(100%);
+                        }
                     }
 
                     h5 {

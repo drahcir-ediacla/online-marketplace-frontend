@@ -165,7 +165,7 @@ const SetPassword = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div><BtnGreen label="Save Changes" onClick={() => { setSuccessAlert(false); setErrorAlert(false); }} disabled={!validPwd || !validMatch} /></div>
+                                <div><BtnGreen label="Save Changes" onClick={() => { setSuccessAlert(false); setErrorAlert(false); }} disabled={!validPwd || !validMatch} className='save-password' /></div>
                             </form>
                         </div>
                     </div>

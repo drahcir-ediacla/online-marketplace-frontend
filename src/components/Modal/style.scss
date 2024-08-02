@@ -37,6 +37,7 @@
             span {
                 font-weight: 500;
                 font-size: 16px;
+                text-align: start;
             }
         }
 
@@ -53,6 +54,7 @@
             span {
                 font-weight: 500;
                 font-size: 16px;
+                text-align: start;
             }
         }
 
@@ -179,6 +181,11 @@
 
             .yes-button:hover {
                 background: #D70512;
+            }
+
+            .mark-sold-button {
+                background: var(--green-400);
+                border: var(--green-400);
             }
         }
 
@@ -326,6 +333,7 @@
         }
 
         .report-item-modal-row3 {
+            text-align: start;
             padding: 10px 20px;
             border-top: 1px solid var(--gray-200);
         }
@@ -364,6 +372,7 @@
 
         .report-item-modal-row5 {
             padding: 20px 20px 10px 20px;
+            text-align: start;
 
             p {
                 margin-bottom: 10px;

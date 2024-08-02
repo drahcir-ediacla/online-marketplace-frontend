@@ -344,7 +344,7 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
                         </div>
                         <div className="item-filter-modal-row3">
                             <BtnClear label='Reset All' onClick={resetFilters} />
-                            <BtnGreen label='Apply' onClick={() => { applyFilters(); toggleModal(); }} onKeyPress={handleEnterKeyPress} />
+                            <BtnGreen label='Apply' className='apply-btn' onClick={() => { applyFilters(); toggleModal(); }} onKeyPress={handleEnterKeyPress} />
                         </div>
                     </div>
                 </div>

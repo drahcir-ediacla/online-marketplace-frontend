@@ -899,7 +899,7 @@ const AddListing = () => {
                                             </div>
                                         </div>
                                         <div className='update-listing-btns'>
-                                            <BtnGreen label='Update Listing' onClick={handleFormSubmit} />
+                                            <BtnGreen label='Update Listing' className='list-now-btn' onClick={handleFormSubmit} />
                                             <BtnClear type='button' label='Cancel' onClick={ProductPage} />
                                         </div>
                                     </div>

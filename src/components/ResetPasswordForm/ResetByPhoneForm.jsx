@@ -6,7 +6,7 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SuccessResetPassword from '../../components/Modal/SuccessResetPassword'
 import LoginBtn from '../Button/LoginBtn'
-import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
+import LogoGray from '../../assets/images/Yogeek-logo.png'
 import BtnClear from '../../components/Button/BtnClear'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
@@ -202,7 +202,7 @@ const ResetByPhoneForm = () => {
           <div className="reset-form-container">
             <form className='reset-form' onSubmit={resetPassword}>
               <div className='row1'>
-                <div className="col1"><Link to="/"><img src={LogoGray} alt="" /></Link></div>
+                <div className="col1"><Link to="/"><img src={LogoGray} alt="" className='auth-form-logo' /></Link></div>
                 <div className="col2"><Link to="/LoginEmail">Sign in</Link> to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
               </div>
               <div className='row2 input-container'>

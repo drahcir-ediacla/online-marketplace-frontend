@@ -38,7 +38,7 @@ const SuccessProfileUpdate = () => {
                             <span>Your profile information successfully updated!</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='mark-sold-button' label='Ok' onClick={refreshPage} />
+                            <BtnGreen label='Ok' onClick={refreshPage} />
                         </div>
                     </div>
                 </div>

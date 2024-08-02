@@ -971,8 +971,8 @@ header {
                     .sticky-header-sell-btn {
                         width: 83px;
                         height: 40px;
-                        background: var(--black-102);
-                        border: none;
+                        background: linear-gradient(to right, #d53f3f, #dc6531);
+                        border: var(--orange-200);
                     }
                 }
             }
@@ -1017,6 +1017,10 @@ header {
         .tablet-header-row1-col1 {
             .logo-icon {
                 display: none;
+            }
+
+            .small-screen-logo {
+                width: 188px;
             }
         }
 
@@ -1133,7 +1137,7 @@ header {
 
             button {
                 position: absolute;
-                background: var(--green-400);
+                background: var(--black-102);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1188,7 +1192,7 @@ header {
             .reset-selected-cities {
                 font-weight: 500;
                 padding: 5px 10px;
-                color: var(--green-400);
+                color: var(--orange-200);
                 cursor: pointer;
             }
 
@@ -1221,7 +1225,8 @@ header {
             }
 
             .active {
-                background-color: var(--gray-200);
+                background: var(--gray-200);
+                border: none;
             }
 
             .active:after {
@@ -1291,7 +1296,8 @@ header {
             }
 
             .active {
-                background-color: var(--gray-200);
+                background: var(--gray-200);
+                border: none;
             }
 
             .active:after {

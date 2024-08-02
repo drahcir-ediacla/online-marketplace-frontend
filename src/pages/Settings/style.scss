@@ -58,6 +58,11 @@
                             }
                         }
                     }
+
+                    .deactivate-account-btn {
+                        background: linear-gradient(to right, #d53f3f, #dc6531);
+                        border-color: #dc6531;
+                    }
                 }
             }
         }
@@ -166,6 +171,11 @@
                         .hide {
                             display: none;
                         }
+                    }
+
+                    .save-password {
+                        background: linear-gradient(to right, #d53f3f, #dc6531);
+                        border-color: #dc6531;
                     }
 
                 }

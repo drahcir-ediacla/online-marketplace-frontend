@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from 'react-router-dom'
 import './style.scss'
 import LoginBtn from '../Button/LoginBtn'
-import LogoGray from '../../assets/images/Yogeek-logo-gray.png'
+import LogoGray from '../../assets/images/Yogeek-logo.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
 import { useDispatch } from 'react-redux';
@@ -130,7 +130,7 @@ const LoginPhoneForm = () => {
       <div className='login-form-container'>
         <form className='login-form' onSubmit={loginUser}>
           <div className='row1'>
-            <div className="col1"><Link to="/"><img src={LogoGray} alt="" /></Link></div>
+            <div className="col1"><Link to="/"><img src={LogoGray} alt="" className='auth-form-logo' /></Link></div>
             <div className="col2">Sign in to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
           </div>
           <div className='row2'>

@@ -36,7 +36,7 @@ const DeactivateAccount = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="row2"><BtnGreen label="Deactivate Account" /></div>
+                            <div className="row2"><BtnGreen label="Deactivate Account" className='deactivate-account-btn' /></div>
                         </div>
                     </div>
                 </div>

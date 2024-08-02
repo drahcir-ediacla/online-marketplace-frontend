@@ -35,7 +35,7 @@ const SuccessRegistration = ({ onClick }) => {
                             <span>Your password has been updated successfully.<br></br>Use your new password to login.</span>
                         </div>
                         <div className='buttons'>
-                            <BtnGreen className='mark-sold-button' label='Continue Login' onClick={onClick} />
+                            <BtnGreen label='Continue Login' onClick={onClick} />
                         </div>
                     </div>
                 </div>

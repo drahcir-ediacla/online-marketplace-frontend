@@ -151,7 +151,7 @@ const SlidingSideNav = () => {
                       </div>
                     ) : (
                       <div className="avatar-icon">
-                        <Link onClick={myProfile}><img src={AvatarIcon} alt="" /></Link>
+                        <Link onClick={myProfile}><img src={AvatarIcon} alt="" className='avatar-image-icon' /></Link>
                       </div>
                     )}
                     <Link onClick={myProfile}><h5>{user.display_name || 'Anonymous'}</h5></Link>
@@ -166,7 +166,7 @@ const SlidingSideNav = () => {
                 <>
                   <div>
                     <div className="avatar-icon">
-                      <img src={AvatarIcon} alt="" />
+                      <img src={AvatarIcon} alt="" className='avatar-image-icon' />
                     </div>
                     <Link to='/LoginEmail'><h5>Hello, sign in</h5></Link>
                   </div>
