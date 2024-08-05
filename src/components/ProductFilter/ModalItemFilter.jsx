@@ -32,6 +32,7 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
     const [tempFilters, setTempFilters] = useState({
         condition: [],
         sort: '',
+        dealOption: [],
     });
     const [tempFilterPrice, setTempFilterPrice] = useState({
         minPrice: '',
@@ -41,6 +42,7 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
     const [filters, setFilters] = useState({
         condition: [],
         sort: '',
+        dealOption: [],
     });
 
     const [filterPrice, setFilterPrice] = useState({
@@ -106,10 +108,10 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
 
         setTempFilters((prevTempFilters) => ({
             ...prevTempFilters,
-            [name]: name === 'condition'
+            [name]: name === 'condition' || name === 'dealOption'
                 ? checked
-                    ? [...prevTempFilters.condition, value]
-                    : prevTempFilters.condition.filter((condition) => condition !== value)
+                    ? [...prevTempFilters[name], value] // Add the value to the array if checked
+                    : prevTempFilters[name].filter((filterValue) => filterValue !== value) // Remove the value if unchecked
                 : value,
         }));
     };
@@ -157,6 +159,7 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
         setTempFilters({
             condition: [],
             sort: '',
+            dealOption: [],
         });
     };
 
@@ -298,14 +301,20 @@ const ModalItemFilter = ({ className, userId, userData, filteredListings, authen
                                     <ul className='filter-deal-options'>
                                         <li>
                                             <CheckBox
+                                                name='dealOption'
                                                 label='Meet Up'
                                                 value='Meet Up'
+                                                checked={tempFilters.dealOption.includes('Meet Up')}
+                                                onChange={handleFilterChange}
                                             />
                                         </li>
                                         <li>
                                             <CheckBox
-                                                label='Mailing and Delivery'
-                                                value='Mailing and Delivery'
+                                                name='dealOption'
+                                                label='Delivery'
+                                                value='Delivery'
+                                                checked={tempFilters.dealOption.includes('Delivery')}
+                                                onChange={handleFilterChange}
                                             />
                                         </li>
                                     </ul>
