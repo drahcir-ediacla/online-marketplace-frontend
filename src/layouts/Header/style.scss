@@ -520,6 +520,7 @@ header {
                                 display: flex;
                                 width: 14px;
                                 fill: var(--black-101);
+                                align-items: baseline;
                             }
 
                             button {
@@ -1350,6 +1351,11 @@ header {
     .tablet-header {
         .tablet-header-row1 {
             .tablet-header-row1-col1 {
+
+                .small-screen-logo {
+                    display: none;
+                }
+
                 .logo-icon {
                     display: block;
                 }
