@@ -1,39 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react'
-import axios from '../../apicalls/axios'
-import './style.scss'
-import FilterBy from '../Button/FilterBy'
-import CheckBox from '../FormField/CheckBox/CheckBox'
-import Input from '../FormField/Input'
-import BtnClear from '../Button/BtnClear'
-import BtnGreen from '../Button/BtnGreen'
-import RadioButton from '../FormField/RadioButton'
+import React, { useState, useEffect, useRef } from 'react';
+import axios from '../../apicalls/axios';
+import './style.scss';
+import FilterBy from '../Button/FilterBy';
+import CheckBox from '../FormField/CheckBox/CheckBox';
+import Input from '../FormField/Input';
+import BtnClear from '../Button/BtnClear';
+import BtnGreen from '../Button/BtnGreen';
+import RadioButton from '../FormField/RadioButton';
 
 const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
-
   const [activeFilter, setActiveFilter] = useState(null);
   const [sortBy, setSortBy] = useState('Most Recent');
   const [filters, setFilters] = useState({
     condition: [],
-    dealOption: [],
     sort: '',
+    dealOption: [],
   });
 
   const [filterPrice, setFilterPrice] = useState({
     minPrice: '',
     maxPrice: '',
-  })
-
+  });
 
   const [currentCategory, setCurrentCategory] = useState(categoryId);
   const containerRef = useRef(null);
-
 
   useEffect(() => {
     // Reset filters when the category changes
     setFilters({
       condition: [],
-      dealOption: [],
       sort: '',
+      dealOption: [],
     });
     setFilterPrice({
       minPrice: '',
@@ -41,8 +38,6 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     });
     setCurrentCategory(categoryId);
   }, [categoryId]);
-
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,9 +53,6 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     };
   }, []);
 
-
-
-
   useEffect(() => {
     // Perform API call with the selected filters and sorting option
     const fetchData = async () => {
@@ -70,7 +62,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             ...filters,
             ...filterPrice,
             sort: filters.sort,
-          }
+          },
         });
 
         // Update the category data in the parent component
@@ -83,18 +75,15 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     fetchData();
   }, [categoryId, value, filters]);
 
-
   const toggleFilterVisibility = (filter) => {
     setActiveFilter(activeFilter === filter ? null : filter);
   };
-
 
   const handleSortByChange = (event) => {
     const selectedSortBy = event.target.value;
     setSortBy(selectedSortBy); // Update the local state
     setFilters((prevFilters) => ({ ...prevFilters, sort: selectedSortBy }));
   };
-
 
   const handleFilterChange = (event) => {
     const { name, value, checked } = event.target;
@@ -104,23 +93,19 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
       [name]: name === 'condition' || name === 'dealOption'
         ? checked
           ? [...prevFilters[name], value] // Add the value to the array if checked
-          : prevFilters[name].filter((item) => item !== value) // Remove the value if unchecked
+          : prevFilters[name].filter((filterValue) => filterValue !== value) // Remove the value if unchecked
         : value,
     }));
   };
-
 
   const handlePriceChange = (event) => {
     const { name, value } = event.target;
     setFilterPrice((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-
   const applyFilters = () => {
     setFilters((prevFilters) => ({ ...prevFilters, applied: true }));
   };
-
-
 
   const resetFilters = () => {
     setFilterPrice({
@@ -130,8 +115,9 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      // condition: [],
-      // sort: '',
+      condition: [],
+      sort: '',
+      dealOption: [],
       applied: false, // Reset the applied property
     }));
 
@@ -145,13 +131,11 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     }
   };
 
-
   const handleEnterKeyPress = (event) => {
     if (event.key === 'Enter') {
       applyFilters();
     }
   };
-
 
   return (
     <>
@@ -161,7 +145,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             <FilterBy
               label='Sort By'
               arrowStyle={activeFilter === 'sortByFilter' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
-              onClick={() => toggleFilterVisibility('sortByFilter')} />
+              onClick={() => toggleFilterVisibility('sortByFilter')}
+            />
             {activeFilter === 'sortByFilter' && (
               <ul className='filter-sortby-options'>
                 <li>
@@ -201,7 +186,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             <FilterBy
               label='Condition'
               arrowStyle={activeFilter === 'condition' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
-              onClick={() => toggleFilterVisibility('condition')} />
+              onClick={() => toggleFilterVisibility('condition')}
+            />
             {activeFilter === 'condition' && (
               <ul className='filter-condition-options'>
                 <li>
@@ -256,7 +242,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             <FilterBy
               label='Deal Option'
               arrowStyle={activeFilter === 'dealOption' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
-              onClick={() => toggleFilterVisibility('dealOption')} />
+              onClick={() => toggleFilterVisibility('dealOption')}
+            />
             {activeFilter === 'dealOption' && (
               <ul className='filter-deal-options'>
                 <li>
@@ -284,7 +271,8 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
             <FilterBy
               label='Price'
               arrowStyle={activeFilter === 'priceFilter' ? { transform: 'rotate(-180deg)', transition: '0.5s ease' } : { transform: 'none', transition: '0.5s ease' }}
-              onClick={() => toggleFilterVisibility('priceFilter')} />
+              onClick={() => toggleFilterVisibility('priceFilter')}
+            />
             {activeFilter === 'priceFilter' && (
               <div className='filter-price-input'>
                 <p>Show item price from</p>
@@ -326,7 +314,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CategoryProductFilter
+export default CategoryProductFilter;
