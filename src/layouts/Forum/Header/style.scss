@@ -1,0 +1,33 @@
+.forum-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: var(--black-101);
+    padding: 10px 10px;
+    color: white;
+
+    .forum-logo {
+        height: 33px;
+    }
+
+    .forum-header-right-col {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        a {
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .default-forum-profile-avatar {
+            filter: grayscale(100%);
+            width: 33px;
+        }
+    }
+}
