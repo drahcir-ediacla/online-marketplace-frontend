@@ -1,4 +1,5 @@
 import React from 'react';
+import './style.css'
 
 const Select = ({ name, id, data, value, onSelect, className, onChange, defaultOption }) => {
   // const handleSelectChange = (e) => {

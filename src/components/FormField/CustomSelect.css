@@ -7,7 +7,7 @@
     width: fit-content;
     gap: 30px;
     cursor: pointer;
-    height: 30px;
+    height: 40px;
   }
   
   .selected-option {
@@ -29,6 +29,7 @@
     left: 0;
     right: 0;
     background: white;
+    border: 1px solid var(--gray-300);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     z-index: 1;
   }

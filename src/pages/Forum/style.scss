@@ -162,6 +162,20 @@
                                 display: flex;
                                 gap: 5px;
                             }
+
+                            .reply-counter {
+                                .reply-msg-icon {
+                                    width: 21px;
+                                    height: 20px;
+                                }
+                            }
+
+                            .view-counter {
+                                .view-msg-icon {
+                                    width: 22px;
+                                    height: 16px;
+                                }
+                            }
                         }
                     }
                 }

@@ -3,7 +3,7 @@ import './Button.css'
 
 const BtnCategory = ({ label, onClick, className, active }) => {
   return (
-    <button className={`category-button ${active ? 'active' : ''}`} onClick={onClick}>
+    <button className={`category-button ${active ? 'active' : ''} ${className}`} onClick={onClick}>
       {label}
     </button>
   );

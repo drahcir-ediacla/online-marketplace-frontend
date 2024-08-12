@@ -14,7 +14,6 @@ import { ReactComponent as UploadImgIcon } from '../../assets/images/upload-img-
 import { ReactComponent as UploadVidIcon } from '../../assets/images/upload-vid-icon.svg';
 import Input from '../../components/FormField/Input';
 import RadioButton from '../../components/FormField/RadioButton'
-import TextArea from '../../components/FormField/TextArea'
 import CheckBox from '../../components/FormField/CheckBox/CheckBox'
 import BtnGreen from '../../components/Button/BtnGreen'
 import BtnClear from '../../components/Button/BtnClear';

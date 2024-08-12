@@ -1,11 +1,12 @@
 // CustomSelect.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './CustomSelect.css'; // Import your CSS file for styling
 
 const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   console.log('selectedOption123:', selectedOption)
+  const dropDownOption = useRef(null);
 
   // useEffect(() => {
   //   const defaultOption = data[0].find(option => option.value === defaultSelected);
@@ -25,8 +26,23 @@ const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
     }
   };
 
+  useEffect(() => {
+    const handleGlobalClick = (event) => {
+      if (dropDownOption.current && !dropDownOption.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleGlobalClick);
+
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, []);
+
+
   return (
-    <div className={`custom-select ${className} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
+    <div className={`custom-select ${className} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown} ref={dropDownOption}>
       <div className="selected-option">
         {selectedOption ? selectedOption.label : 'Inbox'}
       </div>

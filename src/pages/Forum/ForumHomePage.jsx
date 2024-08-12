@@ -13,7 +13,7 @@ import { ReactComponent as NewsPaperIcon } from '../../assets/images/news-paper-
 import { ReactComponent as CalendarIcon } from '../../assets/images/calendar-icon.svg'
 import { ReactComponent as ExclamationIcon } from '../../assets/images/solid-exclamation.svg'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
-import ForumSubCategory from '../../components/Forum/ForumSubCategory'
+import ForumSubCategory from '../../components/Forum/ForumSubCategoryCard'
 import GTranslate from '../../components/GTranslate';
 
 
