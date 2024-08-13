@@ -1,44 +1,28 @@
 import './style.scss'
-import { Link } from 'react-router-dom'
 import { ReactComponent as MagnifyingGlass } from '../../../assets/images/magnifying-glass.svg'
+import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
-import Foorter from '../../../layouts/Forum/Footer'
+import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
-import BtnCategory from '../../../components/Button/BtnCategory'
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
+import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 
 
 const ForumCategoryPage = () => {
+
+    const {user} = useAuthentication();
+
     return (
         <>
-            <Header />
+            <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
             <div>
                 <div className="forum-category-page-container">
-                    <div className='forum-category-page-col1'>
-                        <div className='forum-category-page-row1'>
-                            <p>Join our community, elevate your marketplace experience!</p>
-                            <button type='button' className='forum-login-btn'>Sign In</button>
-                            <p>Don’t have a Yogeek account? <Link>Sign up</Link></p>
-                        </div>
-                        <div className='forum-category-page-row2'>
-                            <label>Categories</label>
-                            <div className="forum-category-btn-container">
-                                <BtnCategory label='General Discussions' active />
-                                <BtnCategory label='Product Categories' />
-                                <BtnCategory label='Support and Feedback' />
-                                <BtnCategory label='Seller Community' />
-                                <BtnCategory label='Promotions and Deals' />
-                                <BtnCategory label='Community Event' />
-                                <BtnCategory label='Industry News & Trends' />
-                                <BtnCategory label='Off-Topic' />
-                            </div>
-                        </div>
-                    </div>
+                    <FilterNavigation authUser={user} />
                     <div className='forum-category-page-col2'>
                         <div className="search-box-container">
                             <div className='forum-search-box'>
@@ -74,39 +58,39 @@ const ForumCategoryPage = () => {
                             </div>
                             <div className='recent-discussion'>
                                 <h6>Recent Discussions</h6>
-                                <ForumDiscussionCard 
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k' 
-                                views='1.2M' 
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
                                 />
-                                <ForumDiscussionCard 
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k' 
-                                views='1.2M' 
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
                                 />
-                                <ForumDiscussionCard 
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k' 
-                                views='1.2M' 
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <Foorter />
+            <Footer />
         </>
     )
 }

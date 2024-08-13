@@ -1,4 +1,5 @@
 import './style.scss'
+import useAuthentication from '../../hooks/authHook'
 import Header from '../../layouts/Forum/Header'
 import Footer from '../../layouts/Forum/Footer'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg'
@@ -20,9 +21,11 @@ import GTranslate from '../../components/GTranslate';
 
 const ForumHomePage = () => {
 
+    const { user } = useAuthentication();
+
     return (
         <>
-            <Header />
+            <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
@@ -140,12 +143,12 @@ const ForumHomePage = () => {
                         </div>
                         <div className="listed-category">
                             <div className='listed-category-title'><h4>Product Categories</h4></div>
-                            <ForumSubCategory 
-                            title='Product Reviews' 
-                            description='User-generated reviews and discussions about products available on your marketplace.'
-                            replies='102k'
-                            views='27.9M'
-                            lastActivity='1h ago'
+                            <ForumSubCategory
+                                title='Product Reviews'
+                                description='User-generated reviews and discussions about products available on your marketplace.'
+                                replies='102k'
+                                views='27.9M'
+                                lastActivity='1h ago'
                             />
                             <div className="forum-sub-category">
                                 <div className='forum-sub-category-col1'>

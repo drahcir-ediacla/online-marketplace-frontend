@@ -3,7 +3,6 @@ import axios from '../../apicalls/axios'
 import { useParams } from 'react-router-dom'
 import { FaStar } from 'react-icons/fa';
 import './style.scss'
-import customerReviewsData from '../../data/customerReviewsData.json'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
 import ProfileCard from '../../components/Cards/ProfileCard'

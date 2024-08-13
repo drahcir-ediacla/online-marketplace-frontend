@@ -5,7 +5,6 @@ import './CustomSelect.css'; // Import your CSS file for styling
 const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  console.log('selectedOption123:', selectedOption)
   const dropDownOption = useRef(null);
 
   // useEffect(() => {

@@ -81,7 +81,8 @@ function App() {
             <Route path='/search-results' element={<SearchResult />} />
             <Route path='/forum' element={<ForumHomePage />} />
             <Route path='/forum/category' element={<ForumMainCategoryPage />} />
-            <Route path='/forum/category/subcategory' element={<ForumSubCategoryPage />} />
+            <Route path='/forum/category/:userId' element={<ForumMainCategoryPage />} />
+            <Route path='/forum/subcategory' element={<ForumSubCategoryPage />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test/:chat_id' element={<TestPage />} />
             <Route path='/test' element={<TestPage />} />

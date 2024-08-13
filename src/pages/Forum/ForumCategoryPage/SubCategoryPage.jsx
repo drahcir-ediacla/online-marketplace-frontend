@@ -1,13 +1,13 @@
 import './style.scss'
 import { Link } from 'react-router-dom'
 import { ReactComponent as MagnifyingGlass } from '../../../assets/images/magnifying-glass.svg'
+import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import Header from '../../../layouts/Forum/Header'
-import Foorter from '../../../layouts/Forum/Footer'
+import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
 import BtnCategory from '../../../components/Button/BtnCategory'
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
-import Select from '../../../components/FormField/Select'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 
 const sortBy = [
@@ -36,10 +36,25 @@ const SubCategoryPage = () => {
             <div>
                 <div className="forum-category-page-container">
                     <div className='forum-category-page-col1'>
-                        <div className='forum-category-page-row1'>
+                        {/* <div className='forum-category-page-row1'>
                             <p>Join our community, elevate your marketplace experience!</p>
                             <button type='button' className='forum-login-btn'>Sign In</button>
                             <p>Don’t have a Yogeek account? <Link>Sign up</Link></p>
+                        </div> */}
+                        <div className='forum-category-page-row1'>
+                            <div className='forum-category-page-row1-row1'>
+                                <img src={DefaultAvatar} alt="" className='forum-profile-pic' />
+                                <div className='user-display-name'>
+                                    <p>Rayfrend_384</p>
+                                    <small>Joined in October 2023</small>
+                                </div>
+                            </div>
+                            <ul className='forum-profile-menu'>
+                                <li>Created Discussions <span className='forum-activity-counter'>(29)</span></li>
+                                <li>Joined Discussions <span className='forum-activity-counter'>(82)</span></li>
+                                <li>Likes <span className='forum-activity-counter'>(82)</span></li>
+                                <li className='forum-notifications'>Notifications <div className='forum-notification-counter'>2</div></li>
+                            </ul>
                         </div>
                         <div className='forum-sortby'>
                             <label>Sort By</label>
@@ -137,7 +152,7 @@ const SubCategoryPage = () => {
                     </div>
                 </div>
             </div>
-            <Foorter />
+            <Footer />
         </>
     )
 }
