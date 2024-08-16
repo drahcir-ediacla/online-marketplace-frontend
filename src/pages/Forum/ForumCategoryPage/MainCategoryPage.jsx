@@ -1,5 +1,6 @@
+import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import './style.scss'
-import { ReactComponent as MagnifyingGlass } from '../../../assets/images/magnifying-glass.svg'
 import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
@@ -8,11 +9,25 @@ import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
+import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
+
 
 
 const ForumCategoryPage = () => {
 
     const {user} = useAuthentication();
+    const [discussionFilter, setDiscussionFilter] = useState(false)
+    const navigate = useNavigate();
+
+    const handleNewDiscussionClick = () => {
+        navigate(`/forum/profile/${user.id}`, { 
+            state: { 
+                activeTab: 4, 
+                discussionFilter: false 
+            } 
+        });
+    };
+    
 
     return (
         <>
@@ -22,24 +37,14 @@ const ForumCategoryPage = () => {
             </div>
             <div>
                 <div className="forum-category-page-container">
-                    <FilterNavigation authUser={user} />
+                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} />
                     <div className='forum-category-page-col2'>
-                        <div className="search-box-container">
-                            <div className='forum-search-box'>
-                                <input
-                                    type="text"
-                                    placeholder='Search discussions...'
-                                />
-                                <button>
-                                    <div className='magnifying-glass'><MagnifyingGlass /></div>
-                                </button>
-                            </div>
-                        </div>
+                        <SearchDiscussionBox />
                         <div className="discussions-container">
                             <div className="category-container">
                                 <div className="category-name">
                                     <h4>General Discussion</h4>
-                                    <NewDiscussionBtn />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 <ForumSubCategory
                                     title='Product Reviews'

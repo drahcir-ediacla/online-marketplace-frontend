@@ -1,124 +1,42 @@
+import React, { useState } from 'react'
 import './style.scss'
-import { Link } from 'react-router-dom'
-import { ReactComponent as MagnifyingGlass } from '../../../assets/images/magnifying-glass.svg'
-import DefaultAvatar from '../../../assets/images/avatar-icon.png'
+import { useNavigate } from 'react-router-dom'
+import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
-import BtnCategory from '../../../components/Button/BtnCategory'
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
-import CustomSelect from '../../../components/FormField/CustomSelect'
-
-const sortBy = [
-    {
-        label: 'Most Recent',
-        value: 'Most Recent',
-    },
-    {
-        label: 'Most Viewed',
-        value: 'Most Viewed',
-    },
-    {
-        label: 'Most Liked',
-        value: 'Most Liked',
-    },
-];
+import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
+import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 
 
 const SubCategoryPage = () => {
+
+    const { user } = useAuthentication();
+    const [discussionFilter, setDiscussionFilter] = useState(true)
+    const navigate = useNavigate();
+
+    const handleNewDiscussionClick = () => {
+        navigate(`/forum/profile/${user.id}`, { state: { activeTab: 4 } });
+    };
+
     return (
         <>
-            <Header />
+            <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
             <div>
                 <div className="forum-category-page-container">
-                    <div className='forum-category-page-col1'>
-                        {/* <div className='forum-category-page-row1'>
-                            <p>Join our community, elevate your marketplace experience!</p>
-                            <button type='button' className='forum-login-btn'>Sign In</button>
-                            <p>Don’t have a Yogeek account? <Link>Sign up</Link></p>
-                        </div> */}
-                        <div className='forum-category-page-row1'>
-                            <div className='forum-category-page-row1-row1'>
-                                <img src={DefaultAvatar} alt="" className='forum-profile-pic' />
-                                <div className='user-display-name'>
-                                    <p>Rayfrend_384</p>
-                                    <small>Joined in October 2023</small>
-                                </div>
-                            </div>
-                            <ul className='forum-profile-menu'>
-                                <li>Created Discussions <span className='forum-activity-counter'>(29)</span></li>
-                                <li>Joined Discussions <span className='forum-activity-counter'>(82)</span></li>
-                                <li>Likes <span className='forum-activity-counter'>(82)</span></li>
-                                <li className='forum-notifications'>Notifications <div className='forum-notification-counter'>2</div></li>
-                            </ul>
-                        </div>
-                        <div className='forum-sortby'>
-                            <label>Sort By</label>
-                            <CustomSelect
-                                id="genderID"
-                                name="gender"
-                                defaultOption='Please select your gender --'
-                                data={sortBy}
-                                className='forum-sortby-dropdown-select'
-                            />
-                        </div>
-                        <div className='forum-last-updated'>
-                            <label>Last Updated</label>
-                            <CustomSelect
-                                id="genderID"
-                                name="gender"
-                                defaultOption='Please select your gender --'
-                                data={sortBy}
-                                className='forum-sortby-dropdown-select'
-                            />
-                        </div>
-                        <div className='forum-category-page-row2'>
-                            <label>Categories</label>
-                            <div className="forum-category-btn-container">
-                                <BtnCategory label='General Discussions' active />
-                                <BtnCategory label='Product Categories' />
-                                <BtnCategory label='Support and Feedback' />
-                                <BtnCategory label='Seller Community' />
-                                <BtnCategory label='Promotions and Deals' />
-                                <BtnCategory label='Community Event' />
-                                <BtnCategory label='Industry News & Trends' />
-                                <BtnCategory label='Off-Topic' />
-                            </div>
-                        </div>
-                        <div className='forum-category-page-row3'>
-                            <label>Tags</label>
-                            <div className="forum-category-btn-container">
-                                <BtnCategory label='Mobile and Electronics' className='tag-btn active' />
-                                <BtnCategory label='Furniture' className='tag-btn' />
-                                <BtnCategory label={`Women's Fashion`} className='tag-btn' />
-                                <BtnCategory label={`Men's Fashion`} className='tag-btn' />
-                                <BtnCategory label='Beauty & Personal Care' className='tag-btn' />
-                                <BtnCategory label='Sports & Leisure' className='tag-btn' />
-                                <div className='more-tags'><Link>View more tags</Link></div>
-                            </div>
-                        </div>
-                    </div>
+                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} />
                     <div className='forum-category-page-col2'>
-                        <div className="search-box-container">
-                            <div className='forum-search-box'>
-                                <input
-                                    type="text"
-                                    placeholder='Search discussions...'
-                                />
-                                <button>
-                                    <div className='magnifying-glass'><MagnifyingGlass /></div>
-                                </button>
-                            </div>
-                        </div>
+                        <SearchDiscussionBox />
                         <div className="discussions-container">
                             <div className="category-container">
                                 <div className="category-name">
                                     <h4>Welcome and Introductions</h4>
-                                    <NewDiscussionBtn />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 <ForumDiscussionCard
                                     title='Possible Scamming Ring Uncovered!'

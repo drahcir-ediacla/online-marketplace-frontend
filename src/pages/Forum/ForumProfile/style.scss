@@ -1,0 +1,36 @@
+.language-selector-container {
+    width: 100%;
+    text-align: right;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+.forum-profile-container {
+    display: flex;
+    gap: 20px;
+    padding: 0 20px;
+
+    .forum-profile-page-col2 {
+        width: 100%;
+
+        .discussions-container {
+
+            .tab-content {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .forum-profile-tab-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+    
+                    h4 {
+                        font-weight: 500;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+.search-box-container {
+    display: flex;
+    justify-content: center;
+
+    .forum-search-box {
+        display: flex;
+        margin: 0 20px 30px 20px;
+        max-width: 900px;
+        flex: 1 1;
+
+        input {
+            height: 42px;
+            width: 100%;
+            padding-left: 10px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid var(--black-102);
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background: var(--black-102);
+
+            .magnifying-glass {
+                display: flex;
+                width: 21px;
+                background: none;
+                fill: white;
+            }
+        }
+    }
+}

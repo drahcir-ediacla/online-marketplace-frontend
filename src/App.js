@@ -35,6 +35,8 @@ const ChatMessages = lazy(() => import('./pages/ChatMessages'));
 const ForumHomePage = lazy(() => import('./pages/Forum/ForumHomePage'));
 const ForumMainCategoryPage = lazy(() => import('./pages/Forum/ForumCategoryPage/MainCategoryPage'));
 const ForumSubCategoryPage = lazy(() => import('./pages/Forum/ForumCategoryPage/SubCategoryPage'));
+const AddDiscussion = lazy(() => import('./pages/Forum/AddDiscussion'));
+const ForumProfile = lazy(() => import('./pages/Forum/ForumProfile'))
 const Dashboard = lazy(() => import('./pages/AdminPanel/Dashboard'));
 const PageNotFound = lazy(() => import('./pages/404/PageNotFound'));
 const NewItems = lazy(() => import('./components/NewItems'));
@@ -83,6 +85,7 @@ function App() {
             <Route path='/forum/category' element={<ForumMainCategoryPage />} />
             <Route path='/forum/category/:userId' element={<ForumMainCategoryPage />} />
             <Route path='/forum/subcategory' element={<ForumSubCategoryPage />} />
+            <Route path='/forum/profile/:userId' element={<ForumProfile />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test/:chat_id' element={<TestPage />} />
             <Route path='/test' element={<TestPage />} />
@@ -100,6 +103,7 @@ function App() {
               <Route path='/updatelisting/:id/:product_name' element={<UpdateListing />} />
               <Route path='/messages/:chat_id' element={<ChatMessages />} />
               <Route path='/messages' element={<ChatMessages />} />
+              <Route path='/forum/add-discussion' element={<AddDiscussion />} />
             </Route>
           </Routes>
         </Suspense>
