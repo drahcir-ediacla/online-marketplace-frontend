@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
@@ -17,8 +17,8 @@ const ForumProfile = () => {
     const { user } = useAuthentication()
     const [activeTab, setActiveTab] = useState(0);
     const [discussionFilter, setDiscussionFilter] = useState(true)
-    console.log('discussionFilter:', discussionFilter)
     const location = useLocation();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -36,6 +36,10 @@ const ForumProfile = () => {
         setActiveTab(tabIndex);
     };
 
+    const handleNewDiscussionClick = () => {
+        navigate(`/forum/profile/${user.id}/add_discussions`);
+    };
+
 
     return (
         <>
@@ -50,6 +54,7 @@ const ForumProfile = () => {
                     joinedDiscussions={() => openContent(1)}
                     likedDiscussions={() => openContent(2)}
                     forumNotifications={() => openContent(3)}
+                    addDiscussions={() => openContent(4)}
                     discussionFilter={discussionFilter}
                 />
                 <div className='forum-profile-page-col2'>
@@ -58,7 +63,7 @@ const ForumProfile = () => {
                         <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
                             <div className="forum-profile-tab-title">
                                 <h4>Created Discussions (29)</h4>
-                                <NewDiscussionBtn onClick={() => openContent(4)} />
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                             </div>
                             <ForumDiscussionCard
                                 title='Possible Scamming Ring Uncovered!'
@@ -91,19 +96,19 @@ const ForumProfile = () => {
                         <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
                             <div className='forum-profile-tab-title'>
                                 <h4>Joined Discussions (29)</h4>
-                                <NewDiscussionBtn onClick={() => openContent(4)} />
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                             </div>
                         </div>
                         <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
                             <div className='forum-profile-tab-title'>
                                 <h4>Likes (29)</h4>
-                                <NewDiscussionBtn onClick={() => openContent(4)} />
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                             </div>
                         </div>
                         <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
                             <div className='forum-profile-tab-title'>
                                 <h4>Notifications</h4>
-                                <NewDiscussionBtn onClick={() => openContent(4)} />
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                             </div>
                         </div>
                         <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>

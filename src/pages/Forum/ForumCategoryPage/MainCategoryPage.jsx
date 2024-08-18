@@ -20,12 +20,7 @@ const ForumCategoryPage = () => {
     const navigate = useNavigate();
 
     const handleNewDiscussionClick = () => {
-        navigate(`/forum/profile/${user.id}`, { 
-            state: { 
-                activeTab: 4, 
-                discussionFilter: false 
-            } 
-        });
+        navigate(`/forum/profile/${user.id}/add_discussions`);
     };
     
 

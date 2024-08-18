@@ -18,7 +18,7 @@ const SubCategoryPage = () => {
     const navigate = useNavigate();
 
     const handleNewDiscussionClick = () => {
-        navigate(`/forum/profile/${user.id}`, { state: { activeTab: 4 } });
+        navigate(`/forum/profile/${user.id}/add_discussions`);
     };
 
     return (

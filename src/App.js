@@ -85,7 +85,7 @@ function App() {
             <Route path='/forum/category' element={<ForumMainCategoryPage />} />
             <Route path='/forum/category/:userId' element={<ForumMainCategoryPage />} />
             <Route path='/forum/subcategory' element={<ForumSubCategoryPage />} />
-            <Route path='/forum/profile/:userId' element={<ForumProfile />} />
+            <Route path='/forum/profile/:userId/:tab' element={<ForumProfile />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test/:chat_id' element={<TestPage />} />
             <Route path='/test' element={<TestPage />} />

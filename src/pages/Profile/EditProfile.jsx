@@ -245,10 +245,27 @@ const EditProfile = () => {
   };
 
 
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedUserData({ ...updatedUserData, [name]: value });
   };
+
+  const restrictSpecialCharacter = (e) => {
+    const { name, value } = e.target;
+
+    // Regular expression to allow only letters, numbers, and spaces
+    const regex = /^[a-zA-Z0-9\s]*$/;
+
+    // Check if the value matches the regex pattern
+    if (regex.test(value)) {
+      setUpdatedUserData({
+        ...updatedUserData,
+        [name]: value,
+      });
+    }
+  }
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -271,10 +288,10 @@ const EditProfile = () => {
       return;
     }
 
-    if(user.email === null || user.phone === null) {
+    if (user.email === null || user.phone === null) {
       setShowAlert(true)
     }
-      
+
     try {
       // Dispatch the action to update the user's profile
       dispatch(Setloader(true));
@@ -396,7 +413,7 @@ const EditProfile = () => {
                       name='display_name'
                       value={updatedUserData.display_name}
                       className='profile-data-input'
-                      onChange={handleInputChange}
+                      onChange={restrictSpecialCharacter}
                     />
                     {requiredFieldErrors.display_name && <div className="errmsg">{requiredFieldErrors.display_name}</div>}
                   </div>
@@ -426,7 +443,7 @@ const EditProfile = () => {
                       placeholder="Enter First Name"
                       value={updatedUserData.first_name}
                       className='profile-data-input'
-                      onChange={handleInputChange}
+                      onChange={restrictSpecialCharacter}
                     />
                     {requiredFieldErrors.first_name && <div className="errmsg">{requiredFieldErrors.first_name}</div>}
                   </div>
@@ -441,7 +458,7 @@ const EditProfile = () => {
                       placeholder="Enter Last Name"
                       value={updatedUserData.last_name}
                       className='profile-data-input'
-                      onChange={handleInputChange}
+                      onChange={restrictSpecialCharacter}
                     />
                     {requiredFieldErrors.last_name && <div className="errmsg">{requiredFieldErrors.last_name}</div>}
                   </div>
@@ -514,7 +531,7 @@ const EditProfile = () => {
                       readOnly
                     />
                     {requiredFieldErrors.email && <div className="errmsg">{requiredFieldErrors.email}</div>}
-                    <BtnClear type="button"  label={user.email === null ? 'Add email' : 'Change email'}  className='change-btn' onClick={toggleUpdateEmail} />
+                    <BtnClear type="button" label={user.email === null ? 'Add email' : 'Change email'} className='change-btn' onClick={toggleUpdateEmail} />
                   </div>
                 </div>
                 <div className='row13 flex'>
@@ -531,7 +548,7 @@ const EditProfile = () => {
                       readOnly
                     />
                     {requiredFieldErrors.phone && <div className="errmsg">{requiredFieldErrors.phone}</div>}
-                    <BtnClear type="button"  label={user.phone === null ? 'Add phone' : 'Change phone'}  className='change-btn' onClick={toggleUpdatePhone} />
+                    <BtnClear type="button" label={user.phone === null ? 'Add phone' : 'Change phone'} className='change-btn' onClick={toggleUpdatePhone} />
                     <div className="plus63">+63</div>
                   </div>
                 </div>

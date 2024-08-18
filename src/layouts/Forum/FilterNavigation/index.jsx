@@ -1,28 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.scss'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 
 
-const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, discussionFilter }) => {
-    const { userId } = useParams();
+const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter }) => {
+    const { userId, tab } = useParams();
+    const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
+
+    useEffect(() => {
+        switch (tab) {
+          case 'created_discussions':
+            createdDiscussions();
+            setShowFilter(true);
+            break;
+          case 'joined_discussions':
+            joinedDiscussions();
+            setShowFilter(true);
+            break;
+          case 'liked_discussions':
+            likedDiscussions();
+            setShowFilter(true);
+            break;
+          case 'notifications':
+            forumNotifications();
+            setShowFilter(false);
+            break;
+          case 'add_discussions':
+            addDiscussions();
+            setShowFilter(false);
+            break;
+          default:
+            // Optional: Handle unknown tabs
+            break;
+        }
+      }, [tab, navigate]);
+      
+
     const handleCreatedDiscussions = () => {
-        setShowFilter(true)
+        navigate(`/forum/profile/${userId}/created_discussions`);
         createdDiscussions(); // Call the function
     };
     const handleJoinedDiscussions = () => {
-        setShowFilter(true)
+        navigate(`/forum/profile/${userId}/joined_discussions`);
         joinedDiscussions(); // Call the function
     };
     const handleLikedDiscussions = () => {
-        setShowFilter(true)
+        navigate(`/forum/profile/${userId}/liked_discussions`);
         likedDiscussions(); // Call the function
     };
     const handleForumNotifications = () => {
-        setShowFilter(false)
+        navigate(`/forum/profile/${userId}/notifications`);
         forumNotifications(); // Call the function
     };
     const sortBy = [
