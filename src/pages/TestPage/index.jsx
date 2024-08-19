@@ -48,50 +48,15 @@
 // export default App;
 
 
-import React, { useState } from 'react';
-import './style.scss';
-import SuccessEmailUpdated from '../../components/Modal/SuccessEmailUpdated';
+import LoginModal from '../../components/Modal/LoginModal'
 
-const App = () => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [largeImageSrc, setLargeImageSrc] = useState('');
 
-  const handleImageClick = (src) => {
-    setLargeImageSrc(src);
-    setShowPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    setLargeImageSrc('');
-  };
-
+const TestPage = () => {
   return (
-    <div className="App">
-      <SuccessEmailUpdated />
-      <h1>Image Popup Example</h1>
-      <div className="thumbnail-container">
-        <img
-          src="https://via.placeholder.com/150"
-          alt="Thumbnail"
-          className="thumbnail"
-          onClick={() => handleImageClick('https://via.placeholder.com/600')}
-        />
-      </div>
+    <>
+    <LoginModal />
+    </>
+  )
+}
 
-      {showPopup && (
-        <div className="popup" onClick={handleClosePopup}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <img src={largeImageSrc} alt="Large" className="large-image" />
-            <button className="close-button" onClick={handleClosePopup}>
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default App;
-
+export default TestPage;

@@ -8,6 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 const QuillEditor = ({ className, value, onChange, id, name }) => {
 
     // const [value, setValue] = useState('')
+    const [isHtmlMode, setIsHtmlMode] = useState(false);
 
     const modules = {
         toolbar: [
@@ -21,9 +22,14 @@ const QuillEditor = ({ className, value, onChange, id, name }) => {
                 { indent: '-1' },
                 { indent: '+1' },
             ],
-            ["link"]
+            ["link", "image", "video"],
+            ['html'],
         ]
     }
+
+    const toggleHtmlMode = () => {
+        setIsHtmlMode(!isHtmlMode);
+    };
 
     return (
         <>

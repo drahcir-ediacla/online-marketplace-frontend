@@ -9,6 +9,7 @@
         .forum-sub-category-info {
             display: flex;
             gap: 10px;
+            cursor: pointer;
 
             .forum-sub-category-icon {
                 width: 45px;
@@ -17,10 +18,19 @@
             .forum-sub-category-title-desc {
                 text-align: left;
 
-                h5 {
-                    font-size: 18px;
-                    font-weight: 500;
+                a {
+                    color: var(--black-101-);
+                    h5 {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
                 }
+
+                a:hover {
+                    text-decoration: underline;
+                }
+
+                
             }
         }
 

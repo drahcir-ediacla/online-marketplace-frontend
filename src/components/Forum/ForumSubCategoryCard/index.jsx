@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom'
 import './style.scss'
 import { ReactComponent as GroupMsgIcon } from '../../../assets/images/group-message-icon.svg'
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 
-const ForumSubCategory = ({title, description, replies, views, lastActivity}) => {
+const ForumSubCategory = ({ title, description, replies, views, lastActivity, to }) => {
     return (
         <>
             <div className="forum-sub-category">
@@ -11,7 +12,7 @@ const ForumSubCategory = ({title, description, replies, views, lastActivity}) =>
                     <div className='forum-sub-category-info'>
                         <div className='forum-sub-category-icon'><GroupMsgIcon /></div>
                         <div className='forum-sub-category-title-desc'>
-                            <h5>{title}</h5>
+                            <Link to={to}><h5>{title}</h5></Link>
                             <span>{description}</span>
                         </div>
                     </div>

@@ -9,27 +9,42 @@ import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
+import LoginModal from '../../../components/Modal/LoginModal';
 
 
 const SubCategoryPage = () => {
 
     const { user } = useAuthentication();
     const [discussionFilter, setDiscussionFilter] = useState(true)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
 
     const handleNewDiscussionClick = () => {
-        navigate(`/forum/profile/${user.id}/add_discussions`);
+        if (!user) {
+            setLoginModalOpen(true)
+        } else {
+            navigate(`/forum/profile/${user.id}/add_discussions`);
+        }
     };
+
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
+    const loginModal = () => {
+        setLoginModalOpen(true)
+    }
 
     return (
         <>
+        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
             <div>
                 <div className="forum-category-page-container">
-                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} />
+                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
                     <div className='forum-category-page-col2'>
                         <SearchDiscussionBox />
                         <div className="discussions-container">

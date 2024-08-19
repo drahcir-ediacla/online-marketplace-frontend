@@ -6,7 +6,7 @@ import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 
 
-const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter }) => {
+const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick }) => {
     const { userId, tab } = useParams();
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
@@ -85,7 +85,7 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 {!authUser ? (
                     <div className='forum-category-page-row1 not-authenticated'>
                         <p>Join our community, elevate your marketplace experience!</p>
-                        <button type='button' className='forum-login-btn' onClick={goLogin}>Sign In</button>
+                        <button type='button' className='forum-login-btn' onClick={onClick}>Sign In</button>
                         <p>Don’t have a Yogeek account? <Link>Sign up</Link></p>
                     </div>
                 ) : (

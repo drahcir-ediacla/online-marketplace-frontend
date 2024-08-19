@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
@@ -10,29 +10,44 @@ import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
+import LoginModal from '../../../components/Modal/LoginModal';
 
 
 
 const ForumCategoryPage = () => {
 
-    const {user} = useAuthentication();
+    const { user } = useAuthentication();
     const [discussionFilter, setDiscussionFilter] = useState(false)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
 
     const handleNewDiscussionClick = () => {
-        navigate(`/forum/profile/${user.id}/add_discussions`);
+        if (!user) {
+            setLoginModalOpen(true)
+        } else {
+            navigate(`/forum/profile/${user.id}/add_discussions`);
+        }
     };
-    
+
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
+    const loginModal = () => {
+        setLoginModalOpen(true)
+    }
+
 
     return (
         <>
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
             <div>
                 <div className="forum-category-page-container">
-                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} />
+                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
                     <div className='forum-category-page-col2'>
                         <SearchDiscussionBox />
                         <div className="discussions-container">
