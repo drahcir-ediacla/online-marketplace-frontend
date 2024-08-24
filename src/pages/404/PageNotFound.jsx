@@ -1,13 +1,15 @@
-import React from 'react'
 import './style.scss'
 import SadImage from '../../assets/images/page-not-found-image.png'
 import BtnGreen from '../../components/Button/BtnGreen'
 
-const HomePage = () => {
-  window.location.href = '/'
-}
+
 
 const PageNotFound = () => {
+
+  const HomePage = () => {
+    window.location.href = '/'
+  }
+  
   return (
     <>
       <div className="container page-not-found-body">

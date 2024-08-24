@@ -87,10 +87,7 @@ function App() {
             <Route path='/forum/subcategory' element={<ForumSubCategoryPage />} />
             <Route path='/forum/profile/:userId/:tab' element={<ForumProfile />} />
             <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/test/:chat_id' element={<TestPage />} />
             <Route path='/test' element={<TestPage />} />
-            <Route path="/:id" component={<NewItems />} />
-            <Route path='/*' element={<PageNotFound />} />
             <Route element={<PrivateRoutes />}>
               <Route path='/editprofile' element={<EditProfile />} />
               <Route path='/wishlist' element={<Wishlist />} />
@@ -105,6 +102,7 @@ function App() {
               <Route path='/messages' element={<ChatMessages />} />
               <Route path='/forum/add-discussion' element={<AddDiscussion />} />
             </Route>
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
       </Router>

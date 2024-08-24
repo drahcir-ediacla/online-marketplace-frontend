@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import axios from '../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
@@ -42,9 +42,11 @@ let postsPerPage = 5;
 const ProductDetails = ({ userId }) => {
 
     const { id, product_name } = useParams();
+    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const dispatch = useDispatch();
     const { user } = useAuthentication();
+    const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
@@ -212,7 +214,12 @@ const ProductDetails = ({ userId }) => {
                 dispatch(Setloader(false));
             } catch (error) {
                 dispatch(Setloader(false));
-                console.error('Error fetching product details:', error);
+                if (error.response && error.response.status === 404) {
+                    // If the product is not found, navigate to the "Page Not Found" page
+                    navigate('/404');
+                } else {
+                    setError('An unexpected error occurred. Please try again later.');
+                }
             }
         };
 
@@ -367,7 +374,7 @@ const ProductDetails = ({ userId }) => {
                             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                                 <div><span><b>Condition:</b>&nbsp;{product.product_condition}</span></div>
                                 <div><span><b>Status:</b>&nbsp;<span style={{ color: product.status === 'Available' ? 'var(--green-400)' : '#FF4135' }}>{product.status}</span></span></div>
-                            </div> 
+                            </div>
                             {(meetupLocations && meetupLocations.length > 0) || product.mailing_delivery ? (
                                 <div className='prod-details-deal-method'>
                                     <div className='col1'><b>Deal Method:</b></div>
