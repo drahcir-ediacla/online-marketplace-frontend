@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from '../../apicalls/axios'
 import './style.scss'
 import useAuthentication from '../../hooks/authHook'
 import Header from '../../layouts/Forum/Header'
@@ -24,10 +25,26 @@ const ForumHomePage = () => {
 
     const { user } = useAuthentication();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
+    const [forumCategories, setForumCategories] = useState([])
+    console.log('forumCategories:', forumCategories)
     const navigate = useNavigate();
 
+
+    useEffect(() => {
+        const fetchForumCategories = async () => {
+            try {
+                const response = await axios.get('/api/fetchforumcategories')
+                setForumCategories(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchForumCategories();
+    }, [])
+
+
     const goToCategoryPage = () => {
-        window.location.href='/forum/category'
+        window.location.href = '/forum/category'
     }
 
     const goToSubcategoryPage = () => {
@@ -46,9 +63,10 @@ const ForumHomePage = () => {
         setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
     }
 
+
     return (
         <>
-        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
@@ -71,40 +89,16 @@ const ForumHomePage = () => {
                         <div className="browse-by-category-row1"><h5>Browse by Category </h5></div>
                         <div className="browse-by-category-row2">
                             <div className='browse-by-category-row2-col1'>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div className='category-general-discussion-icon'><GroupMsgIcon /></div>
-                                    GENERAL DISCUSSION
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><ProductIcon /></div>
-                                    PRODUCT CATEGORIES
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><SupportIcon /></div>
-                                    SUPPORT & FEEDBACK
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><SellerCommunityIcon /></div>
-                                    SELLER COMMUNITY
-                                </button>
-                            </div>
-                            <div className='browse-by-category-row2-col2'>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><MegaPhoneIcon /></div>
-                                    PROMOTION & DEALS
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><NewsPaperIcon /></div>
-                                    INDUSTRY NEWS & TRENDS
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><CalendarIcon /></div>
-                                    COMMUNITY EVENTS
-                                </button>
-                                <button className='forum-categories-nav-menu' onClick={goToCategoryPage}>
-                                    <div><ExclamationIcon /></div>
-                                    OFF-TOPIC
-                                </button>
+                                {forumCategories.map(category => (
+                                    <button className='forum-categories-nav-menu' onClick={goToCategoryPage} key={category.id}>
+                                        <div className='category-general-discussion-icon'>
+                                            <img
+                                                src={category.icon}
+                                                alt=''
+                                            /></div>
+                                        {category.name}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -114,44 +108,21 @@ const ForumHomePage = () => {
                         <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                     </div>
                     <div className="listed-category-container">
-                        <div className="listed-category">
-                            <div className='listed-category-title'><h4>General Discussion</h4></div>
-                            <ForumSubCategory
-                                title='Welcome and Introductions'
-                                description='A place for new members to introduce themselves and meet others.'
-                                replies='1.2k'
-                                views='27.9M'
-                                lastActivity='1h ago'
-                                to={goToSubcategoryPage()}
-                            />
-                            <ForumSubCategory
-                                title='Marketplace Announcements'
-                                description='Updates, news, and important announcements about the marketplace.'
-                                replies='1.2k'
-                                views='27.9M'
-                                lastActivity='July 1, 2024'
-                                to={goToSubcategoryPage()}
-                            />
-                        </div>
-                        <div className="listed-category">
-                            <div className='listed-category-title'><h4>Product Categories</h4></div>
-                            <ForumSubCategory
-                                title='Product Reviews'
-                                description='User-generated reviews and discussions about products available on your marketplace.'
-                                replies='102k'
-                                views='27.9M'
-                                lastActivity='1h ago'
-                                to={goToSubcategoryPage()}
-                            />
-                            <ForumSubCategory
-                                title='Buying Advice'
-                                description='Tips and recommendations for purchasing decisions across different product categories.'
-                                replies='1.2k'
-                                views='27.9M'
-                                lastActivity='July 1, 2024'
-                                to={goToSubcategoryPage()}
-                            />
-                        </div>
+                        {forumCategories.map(category => (
+                            <div className="listed-category" key={category.id}>
+                                <div className='listed-category-title'><h4>{category.name}</h4></div>
+                                {category.subcategories.map(subcategory => (
+                                    <ForumSubCategory
+                                        title={subcategory.name}
+                                        description={subcategory.description}
+                                        replies='1.2k'
+                                        views='27.9M'
+                                        lastActivity='1h ago'
+                                        to={goToSubcategoryPage()}
+                                    />
+                                ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -44,7 +44,6 @@ const ChatMessages = () => {
     const [allChats, setAllChats] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
     const [userStatuses, setUserStatuses] = useState({});
-    console.log('userStatuses:', userStatuses)
     const [receiverInfo, setReceiverInfo] = useState(null); // State to store receiver information
     const sender_id = user?.id;
     const authStatus = userStatuses[receiverInfo?.id] || receiverInfo?.status;
