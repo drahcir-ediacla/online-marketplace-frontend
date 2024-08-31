@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './style.scss'
 import { GetAllCategories } from '../../apicalls/products'
 import HeroBanner from '../../components/HeroBanner'
@@ -17,6 +17,17 @@ function Home() {
 
   const [categories, setCategories] = useState([]);
   const { user } = useAuthentication();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the window was opened as a popup
+    if (window.opener) {
+        window.opener.location.reload(); // Reload the main window
+        window.close(); // Close the popup
+    } else {
+        navigate('/'); // Navigate to the home page if not a popup
+    }
+}, [navigate]);
 
 
   useEffect(() => {

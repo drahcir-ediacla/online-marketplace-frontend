@@ -17,6 +17,7 @@ const ResetByEmail = lazy(() => import('./pages/Auth/ResetPassword/ResetByEmail'
 const ResetByPhone = lazy(() => import('./pages/Auth/ResetPassword/ResetByPhone'));
 const RegisterByEmail = lazy(() => import('./pages/Auth/RegisterAccount/RegisterByEmail'));
 const RegisterByPhone = lazy(() => import('./pages/Auth/RegisterAccount/RegisterByPhone'));
+const AuthSuccess = lazy(() => import('./utils/AuthSuccess'));
 const EditProfile = lazy(() => import('./pages/Profile/EditProfile'));
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const ProductDetails = lazy(() => import('./pages/ProducDetails/ProductDetails'));
@@ -75,6 +76,7 @@ function App() {
             <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
             <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
             <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
+            <Route path="/auth/success" element={<AuthSuccess />} />
             <Route path='/profile/:id' element={<ProfilePage />} />
             <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
             <Route path='/category/:id/:value' element={<MainCategory />} />

@@ -32,6 +32,9 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
     const [errMsg, setErrMsg] = useState('');
     const dispatch = useDispatch()
 
+   
+    
+
     useEffect(() => {
         emailRef.current.focus();
     }, [])
@@ -100,7 +103,7 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
             console.log('Login successful', response.data);
             document.cookie = `jwt=${response.data.accessToken}; Max-Age=86400; Path=/`;
             document.cookie = `refreshJWT=${response.data.refreshToken}; Max-Age=86400; Path=/`;
-            navigate('/');
+            window.location.reload()
         } catch (err) {
             dispatch(Setloader(false))
             // Handle login error based on the response from the backend.
@@ -130,7 +133,11 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
 
         const googleCallback = `${BaseUrl}${googleAuthPath}`;
 
-        window.open(googleCallback, '_self');
+        window.open(
+            googleCallback, 
+            '_blank', // Open in a new window/tab
+            'width=600,height=600,top=100,left=100' // Customize the window's size and position
+        );
     };
 
     const facebook = () => {

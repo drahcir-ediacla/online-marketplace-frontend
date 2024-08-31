@@ -62,7 +62,7 @@ const ForumHeader = ({ authUser }) => {
                         <div className='my-account-dropdown'>
                             <div className='triangle-icon'><TriangleIcon /></div>
                             <ul>
-                                <li><Link to={`/profile/${authUser?.id}`}>My Forum Profile</Link></li>
+                                <li><Link to={`/forum/profile/${authUser?.id}/created_discussions`}>My Forum Profile</Link></li>
                                 <li><Link onClick={logout}>Logout</Link></li>
                             </ul>
                         </div>
