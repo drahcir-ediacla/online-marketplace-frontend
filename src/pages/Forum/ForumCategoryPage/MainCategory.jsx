@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
@@ -17,9 +18,28 @@ import LoginModal from '../../../components/Modal/LoginModal';
 const ForumCategoryPage = () => {
 
     const { user } = useAuthentication();
+    const { id, name } = useParams()
+    const [categoryData, setCategoryData] = useState({})
     const [discussionFilter, setDiscussionFilter] = useState(false)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const fetchCategoryData = async () => {
+            try {
+                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
+                setCategoryData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchCategoryData()
+    }, [])
+
+    const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
+    console.log('subcategories:', subcategories)
+
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -38,10 +58,12 @@ const ForumCategoryPage = () => {
     }
 
 
+
+
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
+            <Header authUser={user} signIn={loginModal} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
@@ -53,23 +75,17 @@ const ForumCategoryPage = () => {
                         <div className="discussions-container">
                             <div className="category-container">
                                 <div className="category-name">
-                                    <h4>General Discussion</h4>
+                                    <h4>{categoryData.name}</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                <ForumSubCategory
-                                    title='Product Reviews'
-                                    description='User-generated reviews and discussions about products available on your marketplace.'
-                                    replies='102k'
-                                    views='27.9M'
-                                    lastActivity='1h ago'
-                                />
-                                <ForumSubCategory
-                                    title='Product Reviews'
-                                    description='User-generated reviews and discussions about products available on your marketplace.'
-                                    replies='102k'
-                                    views='27.9M'
-                                    lastActivity='1h ago'
-                                />
+                                {subcategories && subcategories.length > 0 && (
+                                    <ForumSubCategory
+                                        data={subcategories}
+                                        replies='102k'
+                                        views='27.9M'
+                                        lastActivity='1h ago'
+                                    />
+                                )}
                             </div>
                             <div className='recent-discussion'>
                                 <h6>Recent Discussions</h6>

@@ -6,7 +6,7 @@ import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as TriangleIcon } from '../../../assets/images/triangle-up.svg';
 
 
-const ForumHeader = ({ authUser }) => {
+const ForumHeader = ({ authUser, signIn }) => {
 
     const [dropDownProfile, setDropDownProfile] = useState(false);
     const profileDropDown = useRef(null);
@@ -44,7 +44,7 @@ const ForumHeader = ({ authUser }) => {
             <div className='forum-header-container'>
                 <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
-                    <Link to='/'>Marketplace</Link> | &nbsp;
+                    <Link to='/'>Marketplace</Link> | 
                     {authUser ? (
                         <>
                             {authUser?.display_name}
@@ -52,8 +52,8 @@ const ForumHeader = ({ authUser }) => {
                         </>
                     ) : (
                         <>
-                            <Link to='/loginemail'>Sign In</Link>
-                            <Link to='/loginemail'><img src={DefaultAvatar} alt="" className='default-forum-profile-avatar' /></Link>
+                            <button onClick={signIn} className='onclick-show-login-modal'>Sign In</button>
+                            <button onClick={signIn} className='onclick-show-login-modal'><img src={DefaultAvatar} alt="" className='default-forum-profile-avatar' /></button>
                         </>
                     )}
                 </div>

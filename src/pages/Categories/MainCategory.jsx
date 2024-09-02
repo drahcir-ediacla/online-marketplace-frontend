@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import useAuthentication from '../../hooks/authHook'
 import { AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import './style.scss'

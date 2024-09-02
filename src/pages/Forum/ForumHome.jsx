@@ -26,7 +26,6 @@ const ForumHomePage = () => {
     const { user } = useAuthentication();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [forumCategories, setForumCategories] = useState([])
-    console.log('forumCategories:', forumCategories)
     const navigate = useNavigate();
 
 
@@ -111,16 +110,13 @@ const ForumHomePage = () => {
                         {forumCategories.map(category => (
                             <div className="listed-category" key={category.id}>
                                 <div className='listed-category-title'><h4>{category.name}</h4></div>
-                                {category.subcategories.map(subcategory => (
                                     <ForumSubCategory
-                                        title={subcategory.name}
-                                        description={subcategory.description}
+                                        data={category.subcategories}
                                         replies='1.2k'
                                         views='27.9M'
                                         lastActivity='1h ago'
                                         to={goToSubcategoryPage()}
                                     />
-                                ))}
                             </div>
                         ))}
                     </div>

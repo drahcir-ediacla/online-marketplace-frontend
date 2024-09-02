@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from '../../../apicalls/axios'
 import './style.scss'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -10,35 +11,49 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
     const { userId, tab } = useParams();
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        const fetchForumCategories = async () => {
+            try {
+                const response = await axios.get('/api/fetchforumcategories')
+                setCategories(response.data)
+
+            } catch (error) {
+                console.log('Error fetching data:', error)
+            }
+        }
+        fetchForumCategories()
+    }, [])
 
     useEffect(() => {
         switch (tab) {
-          case 'created_discussions':
-            createdDiscussions();
-            setShowFilter(true);
-            break;
-          case 'joined_discussions':
-            joinedDiscussions();
-            setShowFilter(true);
-            break;
-          case 'liked_discussions':
-            likedDiscussions();
-            setShowFilter(true);
-            break;
-          case 'notifications':
-            forumNotifications();
-            setShowFilter(false);
-            break;
-          case 'add_discussions':
-            addDiscussions();
-            setShowFilter(false);
-            break;
-          default:
-            // Optional: Handle unknown tabs
-            break;
+            case 'created_discussions':
+                createdDiscussions();
+                setShowFilter(true);
+                break;
+            case 'joined_discussions':
+                joinedDiscussions();
+                setShowFilter(true);
+                break;
+            case 'liked_discussions':
+                likedDiscussions();
+                setShowFilter(true);
+                break;
+            case 'notifications':
+                forumNotifications();
+                setShowFilter(false);
+                break;
+            case 'add_discussions':
+                addDiscussions();
+                setShowFilter(false);
+                break;
+            default:
+                // Optional: Handle unknown tabs
+                break;
         }
-      }, [tab, navigate]);
-      
+    }, [tab, navigate]);
+
 
     const handleCreatedDiscussions = () => {
         navigate(`/forum/profile/${userId}/created_discussions`);
@@ -136,14 +151,9 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 <div className='forum-category-page-row2'>
                     <label>Categories</label>
                     <div className="forum-category-btn-container">
-                        <BtnCategory label='General Discussions' active />
-                        <BtnCategory label='Product Categories' />
-                        <BtnCategory label='Support and Feedback' />
-                        <BtnCategory label='Seller Community' />
-                        <BtnCategory label='Promotions and Deals' />
-                        <BtnCategory label='Community Event' />
-                        <BtnCategory label='Industry News & Trends' />
-                        <BtnCategory label='Off-Topic' />
+                        {categories.map(category => (
+                            <BtnCategory label={category.name} active />
+                        ))}
                     </div>
                 </div>
                 <div className='forum-category-page-row3'>

@@ -1,23 +1,46 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../../../apicalls/axios';
 import './style.scss'
-import { useNavigate } from 'react-router-dom'
 import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
+import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
-import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
+import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
 
 
-const SubCategoryPage = () => {
+
+const ForumSubCategoryPage = () => {
 
     const { user } = useAuthentication();
-    const [discussionFilter, setDiscussionFilter] = useState(true)
+    const { id, name } = useParams()
+    const [categoryData, setCategoryData] = useState({})
+    console.log('categoryData:', categoryData)
+    const [discussionFilter, setDiscussionFilter] = useState(false)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const fetchCategoryData = async () => {
+            try {
+                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
+                setCategoryData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchCategoryData()
+    }, [])
+
+    const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
+    console.log('subcategories:', subcategories)
+
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -35,10 +58,13 @@ const SubCategoryPage = () => {
         setLoginModalOpen(true)
     }
 
+
+
+
     return (
         <>
-        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            <Header authUser={user} signIn={loginModal} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
@@ -50,9 +76,20 @@ const SubCategoryPage = () => {
                         <div className="discussions-container">
                             <div className="category-container">
                                 <div className="category-name">
-                                    <h4>Welcome and Introductions</h4>
+                                    <h4>{categoryData.name}</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
+                                {subcategories && subcategories.length > 0 && (
+                                    <ForumSubCategory
+                                        data={subcategories}
+                                        replies='102k'
+                                        views='27.9M'
+                                        lastActivity='1h ago'
+                                    />
+                                )}
+                            </div>
+                            <div className='recent-discussion'>
+                                <h6>Recent Discussions</h6>
                                 <ForumDiscussionCard
                                     title='Possible Scamming Ring Uncovered!'
                                     postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
@@ -91,4 +128,4 @@ const SubCategoryPage = () => {
 }
 
 
-export default SubCategoryPage;
+export default ForumSubCategoryPage;
