@@ -54,6 +54,8 @@ const ForumHomePage = () => {
 
 
 
+
+
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -86,7 +88,7 @@ const ForumHomePage = () => {
                                                 src={category.icon}
                                                 alt=''
                                             /></div>
-                                        {category.name}
+                                        {category.name.toUpperCase()}
                                     </button>
                                 ))}
                             </div>
