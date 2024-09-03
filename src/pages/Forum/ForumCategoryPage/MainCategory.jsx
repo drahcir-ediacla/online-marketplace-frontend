@@ -35,7 +35,7 @@ const ForumCategoryPage = () => {
             }
         }
         fetchCategoryData()
-    }, [])
+    }, [id, name])
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     console.log('subcategories:', subcategories)
@@ -63,7 +63,7 @@ const ForumCategoryPage = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} signIn={loginModal} />
+            <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>

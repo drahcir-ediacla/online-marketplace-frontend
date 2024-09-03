@@ -4,11 +4,13 @@ import './style.scss'
 import Logo from '../../../assets/images/yogeek-forum-logo.png'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as TriangleIcon } from '../../../assets/images/triangle-up.svg';
+import LoginModal from '../../../components/Modal/LoginModal'
 
 
-const ForumHeader = ({ authUser, signIn }) => {
+const ForumHeader = ({ authUser }) => {
 
     const [dropDownProfile, setDropDownProfile] = useState(false);
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const profileDropDown = useRef(null);
 
     useEffect(() => {
@@ -39,12 +41,22 @@ const ForumHeader = ({ authUser, signIn }) => {
         window.open(logoutUrl, '_self');
     };
 
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
+    const loginModal = () => {
+        setLoginModalOpen(true)
+    }
+
     return (
         <>
+        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-header-container'>
                 <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
-                    <Link to='/'>Marketplace</Link> | 
+                    <Link to='/'>Marketplace</Link> 
+                    <span>|</span> 
                     {authUser ? (
                         <>
                             {authUser?.display_name}
@@ -52,8 +64,8 @@ const ForumHeader = ({ authUser, signIn }) => {
                         </>
                     ) : (
                         <>
-                            <button onClick={signIn} className='onclick-show-login-modal'>Sign In</button>
-                            <button onClick={signIn} className='onclick-show-login-modal'><img src={DefaultAvatar} alt="" className='default-forum-profile-avatar' /></button>
+                            <button onClick={loginModal} className='onclick-show-login-modal'>Sign In</button>
+                            <button onClick={loginModal} className='onclick-show-login-modal'><img src={DefaultAvatar} alt="" className='default-forum-profile-avatar' /></button>
                         </>
                     )}
                 </div>

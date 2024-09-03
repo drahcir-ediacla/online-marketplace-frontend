@@ -126,6 +126,31 @@
             gap: 10px;
             flex-wrap: wrap;
 
+            .forum-category-menu {
+                flex-shrink: 0;
+                font-size: 15px;
+                font-weight: 500;
+                background: #fff;
+                border: 1px solid var(--gray-300);
+                border-radius: 50px;
+                color: var(--gray-500);
+                cursor: pointer;
+                outline: none;
+                padding: 5px 20px;
+            }
+
+            .forum-category-menu:hover {
+                background: linear-gradient(90deg, #d53f3f, #dc6531);
+                border: 1px solid var(--orange-200);
+                color: #fff;
+            }
+
+            .active {
+                background: linear-gradient(90deg, #d53f3f, #dc6531);
+                border: 1px solid var(--orange-200);
+                color: #fff;
+            }
+
             .more-tags {
                 display: flex;
                 justify-content: end;

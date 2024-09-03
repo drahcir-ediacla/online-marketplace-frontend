@@ -4,7 +4,9 @@ import { ReactComponent as GroupMsgIcon } from '../../../assets/images/group-mes
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 
-const ForumSubCategory = ({ replies, views, lastActivity, to, data }) => {
+const ForumSubCategory = ({ replies, views, lastActivity, data }) => {
+
+
     return (
         <>
             {data.map(subcategory => (
@@ -13,7 +15,7 @@ const ForumSubCategory = ({ replies, views, lastActivity, to, data }) => {
                         <div className='forum-sub-category-info'>
                             <div className='forum-sub-category-icon'><GroupMsgIcon /></div>
                             <div className='forum-sub-category-title-desc'>
-                                <Link to={to}><h5>{subcategory.name}</h5></Link>
+                                <Link to={`/forum/subcategory/${subcategory.id}/${subcategory.name}`}><h5>{subcategory.name}</h5></Link>
                                 <span>{subcategory.description}</span>
                             </div>
                         </div>

@@ -13,6 +13,7 @@ import QuillEditor from '../../../components/QuillEditor';
 import Input from '../../../components/FormField/Input';
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
+import LoginModal from '../../../components/Modal/LoginModal';
 
 
 
@@ -21,6 +22,7 @@ const ForumProfile = () => {
     const { user } = useAuthentication()
     const [activeTab, setActiveTab] = useState(0);
     const [discussionFilter, setDiscussionFilter] = useState(true)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const location = useLocation();
     const navigate = useNavigate()
 
@@ -41,12 +43,24 @@ const ForumProfile = () => {
     };
 
     const handleNewDiscussionClick = () => {
-        navigate(`/forum/profile/${user.id}/add_discussions`);
+        if(!user) {
+            setLoginModalOpen(true)
+        } else {
+            navigate(`/forum/profile/${user.id}/add_discussions`);
+        }
     };
 
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
+    const loginModal = () => {
+        setLoginModalOpen(true)
+    }
 
     return (
-        <>
+        <> 
+        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
@@ -60,6 +74,7 @@ const ForumProfile = () => {
                     forumNotifications={() => openContent(3)}
                     addDiscussions={() => openContent(4)}
                     discussionFilter={discussionFilter}
+                    onClick={loginModal}
                 />
                 <div className='forum-profile-page-col2'>
                     <SearchDiscussionBox />

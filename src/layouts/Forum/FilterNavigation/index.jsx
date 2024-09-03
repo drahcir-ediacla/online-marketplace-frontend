@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../../apicalls/axios'
 import './style.scss'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, NavLink } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
@@ -12,6 +12,7 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
     const [categories, setCategories] = useState([])
+    const [activeCategory, setActiveCategory] = useState([])
 
     useEffect(() => {
         const fetchForumCategories = async () => {
@@ -25,6 +26,12 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
         }
         fetchForumCategories()
     }, [])
+
+    useEffect(() => {
+        if (categories.length > 0 && activeCategory === null) {
+            setActiveCategory(categories[0].id); // or categories[0].name based on your logic
+        }
+    }, [categories, activeCategory]);
 
     useEffect(() => {
         switch (tab) {
@@ -53,6 +60,11 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 break;
         }
     }, [tab, navigate]);
+
+    const handleCategoryClick = (categoryId, categoryName) => {
+        navigate(`/forum/category/${categoryId}/${encodeURIComponent(categoryName)}`);
+        setActiveCategory(categoryId);
+    };
 
 
     const handleCreatedDiscussions = () => {
@@ -89,9 +101,6 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
     const originalDate = authUser?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
-    const goLogin = () => {
-        window.location.href = '/loginemail'
-    }
 
 
     return (
@@ -101,7 +110,7 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     <div className='forum-category-page-row1 not-authenticated'>
                         <p>Join our community, elevate your marketplace experience!</p>
                         <button type='button' className='forum-login-btn' onClick={onClick}>Sign In</button>
-                        <p>Don’t have a Yogeek account? <Link>Sign up</Link></p>
+                        <p>Don’t have a Yogeek account? <Link to='/registerbyemail'>Sign up</Link></p>
                     </div>
                 ) : (
                     <>
@@ -152,9 +161,10 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     <label>Categories</label>
                     <div className="forum-category-btn-container">
                         {categories.map(category => (
-                            <BtnCategory label={category.name} active />
+                            <NavLink activeClassName="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
                         ))}
                     </div>
+                    
                 </div>
                 <div className='forum-category-page-row3'>
                     <label>Tags</label>

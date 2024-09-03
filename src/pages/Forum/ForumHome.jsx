@@ -6,14 +6,6 @@ import useAuthentication from '../../hooks/authHook'
 import Header from '../../layouts/Forum/Header'
 import Footer from '../../layouts/Forum/Footer'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg'
-import { ReactComponent as GroupMsgIcon } from '../../assets/images/group-message-icon.svg'
-import { ReactComponent as ProductIcon } from '../../assets/images/forum-product-category.svg'
-import { ReactComponent as SupportIcon } from '../../assets/images/support-icon.svg'
-import { ReactComponent as SellerCommunityIcon } from '../../assets/images/seller-community-icon.svg'
-import { ReactComponent as MegaPhoneIcon } from '../../assets/images/mega-phone-icon.svg'
-import { ReactComponent as NewsPaperIcon } from '../../assets/images/news-paper-icon.svg'
-import { ReactComponent as CalendarIcon } from '../../assets/images/calendar-icon.svg'
-import { ReactComponent as ExclamationIcon } from '../../assets/images/solid-exclamation.svg'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
 import ForumSubCategory from '../../components/Forum/ForumSubCategoryCard'
 import LoginModal from '../../components/Modal/LoginModal';
@@ -26,6 +18,7 @@ const ForumHomePage = () => {
     const { user } = useAuthentication();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [forumCategories, setForumCategories] = useState([])
+    console.log('forumCategories:', forumCategories)
     const navigate = useNavigate();
 
 
@@ -42,13 +35,10 @@ const ForumHomePage = () => {
     }, [])
 
 
-    const goToCategoryPage = () => {
-        window.location.href = '/forum/category'
+    const goToCategoryPage = (id, name) => {
+        navigate(`/forum/category/${id}/${name}`);
     }
 
-    const goToSubcategoryPage = () => {
-        return '/forum/subcategory';
-    }
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -61,6 +51,7 @@ const ForumHomePage = () => {
     const toggleLoginModal = () => {
         setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
     }
+
 
 
     return (
@@ -89,7 +80,7 @@ const ForumHomePage = () => {
                         <div className="browse-by-category-row2">
                             <div className='browse-by-category-row2-col1'>
                                 {forumCategories.map(category => (
-                                    <button className='forum-categories-nav-menu' onClick={goToCategoryPage} key={category.id}>
+                                    <button className='forum-categories-nav-menu' onClick={() => goToCategoryPage(category.id, category.name)} key={category.id}>
                                         <div className='category-general-discussion-icon'>
                                             <img
                                                 src={category.icon}
@@ -115,7 +106,6 @@ const ForumHomePage = () => {
                                         replies='1.2k'
                                         views='27.9M'
                                         lastActivity='1h ago'
-                                        to={goToSubcategoryPage()}
                                     />
                             </div>
                         ))}

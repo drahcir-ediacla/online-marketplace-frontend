@@ -64,7 +64,7 @@ const ForumSubCategoryPage = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} signIn={loginModal} />
+            <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
