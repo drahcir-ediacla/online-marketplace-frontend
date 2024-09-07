@@ -9,6 +9,11 @@
         border: 1px solid var(--gray-300);
         box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
         z-index: 1;
+        background: white;
+
+        .selected-prod-large-img {
+            object-fit: contain;
+        }
     }
 
     .group-prod-img-thumb {
@@ -84,6 +89,7 @@
                 width: 65px;
                 border: 1px solid #bcbcbc;
                 cursor: pointer;
+                object-fit: contain;
             }
 
             .video-thumb-container {
@@ -148,11 +154,8 @@
             .selected-prod-img {
                 width: 444px !important;
                 height: 444px !important;
-                object-fit: cover;
-            }
-
-            .selected-prod-large-img {
-                position: absolute;
+                object-fit: contain;
+                background: white;
             }
 
             .video-preview-container {
@@ -325,7 +328,7 @@
 
     .youtube-frame {
         width: 320px;
-                height: 320px;
+        height: 320px;
     }
 
 }
