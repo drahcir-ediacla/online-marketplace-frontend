@@ -53,13 +53,14 @@ const NewItems = ({ data }) => {
       try {
 
         const categoryId = data.find(category => category.label === activeCategory)?.id;
+        const categoryLabel = data.find(category => category.label === activeCategory)?.label;
 
         if (!categoryId) {
           return;
         }
 
         // Fetch the all product's data
-        const response = await axios.get(`/api/getcategory/${categoryId}`)
+        const response = await axios.get(`/api/getcategory/${categoryId}/${categoryLabel}`)
 
         const categoryData = response.data;
 
