@@ -7,7 +7,8 @@ import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 
 
-const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick }) => {
+const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick, userData }) => {
+    console.log('userData:', userData)
     const { userId, tab } = useParams();
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
@@ -20,12 +21,22 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 const response = await axios.get('/api/fetchforumcategories')
                 setCategories(response.data)
 
+                // Check if 'userData' is a function before calling it
+                // 'userData' is expected to be a function passed as a prop for handling the fetched data
+                // If 'userData' is not a function, it logs a message in the console
+                if (typeof userData === 'function') {
+                    userData(response.data);
+                } else {
+                    console.log('userData is not a function');
+                }
+
             } catch (error) {
                 console.log('Error fetching data:', error)
             }
         }
         fetchForumCategories()
     }, [])
+
 
     useEffect(() => {
         if (categories.length > 0 && activeCategory === null) {
@@ -60,6 +71,7 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 break;
         }
     }, [tab, navigate]);
+
 
     const handleCategoryClick = (categoryId, categoryName) => {
         navigate(`/forum/category/${categoryId}/${encodeURIComponent(categoryName)}`);
@@ -158,16 +170,16 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     </>
                 )}
                 <div className='forum-category-page-row2'>
-                    <label>Categories</label>
+                    <label>CATEGORIES</label>
                     <div className="forum-category-btn-container">
                         {categories.map(category => (
                             <NavLink activeClassName="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
                         ))}
                     </div>
-                    
+
                 </div>
                 <div className='forum-category-page-row3'>
-                    <label>Tags</label>
+                    <label>POPULAR TAGS</label>
                     <div className="forum-category-btn-container">
                         <BtnCategory label='Mobile and Electronics' className='tag-btn active' />
                         <BtnCategory label='Furniture' className='tag-btn' />
