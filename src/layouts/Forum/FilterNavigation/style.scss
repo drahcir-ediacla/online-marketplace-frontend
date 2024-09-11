@@ -114,17 +114,22 @@
 
     .forum-category-page-row2,
     .forum-category-page-row3 {
-        padding: 0 20px;
 
-        label {
-            font-weight: 500;
-            margin-bottom: 7px;
+        .section-label-container {
+            background: var(--gray-200);
+            margin-bottom: 10px;
+            label {
+                font-weight: 500;
+                padding: 6px 20px;
+                margin: 0;
+            }
         }
 
         .forum-category-btn-container {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            padding: 0 20px;
 
             .forum-category-menu {
                 flex-shrink: 0;

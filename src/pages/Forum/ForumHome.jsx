@@ -18,7 +18,6 @@ const ForumHomePage = () => {
     const { user } = useAuthentication();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [forumCategories, setForumCategories] = useState([])
-    console.log('forumCategories:', forumCategories)
     const navigate = useNavigate();
 
 

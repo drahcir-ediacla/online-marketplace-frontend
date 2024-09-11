@@ -7,27 +7,31 @@ import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 
 
-const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick, userData }) => {
-    console.log('userData:', userData)
+const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick, categoriesData, tagsData }) => {
     const { userId, tab } = useParams();
     const navigate = useNavigate();
     const [showFilter, setShowFilter] = useState(discussionFilter)
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
+    const [tags, setTags] = useState([])
 
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
-                const response = await axios.get('/api/fetchforumcategories')
-                setCategories(response.data)
+                const responseCategories = await axios.get('/api/fetchforumcategories')
+                setCategories(responseCategories.data)
 
-                // Check if 'userData' is a function before calling it
-                // 'userData' is expected to be a function passed as a prop for handling the fetched data
-                // If 'userData' is not a function, it logs a message in the console
-                if (typeof userData === 'function') {
-                    userData(response.data);
+                const responseTags = await axios.get('/api/fetchforumtags')
+                setTags(responseTags.data)
+
+                // Check if 'categoriesData' is a function before calling it
+                // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
+                // If 'categoriesData' is not a function, it logs a message in the console
+                if (typeof categoriesData || tagsData === 'function') {
+                    categoriesData(responseCategories.data);
+                    tagsData(responseTags.data)
                 } else {
-                    console.log('userData is not a function');
+                    console.log('categoriesData is not a function');
                 }
 
             } catch (error) {
@@ -170,7 +174,9 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     </>
                 )}
                 <div className='forum-category-page-row2'>
-                    <label>CATEGORIES</label>
+                    <div className='section-label-container'>
+                        <label>CATEGORIES</label>
+                    </div>
                     <div className="forum-category-btn-container">
                         {categories.map(category => (
                             <NavLink activeClassName="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
@@ -179,14 +185,13 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
 
                 </div>
                 <div className='forum-category-page-row3'>
-                    <label>POPULAR TAGS</label>
+                    <div className='section-label-container'>
+                        <label>POPULAR TAGS</label>
+                    </div>
                     <div className="forum-category-btn-container">
-                        <BtnCategory label='Mobile and Electronics' className='tag-btn active' />
-                        <BtnCategory label='Furniture' className='tag-btn' />
-                        <BtnCategory label={`Women's Fashion`} className='tag-btn' />
-                        <BtnCategory label={`Men's Fashion`} className='tag-btn' />
-                        <BtnCategory label='Beauty & Personal Care' className='tag-btn' />
-                        <BtnCategory label='Sports & Leisure' className='tag-btn' />
+                        {tags.slice(0, 15).map(tag => (
+                            <BtnCategory label={tag.name} className='tag-btn' />
+                        ))}
                         <div className='more-tags'><Link>View more tags</Link></div>
                     </div>
                 </div>

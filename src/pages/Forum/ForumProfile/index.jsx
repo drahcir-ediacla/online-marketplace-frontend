@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
@@ -15,24 +16,15 @@ import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
 import LoginModal from '../../../components/Modal/LoginModal';
 
-const availableTags = [
-    'React',
-    'JavaScript',
-    'NodeJS',
-    'ExpressJS',
-    'MySQL',
-    'Sequelize',
-    'CSS',
-    'HTML',
-    'TypeScript',
-    'Redux',
-];
 
 
 const ForumProfile = () => {
 
     const { user } = useAuthentication()
+    const location = useLocation();
+    const navigate = useNavigate()
     const [categories, setCategories] = useState([])
+    const [allTags, setAllTags] = useState([])
     const [activeTab, setActiveTab] = useState(0);
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -40,12 +32,21 @@ const ForumProfile = () => {
     const dropDownCategory = useRef();
     const [tags, setTags] = useState([]);
     const [inputTags, setInputTags] = useState('');
-    const [filteredTags, setFilteredTags] = useState(availableTags);
+    const [filteredTags, setFilteredTags] = useState([allTags]);
     const [showDropdownTags, setShowDropdownTags] = useState(false);
     const dropDownTags = useRef();
-    const location = useLocation();
-    const navigate = useNavigate()
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    const [categoryId, setCategoryId] = useState('')
+    const [newDiscussionDetails, setNewDiscussionDetails] = useState({
+        forum_category_id: '',
+    })
+    console.log('Content:', content)
 
+    // const handleContentChange = (message) => {
+    //     setNewDiscussionDetails({ ...newDiscussionDetails, content: message });
+    // };
+ 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
             setActiveTab(location.state.activeTab);
@@ -89,6 +90,15 @@ const ForumProfile = () => {
         }
     };
 
+
+    const createNewDiscussion = async () => {
+        try {
+            await axios.post('/api/create/newdiscussion', newDiscussionDetails)
+        } catch (error) {
+            console.error('Error adding the product:', error);
+        }
+    }
+
     const handleTagInputChange = (e) => {
         const inputValue = e.target.value;
         setInputTags(inputValue);
@@ -96,11 +106,12 @@ const ForumProfile = () => {
         // Filter available tags based on the input and exclude already selected tags
         if (inputValue.trim() !== '') {
             setFilteredTags(
-                availableTags.filter(
+                allTags.filter(
                     (tag) =>
-                        tag.toLowerCase().includes(inputValue.toLowerCase()) &&
-                        !tags.includes(tag)
+                        tag.name.toLowerCase().includes(inputValue.toLowerCase()) &&
+                        !tags.includes(tag.name)
                 )
+                    .map(tag => tag.name)
             );
             setShowDropdownTags(true); // Show dropdown when input is not empty
         } else {
@@ -151,7 +162,8 @@ const ForumProfile = () => {
                     addDiscussions={() => openContent(4)}
                     discussionFilter={discussionFilter}
                     onClick={loginModal}
-                    userData={setCategories}
+                    categoriesData={setCategories}
+                    tagsData={setAllTags}
                 />
                 <div className='forum-profile-page-col2'>
                     {activeTab !== 4 && <SearchDiscussionBox />}
@@ -268,7 +280,12 @@ const ForumProfile = () => {
                             <form className='add-discussion-form'>
                                 <div className='add-discussion-form-field-container'>
                                     <label htmlFor="">Title</label>
-                                    <Input className="discussion-title-box" placeholder='Type discussion title' />
+                                    <Input 
+                                    className="discussion-title-box" 
+                                    placeholder='Type discussion title' 
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    />
                                 </div>
                                 <div className='add-discussion-form-field-container'>
                                     <label htmlFor="">Category</label>
@@ -280,61 +297,18 @@ const ForumProfile = () => {
                                         {selectCategoryOpen &&
                                             <div className="drop-down-forum-category-container">
                                                 <ul className='drop-down-forum-category-options'>
-                                                    <li className='forum-main-category'>
-                                                        <div className="parent-forum-category">GENERAL DISCUSSIONS</div>
-                                                        <ul className='forum-subcategory'>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Welcome and Introductions</div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Marketplace Announcements</div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className='forum-main-category'>
-                                                        <div className="parent-forum-category">PRODUCT CATEGORIES</div>
-                                                        <ul className='forum-subcategory'>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Product Reviews</div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Buying Advice</div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className='forum-main-category'>
-                                                        <div className="parent-forum-category">PRODUCT CATEGORIES</div>
-                                                        <ul className='forum-subcategory'>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Product Reviews</div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Buying Advice</div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className='forum-main-category'>
-                                                        <div className="parent-forum-category">PRODUCT CATEGORIES</div>
-                                                        <ul className='forum-subcategory'>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Product Reviews</div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Buying Advice</div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className='forum-main-category'>
-                                                        <div className="parent-forum-category">PRODUCT CATEGORIES</div>
-                                                        <ul className='forum-subcategory'>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Product Reviews</div>
-                                                            </li>
-                                                            <li>
-                                                                <div className="first-level-forum-subcategory">Buying Advice</div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
+                                                    {categories.map(category => (
+                                                        <li className='forum-main-category' key={category.id}>
+                                                            <div className="parent-forum-category">{category.name}</div>
+                                                            <ul className='forum-subcategory'>
+                                                                {category.subcategories.map(subcategory => (
+                                                                    <li>
+                                                                        <div className="first-level-forum-subcategory">{subcategory.name}</div>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                         }
@@ -346,6 +320,8 @@ const ForumProfile = () => {
                                         id='newDiscussion'
                                         name='newDiscussion'
                                         className='new-discussion-message'
+                                        value={content}
+                                        onChange={(e) => setContent(e)}
                                     />
                                 </div>
                                 <div className='add-discussion-form-field-container'>
@@ -383,11 +359,12 @@ const ForumProfile = () => {
                                                 ))}
                                             </ul>
                                         )}
+
                                     </div>
                                 </div>
                                 <div className='add-discussion-button-container'>
                                     <BtnGreen label='Post Discussion' />
-                                    <BtnClear label='Cancel' />
+                                    <BtnClear label='Cancel' /> 
                                 </div>
                             </form>
                         </div>
