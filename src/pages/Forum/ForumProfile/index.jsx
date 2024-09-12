@@ -39,11 +39,11 @@ const ForumProfile = () => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [categoryId, setCategoryId] = useState('')
-    const [newDiscussionDetails, setNewDiscussionDetails] = useState({
-        forum_category_id: '',
-    })
 
- 
+    console.log('allTags:', allTags)
+    console.log('tags:', tags)
+    console.log('filteredTags:', filteredTags)
+
     useEffect(() => {
         if (location.state && location.state.activeTab) {
             setActiveTab(location.state.activeTab);
@@ -95,6 +95,9 @@ const ForumProfile = () => {
                 forum_category_id: categoryId,
                 title: title,
                 content: content,
+                discussionTags: tags.map(tag => ({
+                    tag_id: tag.tag_id
+                }))
             })
         } catch (error) {
             console.error('Error adding the product:', error);
@@ -106,32 +109,35 @@ const ForumProfile = () => {
         setSelectedSubCategory(name)
         setSelectCategoryOpen(false);
     }
-    
+
 
     const handleTagInputChange = (e) => {
         const inputValue = e.target.value;
         setInputTags(inputValue);
 
-        // Filter available tags based on the input and exclude already selected tags
         if (inputValue.trim() !== '') {
+            // Create a set of tag IDs that are already selected
+            const selectedTagIds = new Set(tags.map(tag => tag.tag_id));
+
+            // Filter available tags based on the input and exclude already selected tags
             setFilteredTags(
-                allTags.filter(
-                    (tag) =>
+                allTags
+                    .filter(tag =>
                         tag.name.toLowerCase().includes(inputValue.toLowerCase()) &&
-                        !tags.includes(tag.name)
-                )
-                    .map(tag => tag.name)
+                        !selectedTagIds.has(tag.id)
+                    )
             );
-            setShowDropdownTags(true); // Show dropdown when input is not empty
+            setShowDropdownTags(true);
         } else {
             setFilteredTags([]);
-            setShowDropdownTags(false); // Hide dropdown when input is empty
+            setShowDropdownTags(false);
         }
     };
+    
 
-    const handleTagClick = (tag) => {
-        if (!tags.some(t => t.tag_id === tag)) {
-            setTags([...tags, {tag_id: tag}]);
+    const handleTagClick = (id, name) => {
+        if (!tags.some(t => t.tag_id === id)) {
+            setTags([...tags, { tag_id: id, tag_name: name }]);
             setInputTags(''); // Clear input after tag selection
             setShowDropdownTags(false);
         }
@@ -141,6 +147,15 @@ const ForumProfile = () => {
     const handleRemoveTag = (tagToRemove) => {
         setTags(tags.filter((tag) => tag.tag_id !== tagToRemove.tag_id));
     };
+
+    const clearForm = (e) => {
+        e.preventDefault();
+        setTitle('')
+        setCategoryId('')
+        setSelectedSubCategory('')
+        setContent('')
+        setTags([])
+    }
 
     const toggleSelectCategory = () => {
         setSelectCategoryOpen(!selectCategoryOpen)
@@ -289,11 +304,11 @@ const ForumProfile = () => {
                             <form className='add-discussion-form'>
                                 <div className='add-discussion-form-field-container'>
                                     <label htmlFor="">Title</label>
-                                    <Input 
-                                    className="discussion-title-box" 
-                                    placeholder='Type discussion title' 
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    <Input
+                                        className="discussion-title-box"
+                                        placeholder='Type discussion title'
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
                                     />
                                 </div>
                                 <div className='add-discussion-form-field-container'>
@@ -339,7 +354,7 @@ const ForumProfile = () => {
                                         <ul className="tags-list">
                                             {tags.map((tag, index) => (
                                                 <li key={index} className="tag">
-                                                    {tag.tag_id}
+                                                    {tag.tag_name}
                                                     <button
                                                         type="button"
                                                         onClick={() => handleRemoveTag(tag)}
@@ -362,8 +377,8 @@ const ForumProfile = () => {
                                         {showDropdownTags && filteredTags.length > 0 && (
                                             <ul className="dropdown-list">
                                                 {filteredTags.map((tag, index) => (
-                                                    <li key={index} onClick={() => handleTagClick(tag)}>
-                                                        {tag}
+                                                    <li key={index} onClick={() => handleTagClick(tag.id, tag.name)}>
+                                                        {tag.name}
                                                     </li>
                                                 ))}
                                             </ul>
@@ -373,7 +388,7 @@ const ForumProfile = () => {
                                 </div>
                                 <div className='add-discussion-button-container'>
                                     <BtnGreen label='Post Discussion' onClick={createNewDiscussion} />
-                                    <BtnClear label='Cancel' /> 
+                                    <BtnClear label='Clear' onClick={clearForm} />
                                 </div>
                             </form>
                         </div>

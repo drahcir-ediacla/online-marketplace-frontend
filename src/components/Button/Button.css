@@ -221,6 +221,18 @@
 }
 
 
+/* REPLY BUTTON */
+.default-reply-btn-style {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 1px;
+  color: white;
+  background: linear-gradient(to right, #d53f3f, #dc6531);
+  border: 1px solid var(--orange-200);
+  padding: 5px 20px;
+  border-radius: 5px;
+}
 
 /*-------------------- MEDIA QUERY ------------------------------*/
 
