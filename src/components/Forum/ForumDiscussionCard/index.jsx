@@ -21,7 +21,7 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
                     </div>
                     {discussion?.post?.map(post => (
                         <div className='forum-discussion-card-row2' key={post?.id}>
-                            <p>{post?.content}</p>
+                            <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                         </div>
                     ))}
                     <div className='forum-discussion-card-row3'>

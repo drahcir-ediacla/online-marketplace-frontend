@@ -29,6 +29,7 @@ const ForumProfile = () => {
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false)
+    const [selectedSubCategory, setSelectedSubCategory] = useState('')
     const dropDownCategory = useRef();
     const [tags, setTags] = useState([]);
     const [inputTags, setInputTags] = useState('');
@@ -41,11 +42,7 @@ const ForumProfile = () => {
     const [newDiscussionDetails, setNewDiscussionDetails] = useState({
         forum_category_id: '',
     })
-    console.log('Content:', content)
 
-    // const handleContentChange = (message) => {
-    //     setNewDiscussionDetails({ ...newDiscussionDetails, content: message });
-    // };
  
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -91,13 +88,25 @@ const ForumProfile = () => {
     };
 
 
-    const createNewDiscussion = async () => {
+    const createNewDiscussion = async (e) => {
+        e.preventDefault();
         try {
-            await axios.post('/api/create/newdiscussion', newDiscussionDetails)
+            await axios.post('/api/create/newdiscussion', {
+                forum_category_id: categoryId,
+                title: title,
+                content: content,
+            })
         } catch (error) {
             console.error('Error adding the product:', error);
         }
     }
+
+    const handleCategorySelect = (id, name) => {
+        setCategoryId(id);
+        setSelectedSubCategory(name)
+        setSelectCategoryOpen(false);
+    }
+    
 
     const handleTagInputChange = (e) => {
         const inputValue = e.target.value;
@@ -121,8 +130,8 @@ const ForumProfile = () => {
     };
 
     const handleTagClick = (tag) => {
-        if (!tags.includes(tag)) {
-            setTags([...tags, tag]);
+        if (!tags.some(t => t.tag_id === tag)) {
+            setTags([...tags, {tag_id: tag}]);
             setInputTags(''); // Clear input after tag selection
             setShowDropdownTags(false);
         }
@@ -130,7 +139,7 @@ const ForumProfile = () => {
 
     // Handle removing a tag
     const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter((tag) => tag !== tagToRemove));
+        setTags(tags.filter((tag) => tag.tag_id !== tagToRemove.tag_id));
     };
 
     const toggleSelectCategory = () => {
@@ -292,7 +301,7 @@ const ForumProfile = () => {
                                     <div className="wrapper" ref={dropDownCategory}>
                                         <div className={`drop-down-arrow ${selectCategoryOpen && 'active'}`} onClick={toggleSelectCategory}></div>
                                         <div className="drop-down-forum-category">
-                                            <input type="text" className="discussion-select-box" placeholder='Select category' readOnly />
+                                            <input type="text" className="discussion-select-box" placeholder='Select category' value={selectedSubCategory} readOnly />
                                         </div>
                                         {selectCategoryOpen &&
                                             <div className="drop-down-forum-category-container">
@@ -302,7 +311,7 @@ const ForumProfile = () => {
                                                             <div className="parent-forum-category">{category.name}</div>
                                                             <ul className='forum-subcategory'>
                                                                 {category.subcategories.map(subcategory => (
-                                                                    <li>
+                                                                    <li key={subcategory.id} onClick={() => handleCategorySelect(subcategory.id, subcategory.name)}>
                                                                         <div className="first-level-forum-subcategory">{subcategory.name}</div>
                                                                     </li>
                                                                 ))}
@@ -330,7 +339,7 @@ const ForumProfile = () => {
                                         <ul className="tags-list">
                                             {tags.map((tag, index) => (
                                                 <li key={index} className="tag">
-                                                    {tag}
+                                                    {tag.tag_id}
                                                     <button
                                                         type="button"
                                                         onClick={() => handleRemoveTag(tag)}
@@ -363,7 +372,7 @@ const ForumProfile = () => {
                                     </div>
                                 </div>
                                 <div className='add-discussion-button-container'>
-                                    <BtnGreen label='Post Discussion' />
+                                    <BtnGreen label='Post Discussion' onClick={createNewDiscussion} />
                                     <BtnClear label='Cancel' /> 
                                 </div>
                             </form>
