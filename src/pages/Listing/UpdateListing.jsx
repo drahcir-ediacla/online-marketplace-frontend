@@ -364,33 +364,40 @@ const AddListing = () => {
     const handleImageChange = (e) => {
         const files = e.target.files;
         const selectedImagesArray = Array.from(files);
-
+        const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2 MB
+    
+    
         if (selectedImagesArray.length + selectedImages.length > maxImages) {
-            alert(`You can only select up to ${maxImages} images.`);
-            return;
+          alert(`You can only select up to ${maxImages} images.`);
+          return;
         }
-
+    
         const imagePreviewsArray = [];
-
+    
         selectedImagesArray.forEach((image) => {
-            if (!image.type.startsWith('image/')) {
-                alert('Only image files are allowed.');
-                return;
+          if (!image.type.startsWith('image/')) {
+            alert('Only image files are allowed.');
+            return;
+          }
+    
+          if (image.size > MAX_IMAGE_SIZE) {
+            alert('Selected images exceed the maximum file size of 2 MB.');
+            return;
+          }
+    
+          const reader = new FileReader();
+    
+          reader.onload = (e) => {
+            imagePreviewsArray.push(e.target.result);
+            if (imagePreviewsArray.length === selectedImagesArray.length) {
+              setImagePreviews((prevPreviews) => [...prevPreviews, ...imagePreviewsArray]);
+              setSelectedImages((prevImages) => [...prevImages, ...selectedImagesArray]);
             }
-
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                imagePreviewsArray.push(e.target.result);
-                if (imagePreviewsArray.length === selectedImagesArray.length) {
-                    setImagePreviews((prevPreviews) => [...prevPreviews, ...imagePreviewsArray]);
-                    setSelectedImages((prevImages) => [...prevImages, ...selectedImagesArray]);
-                }
-            };
-
-            reader.readAsDataURL(image);
+          };
+    
+          reader.readAsDataURL(image);
         });
-    };
+      };
 
     const removeImage = (index) => {
         const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
@@ -406,28 +413,35 @@ const AddListing = () => {
 
     const handleVideoChange = (e) => {
         const files = e.target.files;
-
+        const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
+    
+    
         if (files.length > maxVideos) {
-            alert(`You can only select up to ${maxVideos} video.`);
-            return;
+          alert(`You can only select up to ${maxVideos} video.`);
+          return;
         }
-
+    
         const video = files[0];
-
+    
         if (!video.type.startsWith('video/')) {
-            alert('Only video files are allowed.');
-            return;
+          alert('Only video files are allowed.');
+          return;
         }
-
+    
+        if (video.size > MAX_VIDEO_SIZE) {
+          alert('The selected video exceeds the maximum file size of 50 MB.');
+          return;
+        }
+    
         const reader = new FileReader();
-
+    
         reader.onload = (e) => {
-            setVideoPreviews([e.target.result]);
-            setSelectedVideos([video]);
+          setVideoPreviews([e.target.result]);
+          setSelectedVideos([video]);
         };
-
+    
         reader.readAsDataURL(video);
-    };
+      };
 
 
     const removeVideo = () => {

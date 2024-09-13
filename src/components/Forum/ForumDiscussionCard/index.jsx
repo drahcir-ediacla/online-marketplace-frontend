@@ -5,13 +5,14 @@ import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
 const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
+    console.log('Data:', data)
 
     const avatar = data?.discussionStarter?.profile_pic || DefaultAvatar;
 
     return (
         <>
             {data?.map(discussion => (
-                <div className="forum-discussion-card" key={discussion?.id}>
+                <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
                         <img src={avatar} alt='' />
                         <div className='forum-discussion-info'>
@@ -20,7 +21,7 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
                         </div>
                     </div>
                     {discussion?.post?.map(post => (
-                        <div className='forum-discussion-card-row2' key={post?.id}>
+                        <div className='forum-discussion-card-row2' key={post?.post_id}>
                             <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                         </div>
                     ))}

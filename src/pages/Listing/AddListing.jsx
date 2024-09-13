@@ -235,6 +235,8 @@ const AddListing = () => {
   const handleImageChange = (e) => {
     const files = e.target.files;
     const selectedImagesArray = Array.from(files);
+    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2 MB
+
 
     if (selectedImagesArray.length + selectedImages.length > maxImages) {
       alert(`You can only select up to ${maxImages} images.`);
@@ -246,6 +248,11 @@ const AddListing = () => {
     selectedImagesArray.forEach((image) => {
       if (!image.type.startsWith('image/')) {
         alert('Only image files are allowed.');
+        return;
+      }
+
+      if (image.size > MAX_IMAGE_SIZE) {
+        alert('Selected images exceed the maximum file size of 2 MB.');
         return;
       }
 
@@ -277,6 +284,8 @@ const AddListing = () => {
 
   const handleVideoChange = (e) => {
     const files = e.target.files;
+    const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
+
 
     if (files.length > maxVideos) {
       alert(`You can only select up to ${maxVideos} video.`);
@@ -287,6 +296,11 @@ const AddListing = () => {
 
     if (!video.type.startsWith('video/')) {
       alert('Only video files are allowed.');
+      return;
+    }
+
+    if (video.size > MAX_VIDEO_SIZE) {
+      alert('The selected video exceeds the maximum file size of 50 MB.');
       return;
     }
 

@@ -24,7 +24,6 @@ const ForumSubCategoryPage = () => {
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
 
-
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {

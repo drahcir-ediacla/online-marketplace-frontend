@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
+import { Setloader } from '../../../redux/reducer/loadersSlice';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
@@ -21,6 +23,7 @@ import LoginModal from '../../../components/Modal/LoginModal';
 const ForumProfile = () => {
 
     const { user } = useAuthentication()
+    const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
     const [categories, setCategories] = useState([])
@@ -90,19 +93,47 @@ const ForumProfile = () => {
 
     const createNewDiscussion = async (e) => {
         e.preventDefault();
+
+        // Basic validation
+        if (!categoryId || !title || !content) {
+            console.error('Category, title, and content are required.');
+            return;
+        }
+
         try {
-            await axios.post('/api/create/newdiscussion', {
+            // Dispatch loader before making the API call
+            dispatch(Setloader(true));
+
+            // Make the API call
+            const response = await axios.post('/api/create/newdiscussion', {
                 forum_category_id: categoryId,
                 title: title,
                 content: content,
                 discussionTags: tags.map(tag => ({
                     tag_id: tag.tag_id
                 }))
-            })
+            });
+
+            // Clear the form fields
+            setTitle('');
+            setCategoryId('');
+            setSelectedSubCategory('');
+            setContent('');
+            setTags([]);
+
+            // Redirect to the new discussion page
+            const discussionId = response.data.discussion_id;
+            window.location.href = `/forum/discussion/${discussionId}`;
         } catch (error) {
-            console.error('Error adding the product:', error);
+            // Handle errors and dispatch loader as false
+            console.error('Error adding the discussion:', error);
+            // Optionally, set an error state to display a message to the user
+        } finally {
+            // Ensure loader is hidden in both success and failure cases
+            dispatch(Setloader(false));
         }
-    }
+    };
+
 
     const handleCategorySelect = (id, name) => {
         setCategoryId(id);
@@ -133,7 +164,7 @@ const ForumProfile = () => {
             setShowDropdownTags(false);
         }
     };
-    
+
 
     const handleTagClick = (id, name) => {
         if (!tags.some(t => t.tag_id === id)) {

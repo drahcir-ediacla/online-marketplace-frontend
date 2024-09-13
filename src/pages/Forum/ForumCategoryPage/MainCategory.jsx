@@ -38,7 +38,6 @@ const ForumCategoryPage = () => {
     }, [id, name])
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
-    console.log('subcategories:', subcategories)
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
     console.log('discussions:', discussions)
 
