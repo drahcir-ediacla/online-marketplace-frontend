@@ -1,4 +1,5 @@
 import './style.scss'
+import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
@@ -31,10 +32,12 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
             {data?.map(discussion => (
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
-                        <img src={avatar} alt='' />
+                        <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
                         <div className='forum-discussion-info'>
-                            <label>{discussion?.title}</label>
-                            <small>by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}</small>
+                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.title}</h6></Link>
+                            <small>
+                                by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}
+                            </small>
                         </div>
                     </div>
                     {discussion?.post?.map(post => (

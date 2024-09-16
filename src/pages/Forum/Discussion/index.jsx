@@ -20,7 +20,7 @@ import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
 
 
-const AddDiscussion = () => {
+const Discussion = () => {
 
     const { discussionId } = useParams();
     const dispatch = useDispatch()
@@ -40,7 +40,7 @@ const AddDiscussion = () => {
             } catch (error) {
                 dispatch(Setloader(false))
                 if (error.response && error.response.status === 404) {
-                    // If the product is not found, navigate to the "Page Not Found" page
+               // If the product is not found, navigate to the "Page Not Found" page
                     navigate('/404');
                 } else {
                     console.error("Error fetching data:", error);
@@ -90,7 +90,7 @@ const AddDiscussion = () => {
                     <SearchDiscussionBox />
                     <div className="started-discussion-container">
                         <div className='started-discussion-container-row1'>
-                            <img src={DefaultAvatar} alt="" />
+                            <img src={discussionData.discussionStarter?.profile_pic || DefaultAvatar} alt="" />
                             <div className='started-forum-discussion-info'>
                                 <label>{discussionData.title}</label>
                                 <small>by {discussionData.discussionStarter?.display_name || 'Unknown'} {getFormattedDate(discussionData.created_at)}</small>
@@ -133,4 +133,4 @@ const AddDiscussion = () => {
     )
 }
 
-export default AddDiscussion;
+export default Discussion;
