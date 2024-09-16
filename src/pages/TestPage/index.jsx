@@ -1,62 +1,110 @@
-// import React, { useEffect, useRef, useState } from 'react';
-// import 'owl.carousel/dist/assets/owl.carousel.css';
-// import 'owl.carousel/dist/assets/owl.theme.default.css';
-// import MeetUpSelector from '../../components/MeetUpSelector';
-// import SuccessResetPassword from '../../components/Modal/SuccessResetPassword';
-// import SuccessEmailUpdated from '../../components/Modal/SuccessEmailUpdated'
-// import './style.scss';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from '../../apicalls/axios';
 
-// const libraries = ['places'];
+const TagFilter = () => {
+  const navigate = useNavigate();
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  console.log('selectedTags:', selectedTags)
+  const [discussions, setDiscussions] = useState([]);
+  console.log('discussions:', discussions)
 
-// const TestPage = () => {
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get('/api/fetchforumtags');
+        setTags(response.data);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+    fetchTags();
+  }, []);
+
  
 
-//   return (
-//     <>
-//       <SuccessEmailUpdated />
-//     </>
-//   );
-// }
+  useEffect(() => {
+    const fetchDiscussions = async () => {
+      try {
+        const response = await axios.get('/api/filtertags', {
+          params: {
+            tag_id: selectedTags.join(','),
+          },
+        });
 
-// export default TestPage;
+        const newDiscussions = response.data;
 
+        setDiscussions((prevDiscussions) => {
+          const existingDiscussionIds = new Set(prevDiscussions.map(d => d.discussion_id));
 
-// App.js
-// import React from 'react';
-// import { useTranslation } from 'react-i18next';
-// import i18n from '../../utils/i18n';
-// import GTranslate from '../../components/GTranslate';
+          const uniqueNewDiscussions = newDiscussions.filter(
+            (newDiscussion) => !existingDiscussionIds.has(newDiscussion.discussion_id)
+          );
 
-// function App() {
-//   const { t } = useTranslation();
+          return [...prevDiscussions, ...uniqueNewDiscussions];
+        });
+      } catch (error) {
+        console.error('Error fetching discussions:', error);
+      }
+    };
 
-//   const changeLanguage = (lng) => {
-//     i18n.changeLanguage(lng);
-//   };
+    if (selectedTags.length > 0) {
+      fetchDiscussions();
+    } else {
+      setDiscussions([]); // Reset discussions when no tags are selected
+    }
+  }, [selectedTags]);
+  
 
-//   return (
-//     <div>
-//       <button onClick={() => changeLanguage('en')}>English</button>
-//       <button onClick={() => changeLanguage('fr')}>French</button>
-//       <h1>{t('welcome')}</h1>
-//       <p>{t('description')}</p>
-//       <GTranslate />
-//     </div>
-//   );
-// }
+   // Toggle tag selection
+   const toggleTag = (tag_id) => {
+    setSelectedTags((prevSelectedTags) => {
+      const updatedTags = prevSelectedTags.includes(tag_id)
+        ? prevSelectedTags.filter((t) => t !== tag_id)
+        : [...prevSelectedTags, tag_id];
 
-// export default App;
+      navigate('/test'); // Navigate after updating the state
 
+      return updatedTags;
+    });
+  };
 
-import LoginModal from '../../components/Modal/LoginModal'
-
-
-const TestPage = () => {
   return (
-    <>
-    <LoginModal />
-    </>
-  )
-}
+    <div>
+      <h3>Select Tags to Filter Discussions</h3>
+      <div>
+        {tags.map((tag) => (
+          <button
+            key={tag.id}
+            onClick={() => toggleTag(tag.id)}
+            style={{
+              backgroundColor: selectedTags.includes(tag.id) ? 'lightgreen' : 'lightgray',
+              margin: '5px',
+              padding: '10px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {tag.name}
+          </button>
+        ))}
+      </div>
 
-export default TestPage;
+      <h3>Filtered Discussions</h3>
+      <ul>
+        {discussions.length > 0 ? (
+          discussions.map((discussion) => (
+            <li key={discussion.id}>
+              {discussion.allDiscussionsInTag.title} (ID: {discussion.discussion_id})
+            </li>
+          ))
+        ) : (
+          <p>No discussions found</p>
+        )}
+      </ul>
+    </div>
+  );
+};
+
+export default TagFilter;
