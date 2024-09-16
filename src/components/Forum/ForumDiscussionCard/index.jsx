@@ -1,4 +1,6 @@
 import './style.scss'
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
@@ -9,6 +11,21 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
 
     const avatar = data?.discussionStarter?.profile_pic || DefaultAvatar;
 
+    // Function to safely parse and format the date
+    const getFormattedDate = (dateString) => {
+        // Ensure dateString is a valid ISO string
+        if (typeof dateString !== 'string') {
+            return 'Invalid date';
+        }
+
+        const date = new Date(dateString);
+
+        // Check if date is valid
+        return isNaN(date.getTime())
+            ? 'Invalid date'
+            : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
+    };
+
     return (
         <>
             {data?.map(discussion => (
@@ -17,7 +34,7 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
                         <img src={avatar} alt='' />
                         <div className='forum-discussion-info'>
                             <label>{discussion?.title}</label>
-                            <small>by {discussion?.discussionStarter?.display_name} {date}</small>
+                            <small>by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}</small>
                         </div>
                     </div>
                     {discussion?.post?.map(post => (
