@@ -95,7 +95,7 @@ const MeetUpSelector = ({ onSelectedPlacesChange, fetchedMeetupPlaces }) => {
                         (predictions) => {
                             autocompleteItems.forEach(item => {
                                 const description = item.querySelector('.pac-item-query')?.textContent || '';
-                                const prediction = predictions.find(pred => pred.description.includes(description));
+                                const prediction = predictions?.find(pred => pred.description.includes(description));
                                 if (prediction && selectedPlaces.some(selectedPlace => selectedPlace.placeId === prediction.place_id)) {
                                     item.classList.add('highlight');
                                 } else {
