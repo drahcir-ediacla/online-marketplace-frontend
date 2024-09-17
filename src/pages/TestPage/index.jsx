@@ -6,9 +6,7 @@ const TagFilter = () => {
   const navigate = useNavigate();
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  console.log('selectedTags:', selectedTags)
   const [discussions, setDiscussions] = useState([]);
-  console.log('discussions:', discussions)
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -32,29 +30,37 @@ const TagFilter = () => {
             tag_id: selectedTags.join(','),
           },
         });
-
+  
         const newDiscussions = response.data;
-
+  
         setDiscussions((prevDiscussions) => {
           const existingDiscussionIds = new Set(prevDiscussions.map(d => d.discussion_id));
-
+          const newDiscussionIds = new Set(newDiscussions.map(d => d.discussion_id));
+  
+          // Filter out discussions that are in the previous state but not in the new discussions
+          const updatedDiscussions = prevDiscussions.filter(
+            (discussion) => newDiscussionIds.has(discussion.discussion_id)
+          );
+  
+          // Add new discussions that are not already in the updated discussions
           const uniqueNewDiscussions = newDiscussions.filter(
             (newDiscussion) => !existingDiscussionIds.has(newDiscussion.discussion_id)
           );
-
-          return [...prevDiscussions, ...uniqueNewDiscussions];
+  
+          return [...updatedDiscussions, ...uniqueNewDiscussions];
         });
       } catch (error) {
         console.error('Error fetching discussions:', error);
       }
     };
-
+  
     if (selectedTags.length > 0) {
       fetchDiscussions();
     } else {
       setDiscussions([]); // Reset discussions when no tags are selected
     }
   }, [selectedTags]);
+  
   
 
    // Toggle tag selection

@@ -43,10 +43,6 @@ const ForumProfile = () => {
     const [content, setContent] = useState('')
     const [categoryId, setCategoryId] = useState('')
 
-    console.log('allTags:', allTags)
-    console.log('tags:', tags)
-    console.log('filteredTags:', filteredTags)
-
     useEffect(() => {
         if (location.state && location.state.activeTab) {
             setActiveTab(location.state.activeTab);

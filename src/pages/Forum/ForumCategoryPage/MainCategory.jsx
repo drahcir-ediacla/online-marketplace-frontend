@@ -20,7 +20,7 @@ const ForumCategoryPage = () => {
     const { user } = useAuthentication();
     const { id, name } = useParams()
     const [categoryData, setCategoryData] = useState({})
-    const [discussionFilter, setDiscussionFilter] = useState(false)
+    const [discussionFilter] = useState(false)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
 

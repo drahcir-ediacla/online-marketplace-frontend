@@ -1,0 +1,35 @@
+.language-selector-container {
+    width: 100%;
+    text-align: right;
+    margin: 10px 0;
+    padding: 0 10px;
+}
+
+.forum-filter-tags-page-container {
+    display: flex;
+    gap: 20px;
+    padding: 0 20px;
+
+    .forum-filter-tags-page-container-col2 {
+        width: 100%;
+
+        .discussions-container {
+            .discussions-container-row1 {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                h4 {
+                    font-weight: 500;
+                }
+            }
+
+            .discussion-list {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+        }
+    }
+}

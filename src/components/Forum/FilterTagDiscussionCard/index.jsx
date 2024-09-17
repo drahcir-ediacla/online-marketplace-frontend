@@ -7,7 +7,7 @@ import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.s
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
-const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
+const FilterTagDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
     console.log('Data:', data)
 
     
@@ -33,13 +33,13 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
                     <div className='forum-discussion-card-row1'>
                         <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
                         <div className='forum-discussion-info'>
-                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.title}</h6></Link>
+                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.allDiscussionsInTag?.title}</h6></Link>
                             <small>
-                                by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}
+                                by {discussion?.allDiscussionsInTag?.discussionStarter?.display_name} {getFormattedDate(discussion?.allDiscussionsInTag?.created_at)}
                             </small>
                         </div>
                     </div>
-                    {discussion?.post?.map(post => (
+                    {discussion?.allDiscussionsInTag?.post?.map(post => (
                         <div className='forum-discussion-card-row2' key={post?.post_id}>
                             <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                         </div>
@@ -66,4 +66,4 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
     )
 }
 
-export default ForumDiscussionCard
+export default FilterTagDiscussionCard

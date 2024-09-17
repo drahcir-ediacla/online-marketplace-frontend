@@ -1,19 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../../apicalls/axios'
 import './style.scss'
-import { Link, useParams, useNavigate, NavLink } from 'react-router-dom'
+import { Link, useParams, useNavigate, NavLink, useLocation } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 
 
-const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, likedDiscussions, forumNotifications, addDiscussions, discussionFilter, onClick, categoriesData, tagsData }) => {
+const FilterNavigation = ({
+    authUser,
+    createdDiscussions,
+    joinedDiscussions,
+    likedDiscussions,
+    forumNotifications,
+    addDiscussions,
+    discussionFilter,
+    onClick,
+    categoriesData,
+    tagsData,
+    }) => {
+
     const { userId, tab } = useParams();
     const navigate = useNavigate();
+    const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
+    const [selectedTags, setSelectedTags] = useState([])
+
+
+    useEffect(() => {
+        // If location.state is not null or undefined, update state
+        if (location.state && location.state.selectedTags) {
+            setSelectedTags(location.state.selectedTags);
+        }
+    }, [location.state]);
+    
 
     useEffect(() => {
         const fetchForumCategories = async () => {
@@ -27,9 +50,11 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                 // Check if 'categoriesData' is a function before calling it
                 // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
                 // If 'categoriesData' is not a function, it logs a message in the console
-                if (typeof categoriesData || tagsData === 'function') {
+                if (typeof categoriesData === 'function') {
                     categoriesData(responseCategories.data);
-                    tagsData(responseTags.data)
+                }
+                if (typeof tagsData === 'function') {
+                    tagsData(responseTags.data);
                 } else {
                     console.log('categoriesData is not a function');
                 }
@@ -114,6 +139,21 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
         },
     ];
 
+    const toggleTag = (tag_id) => {
+        setSelectedTags((prevSelectedTags) => {
+            const updatedTags = prevSelectedTags.includes(tag_id)
+                ? prevSelectedTags.filter((t) => t !== tag_id)
+                : [...prevSelectedTags, tag_id];
+
+            // Navigate with the updatedTags directly
+            navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
+
+            return updatedTags;
+        });
+    };
+
+
+
     const originalDate = authUser?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
@@ -179,7 +219,7 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     </div>
                     <div className="forum-category-btn-container">
                         {categories.map(category => (
-                            <NavLink activeClassName="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
+                            <NavLink activeclassname="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
                         ))}
                     </div>
 
@@ -190,7 +230,12 @@ const FilterNavigation = ({ authUser, createdDiscussions, joinedDiscussions, lik
                     </div>
                     <div className="forum-category-btn-container">
                         {tags.slice(0, 15).map(tag => (
-                            <BtnCategory label={tag.name} className='tag-btn' />
+                            <BtnCategory
+                                key={tag.id}
+                                onClick={() => toggleTag(tag.id)}
+                                label={tag.name}
+                                className={`tag-btn ${selectedTags.includes(tag.id) ? 'active' : ''}`}
+                            />
                         ))}
                         <div className='more-tags'><Link>View more tags</Link></div>
                     </div>
