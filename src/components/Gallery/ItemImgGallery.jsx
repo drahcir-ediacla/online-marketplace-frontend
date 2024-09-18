@@ -166,7 +166,7 @@ const ItemImgGallery = ({ gallery, index }) => {
                         },
                         enlargedImageContainerDimensions: {
                           width: 1200,
-                          height: 680,
+                          height: 720,
                         },
                         id: `ProductImg_${index}`,  // Unique ID for each ReactImageMagnify component
                         imageClassName: 'selected-prod-img',
