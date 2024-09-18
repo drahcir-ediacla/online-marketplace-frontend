@@ -114,7 +114,6 @@ const ForumHomePage = () => {
                     </div>
                 </div>
             </div>
-            <TagFilter />
             <Footer />
         </>
     )
