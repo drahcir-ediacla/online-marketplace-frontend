@@ -10,7 +10,6 @@ import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
 import ForumSubCategory from '../../components/Forum/ForumSubCategoryCard'
 import LoginModal from '../../components/Modal/LoginModal';
 import GTranslate from '../../components/GTranslate';
-import TagFilter from '../TestPage'
 
 
 
