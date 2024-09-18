@@ -88,7 +88,6 @@ function App() {
             <Route path='/forum/category/:id/:name' element={<ForumMainCategoryPage />} />
             <Route path='/forum/subcategory/:id/:name' element={<ForumSubCategoryPage />} />
             <Route path='/forum/profile/:userId/:tab' element={<ForumProfile />} />
-            <Route path='/forum/profile/:userId/add_discussions' element={user ? <ForumProfile /> : <LoginEmail />} />
             <Route path='/forum/discussion/:discussionId' element={<ForumDiscussion />} />
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
             <Route path='/dashboard' element={<Dashboard />} />
