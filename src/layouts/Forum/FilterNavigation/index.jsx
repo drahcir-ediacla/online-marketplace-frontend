@@ -192,7 +192,7 @@ const FilterNavigation = ({
                 {showFilter && (
                     <>
                         <div className='forum-sortby'>
-                            <label>Sort By</label>
+                            <label>SORT BY</label>
                             <CustomSelect
                                 id="genderID"
                                 name="gender"
@@ -202,7 +202,7 @@ const FilterNavigation = ({
                             />
                         </div>
                         <div className='forum-last-updated'>
-                            <label>Last Updated</label>
+                            <label>LAST UPDATED</label>
                             <CustomSelect
                                 id="genderID"
                                 name="gender"

@@ -19,7 +19,7 @@ const FilterDiscussionByTags = () => {
     const navigate = useNavigate()
     const location = useLocation();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-    const [discussionFilter, setDiscussionFilter] = useState(false)
+    const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
     const [selectedTags, setSelectedTags] = useState([]);
 
