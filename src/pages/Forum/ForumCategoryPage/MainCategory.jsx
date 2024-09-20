@@ -39,7 +39,6 @@ const ForumCategoryPage = () => {
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
-    console.log('discussions:', discussions)
 
 
     const handleNewDiscussionClick = () => {

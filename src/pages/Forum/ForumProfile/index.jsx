@@ -29,7 +29,6 @@ const ForumProfile = () => {
     const [categories, setCategories] = useState([])
     const [allTags, setAllTags] = useState([])
     const [activeTab, setActiveTab] = useState(0);
-    console.log('activeTab:', activeTab)
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false)

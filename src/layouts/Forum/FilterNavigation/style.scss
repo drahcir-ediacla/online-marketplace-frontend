@@ -160,6 +160,12 @@
                 display: flex;
                 justify-content: end;
                 width: 100%;
+
+                button {
+                    color: var(--blue);
+                    border: none;
+                    background: none;
+                }
             }
         }
     }
@@ -167,14 +173,14 @@
     .forum-category-page-row3 {
         .forum-category-btn-container {
             .active {
-                color: var(--black-101);
-                background: var(--gray-300);
+                color: white;
+                background: var(--tag-blue);
                 border: 1px solid var(--gray-300);
             }
 
             .tag-btn:hover {
-                color: var(--black-101);
-                background: var(--gray-300);
+                color: white;
+                background: var(--tag-blue);
                 border: 1px solid var(--gray-300);
             }
         }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../apicalls/axios';
+import FilterTagModal from '../../components/Modal/FilterTagModal';
 
 const TagFilter = () => {
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ const TagFilter = () => {
 
   return (
     <div>
+      <FilterTagModal />
       <h3>Select Tags to Filter Discussions</h3>
       <div>
         {tags.map((tag) => (

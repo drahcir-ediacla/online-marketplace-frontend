@@ -98,7 +98,7 @@ const FilterDiscussionByTags = () => {
                     <SearchDiscussionBox />
                     <div className='discussions-container'>
                         <div className='discussions-container-row1'>
-                            <h4>Filtered Discussions</h4>
+                            <h4>Filter Tagged Discussions</h4>
                             <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                         </div>
                         <div className='discussion-list'>

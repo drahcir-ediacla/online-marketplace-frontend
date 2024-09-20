@@ -5,6 +5,7 @@ import { Link, useParams, useNavigate, NavLink, useLocation } from 'react-router
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
+import FilterTagModal from '../../../components/Modal/FilterTagModal'
 
 
 const FilterNavigation = ({
@@ -28,6 +29,7 @@ const FilterNavigation = ({
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState([])
+    const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -152,6 +154,10 @@ const FilterNavigation = ({
         });
     };
 
+    const toggleTagModal = () => {
+        setFilterTagModalOpen((prev) => !prev)
+    }
+
 
 
     const originalDate = authUser?.createdAt || '';
@@ -161,6 +167,7 @@ const FilterNavigation = ({
 
     return (
         <>
+        {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
             <div className='forum-category-page-filter-nav'>
                 {!authUser ? (
                     <div className='forum-category-page-row1 not-authenticated'>
@@ -237,7 +244,7 @@ const FilterNavigation = ({
                                 className={`tag-btn ${selectedTags.includes(tag.id) ? 'active' : ''}`}
                             />
                         ))}
-                        <div className='more-tags'><Link>View more tags</Link></div>
+                        <div className='more-tags'><button onClick={toggleTagModal}>More tags</button></div>
                     </div>
                 </div>
             </div>
