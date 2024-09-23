@@ -252,3 +252,46 @@ $g09: #edf0f5;
   cursor: pointer;
   border-radius: 4px;
 }
+
+
+
+//-----------------Forum Reply ---------------------------------//
+
+/* src/index.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  background: #fff;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: calc(100% - 22px);
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}

@@ -21,7 +21,9 @@ const FilterDiscussionByTags = () => {
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
-    const [selectedTags, setSelectedTags] = useState([]);
+    console.log('FilterDiscussionByTags discussions:', discussions)
+    const [selectedTags, setSelectedTags] = useState(location.state || []);
+    console.log('FilterDiscussionByTags selectedTags:', selectedTags)
 
     useEffect(() => {
         // If location.state is not null or undefined, update state
@@ -55,7 +57,14 @@ const FilterDiscussionByTags = () => {
                         (newDiscussion) => !existingDiscussionIds.has(newDiscussion.discussion_id)
                     );
 
-                    return [...updatedDiscussions, ...uniqueNewDiscussions];
+                    const combinedDiscussions = [...updatedDiscussions, ...uniqueNewDiscussions];
+
+                    // Filter out duplicates based on discussion_id
+                    const setFilteredDiscussions = Array.from(
+                        new Map(combinedDiscussions.map(discussion => [discussion.discussion_id, discussion])).values()
+                    );
+
+                    return setFilteredDiscussions;
                 });
             } catch (error) {
                 console.error('Error fetching discussions:', error);
@@ -68,6 +77,7 @@ const FilterDiscussionByTags = () => {
             setDiscussions([]); // Reset discussions when no tags are selected
         }
     }, [selectedTags]);
+
 
     const handleNewDiscussionClick = () => {
         if (!user) {

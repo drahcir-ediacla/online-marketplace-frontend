@@ -13,12 +13,28 @@ const FilterTagModal = ({ onClick, tagsData }) => {
     const [isModalOpen] = useState(true);
     const [showDropdownTags, setShowDropdownTags] = useState(false);
     const [tags, setTags] = useState([]);
+    console.log('tags:', tags)
+    const [selectedTags, setSelectedTags] = useState([]);
+    console.log('FilterTagModal selectedTags:', selectedTags)
     const [inputTags, setInputTags] = useState('');
-    const [filteredTags, setFilteredTags] = useState([tagsData]);
+    const [filteredTags, setFilteredTags] = useState(tagsData);
+    console.log('FilterTagModal filteredTags:', filteredTags)
     const dropDownTags = useRef();
 
 
-    
+    useEffect(() => {
+        // If location.state is not null or undefined, update state
+        if (location.state && location.state.selectedTags) {
+            setSelectedTags(location.state.selectedTags);
+        }
+    }, [location.state]);
+
+
+    useEffect(() => {
+        // Filter tags based on selectedTags
+        const filtered = tagsData.filter(tag => selectedTags.includes(tag.id));
+        setTags(filtered.map(tag => ({ tag_id: tag.id, tag_name: tag.name })));
+    }, [selectedTags, tagsData]);
 
 
     useEffect(() => {
@@ -54,11 +70,12 @@ const FilterTagModal = ({ onClick, tagsData }) => {
         }
     };
 
-    
+
 
     const handleTagClick = (id, name) => {
         if (!tags.some(t => t.tag_id === id)) {
             setTags([...tags, { tag_id: id, tag_name: name }]);
+            setSelectedTags([...selectedTags, id])
             // setInputTags(''); // Clear input after tag selection
             // setShowDropdownTags(false);
         }
@@ -66,11 +83,19 @@ const FilterTagModal = ({ onClick, tagsData }) => {
 
     const handleRemoveTag = (tagToRemove) => {
         setTags(tags.filter((tag) => tag.tag_id !== tagToRemove.tag_id));
+        setSelectedTags(selectedTags.filter(id => id !== tagToRemove.tag_id));
     };
 
     const clearSelectedTags = () => {
         setTags([])
+        setSelectedTags([])
     }
+
+    const applyFilterTag = () => {
+        // Ensure selectedTags contains the current selected tag IDs
+        const updatedSelectedTags = selectedTags; // or any updates you might have made
+        navigate('/forum/filtertags', { state: { selectedTags: updatedSelectedTags } });
+    };
 
 
     return (
@@ -86,8 +111,8 @@ const FilterTagModal = ({ onClick, tagsData }) => {
                         <h5>Filter discussions by tags</h5>
                         {tags.length > 0 ? (<span>Selected Tags:</span>) : ("")}
                         <ul className='selected-tag-list'>
-                            {tags.map((tag, index) => (
-                                <li key={index} className='tag' ref={dropDownTags}>
+                            {tags.map((tag) => (
+                                <li key={tag.tag_id} className='tag' ref={dropDownTags}>
                                     {tag.tag_name}
                                     <button
                                         type="button"
@@ -130,7 +155,7 @@ const FilterTagModal = ({ onClick, tagsData }) => {
 
                     </div>
                     <div className='filter-tag-modal-row4'>
-                        <BtnGreen label='Apply Filter' />
+                        <BtnGreen label='Apply Filter' onClick={() => { applyFilterTag(); onClick(); }} />
                         <BtnClear label='Clear' onClick={clearSelectedTags} />
                         <BtnClear label='Cancel' onClick={onClick} />
                     </div>

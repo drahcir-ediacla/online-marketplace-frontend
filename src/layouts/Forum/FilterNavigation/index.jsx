@@ -19,7 +19,7 @@ const FilterNavigation = ({
     onClick,
     categoriesData,
     tagsData,
-    }) => {
+}) => {
 
     const { userId, tab } = useParams();
     const navigate = useNavigate();
@@ -28,7 +28,8 @@ const FilterNavigation = ({
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
-    const [selectedTags, setSelectedTags] = useState([])
+    const [selectedTags, setSelectedTags] = useState(location.state || [])
+    console.log('selectedTags:', selectedTags)
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
 
 
@@ -38,7 +39,7 @@ const FilterNavigation = ({
             setSelectedTags(location.state.selectedTags);
         }
     }, [location.state]);
-    
+
 
     useEffect(() => {
         const fetchForumCategories = async () => {
@@ -158,6 +159,12 @@ const FilterNavigation = ({
         setFilterTagModalOpen((prev) => !prev)
     }
 
+    const clearAllTags = () => {
+        const updatedTags = []; // No tags selected
+        setSelectedTags(updatedTags);
+        navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
+    };
+    
 
 
     const originalDate = authUser?.createdAt || '';
@@ -167,7 +174,7 @@ const FilterNavigation = ({
 
     return (
         <>
-        {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
+            {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
             <div className='forum-category-page-filter-nav'>
                 {!authUser ? (
                     <div className='forum-category-page-row1 not-authenticated'>
@@ -244,7 +251,10 @@ const FilterNavigation = ({
                                 className={`tag-btn ${selectedTags.includes(tag.id) ? 'active' : ''}`}
                             />
                         ))}
-                        <div className='more-tags'><button onClick={toggleTagModal}>More tags</button></div>
+                        <div className='more-tags' style={{justifyContent: selectedTags.length > 0 ? ('space-between') : ('end') }}>
+                            {selectedTags && selectedTags.length > 0 && <button onClick={clearAllTags}>Clear all</button>}
+                            <button onClick={toggleTagModal}>Select more tags</button>
+                        </div>
                     </div>
                 </div>
             </div>

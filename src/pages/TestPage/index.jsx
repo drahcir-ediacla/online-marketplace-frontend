@@ -1,119 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../../apicalls/axios';
-import FilterTagModal from '../../components/Modal/FilterTagModal';
+// src/App.js
+import React, { useState } from 'react';
+import MessageList from './MessageList';
 
-const TagFilter = () => {
-  const navigate = useNavigate();
-  const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [discussions, setDiscussions] = useState([]);
+const App = () => {
+  const [messages, setMessages] = useState([
+    { id: 1, text: 'This is the first message', replies: [], repliedTo: null },
+    { id: 2, text: 'This is the second message', replies: [], repliedTo: null },
+  ]);
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await axios.get('/api/fetchforumtags');
-        setTags(response.data);
-      } catch (error) {
-        console.error('Error fetching tags:', error);
-      }
+  const addReply = (messageId, replyText, repliedToText) => {
+    const addReplyToMessage = (messages, messageId, replyText, repliedToText) => {
+      return messages.map((message) => {
+        if (message.id === messageId) {
+          return {
+            ...message,
+            replies: [
+              ...message.replies,
+              { id: Date.now(), text: replyText, replies: [], repliedTo: repliedToText },
+            ],
+          };
+        } else {
+          return {
+            ...message,
+            replies: addReplyToMessage(message.replies, messageId, replyText, repliedToText),
+          };
+        }
+      });
     };
-    fetchTags();
-  }, []);
 
- 
-
-  useEffect(() => {
-    const fetchDiscussions = async () => {
-      try {
-        const response = await axios.get('/api/filtertags', {
-          params: {
-            tag_id: selectedTags.join(','),
-          },
-        });
-  
-        const newDiscussions = response.data;
-  
-        setDiscussions((prevDiscussions) => {
-          const existingDiscussionIds = new Set(prevDiscussions.map(d => d.discussion_id));
-          const newDiscussionIds = new Set(newDiscussions.map(d => d.discussion_id));
-  
-          // Filter out discussions that are in the previous state but not in the new discussions
-          const updatedDiscussions = prevDiscussions.filter(
-            (discussion) => newDiscussionIds.has(discussion.discussion_id)
-          );
-  
-          // Add new discussions that are not already in the updated discussions
-          const uniqueNewDiscussions = newDiscussions.filter(
-            (newDiscussion) => !existingDiscussionIds.has(newDiscussion.discussion_id)
-          );
-  
-          return [...updatedDiscussions, ...uniqueNewDiscussions];
-        });
-      } catch (error) {
-        console.error('Error fetching discussions:', error);
-      }
-    };
-  
-    if (selectedTags.length > 0) {
-      fetchDiscussions();
-    } else {
-      setDiscussions([]); // Reset discussions when no tags are selected
-    }
-  }, [selectedTags]);
-  
-  
-
-   // Toggle tag selection
-   const toggleTag = (tag_id) => {
-    setSelectedTags((prevSelectedTags) => {
-      const updatedTags = prevSelectedTags.includes(tag_id)
-        ? prevSelectedTags.filter((t) => t !== tag_id)
-        : [...prevSelectedTags, tag_id];
-
-      navigate('/test'); // Navigate after updating the state
-
-      return updatedTags;
-    });
+    setMessages((prevMessages) => addReplyToMessage(prevMessages, messageId, replyText, repliedToText));
   };
-  
 
   return (
     <div>
-      <FilterTagModal />
-      <h3>Select Tags to Filter Discussions</h3>
-      <div>
-        {tags.map((tag) => (
-          <button
-            key={tag.id}
-            onClick={() => toggleTag(tag.id)}
-            style={{
-              backgroundColor: selectedTags.includes(tag.id) ? 'lightgreen' : 'lightgray',
-              margin: '5px',
-              padding: '10px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            {tag.name}
-          </button>
-        ))}
-      </div>
-
-      <h3>Filtered Discussions</h3>
-      <ul>
-        {discussions.length > 0 ? (
-          discussions.map((discussion) => (
-            <li key={discussion.id}>
-              {discussion.allDiscussionsInTag.title} (ID: {discussion.discussion_id})
-            </li>
-          ))
-        ) : (
-          <p>No discussions found</p>
-        )}
-      </ul>
+      <h1>Community Forum</h1>
+      <MessageList messages={messages} addReply={addReply} />
     </div>
   );
 };
 
-export default TagFilter;
+export default App;
