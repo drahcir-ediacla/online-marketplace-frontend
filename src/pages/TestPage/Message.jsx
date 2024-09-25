@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 const Message = ({ message, addReply, level }) => {
   const [replyText, setReplyText] = useState('');
+  console.log('replyText:', replyText)
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
