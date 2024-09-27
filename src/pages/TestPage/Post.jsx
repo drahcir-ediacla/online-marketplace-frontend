@@ -51,8 +51,14 @@ const Post = ({ post, discussionId }) => {
   return (
     <div style={{ marginLeft: `${post.level * 20}px`, borderLeft: '2px solid #ccc', paddingLeft: '10px', marginTop: '10px' }}>
       <div>
+        {post.level === 0 && <p>Starter</p>}
         <strong>{post.postCreator.display_name}</strong> (Level {post.level}) says:
       </div>
+      {post.level >= 3 && (
+        <div>
+          <b>Replied to: {post.parentPostCreator.display_name}</b>
+        </div>
+      )}
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
       <div style={{ fontSize: 'small', color: 'gray' }}>{new Date(post.created_at).toLocaleString()}</div>
       <button onClick={() => toggleReply(post.post_id)}>Reply</button>

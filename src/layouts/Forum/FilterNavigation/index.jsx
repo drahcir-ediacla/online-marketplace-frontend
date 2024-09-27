@@ -29,7 +29,6 @@ const FilterNavigation = ({
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
-    console.log('selectedTags:', selectedTags)
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
 
 

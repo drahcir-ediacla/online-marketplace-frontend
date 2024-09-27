@@ -1,0 +1,182 @@
+[
+    {
+        "post_id": "150366f3-2685-44fa-9d0b-b79a6f11510d",
+        "user_id": 1,
+        "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+        "parent_post_id": null,
+        "content": "<p>They left a fake 1-star review for our products without buying them!!!</p><p><br></p><p>We sent many complaint emails, but there was no positive response!!!</p><p><br></p><p>At the same time, the 1-star review continued to exist and was not deleted.</p><p><br></p><p>Our competitors easily defeated our new products in this way.</p><p><br></p><p>Is this how Amazon protects the rights of sellers?</p><p><br></p>",
+        "level": 0,
+        "created_at": "2024-09-16T01:26:59.000Z",
+        "updated_at": "2024-09-16T01:26:59.000Z",
+        "postCreator": {
+            "id": 1,
+            "display_name": "MrBuloy11"
+        },
+        "replies": [
+            {
+                "post_id": "00166a2a-14b8-4486-ae28-a2faab599227",
+                "user_id": 5,
+                "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                "parent_post_id": "150366f3-2685-44fa-9d0b-b79a6f11510d",
+                "content": "g",
+                "level": 1,
+                "created_at": "2024-09-25T10:00:00.000Z",
+                "updated_at": "2024-09-25T10:00:00.000Z",
+                "postCreator": {
+                    "id": 5,
+                    "display_name": "Richard-GeekNation"
+                },
+                "replies": [],
+                "parentPostContent": "<p>They left a fake 1-star review for our products without buying them!!!</p><p><br></p><p>We sent many complaint emails, but there was no positive response!!!</p><p><br></p><p>At the same time, the 1-star review continued to exist and was not deleted.</p><p><br></p><p>Our competitors easily defeated our new products in this way.</p><p><br></p><p>Is this how Amazon protects the rights of sellers?</p><p><br></p>",
+                "parentPostCreator": {
+                    "id": 1,
+                    "display_name": "MrBuloy11"
+                }
+            },
+            {
+                "post_id": "9b524e9b-98e7-4f5a-895e-66f77872a239",
+                "user_id": 2,
+                "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                "parent_post_id": "150366f3-2685-44fa-9d0b-b79a6f11510d",
+                "content": "Reply Level 1",
+                "level": 1,
+                "created_at": "2024-09-24T03:16:31.000Z",
+                "updated_at": "2024-09-24T03:16:31.000Z",
+                "postCreator": {
+                    "id": 2,
+                    "display_name": "Melody"
+                },
+                "replies": [
+                    {
+                        "post_id": "7a6c418a-04d9-4a02-88d0-9bfc20c9f073",
+                        "user_id": 5,
+                        "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                        "parent_post_id": "9b524e9b-98e7-4f5a-895e-66f77872a239",
+                        "content": "d",
+                        "level": 2,
+                        "created_at": "2024-09-25T09:02:03.000Z",
+                        "updated_at": "2024-09-25T09:02:03.000Z",
+                        "postCreator": {
+                            "id": 5,
+                            "display_name": "Richard-GeekNation"
+                        },
+                        "replies": [],
+                        "parentPostContent": "Reply Level 1",
+                        "parentPostCreator": {
+                            "id": 2,
+                            "display_name": "Melody"
+                        }
+                    },
+                    {
+                        "post_id": "97404a05-f513-41bb-84b0-bad647fe7f60",
+                        "user_id": 3,
+                        "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                        "parent_post_id": "9b524e9b-98e7-4f5a-895e-66f77872a239",
+                        "content": "Reply Level 2",
+                        "level": 2,
+                        "created_at": "2024-09-24T08:32:38.000Z",
+                        "updated_at": "2024-09-24T08:32:38.000Z",
+                        "postCreator": {
+                            "id": 3,
+                            "display_name": "Richard Yahoo"
+                        },
+                        "replies": [
+                            {
+                                "post_id": "dc57d5ad-720c-48b3-934c-42e411b73296",
+                                "user_id": 3,
+                                "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                                "parent_post_id": "97404a05-f513-41bb-84b0-bad647fe7f60",
+                                "content": "Reply Level 3",
+                                "level": 3,
+                                "created_at": "2024-09-24T09:13:52.000Z",
+                                "updated_at": "2024-09-24T09:13:52.000Z",
+                                "postCreator": {
+                                    "id": 3,
+                                    "display_name": "Richard Yahoo"
+                                },
+                                "replies": [
+                                    {
+                                        "post_id": "6737c0d1-36e0-4890-a930-8eb612e5c5df",
+                                        "user_id": 5,
+                                        "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                                        "parent_post_id": "dc57d5ad-720c-48b3-934c-42e411b73296",
+                                        "content": "Reply Level 4",
+                                        "level": 4,
+                                        "created_at": "2024-09-25T01:16:43.000Z",
+                                        "updated_at": "2024-09-25T01:16:43.000Z",
+                                        "postCreator": {
+                                            "id": 5,
+                                            "display_name": "Richard-GeekNation"
+                                        },
+                                        "replies": [
+                                            {
+                                                "post_id": "304ba631-8dbf-4157-88f3-47bc8e9b6021",
+                                                "user_id": 5,
+                                                "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                                                "parent_post_id": "6737c0d1-36e0-4890-a930-8eb612e5c5df",
+                                                "content": "last level",
+                                                "level": 5,
+                                                "created_at": "2024-09-25T10:00:22.000Z",
+                                                "updated_at": "2024-09-25T10:00:22.000Z",
+                                                "postCreator": {
+                                                    "id": 5,
+                                                    "display_name": "Richard-GeekNation"
+                                                },
+                                                "replies": [],
+                                                "parentPostContent": "Reply Level 4",
+                                                "parentPostCreator": {
+                                                    "id": 5,
+                                                    "display_name": "Richard-GeekNation"
+                                                }
+                                            }
+                                        ],
+                                        "parentPostContent": "Reply Level 3",
+                                        "parentPostCreator": {
+                                            "id": 3,
+                                            "display_name": "Richard Yahoo"
+                                        }
+                                    }
+                                ],
+                                "parentPostContent": "Reply Level 2",
+                                "parentPostCreator": {
+                                    "id": 3,
+                                    "display_name": "Richard Yahoo"
+                                }
+                            }
+                        ],
+                        "parentPostContent": "Reply Level 1",
+                        "parentPostCreator": {
+                            "id": 2,
+                            "display_name": "Melody"
+                        }
+                    }
+                ],
+                "parentPostContent": "<p>They left a fake 1-star review for our products without buying them!!!</p><p><br></p><p>We sent many complaint emails, but there was no positive response!!!</p><p><br></p><p>At the same time, the 1-star review continued to exist and was not deleted.</p><p><br></p><p>Our competitors easily defeated our new products in this way.</p><p><br></p><p>Is this how Amazon protects the rights of sellers?</p><p><br></p>",
+                "parentPostCreator": {
+                    "id": 1,
+                    "display_name": "MrBuloy11"
+                }
+            },
+            {
+                "post_id": "c72be52b-58ba-421c-907c-13643d83b3c0",
+                "user_id": 1,
+                "discussion_id": "960219e9-0c6b-42b3-8b5c-d619877f99f1",
+                "parent_post_id": "150366f3-2685-44fa-9d0b-b79a6f11510d",
+                "content": "testing lng",
+                "level": 1,
+                "created_at": "2024-09-24T08:55:41.000Z",
+                "updated_at": "2024-09-24T08:55:41.000Z",
+                "postCreator": {
+                    "id": 1,
+                    "display_name": "MrBuloy11"
+                },
+                "replies": [],
+                "parentPostContent": "<p>They left a fake 1-star review for our products without buying them!!!</p><p><br></p><p>We sent many complaint emails, but there was no positive response!!!</p><p><br></p><p>At the same time, the 1-star review continued to exist and was not deleted.</p><p><br></p><p>Our competitors easily defeated our new products in this way.</p><p><br></p><p>Is this how Amazon protects the rights of sellers?</p><p><br></p>",
+                "parentPostCreator": {
+                    "id": 1,
+                    "display_name": "MrBuloy11"
+                }
+            }
+        ]
+    }
+]

@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     // Fetch posts for this discussion from API
     const fetchPosts = async () => {
-      const response = await axios.get(`/api/discussions/${discussionId}`);
+      const response = await axios.get(`/api/discussions/${discussionId}/posts`);
       setPosts(response.data);
     };
 
