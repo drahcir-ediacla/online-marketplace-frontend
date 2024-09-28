@@ -1,7 +1,9 @@
 .forum-footer {
+    position: sticky;
+    bottom: 0;
     color: #555555;
     text-align: center;
     padding: 10px;
     border-top: 1px solid var(--gray-300);
-    margin-top: 100px;
+    background: white;
 }

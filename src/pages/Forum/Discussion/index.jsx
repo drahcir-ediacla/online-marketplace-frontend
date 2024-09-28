@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
-import { Setloader } from '../../../redux/reducer/loadersSlice';
-import useAuthentication from '../../../hooks/authHook'
+import { formatDistanceToNow } from 'date-fns';
 import './style.scss'
 import axios from '../../../apicalls/axios'
+import useAuthentication from '../../../hooks/authHook'
+import { enUS } from 'date-fns/locale';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer';
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import GTranslate from '../../../components/GTranslate';
 import LoginModal from '../../../components/Modal/LoginModal';
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
-import PostList from './PostsList';
+import BtnReply from '../../../components/Button/BtnReply';
+import { Setloader } from '../../../redux/reducer/loadersSlice';
+import QuillEditor from '../../../components/QuillEditor';
+import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
+import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
+import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
+import DefaultAvatar from '../../../assets/images/avatar-icon.png'
+import BtnGreen from '../../../components/Button/BtnGreen';
+import BtnClear from '../../../components/Button/BtnClear';
 
 
 
@@ -20,19 +29,22 @@ const Discussion = () => {
     const { discussionId } = useParams();
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const [posts, setPosts] = useState([]);
     const { user } = useAuthentication()
+    const [openReply, setOpenReply] = useState({});
+    const [contentValue, setContentValue] = useState('')
+    console.log('contentValue:', contentValue)
+    const [activePostId, setActivePostId] = useState(null)
+    const [parentPostId, setParentPostId] = useState(null);
+    console.log('parentPostId:', parentPostId)
+    const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-
-
-    
 
     useEffect(() => {
         const fetchDiscussionData = async () => {
             dispatch(Setloader(true))
             try {
                 const response = await axios.get(`/api/discussions/${discussionId}/posts`);
-                setPosts(response.data)
+                setAllPost(response.data)
                 dispatch(Setloader(false))
             } catch (error) {
                 dispatch(Setloader(false))
@@ -56,9 +68,70 @@ const Discussion = () => {
         setLoginModalOpen(true)
     }
 
+    const toggleReply = (postId) => {
+        // Close the previous open reply editor 
+        setOpenReply({});
+        // Open the specific reply editor
+        setOpenReply((prev) => ({
+            ...prev,
+            [postId]: !prev[postId],
+        }));
+
+        if (!openReply[postId]) {
+            // Only set the parentPostId and clear input when opening
+            setContentValue('');
+            setParentPostId(postId);
+        }
+    };
+
+    const cancelReply = () => {
+        setOpenReply({});
+        setContentValue('');
+        setParentPostId(null);
+        setActivePostId(null)
+    }
+
+    const handleContentChange = (id, value) => {
+        setActivePostId(id)
+        setContentValue(value);
+    };
+
+    // Function to safely parse and format the date
+    const getFormattedDate = (dateString) => {
+        // Ensure dateString is a valid ISO string
+        if (typeof dateString !== 'string') {
+            return 'Invalid date';
+        }
+
+        const date = new Date(dateString);
+
+        // Check if date is valid
+        return isNaN(date.getTime())
+            ? 'Invalid date'
+            : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
+    };
+
+    const handleSubmit = async () => {
+
+        try {
+            await axios.post('/api/post/create', {
+                content: contentValue,
+                discussion_id: discussionId,
+                parent_post_id: parentPostId,
+            });
+            // Clear input and reset parentPostId after successful submission
+            setContentValue('');
+            setParentPostId(null);
+            // Optionally, refetch posts here if needed
+        } catch (error) {
+            console.error("Error submitting the reply:", error);
+        }
+    };
+
+
     return (
         <>
-         {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
@@ -67,10 +140,226 @@ const Discussion = () => {
                 <FilterNavigation
                     authUser={user}
                     onClick={loginModal}
+                    className='sticky-filter-nav'
                 />
                 <div className='forum-discussion-page-container-col2'>
                     <SearchDiscussionBox />
-                    <PostList posts={posts} discussionId={discussionId} />
+                    {allPost.map(post => (
+                        <>
+                            <div className="started-discussion-container" key={post?.post_id}>
+                                <div className='started-discussion-container-row1'>
+                                    <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                    <div className='started-forum-discussion-info'>
+                                        <label>{post?.discussion?.title}</label>
+                                        <small>by {post?.postCreator?.display_name || 'Unknown'} {getFormattedDate(post.created_at)}</small>
+                                    </div>
+                                </div>
+                                {!post?.parent_post_id && (
+                                    <div className='started-discussion-container-row2' key={post?.post_id}>
+                                        <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+                                    </div>
+                                )}
+                                <div className='started-discussion-container-row3'>
+                                    <div className='view-reply-like-counter'>
+                                        <div className='like-counter'>
+                                            <div className='like-msg-icon'><Like /></div>
+                                            <span>4.5k</span>
+                                        </div>
+                                        <div className='reply-counter'>
+                                            <div className='reply-msg-icon'><MsgIcon /></div>
+                                            <span>4.5k</span>
+                                        </div>
+                                        <div className='view-counter'>
+                                            <div className='view-msg-icon'><EyeIcon /></div>
+                                            <span>1.2M</span>
+                                        </div>
+                                    </div>
+                                    <BtnReply label='Reply' onClick={() => toggleReply(post.post_id)} />
+                                </div>
+                            </div>
+                            {openReply[post.post_id] && (
+                                <>
+                                    <QuillEditor
+                                        id='replyLevelZero'
+                                        name='replyLevelZero'
+                                        className='new-reply-message'
+                                        placeholder="Type your reply here..."
+                                        value={activePostId === post?.post_id ? contentValue : ''}
+                                        onChange={(content) => handleContentChange(post?.post_id, content)}
+                                    />
+
+                                    <div className='add-reply-button-container'>
+                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                        <BtnClear label='Cancel' onClick={cancelReply} />
+                                    </div>
+                                </>
+                            )}
+                            <div className="filter-replies">
+                                <span>12 Replies</span>
+                                <div><span>Sort By</span></div>
+                            </div>
+                            {post.replies.map(levelOneReply => (
+                                <>
+                                    <div className="all-replies-container" key={levelOneReply.post_id}>
+                                        <div className='reply-container'>
+                                            <div className="reply-box">
+                                                <div className="reply-row1">
+                                                    <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                    <div className="post-creator-info">
+                                                        <span>{levelOneReply.postCreator.display_name}</span>
+                                                        <small>{getFormattedDate(levelOneReply.created_at)}</small>
+                                                        <span>Level: {levelOneReply.level}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="reply-row2">
+                                                    <div dangerouslySetInnerHTML={{ __html: levelOneReply?.content }} />
+                                                </div>
+                                                <div className='reply-row3'>
+                                                    <div className='view-reply-like-counter'>
+                                                        <div className='like-counter'>
+                                                            <div className='like-msg-icon'><Like /></div>
+                                                            <span>4.5k</span>
+                                                        </div>
+                                                        <div className='reply-counter'>
+                                                            <div className='reply-msg-icon'><MsgIcon /></div>
+                                                            <span>4.5k</span>
+                                                        </div>
+                                                        <div className='view-counter'>
+                                                            <div className='view-msg-icon'><EyeIcon /></div>
+                                                            <span>1.2M</span>
+                                                        </div>
+                                                    </div>
+                                                    <BtnReply label='Reply' onClick={() => toggleReply(levelOneReply.post_id)} />
+                                                </div>
+                                            </div>
+                                            {openReply[levelOneReply.post_id] && (
+                                                <>
+                                                    <QuillEditor
+                                                        id='replyLevelOne'
+                                                        name='replyLevelOne'
+                                                        className='new-reply-message'
+                                                        placeholder="Type your reply here..."
+                                                        value={activePostId === levelOneReply?.post_id ? contentValue : ''}
+                                                        onChange={(content) => handleContentChange(levelOneReply?.post_id, content)}
+                                                    />
+
+                                                    <div className='add-reply-button-container'>
+                                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                        <BtnClear label='Cancel' onClick={cancelReply} />
+                                                    </div>
+                                                </>
+                                            )}
+                                            <div className="toggle-hide-show-replies">Show more replies</div>
+                                            {levelOneReply.replies.map(levelTwoReply => (
+                                                <div className="level2-replies-container" key={levelTwoReply.post_id}>
+                                                    <div className="reply-box">
+                                                        <div className="reply-row1">
+                                                            <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                            <div className="post-creator-info">
+                                                                <span>{levelTwoReply.postCreator.display_name}</span>
+                                                                <small>{getFormattedDate(levelTwoReply.created_at)}</small>
+                                                                <span>Level: {levelTwoReply.level}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="reply-row2">
+                                                            <div dangerouslySetInnerHTML={{ __html: levelTwoReply?.content }} />
+                                                        </div>
+                                                        <div className='reply-row3'>
+                                                            <div className='view-reply-like-counter'>
+                                                                <div className='like-counter'>
+                                                                    <div className='like-msg-icon'><Like /></div>
+                                                                    <span>4.5k</span>
+                                                                </div>
+                                                                <div className='reply-counter'>
+                                                                    <div className='reply-msg-icon'><MsgIcon /></div>
+                                                                    <span>4.5k</span>
+                                                                </div>
+                                                                <div className='view-counter'>
+                                                                    <div className='view-msg-icon'><EyeIcon /></div>
+                                                                    <span>1.2M</span>
+                                                                </div>
+                                                            </div>
+                                                            <BtnReply label='Reply' onClick={() => toggleReply(levelTwoReply.post_id)} />
+                                                        </div>
+                                                    </div>
+                                                    {openReply[levelTwoReply.post_id] && (
+                                                        <>
+                                                            <QuillEditor
+                                                                id='replyLevelTwo'
+                                                                name='replyLevelTwo'
+                                                                className='new-reply-message'
+                                                                placeholder="Type your reply here..."
+                                                                value={activePostId === levelTwoReply?.post_id ? contentValue : ''}
+                                                                onChange={(content) => handleContentChange(levelTwoReply?.post_id, content)}
+                                                            />
+
+                                                            <div className='add-reply-button-container'>
+                                                                <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                                <BtnClear label='Cancel' onClick={cancelReply} />
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                    <div className="toggle-hide-show-replies">Show Replies</div>
+                                                    {levelTwoReply.replies.map(levelThreeReply => (
+                                                        <div className="level2-replies-container">
+                                                            <div className="reply-box">
+                                                                <div className="reply-row1">
+                                                                    <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                    <div className="post-creator-info">
+                                                                        <span>{levelThreeReply.postCreator.display_name}</span>
+                                                                        <small>{getFormattedDate(levelThreeReply.created_at)}</small>
+                                                                        <span>Level: {levelThreeReply.level}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="reply-row2">
+                                                                    <div dangerouslySetInnerHTML={{ __html: levelThreeReply?.content }} />
+                                                                </div>
+                                                                <div className='reply-row3'>
+                                                                    <div className='view-reply-like-counter'>
+                                                                        <div className='like-counter'>
+                                                                            <div className='like-msg-icon'><Like /></div>
+                                                                            <span>4.5k</span>
+                                                                        </div>
+                                                                        <div className='reply-counter'>
+                                                                            <div className='reply-msg-icon'><MsgIcon /></div>
+                                                                            <span>4.5k</span>
+                                                                        </div>
+                                                                        <div className='view-counter'>
+                                                                            <div className='view-msg-icon'><EyeIcon /></div>
+                                                                            <span>1.2M</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <BtnReply label='Reply' onClick={() => toggleReply(levelThreeReply.post_id)} />
+                                                                </div>
+                                                            </div>
+                                                            {openReply[levelThreeReply?.post_id] && (
+                                                                <>
+                                                                    <QuillEditor
+                                                                        id='replyLevelThree'
+                                                                        name='replyLevelThree'
+                                                                        className='new-reply-message'
+                                                                        placeholder="Type your reply here..."
+                                                                        value={activePostId === levelThreeReply?.post_id ? contentValue : ''}
+                                                                        onChange={(content) => handleContentChange(levelThreeReply?.post_id, content)}
+                                                                    />
+
+                                                                    <div className='add-reply-button-container'>
+                                                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                                        <BtnClear label='Cancel' onClick={cancelReply} />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            <div className="toggle-hide-show-replies">Show Replies</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+                        </>
+                    ))}
                 </div>
             </div>
             <Footer />

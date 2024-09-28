@@ -10,8 +10,25 @@
     gap: 20px;
     padding: 0 20px;
 
+    .sticky-filter-nav {
+        position: sticky;
+        top: 100px;
+    }
+
     .forum-discussion-page-container-col2 {
         width: 100%;
+
+        .new-reply-message {
+            height: auto;
+            margin: 10px 0 25px 25px;
+        }
+
+        .add-reply-button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-left: 25px;
+        }
 
         .started-discussion-container {
             display: flex;
@@ -95,6 +112,127 @@
                             height: 12px;
                         }
                     }
+                }
+            }
+        }
+
+        .filter-replies {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            margin: 10px 0;
+        }
+
+        .all-replies-container {
+            padding-left: 25px;
+            border-left: 1px solid var(--gray-300);
+
+            .reply-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .reply-box {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--gray-300);
+                    border-left: 4px solid var(--gray-300);
+                    padding: 10px;
+
+                    .reply-row1 {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        img {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                        }
+
+                        .post-creator-info {
+                            display: flex;
+                            flex-direction: column;
+
+                            span {
+                                font-size: 16px;
+                                font-weight: 500;
+                            }
+
+                            small {
+                                font-size: 13px;
+                                font-style: italic;
+                            }
+                        }
+                    }
+
+                    .reply-row3 {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .view-reply-like-counter {
+                            display: flex;
+                            gap: 20px;
+                            font-size: 13px;
+                            font-style: italic;
+
+                            .like-counter {
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+
+                                .like-msg-icon {
+                                    display: flex;
+                                    width: 17px;
+                                    height: 16px;
+                                    fill: var(--black-102);
+                                }
+                            }
+
+                            .reply-counter {
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+
+                                .reply-msg-icon {
+                                    display: flex;
+                                    width: 16px;
+                                    height: 16px;
+                                }
+                            }
+
+                            .view-counter {
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+
+                                .view-msg-icon {
+                                    display: flex;
+                                    width: 17px;
+                                    height: 12px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .new-reply-message {
+                    height: auto;
+                    margin: 10px 0 25px 25px;
+                }
+
+                .add-reply-button-container {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 20px;
+                    margin-left: 25px;
+                }
+
+                .level2-replies-container {
+                    border-left: 1px solid var(--gray-300);
+                    padding-left: 25px;
                 }
             }
         }

@@ -19,6 +19,7 @@ const FilterNavigation = ({
     onClick,
     categoriesData,
     tagsData,
+    className
 }) => {
 
     const { userId, tab } = useParams();
@@ -174,7 +175,7 @@ const FilterNavigation = ({
     return (
         <>
             {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
-            <div className='forum-category-page-filter-nav'>
+            <div className={`forum-category-page-filter-nav ${className}`}>
                 {!authUser ? (
                     <div className='forum-category-page-row1 not-authenticated'>
                         <p>Join our community, elevate your marketplace experience!</p>
