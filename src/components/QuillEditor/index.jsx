@@ -6,7 +6,7 @@ import './style.scss'
 
 
 
-const QuillEditor = ({ className, value, onChange, id, name }) => {
+const QuillEditor = ({ className, value, onChange, id, name, placeholder }) => {
 
     // const [value, setValue] = useState('')
     const [isHtmlMode, setIsHtmlMode] = useState(false);
@@ -42,7 +42,7 @@ const QuillEditor = ({ className, value, onChange, id, name }) => {
                 onChange={onChange}
                 modules={modules}
                 className={className}
-                placeholder="Type the details of your product here..."
+                placeholder={placeholder}
             />
         </>
     )

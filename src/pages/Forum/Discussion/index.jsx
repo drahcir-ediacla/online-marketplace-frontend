@@ -6,6 +6,7 @@ import useAuthentication from '../../../hooks/authHook'
 import './style.scss'
 import axios from '../../../apicalls/axios'
 import Header from '../../../layouts/Forum/Header'
+import Footer from '../../../layouts/Forum/Footer';
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import GTranslate from '../../../components/GTranslate';
 import LoginModal from '../../../components/Modal/LoginModal';
@@ -72,7 +73,7 @@ const Discussion = () => {
                     <PostList posts={posts} discussionId={discussionId} />
                 </div>
             </div>
-            
+            <Footer />
         </>
     )
 }

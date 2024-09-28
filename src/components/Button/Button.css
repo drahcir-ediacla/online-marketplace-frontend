@@ -227,11 +227,19 @@
   align-items: center;
   gap: 10px;
   letter-spacing: 1px;
-  color: white;
-  background: linear-gradient(to right, #d53f3f, #dc6531);
-  border: 1px solid var(--orange-200);
+  color: var(--black-102);
+  background: none;
+  border: 1px solid var(--gray-300);
   padding: 5px 20px;
   border-radius: 5px;
+}
+
+.default-reply-btn-style:hover {
+  background: var(--gray-100);
+}
+
+.default-reply-btn-style .reply-icon-style {
+    fill: var(--black-102);
 }
 
 /*-------------------- MEDIA QUERY ------------------------------*/

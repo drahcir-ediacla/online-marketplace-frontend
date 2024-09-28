@@ -7,6 +7,7 @@ import axios from '../../apicalls/axios'
 import useAuthentication from '../../hooks/authHook'
 import { enUS } from 'date-fns/locale';
 import Header from '../../layouts/Forum/Header'
+import Footer from '../../layouts/Forum/Footer';
 import FilterNavigation from '../../layouts/Forum/FilterNavigation'
 import GTranslate from '../../components/GTranslate';
 import LoginModal from '../../components/Modal/LoginModal';
@@ -32,6 +33,7 @@ const Discussion = () => {
     const [openReply, setOpenReply] = useState({});
     const [contentValue, setContentValue] = useState('')
     console.log('contentValue:', contentValue)
+    const [activePostId, setActivePostId] = useState(null)
     const [parentPostId, setParentPostId] = useState(null);
     console.log('parentPostId:', parentPostId)
     const [allPost, setAllPost] = useState([]);
@@ -67,6 +69,9 @@ const Discussion = () => {
     }
 
     const toggleReply = (postId, parentPostId) => {
+        // Close the previous open reply editor 
+        setOpenReply({}); 
+        // Open the specific reply editor
         setOpenReply((prev) => ({
             ...prev,
             [postId]: !prev[postId],
@@ -76,14 +81,18 @@ const Discussion = () => {
             // Only set the parentPostId and clear input when opening
             setContentValue('');
             setParentPostId(parentPostId);
-        } else {
-            // Clear input and reset parentPostId when closing
-            setContentValue('');
-            setParentPostId(null);
         }
     };
 
-    const handleContentChange = (value) => {
+    const cancelReply = () => {
+        setOpenReply({}); 
+        setContentValue('');
+        setParentPostId(null);
+        setActivePostId(null)
+    }
+
+    const handleContentChange = (id, value) => {
+        setActivePostId(id)
         setContentValue(value);
     };
 
@@ -213,13 +222,14 @@ const Discussion = () => {
                                                         id='replyLevelOne'
                                                         name='replyLevelOne'
                                                         className='new-discussion-message'
-                                                        value={contentValue}
-                                                        onChange={(e) => handleContentChange(e)}
+                                                        placeholder="Type your reply here..."
+                                                        value={activePostId === levelOneReply?.post_id ? contentValue : ''}
+                                                        onChange={(content) => handleContentChange(levelOneReply?.post_id, content)}
                                                     />
 
                                                     <div className='add-discussion-button-container'>
                                                         <BtnGreen label='Post Discussion' onClick={handleSubmit} />
-                                                        <BtnClear label='Clear' />
+                                                        <BtnClear label='Cancel' onClick={cancelReply} />
                                                     </div>
                                                 </>
                                             )}
@@ -262,13 +272,14 @@ const Discussion = () => {
                                                                 id='replyLevelTwo'
                                                                 name='replyLevelTwo'
                                                                 className='new-discussion-message'
-                                                                value={contentValue}
-                                                                onChange={(e) => handleContentChange(e)}
+                                                                placeholder="Type your reply here..."
+                                                                value={activePostId === levelTwoReply?.post_id ? contentValue : ''}
+                                                                onChange={(content) => handleContentChange(levelTwoReply?.post_id, content)}
                                                             />
 
                                                             <div className='add-discussion-button-container'>
                                                                 <BtnGreen label='Post Discussion' />
-                                                                <BtnClear label='Clear' />
+                                                                <BtnClear label='Cancel' onClick={cancelReply}/>
                                                             </div>
                                                         </>
                                                     )}
@@ -305,19 +316,20 @@ const Discussion = () => {
                                                                     <BtnReply label='Reply' onClick={() => toggleReply(levelThreeReply.post_id, levelTwoReply.post_id)} />
                                                                 </div>
                                                             </div>
-                                                            {openReply[levelThreeReply.post_id] && (
+                                                            {openReply[levelThreeReply?.post_id] && (
                                                                 <>
                                                                     <QuillEditor
                                                                         id='replyLevelThree'
                                                                         name='replyLevelThree'
                                                                         className='new-discussion-message'
-                                                                        value={contentValue}
-                                                                        onChange={(e) => handleContentChange(e)}
+                                                                        placeholder="Type your reply here..."
+                                                                        value={activePostId === levelThreeReply?.post_id ? contentValue : ''}
+                                                                        onChange={(content) => handleContentChange(levelThreeReply?.post_id, content)}
                                                                     />
 
                                                                     <div className='add-discussion-button-container'>
                                                                         <BtnGreen label='Post Discussion' />
-                                                                        <BtnClear label='Clear' />
+                                                                        <BtnClear label='Cancel' onClick={cancelReply}/>
                                                                     </div>
                                                                 </>
                                                             )}
@@ -334,6 +346,7 @@ const Discussion = () => {
                     ))}
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

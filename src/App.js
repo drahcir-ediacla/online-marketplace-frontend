@@ -92,7 +92,7 @@ function App() {
             <Route path='/forum/discussion/:discussionId' element={<ForumDiscussion />} />
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
             <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/test/:discussionId' element={<TestPage />} />
+            <Route path='/test' element={<TestPage />} />
             <Route path='/forumtest/:discussionId' element={<ForumTestPage />} />
             <Route element={<PrivateRoutes />}>
               <Route path='/editprofile' element={<EditProfile />} />
