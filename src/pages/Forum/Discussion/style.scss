@@ -18,6 +18,27 @@
     .forum-discussion-page-container-col2 {
         width: 100%;
 
+        .show-less-content {
+            mask-image: linear-gradient(180deg, #555 60%, transparent);
+            min-height: 38px;
+            max-height: 350px;
+            overflow: hidden;
+        }
+
+        .show-all-content {
+            mask-image: none;
+            min-height: 38px;
+            max-height: auto;
+            overflow: hidden;
+        }
+
+        .toggle-content-btn {
+            border: none;
+            background: none;
+            text-decoration: underline;
+            font-size: 13px;
+        }
+
         .new-reply-message {
             height: auto;
             margin: 10px 0 25px 25px;
@@ -62,7 +83,31 @@
                     small {
                         font-size: 13px;
                         font-style: italic;
+                        color: #838383;
                     }
+                }
+            }
+
+            .started-discussion-container-row2 {
+                .show-less-content {
+                    mask-image: linear-gradient(180deg, #555 60%, transparent);
+                    min-height: 38px;
+                    max-height: 350px;
+                    overflow: hidden;
+                }
+
+                .show-all-content {
+                    mask-image: none;
+                    min-height: 38px;
+                    max-height: auto;
+                    overflow: hidden;
+                }
+
+                .toggle-content-btn {
+                    border: none;
+                    background: none;
+                    text-decoration: underline;
+                    font-size: 13px;
                 }
             }
 
@@ -122,6 +167,10 @@
             align-items: center;
             height: 40px;
             margin: 10px 0;
+
+            .replies-counter {
+                font-weight: 500;
+            }
         }
 
         .all-replies-container {
@@ -138,8 +187,10 @@
                     flex-direction: column;
                     gap: 10px;
                     border: 1px solid var(--gray-300);
-                    border-left: 4px solid var(--gray-300);
+                    border-left: 4px solid var(--orange-200);
                     padding: 10px;
+
+
 
                     .reply-row1 {
                         display: flex;
@@ -164,6 +215,7 @@
                             small {
                                 font-size: 13px;
                                 font-style: italic;
+                                color: #838383;
                             }
                         }
                     }
@@ -233,6 +285,20 @@
                 .level2-replies-container {
                     border-left: 1px solid var(--gray-300);
                     padding-left: 25px;
+
+                    .reply-box {
+                        .parent-post-container {
+                            background: var(--gray-200);
+                            padding: 10px;
+                            border-left: 4px solid var(--gray-300);
+
+                            .parent-post-container-row1 {
+                                a {
+                                    text-decoration: underline;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

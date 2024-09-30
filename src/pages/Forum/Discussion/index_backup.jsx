@@ -33,8 +33,11 @@ const Discussion = () => {
     const [openReply, setOpenReply] = useState({});
     const [showMoreContent, setShowMoreContent] = useState({})
     const [contentValue, setContentValue] = useState('')
+    console.log('contentValue:', contentValue)
+    const [isOverflowing, setIsOverflowing] = useState(false);
     const [activePostId, setActivePostId] = useState(null)
     const [parentPostId, setParentPostId] = useState(null);
+    console.log('parentPostId:', parentPostId)
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
@@ -140,12 +143,10 @@ const Discussion = () => {
                 discussion_id: discussionId,
                 parent_post_id: parentPostId,
             });
-
-            // Optionally, refetch posts here if needed
-            const response = await axios.get(`/api/discussions/${discussionId}/posts`);
+            // Clear input and reset parentPostId after successful submission
             setContentValue('');
             setParentPostId(null);
-            setAllPost(response.data)
+            // Optionally, refetch posts here if needed
         } catch (error) {
             console.error("Error submitting the reply:", error);
         }
@@ -181,13 +182,13 @@ const Discussion = () => {
                                     <div className='started-discussion-container-row2' key={post?.post_id}>
                                         <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
                                         {post?.content.length > 340 && (
+                                        <div style={{ textAlign: 'center' }}>
                                             <div style={{ textAlign: 'center' }}>
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
-                                                        {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
-                                                    </button>
-                                                </div>
+                                                <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
+                                                    {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
+                                                </button>
                                             </div>
+                                        </div>
                                         )}
                                     </div>
                                 )}
@@ -243,16 +244,7 @@ const Discussion = () => {
                                                     </div>
                                                 </div>
                                                 <div className="reply-row2">
-                                                    <div className={showMoreContent[levelOneReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelOneReply?.content }} />
-                                                    {levelOneReply?.content.length > 340 && (
-                                                        <div style={{ textAlign: 'center' }}>
-                                                            <div style={{ textAlign: 'center' }}>
-                                                                <button className='toggle-content-btn' onClick={() => toggleContent(levelOneReply?.post_id)}>
-                                                                    {showMoreContent[levelOneReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                    <div dangerouslySetInnerHTML={{ __html: levelOneReply?.content }} />
                                                 </div>
                                                 <div className='reply-row3'>
                                                     <div className='view-reply-like-counter'>
@@ -301,16 +293,7 @@ const Discussion = () => {
                                                             </div>
                                                         </div>
                                                         <div className="reply-row2">
-                                                            <div className={showMoreContent[levelTwoReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelTwoReply?.content }} />
-                                                            {levelTwoReply?.content.length > 340 && (
-                                                                <div style={{ textAlign: 'center' }}>
-                                                                    <div style={{ textAlign: 'center' }}>
-                                                                        <button className='toggle-content-btn' onClick={() => toggleContent(levelTwoReply?.post_id)}>
-                                                                            {showMoreContent[levelTwoReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            )}
+                                                            <div dangerouslySetInnerHTML={{ __html: levelTwoReply?.content }} />
                                                         </div>
                                                         <div className='reply-row3'>
                                                             <div className='view-reply-like-counter'>
@@ -365,16 +348,7 @@ const Discussion = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="reply-row2">
-                                                                    <div className={showMoreContent[levelThreeReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelThreeReply?.content }} />
-                                                                    {levelThreeReply?.content.length > 340 && (
-                                                                        <div style={{ textAlign: 'center' }}>
-                                                                            <div style={{ textAlign: 'center' }}>
-                                                                                <button className='toggle-content-btn' onClick={() => toggleContent(levelThreeReply?.post_id)}>
-                                                                                    {showMoreContent[levelThreeReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
+                                                                    <div dangerouslySetInnerHTML={{ __html: levelThreeReply?.content }} />
                                                                 </div>
                                                                 <div className='reply-row3'>
                                                                     <div className='view-reply-like-counter'>
