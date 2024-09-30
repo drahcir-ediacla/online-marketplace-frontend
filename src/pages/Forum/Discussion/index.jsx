@@ -143,6 +143,7 @@ const Discussion = () => {
 
             // Optionally, refetch posts here if needed
             const response = await axios.get(`/api/discussions/${discussionId}/posts`);
+            setOpenReply({});
             setContentValue('');
             setParentPostId(null);
             setAllPost(response.data)
@@ -361,7 +362,7 @@ const Discussion = () => {
                                                                 <div className='parent-post-container'>
                                                                     <div className='parent-post-container-row1'>
                                                                         <Link>{levelThreeReply.parentPostCreator.display_name} said:</Link>
-                                                                        <p>{levelThreeReply.parentPostContent}</p>
+                                                                        <div dangerouslySetInnerHTML={{__html: levelThreeReply.parentPostContent}} />
                                                                     </div>
                                                                 </div>
                                                                 <div className="reply-row2">
