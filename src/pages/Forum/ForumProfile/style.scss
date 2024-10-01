@@ -10,6 +10,10 @@
     gap: 20px;
     padding: 0 20px;
 
+    .profile-filter-navigation {
+        max-height: none;
+    }
+
     .forum-profile-page-col2 {
         width: 100%;
 
@@ -228,4 +232,9 @@
             }
         }
     }
+}
+
+.forum-profile-footer {
+    position: relative;
+    margin-top: 100px;
 }

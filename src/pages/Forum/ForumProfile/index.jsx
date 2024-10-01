@@ -215,6 +215,7 @@ const ForumProfile = () => {
                     onClick={loginModal}
                     categoriesData={setCategories}
                     tagsData={setAllTags}
+                    className='profile-filter-navigation'
                 />
                 <div className='forum-profile-page-col2'>
                     {activeTab !== 4 && <SearchDiscussionBox />}
@@ -422,7 +423,7 @@ const ForumProfile = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
+            <Footer className='forum-profile-footer' />
         </>
     )
 }

@@ -425,7 +425,7 @@ const Discussion = () => {
                     ))}
                 </div>
             </div>
-            <Footer />
+            <Footer className='forum-discussion-page-footer' />
         </>
     )
 }

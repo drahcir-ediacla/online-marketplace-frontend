@@ -1,9 +1,9 @@
 import './style.scss'
 
-const ForumFooter = () => {
+const ForumFooter = ({ className }) => {
   return (
     <>
-      <div className='forum-footer'>
+      <div className={`forum-footer ${className}`}>
         <span>Copyright 2023 - Yogeek</span>
       </div>
     </>

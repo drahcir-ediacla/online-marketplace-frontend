@@ -103,7 +103,7 @@ const FilterDiscussionByTags = () => {
                 <GTranslate />
             </div>
             <div className='forum-filter-tags-page-container'>
-                <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
+                <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} className='filter-discussion-tags-page' />
                 <div className='forum-filter-tags-page-container-col2'>
                     <SearchDiscussionBox />
                     <div className='discussions-container'>
