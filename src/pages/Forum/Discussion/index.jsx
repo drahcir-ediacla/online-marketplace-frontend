@@ -307,7 +307,7 @@ const Discussion = () => {
                                                                 {levelTwoReply?.content.length > 340 && (
                                                                     <div style={{ textAlign: 'center' }}>
                                                                         <div style={{ textAlign: 'center' }}>
-                                                                            <button className='toggle-content-btn' onClick={!user ? loginModal : () => toggleReply(levelTwoReply.post_id)}>
+                                                                            <button className='toggle-content-btn' onClick={() => toggleContent(levelTwoReply?.post_id)}>
                                                                                 {showMoreContent[levelTwoReply?.post_id] ? 'Show less...' : 'Show more...'}
                                                                             </button>
                                                                         </div>
@@ -329,7 +329,7 @@ const Discussion = () => {
                                                                         <span>1.2M</span>
                                                                     </div>
                                                                 </div>
-                                                                <BtnReply label='Reply' onClick={() => toggleReply(levelTwoReply.post_id)} />
+                                                                <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelTwoReply.post_id)} />
                                                             </div>
                                                         </div>
                                                         {openReply[levelTwoReply.post_id] && (
