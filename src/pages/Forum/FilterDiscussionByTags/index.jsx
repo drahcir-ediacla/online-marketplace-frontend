@@ -98,40 +98,42 @@ const FilterDiscussionByTags = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
-            <div className='language-selector-container'>
-                <GTranslate />
-            </div>
-            <div className='forum-filter-tags-page-container'>
-                <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} className='filter-discussion-tags-page' />
-                <div className='forum-filter-tags-page-container-col2'>
-                    <SearchDiscussionBox />
-                    <div className='discussions-container'>
-                        <div className='discussions-container-row1'>
-                            <h4>Filter Tagged Discussions</h4>
-                            <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+            <div className='forum-page-container'>
+                <Header authUser={user} />
+                <div className='forum-filter-tags-page-container'>
+                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} className='filter-discussion-tags-page' />
+                    <div className='forum-filter-tags-page-container-col2'>
+                        <div className='language-selector-container'>
+                            <GTranslate />
                         </div>
-                        <div className='discussion-list'>
-                            {discussions && discussions.length > 0 ? (
-                                <><FilterTagDiscussionCard
-                                    data={discussions}
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
-                                </>
-                            ) : (
-                                <>
-                                    No discussions found!
-                                </>
-                            )}
+                        <SearchDiscussionBox />
+                        <div className='discussions-container'>
+                            <div className='discussions-container-row1'>
+                                <h4>Filter Tagged Discussions</h4>
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                            </div>
+                            <div className='discussion-list'>
+                                {discussions && discussions.length > 0 ? (
+                                    <><FilterTagDiscussionCard
+                                        data={discussions}
+                                        date='3 hours ago'
+                                        like='4.5k'
+                                        replies='4.5k'
+                                        views='1.2M'
+                                    />
+                                    </>
+                                ) : (
+                                    <>
+                                        No discussions found!
+                                    </>
+                                )}
 
+                            </div>
                         </div>
                     </div>
                 </div>
+                <Footer />
             </div>
-            <Footer />
         </>
     )
 }

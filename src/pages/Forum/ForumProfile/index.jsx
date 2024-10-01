@@ -199,231 +199,233 @@ const ForumProfile = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
-            <div className='language-selector-container'>
-                <GTranslate />
-            </div>
-            <div className="forum-profile-container">
-                <FilterNavigation
-                    authUser={user}
-                    createdDiscussions={() => openContent(0)}
-                    joinedDiscussions={() => openContent(1)}
-                    likedDiscussions={() => openContent(2)}
-                    forumNotifications={() => openContent(3)}
-                    addDiscussions={() => openContent(4)}
-                    discussionFilter={discussionFilter}
-                    onClick={loginModal}
-                    categoriesData={setCategories}
-                    tagsData={setAllTags}
-                    className='profile-filter-navigation'
-                />
-                <div className='forum-profile-page-col2'>
-                    {activeTab !== 4 && <SearchDiscussionBox />}
-                    <div className="discussions-container">
-                        <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
-                            <div className="forum-profile-tab-title">
-                                <h4>Created Discussions (29)</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                            </div>
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
+            <div className='forum-page-container'>
+                <Header authUser={user} />
+                <div className="forum-profile-container">
+                    <FilterNavigation
+                        authUser={user}
+                        createdDiscussions={() => openContent(0)}
+                        joinedDiscussions={() => openContent(1)}
+                        likedDiscussions={() => openContent(2)}
+                        forumNotifications={() => openContent(3)}
+                        addDiscussions={() => openContent(4)}
+                        discussionFilter={discussionFilter}
+                        onClick={loginModal}
+                        categoriesData={setCategories}
+                        tagsData={setAllTags}
+                        className='profile-filter-navigation'
+                    />
+                    <div className='forum-profile-page-col2'>
+                        <div className='language-selector-container'>
+                            <GTranslate />
                         </div>
-                        <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
-                            <div className="forum-profile-tab-title">
-                                <h4>Joined Discussions (29)</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                            </div>
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                        </div>
-                        <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
-                            <div className='forum-profile-tab-title'>
-                                <h4>Likes (29)</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                            </div>
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                            <ForumDiscussionCard
-                                title='Possible Scamming Ring Uncovered!'
-                                postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                author='Seller_zGoDlPZLneGhF'
-                                date='3 hours ago'
-                                like='4.5k'
-                                replies='4.5k'
-                                views='1.2M'
-                            />
-                        </div>
-                        <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
-                            <div className='forum-profile-tab-title'>
-                                <h4>Notifications</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                            </div>
-                        </div>
-                        <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>
-                            <div className='forum-profile-tab-title'>
-                                <h4>Add New Discussions</h4>
-                            </div>
-                            <form className='add-discussion-form'>
-                                <div className='add-discussion-form-field-container'>
-                                    <label htmlFor="">Title</label>
-                                    <Input
-                                        className="discussion-title-box"
-                                        placeholder='Type discussion title'
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
+                        {activeTab !== 4 && <SearchDiscussionBox />}
+                        <div className="discussions-container">
+                            <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
+                                <div className="forum-profile-tab-title">
+                                    <h4>Created Discussions (29)</h4>
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                <div className='add-discussion-form-field-container'>
-                                    <label htmlFor="">Category</label>
-                                    <div className="wrapper" ref={dropDownCategory}>
-                                        <div className={`drop-down-arrow ${selectCategoryOpen && 'active'}`} onClick={toggleSelectCategory}></div>
-                                        <div className="drop-down-forum-category">
-                                            <input type="text" className="discussion-select-box" placeholder='Select category' value={selectedSubCategory} readOnly />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                            </div>
+                            <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
+                                <div className="forum-profile-tab-title">
+                                    <h4>Joined Discussions (29)</h4>
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                </div>
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                            </div>
+                            <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
+                                <div className='forum-profile-tab-title'>
+                                    <h4>Likes (29)</h4>
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                </div>
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                                <ForumDiscussionCard
+                                    title='Possible Scamming Ring Uncovered!'
+                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
+                                    author='Seller_zGoDlPZLneGhF'
+                                    date='3 hours ago'
+                                    like='4.5k'
+                                    replies='4.5k'
+                                    views='1.2M'
+                                />
+                            </div>
+                            <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
+                                <div className='forum-profile-tab-title'>
+                                    <h4>Notifications</h4>
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                </div>
+                            </div>
+                            <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>
+                                <div className='forum-profile-tab-title'>
+                                    <h4>Add New Discussions</h4>
+                                </div>
+                                <form className='add-discussion-form'>
+                                    <div className='add-discussion-form-field-container'>
+                                        <label htmlFor="">Title</label>
+                                        <Input
+                                            className="discussion-title-box"
+                                            placeholder='Type discussion title'
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className='add-discussion-form-field-container'>
+                                        <label htmlFor="">Category</label>
+                                        <div className="wrapper" ref={dropDownCategory}>
+                                            <div className={`drop-down-arrow ${selectCategoryOpen && 'active'}`} onClick={toggleSelectCategory}></div>
+                                            <div className="drop-down-forum-category">
+                                                <input type="text" className="discussion-select-box" placeholder='Select category' value={selectedSubCategory} readOnly />
+                                            </div>
+                                            {selectCategoryOpen &&
+                                                <div className="drop-down-forum-category-container">
+                                                    <ul className='drop-down-forum-category-options'>
+                                                        {categories.map(category => (
+                                                            <li className='forum-main-category' key={category.id}>
+                                                                <div className="parent-forum-category">{category.name}</div>
+                                                                <ul className='forum-subcategory'>
+                                                                    {category.subcategories.map(subcategory => (
+                                                                        <li key={subcategory.id} onClick={() => handleCategorySelect(subcategory.id, subcategory.name)}>
+                                                                            <div className="first-level-forum-subcategory">{subcategory.name}</div>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            }
                                         </div>
-                                        {selectCategoryOpen &&
-                                            <div className="drop-down-forum-category-container">
-                                                <ul className='drop-down-forum-category-options'>
-                                                    {categories.map(category => (
-                                                        <li className='forum-main-category' key={category.id}>
-                                                            <div className="parent-forum-category">{category.name}</div>
-                                                            <ul className='forum-subcategory'>
-                                                                {category.subcategories.map(subcategory => (
-                                                                    <li key={subcategory.id} onClick={() => handleCategorySelect(subcategory.id, subcategory.name)}>
-                                                                        <div className="first-level-forum-subcategory">{subcategory.name}</div>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
+                                    </div>
+                                    <div className='add-discussion-form-field-container'>
+                                        <label htmlFor="">Message</label>
+                                        <QuillEditor
+                                            id='newDiscussion'
+                                            name='newDiscussion'
+                                            className='new-discussion-message'
+                                            value={content}
+                                            onChange={(e) => setContent(e)}
+                                        />
+                                    </div>
+                                    <div className='add-discussion-form-field-container'>
+                                        <label htmlFor="">Tags</label>
+                                        <div className="tags-input-container" ref={dropDownTags}>
+                                            <ul className="tags-list">
+                                                {tags.map((tag, index) => (
+                                                    <li key={index} className="tag">
+                                                        {tag.tag_name}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRemoveTag(tag)}
+                                                            className="remove-tag-button"
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                                <li className='input-tags-container'>
+                                                    <input
+                                                        type="text"
+                                                        value={inputTags}
+                                                        onChange={handleTagInputChange}
+                                                        placeholder="Search or select tags"
+                                                        className="tags-input"
+                                                    />
+                                                </li>
+                                            </ul>
+                                            {showDropdownTags && filteredTags.length > 0 && (
+                                                <ul className="dropdown-list">
+                                                    {filteredTags.map((tag, index) => (
+                                                        <li key={index} onClick={() => handleTagClick(tag.id, tag.name)}>
+                                                            {tag.name}
                                                         </li>
                                                     ))}
                                                 </ul>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <div className='add-discussion-form-field-container'>
-                                    <label htmlFor="">Message</label>
-                                    <QuillEditor
-                                        id='newDiscussion'
-                                        name='newDiscussion'
-                                        className='new-discussion-message'
-                                        value={content}
-                                        onChange={(e) => setContent(e)}
-                                    />
-                                </div>
-                                <div className='add-discussion-form-field-container'>
-                                    <label htmlFor="">Tags</label>
-                                    <div className="tags-input-container" ref={dropDownTags}>
-                                        <ul className="tags-list">
-                                            {tags.map((tag, index) => (
-                                                <li key={index} className="tag">
-                                                    {tag.tag_name}
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveTag(tag)}
-                                                        className="remove-tag-button"
-                                                    >
-                                                        &times;
-                                                    </button>
-                                                </li>
-                                            ))}
-                                            <li className='input-tags-container'>
-                                                <input
-                                                    type="text"
-                                                    value={inputTags}
-                                                    onChange={handleTagInputChange}
-                                                    placeholder="Search or select tags"
-                                                    className="tags-input"
-                                                />
-                                            </li>
-                                        </ul>
-                                        {showDropdownTags && filteredTags.length > 0 && (
-                                            <ul className="dropdown-list">
-                                                {filteredTags.map((tag, index) => (
-                                                    <li key={index} onClick={() => handleTagClick(tag.id, tag.name)}>
-                                                        {tag.name}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
+                                            )}
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='add-discussion-button-container'>
-                                    <BtnGreen label='Post Discussion' onClick={createNewDiscussion} />
-                                    <BtnClear label='Clear' onClick={clearForm} />
-                                </div>
-                            </form>
+                                    <div className='add-discussion-button-container'>
+                                        <BtnGreen label='Post Discussion' onClick={createNewDiscussion} />
+                                        <BtnClear label='Clear' onClick={clearForm} />
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <Footer className='forum-profile-footer' />
             </div>
-            <Footer className='forum-profile-footer' />
         </>
     )
 }

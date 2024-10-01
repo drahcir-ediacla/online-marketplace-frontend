@@ -62,46 +62,48 @@ const ForumSubCategoryPage = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
-            <div className='language-selector-container'>
-                <GTranslate />
-            </div>
-            <div>
-                <div className="forum-category-page-container">
-                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
-                    <div className='forum-category-page-col2'>
-                        <SearchDiscussionBox />
-                        <div className="discussions-container">
-                            <div className="category-container">
-                                <div className="category-name">
-                                    <h4>{categoryData.name}</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                                </div>
-                                {subcategories && subcategories.length > 0 && (
-                                    <ForumSubCategory
-                                        data={subcategories}
-                                        replies='102k'
-                                        views='27.9M'
-                                        lastActivity='1h ago'
-                                    />
-                                )}
+            <div className='forum-page-container'>
+                <Header authUser={user} />
+                <div>
+                    <div className="forum-category-page-container">
+                        <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
+                        <div className='forum-category-page-col2'>
+                            <div className='language-selector-container'>
+                                <GTranslate />
                             </div>
-                            <div className='discussion-list'>
-                                {discussions && discussions.length > 0 && (
-                                    <ForumDiscussionCard
-                                        data={discussions}
-                                        date='3 hours ago'
-                                        like='4.5k'
-                                        replies='4.5k'
-                                        views='1.2M'
-                                    />
-                                )}
+                            <SearchDiscussionBox />
+                            <div className="discussions-container">
+                                <div className="category-container">
+                                    <div className="category-name">
+                                        <h4>{categoryData.name}</h4>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    </div>
+                                    {subcategories && subcategories.length > 0 && (
+                                        <ForumSubCategory
+                                            data={subcategories}
+                                            replies='102k'
+                                            views='27.9M'
+                                            lastActivity='1h ago'
+                                        />
+                                    )}
+                                </div>
+                                <div className='discussion-list'>
+                                    {discussions && discussions.length > 0 && (
+                                        <ForumDiscussionCard
+                                            data={discussions}
+                                            date='3 hours ago'
+                                            like='4.5k'
+                                            replies='4.5k'
+                                            views='1.2M'
+                                        />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Footer />
             </div>
-            <Footer />
         </>
     )
 }

@@ -1,3 +1,8 @@
+.discussion-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
 .language-selector-container {
     width: 100%;
     text-align: right;
@@ -12,7 +17,8 @@
 
     .sticky-filter-nav {
         position: sticky;
-        top: 100px;
+        top: 60px;
+        margin-top: 0;
     }
 
     .forum-discussion-page-container-col2 {
@@ -308,5 +314,6 @@
 .forum-discussion-page-footer {
     position: sticky;
     bottom: 0;
-    margin: 0;
+    margin-top: auto;
+}
 }

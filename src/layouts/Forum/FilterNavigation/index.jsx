@@ -243,7 +243,7 @@ const FilterNavigation = ({
                         <label>POPULAR TAGS</label>
                     </div>
                     <div className="forum-category-btn-container">
-                        {tags.slice(0, 15).map(tag => (
+                        {tags.slice(0, 10).map(tag => (
                             <BtnCategory
                                 key={tag.id}
                                 onClick={() => toggleTag(tag.id)}

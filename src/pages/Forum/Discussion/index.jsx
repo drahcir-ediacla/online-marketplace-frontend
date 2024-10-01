@@ -156,276 +156,278 @@ const Discussion = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <Header authUser={user} />
-            <div className='language-selector-container'>
-                <GTranslate />
-            </div>
-            <div className="forum-discussion-page-container">
-                <FilterNavigation
-                    authUser={user}
-                    onClick={loginModal}
-                    className='sticky-filter-nav'
-                />
-                <div className='forum-discussion-page-container-col2'>
-                    <SearchDiscussionBox />
-                    {allPost.map(post => (
-                        <>
-                            <div className="started-discussion-container" key={post?.post_id}>
-                                <div className='started-discussion-container-row1'>
-                                    <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                    <div className='started-forum-discussion-info'>
-                                        <label>{post?.discussion?.title}</label>
-                                        <small>by {post?.postCreator?.display_name || 'Unknown'} &nbsp;&nbsp;&nbsp;&nbsp; Posted: {getFormattedDate(post.created_at)}</small>
+            <div className='discussion-container'>
+                <Header authUser={user} />
+                <div className="forum-discussion-page-container">
+                    <FilterNavigation
+                        authUser={user}
+                        onClick={loginModal}
+                        className='sticky-filter-nav'
+                    />
+                    <div className='forum-discussion-page-container-col2'>
+                        <div className='language-selector-container'>
+                            <GTranslate />
+                        </div>
+                        <SearchDiscussionBox />
+                        {allPost.map(post => (
+                            <>
+                                <div className="started-discussion-container" key={post?.post_id}>
+                                    <div className='started-discussion-container-row1'>
+                                        <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                        <div className='started-forum-discussion-info'>
+                                            <label>{post?.discussion?.title}</label>
+                                            <small>by {post?.postCreator?.display_name || 'Unknown'} &nbsp;&nbsp;&nbsp;&nbsp; Posted: {getFormattedDate(post.created_at)}</small>
+                                        </div>
                                     </div>
-                                </div>
-                                {!post?.parent_post_id && (
-                                    <div className='started-discussion-container-row2' key={post?.post_id}>
-                                        <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
-                                        {post?.content.length > 340 && (
-                                            <div style={{ textAlign: 'center' }}>
+                                    {!post?.parent_post_id && (
+                                        <div className='started-discussion-container-row2' key={post?.post_id}>
+                                            <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
+                                            {post?.content.length > 340 && (
                                                 <div style={{ textAlign: 'center' }}>
-                                                    <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
-                                                        {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                                <div className='started-discussion-container-row3'>
-                                    <div className='view-reply-like-counter'>
-                                        <div className='like-counter'>
-                                            <div className='like-msg-icon'><Like /></div>
-                                            <span>4.5k</span>
-                                        </div>
-                                        <div className='reply-counter'>
-                                            <div className='reply-msg-icon'><MsgIcon /></div>
-                                            <span>4.5k</span>
-                                        </div>
-                                        <div className='view-counter'>
-                                            <div className='view-msg-icon'><EyeIcon /></div>
-                                            <span>1.2M</span>
-                                        </div>
-                                    </div>
-                                    <BtnReply label='Reply' onClick={() => toggleReply(post.post_id)} />
-                                </div>
-                            </div>
-                            {openReply[post.post_id] && (
-                                <>
-                                    <QuillEditor
-                                        id='replyLevelZero'
-                                        name='replyLevelZero'
-                                        className='new-reply-message'
-                                        placeholder="Type your reply here..."
-                                        value={activePostId === post?.post_id ? contentValue : ''}
-                                        onChange={(content) => handleContentChange(post?.post_id, content)}
-                                    />
-
-                                    <div className='add-reply-button-container'>
-                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
-                                        <BtnClear label='Cancel' onClick={cancelReply} />
-                                    </div>
-                                </>
-                            )}
-                            <div className="filter-replies">
-                                <span className='replies-counter'>{totalReplies} Replies</span>
-                                <div><span>Sort By</span></div>
-                            </div>
-                            {post.replies.map(levelOneReply => (
-                                <>
-                                    <div className="all-replies-container" key={levelOneReply.post_id}>
-                                        <div className='reply-container'>
-                                            <div className="reply-box">
-                                                <div className="reply-row1">
-                                                    <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                    <div className="post-creator-info">
-                                                        <span>{levelOneReply.postCreator.display_name}</span>
-                                                        <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
+                                                            {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="reply-row2">
-                                                    <div className={showMoreContent[levelOneReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelOneReply?.content }} />
-                                                    {levelOneReply?.content.length > 340 && (
-                                                        <div style={{ textAlign: 'center' }}>
-                                                            <div style={{ textAlign: 'center' }}>
-                                                                <button className='toggle-content-btn' onClick={() => toggleContent(levelOneReply?.post_id)}>
-                                                                    {showMoreContent[levelOneReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className='reply-row3'>
-                                                    <div className='view-reply-like-counter'>
-                                                        <div className='like-counter'>
-                                                            <div className='like-msg-icon'><Like /></div>
-                                                            <span>4.5k</span>
-                                                        </div>
-                                                        <div className='reply-counter'>
-                                                            <div className='reply-msg-icon'><MsgIcon /></div>
-                                                            <span>4.5k</span>
-                                                        </div>
-                                                        <div className='view-counter'>
-                                                            <div className='view-msg-icon'><EyeIcon /></div>
-                                                            <span>1.2M</span>
-                                                        </div>
-                                                    </div>
-                                                    <BtnReply label='Reply' onClick={() => toggleReply(levelOneReply.post_id)} />
-                                                </div>
-                                            </div>
-                                            {openReply[levelOneReply.post_id] && (
-                                                <>
-                                                    <QuillEditor
-                                                        id='replyLevelOne'
-                                                        name='replyLevelOne'
-                                                        className='new-reply-message'
-                                                        placeholder="Type your reply here..."
-                                                        value={activePostId === levelOneReply?.post_id ? contentValue : ''}
-                                                        onChange={(content) => handleContentChange(levelOneReply?.post_id, content)}
-                                                    />
-
-                                                    <div className='add-reply-button-container'>
-                                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
-                                                        <BtnClear label='Cancel' onClick={cancelReply} />
-                                                    </div>
-                                                </>
                                             )}
-                                            <div className="toggle-hide-show-replies">Show more replies</div>
-                                            {levelOneReply.replies.map(levelTwoReply => (
-                                                <div className="level2-replies-container" key={levelTwoReply.post_id}>
-                                                    <div className="reply-box">
-                                                        <div className="reply-row1">
-                                                            <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                            <div className="post-creator-info">
-                                                                <span>{levelTwoReply.postCreator.display_name}</span>
-                                                                <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
-                                                            </div>
-                                                        </div>
-                                                        <div className="reply-row2">
-                                                            <div className={showMoreContent[levelTwoReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelTwoReply?.content }} />
-                                                            {levelTwoReply?.content.length > 340 && (
-                                                                <div style={{ textAlign: 'center' }}>
-                                                                    <div style={{ textAlign: 'center' }}>
-                                                                        <button className='toggle-content-btn' onClick={() => toggleContent(levelTwoReply?.post_id)}>
-                                                                            {showMoreContent[levelTwoReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className='reply-row3'>
-                                                            <div className='view-reply-like-counter'>
-                                                                <div className='like-counter'>
-                                                                    <div className='like-msg-icon'><Like /></div>
-                                                                    <span>4.5k</span>
-                                                                </div>
-                                                                <div className='reply-counter'>
-                                                                    <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                    <span>4.5k</span>
-                                                                </div>
-                                                                <div className='view-counter'>
-                                                                    <div className='view-msg-icon'><EyeIcon /></div>
-                                                                    <span>1.2M</span>
-                                                                </div>
-                                                            </div>
-                                                            <BtnReply label='Reply' onClick={() => toggleReply(levelTwoReply.post_id)} />
+                                        </div>
+                                    )}
+                                    <div className='started-discussion-container-row3'>
+                                        <div className='view-reply-like-counter'>
+                                            <div className='like-counter'>
+                                                <div className='like-msg-icon'><Like /></div>
+                                                <span>4.5k</span>
+                                            </div>
+                                            <div className='reply-counter'>
+                                                <div className='reply-msg-icon'><MsgIcon /></div>
+                                                <span>4.5k</span>
+                                            </div>
+                                            <div className='view-counter'>
+                                                <div className='view-msg-icon'><EyeIcon /></div>
+                                                <span>1.2M</span>
+                                            </div>
+                                        </div>
+                                        <BtnReply label='Reply' onClick={() => toggleReply(post.post_id)} />
+                                    </div>
+                                </div>
+                                {openReply[post.post_id] && (
+                                    <>
+                                        <QuillEditor
+                                            id='replyLevelZero'
+                                            name='replyLevelZero'
+                                            className='new-reply-message'
+                                            placeholder="Type your reply here..."
+                                            value={activePostId === post?.post_id ? contentValue : ''}
+                                            onChange={(content) => handleContentChange(post?.post_id, content)}
+                                        />
+
+                                        <div className='add-reply-button-container'>
+                                            <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                            <BtnClear label='Cancel' onClick={cancelReply} />
+                                        </div>
+                                    </>
+                                )}
+                                <div className="filter-replies">
+                                    <span className='replies-counter'>{totalReplies} Replies</span>
+                                    <div><span>Sort By</span></div>
+                                </div>
+                                {post.replies.map(levelOneReply => (
+                                    <>
+                                        <div className="all-replies-container" key={levelOneReply.post_id}>
+                                            <div className='reply-container'>
+                                                <div className="reply-box">
+                                                    <div className="reply-row1">
+                                                        <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                        <div className="post-creator-info">
+                                                            <span>{levelOneReply.postCreator.display_name}</span>
+                                                            <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
                                                         </div>
                                                     </div>
-                                                    {openReply[levelTwoReply.post_id] && (
-                                                        <>
-                                                            <QuillEditor
-                                                                id='replyLevelTwo'
-                                                                name='replyLevelTwo'
-                                                                className='new-reply-message'
-                                                                placeholder="Type your reply here..."
-                                                                value={activePostId === levelTwoReply?.post_id ? contentValue : ''}
-                                                                onChange={(content) => handleContentChange(levelTwoReply?.post_id, content)}
-                                                            />
-
-                                                            <div className='add-reply-button-container'>
-                                                                <BtnGreen label='Post Discussion' onClick={handleSubmit} />
-                                                                <BtnClear label='Cancel' onClick={cancelReply} />
+                                                    <div className="reply-row2">
+                                                        <div className={showMoreContent[levelOneReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelOneReply?.content }} />
+                                                        {levelOneReply?.content.length > 340 && (
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div style={{ textAlign: 'center' }}>
+                                                                    <button className='toggle-content-btn' onClick={() => toggleContent(levelOneReply?.post_id)}>
+                                                                        {showMoreContent[levelOneReply?.post_id] ? 'Show less...' : 'Show more...'}
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                        </>
-                                                    )}
-                                                    <div className="toggle-hide-show-replies">Show Replies</div>
-                                                    {levelTwoReply.replies.map(levelThreeReply => (
-                                                        <div className="level2-replies-container">
-                                                            <div className="reply-box">
-                                                                <div className="reply-row1">
-                                                                    <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                                    <div className="post-creator-info">
-                                                                        <span>{levelThreeReply.postCreator.display_name}</span>
-                                                                        <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
-                                                                    </div>
+                                                        )}
+                                                    </div>
+                                                    <div className='reply-row3'>
+                                                        <div className='view-reply-like-counter'>
+                                                            <div className='like-counter'>
+                                                                <div className='like-msg-icon'><Like /></div>
+                                                                <span>4.5k</span>
+                                                            </div>
+                                                            <div className='reply-counter'>
+                                                                <div className='reply-msg-icon'><MsgIcon /></div>
+                                                                <span>4.5k</span>
+                                                            </div>
+                                                            <div className='view-counter'>
+                                                                <div className='view-msg-icon'><EyeIcon /></div>
+                                                                <span>1.2M</span>
+                                                            </div>
+                                                        </div>
+                                                        <BtnReply label='Reply' onClick={() => toggleReply(levelOneReply.post_id)} />
+                                                    </div>
+                                                </div>
+                                                {openReply[levelOneReply.post_id] && (
+                                                    <>
+                                                        <QuillEditor
+                                                            id='replyLevelOne'
+                                                            name='replyLevelOne'
+                                                            className='new-reply-message'
+                                                            placeholder="Type your reply here..."
+                                                            value={activePostId === levelOneReply?.post_id ? contentValue : ''}
+                                                            onChange={(content) => handleContentChange(levelOneReply?.post_id, content)}
+                                                        />
+
+                                                        <div className='add-reply-button-container'>
+                                                            <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                            <BtnClear label='Cancel' onClick={cancelReply} />
+                                                        </div>
+                                                    </>
+                                                )}
+                                                <div className="toggle-hide-show-replies">Show more replies</div>
+                                                {levelOneReply.replies.map(levelTwoReply => (
+                                                    <div className="level2-replies-container" key={levelTwoReply.post_id}>
+                                                        <div className="reply-box">
+                                                            <div className="reply-row1">
+                                                                <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                <div className="post-creator-info">
+                                                                    <span>{levelTwoReply.postCreator.display_name}</span>
+                                                                    <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
                                                                 </div>
-                                                                <div className='parent-post-container'>
-                                                                    <div className='parent-post-container-row1'>
-                                                                        <Link>{levelThreeReply.parentPostCreator.display_name} said:</Link>
-                                                                        <div dangerouslySetInnerHTML={{__html: levelThreeReply.parentPostContent}} />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="reply-row2">
-                                                                    <div className={showMoreContent[levelThreeReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelThreeReply?.content }} />
-                                                                    {levelThreeReply?.content.length > 340 && (
+                                                            </div>
+                                                            <div className="reply-row2">
+                                                                <div className={showMoreContent[levelTwoReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelTwoReply?.content }} />
+                                                                {levelTwoReply?.content.length > 340 && (
+                                                                    <div style={{ textAlign: 'center' }}>
                                                                         <div style={{ textAlign: 'center' }}>
+                                                                            <button className='toggle-content-btn' onClick={() => toggleContent(levelTwoReply?.post_id)}>
+                                                                                {showMoreContent[levelTwoReply?.post_id] ? 'Show less...' : 'Show more...'}
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className='reply-row3'>
+                                                                <div className='view-reply-like-counter'>
+                                                                    <div className='like-counter'>
+                                                                        <div className='like-msg-icon'><Like /></div>
+                                                                        <span>4.5k</span>
+                                                                    </div>
+                                                                    <div className='reply-counter'>
+                                                                        <div className='reply-msg-icon'><MsgIcon /></div>
+                                                                        <span>4.5k</span>
+                                                                    </div>
+                                                                    <div className='view-counter'>
+                                                                        <div className='view-msg-icon'><EyeIcon /></div>
+                                                                        <span>1.2M</span>
+                                                                    </div>
+                                                                </div>
+                                                                <BtnReply label='Reply' onClick={() => toggleReply(levelTwoReply.post_id)} />
+                                                            </div>
+                                                        </div>
+                                                        {openReply[levelTwoReply.post_id] && (
+                                                            <>
+                                                                <QuillEditor
+                                                                    id='replyLevelTwo'
+                                                                    name='replyLevelTwo'
+                                                                    className='new-reply-message'
+                                                                    placeholder="Type your reply here..."
+                                                                    value={activePostId === levelTwoReply?.post_id ? contentValue : ''}
+                                                                    onChange={(content) => handleContentChange(levelTwoReply?.post_id, content)}
+                                                                />
+
+                                                                <div className='add-reply-button-container'>
+                                                                    <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                                    <BtnClear label='Cancel' onClick={cancelReply} />
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                        <div className="toggle-hide-show-replies">Show Replies</div>
+                                                        {levelTwoReply.replies.map(levelThreeReply => (
+                                                            <div className="level2-replies-container">
+                                                                <div className="reply-box">
+                                                                    <div className="reply-row1">
+                                                                        <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                        <div className="post-creator-info">
+                                                                            <span>{levelThreeReply.postCreator.display_name}</span>
+                                                                            <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className='parent-post-container'>
+                                                                        <div className='parent-post-container-row1'>
+                                                                            <Link>{levelThreeReply.parentPostCreator.display_name} said:</Link>
+                                                                            <div dangerouslySetInnerHTML={{ __html: levelThreeReply.parentPostContent }} />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="reply-row2">
+                                                                        <div className={showMoreContent[levelThreeReply?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: levelThreeReply?.content }} />
+                                                                        {levelThreeReply?.content.length > 340 && (
                                                                             <div style={{ textAlign: 'center' }}>
-                                                                                <button className='toggle-content-btn' onClick={() => toggleContent(levelThreeReply?.post_id)}>
-                                                                                    {showMoreContent[levelThreeReply?.post_id] ? 'Show less...' : 'Show more...'}
-                                                                                </button>
+                                                                                <div style={{ textAlign: 'center' }}>
+                                                                                    <button className='toggle-content-btn' onClick={() => toggleContent(levelThreeReply?.post_id)}>
+                                                                                        {showMoreContent[levelThreeReply?.post_id] ? 'Show less...' : 'Show more...'}
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className='reply-row3'>
+                                                                        <div className='view-reply-like-counter'>
+                                                                            <div className='like-counter'>
+                                                                                <div className='like-msg-icon'><Like /></div>
+                                                                                <span>4.5k</span>
+                                                                            </div>
+                                                                            <div className='reply-counter'>
+                                                                                <div className='reply-msg-icon'><MsgIcon /></div>
+                                                                                <span>4.5k</span>
+                                                                            </div>
+                                                                            <div className='view-counter'>
+                                                                                <div className='view-msg-icon'><EyeIcon /></div>
+                                                                                <span>1.2M</span>
                                                                             </div>
                                                                         </div>
-                                                                    )}
-                                                                </div>
-                                                                <div className='reply-row3'>
-                                                                    <div className='view-reply-like-counter'>
-                                                                        <div className='like-counter'>
-                                                                            <div className='like-msg-icon'><Like /></div>
-                                                                            <span>4.5k</span>
-                                                                        </div>
-                                                                        <div className='reply-counter'>
-                                                                            <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                            <span>4.5k</span>
-                                                                        </div>
-                                                                        <div className='view-counter'>
-                                                                            <div className='view-msg-icon'><EyeIcon /></div>
-                                                                            <span>1.2M</span>
-                                                                        </div>
+                                                                        <BtnReply label='Reply' onClick={() => toggleReply(levelThreeReply.post_id)} />
                                                                     </div>
-                                                                    <BtnReply label='Reply' onClick={() => toggleReply(levelThreeReply.post_id)} />
                                                                 </div>
-                                                            </div>
-                                                            {openReply[levelThreeReply?.post_id] && (
-                                                                <>
-                                                                    <QuillEditor
-                                                                        id='replyLevelThree'
-                                                                        name='replyLevelThree'
-                                                                        className='new-reply-message'
-                                                                        placeholder="Type your reply here..."
-                                                                        value={activePostId === levelThreeReply?.post_id ? contentValue : ''}
-                                                                        onChange={(content) => handleContentChange(levelThreeReply?.post_id, content)}
-                                                                    />
+                                                                {openReply[levelThreeReply?.post_id] && (
+                                                                    <>
+                                                                        <QuillEditor
+                                                                            id='replyLevelThree'
+                                                                            name='replyLevelThree'
+                                                                            className='new-reply-message'
+                                                                            placeholder="Type your reply here..."
+                                                                            value={activePostId === levelThreeReply?.post_id ? contentValue : ''}
+                                                                            onChange={(content) => handleContentChange(levelThreeReply?.post_id, content)}
+                                                                        />
 
-                                                                    <div className='add-reply-button-container'>
-                                                                        <BtnGreen label='Post Discussion' onClick={handleSubmit} />
-                                                                        <BtnClear label='Cancel' onClick={cancelReply} />
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                            <div className="toggle-hide-show-replies">Show Replies</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ))}
+                                                                        <div className='add-reply-button-container'>
+                                                                            <BtnGreen label='Post Discussion' onClick={handleSubmit} />
+                                                                            <BtnClear label='Cancel' onClick={cancelReply} />
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                                <div className="toggle-hide-show-replies">Show Replies</div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            ))}
-                        </>
-                    ))}
+                                    </>
+                                ))}
+                            </>
+                        ))}
+                    </div>
                 </div>
+                <Footer className='forum-discussion-page-footer' />
             </div>
-            <Footer className='forum-discussion-page-footer' />
         </>
     )
 }

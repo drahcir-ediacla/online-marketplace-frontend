@@ -63,14 +63,15 @@ const ForumCategoryPage = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            <div className='forum-page-container'>
             <Header authUser={user} />
-            <div className='language-selector-container'>
-                <GTranslate />
-            </div>
             <div>
                 <div className="forum-category-page-container">
                     <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
                     <div className='forum-category-page-col2'>
+                        <div className='language-selector-container'>
+                            <GTranslate />
+                        </div>
                         <SearchDiscussionBox />
                         <div className="discussions-container">
                             <div className="category-container">
@@ -103,7 +104,8 @@ const ForumCategoryPage = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
+            <Footer className='forum-category-footer' />
+            </div>
         </>
     )
 }
