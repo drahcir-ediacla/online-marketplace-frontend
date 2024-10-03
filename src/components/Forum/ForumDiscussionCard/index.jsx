@@ -10,7 +10,7 @@ import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
     console.log('Data:', data)
 
-    
+
     // Function to safely parse and format the date
     const getFormattedDate = (dateString) => {
         // Ensure dateString is a valid ISO string
@@ -29,6 +29,7 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
     return (
         <>
             {data?.map(discussion => (
+
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
                         <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />

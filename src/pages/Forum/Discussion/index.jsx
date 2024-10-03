@@ -214,15 +214,15 @@ const Discussion = () => {
                                         <div className='view-reply-like-counter'>
                                             <div className='like-counter'>
                                                 <div className='like-msg-icon'><Like /></div>
-                                                <span>4.5k</span>
+                                                <span>4.5k likes</span>
                                             </div>
                                             <div className='reply-counter'>
                                                 <div className='reply-msg-icon'><MsgIcon /></div>
-                                                <span>4.5k</span>
+                                                <span>{totalReplies} replies</span>
                                             </div>
                                             <div className='view-counter'>
                                                 <div className='view-msg-icon'><EyeIcon /></div>
-                                                <span>1.2M</span>
+                                                <span>1.2M views</span>
                                             </div>
                                         </div>
                                         <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(post.post_id)} />
@@ -279,15 +279,15 @@ const Discussion = () => {
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
                                                                 <div className='like-msg-icon'><Like /></div>
-                                                                <span>4.5k</span>
+                                                                <span>4.5k likes</span>
                                                             </div>
                                                             <div className='reply-counter'>
                                                                 <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                <span>4.5k</span>
+                                                                <span>{levelOneReply.replies.length} replies</span>
                                                             </div>
                                                             <div className='view-counter'>
                                                                 <div className='view-msg-icon'><EyeIcon /></div>
-                                                                <span>1.2M</span>
+                                                                <span>1.2M views</span>
                                                             </div>
                                                         </div>
                                                         <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelOneReply.post_id)} />
@@ -351,15 +351,15 @@ const Discussion = () => {
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
                                                                                     <div className='like-msg-icon'><Like /></div>
-                                                                                    <span>4.5k</span>
+                                                                                    <span>4.5k likes</span>
                                                                                 </div>
                                                                                 <div className='reply-counter'>
                                                                                     <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                                    <span>4.5k</span>
+                                                                                    <span>{levelTwoReply.replies.length} replies</span>
                                                                                 </div>
                                                                                 <div className='view-counter'>
                                                                                     <div className='view-msg-icon'><EyeIcon /></div>
-                                                                                    <span>1.2M</span>
+                                                                                    <span>1.2M views</span>
                                                                                 </div>
                                                                             </div>
                                                                             <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelTwoReply.post_id)} />
@@ -428,15 +428,15 @@ const Discussion = () => {
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
                                                                                                     <div className='like-msg-icon'><Like /></div>
-                                                                                                    <span>4.5k</span>
+                                                                                                    <span>4.5k likes</span>
                                                                                                 </div>
                                                                                                 <div className='reply-counter'>
                                                                                                     <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                                                    <span>4.5k</span>
+                                                                                                    <span>{levelThreeReply.replies.length} replies</span>
                                                                                                 </div>
                                                                                                 <div className='view-counter'>
                                                                                                     <div className='view-msg-icon'><EyeIcon /></div>
-                                                                                                    <span>1.2M</span>
+                                                                                                    <span>1.2M views</span>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelThreeReply.post_id)} />
