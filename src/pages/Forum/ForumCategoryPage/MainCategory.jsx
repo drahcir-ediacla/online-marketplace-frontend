@@ -82,7 +82,6 @@ const ForumCategoryPage = () => {
                                 {subcategories && subcategories.length > 0 && (
                                     <ForumSubCategory
                                         data={subcategories}
-                                        replies='102k'
                                         views='27.9M'
                                         lastActivity='1h ago'
                                     />
@@ -93,10 +92,6 @@ const ForumCategoryPage = () => {
                                 {discussions && discussions.length > 0 && (
                                     <ForumDiscussionCard
                                         data={discussions}
-                                        date='3 hours ago'
-                                        like='4.5k'
-                                        replies='4.5k'
-                                        views='1.2M'
                                     />
                                 )}
                             </div>

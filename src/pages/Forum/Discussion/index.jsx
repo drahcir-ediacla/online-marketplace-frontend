@@ -36,6 +36,7 @@ const Discussion = () => {
     const [contentValue, setContentValue] = useState('')
     const [activePostId, setActivePostId] = useState(null)
     const [parentPostId, setParentPostId] = useState(null);
+    const [postId, setPostId] = useState(null)
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
@@ -46,6 +47,9 @@ const Discussion = () => {
             try {
                 const response = await axios.get(`/api/discussions/${discussionId}/posts`);
                 setAllPost(response.data)
+                const firstPostId = response.data.length > 0 ? response.data[0].post_id : null;
+                setPostId(firstPostId)
+                console.log("First post ID:", firstPostId);
                 dispatch(Setloader(false))
             } catch (error) {
                 dispatch(Setloader(false))
@@ -71,6 +75,20 @@ const Discussion = () => {
         });
         setOpenReply(newOpenReply);
     }, [allPost]); // Run when allPost changes
+    
+
+    useEffect(() => {
+        const incrementViews = async () => {
+          try {
+            await axios.post(`/api/post/${postId}/view`);
+          } catch (error) {
+            console.error('Error updating post views:', error);
+          }
+        };
+    
+        incrementViews();
+      }, [postId]);
+
 
     const toggleLoginModal = () => {
         setLoginModalOpen((prev) => !prev)

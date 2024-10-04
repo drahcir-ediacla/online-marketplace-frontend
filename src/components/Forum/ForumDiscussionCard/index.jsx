@@ -7,34 +7,43 @@ import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.s
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
-const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
-    console.log('Data:', data)
-
+const ForumDiscussionCard = ({ data }) => {
+    console.log('Data:', data);
 
     // Function to safely parse and format the date
     const getFormattedDate = (dateString) => {
-        // Ensure dateString is a valid ISO string
         if (typeof dateString !== 'string') {
             return 'Invalid date';
         }
 
         const date = new Date(dateString);
-
-        // Check if date is valid
         return isNaN(date.getTime())
             ? 'Invalid date'
             : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
     };
 
+    const getTotalReplies = (posts) => {
+        let totalReplies = 0;
+
+        const countReplies = (post) => {
+            totalReplies += post.replies.length;
+            post.replies.forEach(countReplies); // Recursively count replies
+        };
+
+        posts.forEach(countReplies);
+        return totalReplies;
+    };
+
     return (
         <>
             {data?.map(discussion => (
-
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
                         <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
                         <div className='forum-discussion-info'>
-                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.title}</h6></Link>
+                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}>
+                                <h6>{discussion?.title}</h6>
+                            </Link>
                             <small>
                                 by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}
                             </small>
@@ -49,15 +58,15 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
                         <div className="view-reply-like-counter">
                             <div className="like-counter">
                                 <div className='like-msg-icon'><Like /></div>
-                                <span>{like}</span>
+                                <span>{discussion?.like || 0}</span>
                             </div>
                             <div className="reply-counter">
                                 <div className='reply-msg-icon'><MsgIcon /></div>
-                                <span>{replies}</span>
+                                <span>{getTotalReplies(discussion?.post)} replies</span>
                             </div>
                             <div className="view-counter">
                                 <div className='view-msg-icon'><EyeIcon /></div>
-                                <span>{views}</span>
+                                <span>{discussion?.views || 0}</span>
                             </div>
                         </div>
                     </div>
@@ -67,4 +76,4 @@ const ForumDiscussionCard = ({ data, title, postedMessage, author, date, like, r
     )
 }
 
-export default ForumDiscussionCard
+export default ForumDiscussionCard;
