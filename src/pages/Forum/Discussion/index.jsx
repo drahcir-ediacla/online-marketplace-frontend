@@ -75,19 +75,19 @@ const Discussion = () => {
         });
         setOpenReply(newOpenReply);
     }, [allPost]); // Run when allPost changes
-    
+
 
     useEffect(() => {
         const incrementViews = async () => {
-          try {
-            await axios.post(`/api/post/${postId}/view`);
-          } catch (error) {
-            console.error('Error updating post views:', error);
-          }
+            try {
+                await axios.post(`/api/post/${postId}/view`);
+            } catch (error) {
+                console.error('Error updating post views:', error);
+            }
         };
-    
+
         incrementViews();
-      }, [postId]);
+    }, [postId]);
 
 
     const toggleLoginModal = () => {
@@ -215,36 +215,38 @@ const Discussion = () => {
                                         </div>
                                     </div>
                                     {!post?.parent_post_id && (
-                                        <div className='started-discussion-container-row2' key={post?.post_id}>
-                                            <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
-                                            {post?.content.length > 340 && (
-                                                <div style={{ textAlign: 'center' }}>
+                                        <>
+                                            <div className='started-discussion-container-row2' key={post?.post_id}>
+                                                <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
+                                                {post?.content.length > 340 && (
                                                     <div style={{ textAlign: 'center' }}>
-                                                        <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
-                                                            {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
-                                                        </button>
+                                                        <div style={{ textAlign: 'center' }}>
+                                                            <button className='toggle-content-btn' onClick={() => toggleContent(post?.post_id)}>
+                                                                {showMoreContent[post?.post_id] ? 'Show less...' : 'Show more...'}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className='started-discussion-container-row3'>
+                                                <div className='view-reply-like-counter'>
+                                                    <div className='like-counter'>
+                                                        <div className='like-msg-icon'><Like /></div>
+                                                        <span>{post?.likes?.length || 0} likes</span>
+                                                    </div>
+                                                    <div className='reply-counter'>
+                                                        <div className='reply-msg-icon'><MsgIcon /></div>
+                                                        <span>{totalReplies} replies</span>
+                                                    </div>
+                                                    <div className='view-counter'>
+                                                        <div className='view-msg-icon'><EyeIcon /></div>
+                                                        <span>{post.views} views</span>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
+                                                <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(post.post_id)} />
+                                            </div>
+                                        </>
                                     )}
-                                    <div className='started-discussion-container-row3'>
-                                        <div className='view-reply-like-counter'>
-                                            <div className='like-counter'>
-                                                <div className='like-msg-icon'><Like /></div>
-                                                <span>4.5k likes</span>
-                                            </div>
-                                            <div className='reply-counter'>
-                                                <div className='reply-msg-icon'><MsgIcon /></div>
-                                                <span>{totalReplies} replies</span>
-                                            </div>
-                                            <div className='view-counter'>
-                                                <div className='view-msg-icon'><EyeIcon /></div>
-                                                <span>1.2M views</span>
-                                            </div>
-                                        </div>
-                                        <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(post.post_id)} />
-                                    </div>
                                 </div>
                                 {openReply[post.post_id] && (
                                     <>
@@ -297,15 +299,7 @@ const Discussion = () => {
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
                                                                 <div className='like-msg-icon'><Like /></div>
-                                                                <span>4.5k likes</span>
-                                                            </div>
-                                                            <div className='reply-counter'>
-                                                                <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                <span>{levelOneReply.replies.length} replies</span>
-                                                            </div>
-                                                            <div className='view-counter'>
-                                                                <div className='view-msg-icon'><EyeIcon /></div>
-                                                                <span>1.2M views</span>
+                                                                <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
                                                         <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelOneReply.post_id)} />
@@ -369,15 +363,7 @@ const Discussion = () => {
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
                                                                                     <div className='like-msg-icon'><Like /></div>
-                                                                                    <span>4.5k likes</span>
-                                                                                </div>
-                                                                                <div className='reply-counter'>
-                                                                                    <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                                    <span>{levelTwoReply.replies.length} replies</span>
-                                                                                </div>
-                                                                                <div className='view-counter'>
-                                                                                    <div className='view-msg-icon'><EyeIcon /></div>
-                                                                                    <span>1.2M views</span>
+                                                                                    <span>{levelTwoReply?.likes?.length || 0} likes</span>
                                                                                 </div>
                                                                             </div>
                                                                             <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelTwoReply.post_id)} />
@@ -446,15 +432,7 @@ const Discussion = () => {
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
                                                                                                     <div className='like-msg-icon'><Like /></div>
-                                                                                                    <span>4.5k likes</span>
-                                                                                                </div>
-                                                                                                <div className='reply-counter'>
-                                                                                                    <div className='reply-msg-icon'><MsgIcon /></div>
-                                                                                                    <span>{levelThreeReply.replies.length} replies</span>
-                                                                                                </div>
-                                                                                                <div className='view-counter'>
-                                                                                                    <div className='view-msg-icon'><EyeIcon /></div>
-                                                                                                    <span>1.2M views</span>
+                                                                                                    <span>{levelThreeReply?.likes?.length || 0} likes</span>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <BtnReply label='Reply' onClick={!user ? loginModal : () => toggleReply(levelThreeReply.post_id)} />

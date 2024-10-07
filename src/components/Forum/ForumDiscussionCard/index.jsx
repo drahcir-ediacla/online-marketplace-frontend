@@ -50,26 +50,28 @@ const ForumDiscussionCard = ({ data }) => {
                         </div>
                     </div>
                     {discussion?.post?.map(post => (
-                        <div className='forum-discussion-card-row2' key={post?.post_id}>
-                            <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                        </div>
+                        <>
+                            <div className='forum-discussion-card-row2' key={post?.post_id}>
+                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+                            </div>
+                            <div className='forum-discussion-card-row3'>
+                                <div className="view-reply-like-counter">
+                                    <div className="like-counter">
+                                        <div className='like-msg-icon'><Like /></div>
+                                        <span>{post?.likes.length || 0} likes</span>
+                                    </div>
+                                    <div className="reply-counter">
+                                        <div className='reply-msg-icon'><MsgIcon /></div>
+                                        <span>{getTotalReplies(discussion?.post)} replies</span>
+                                    </div>
+                                    <div className="view-counter">
+                                        <div className='view-msg-icon'><EyeIcon /></div>
+                                        <span>{discussion?.post[0]?.views} views</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     ))}
-                    <div className='forum-discussion-card-row3'>
-                        <div className="view-reply-like-counter">
-                            <div className="like-counter">
-                                <div className='like-msg-icon'><Like /></div>
-                                <span>{discussion?.like || 0}</span>
-                            </div>
-                            <div className="reply-counter">
-                                <div className='reply-msg-icon'><MsgIcon /></div>
-                                <span>{getTotalReplies(discussion?.post)} replies</span>
-                            </div>
-                            <div className="view-counter">
-                                <div className='view-msg-icon'><EyeIcon /></div>
-                                <span>{discussion?.views || 0}</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             ))}
         </>
