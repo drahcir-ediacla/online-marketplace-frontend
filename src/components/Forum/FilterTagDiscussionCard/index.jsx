@@ -7,10 +7,10 @@ import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.s
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
-const FilterTagDiscussionCard = ({ data, title, postedMessage, author, date, like, replies, views }) => {
-    
+const FilterTagDiscussionCard = ({ data, replies }) => {
 
-    
+
+
     // Function to safely parse and format the date
     const getFormattedDate = (dateString) => {
         // Ensure dateString is a valid ISO string
@@ -40,26 +40,28 @@ const FilterTagDiscussionCard = ({ data, title, postedMessage, author, date, lik
                         </div>
                     </div>
                     {discussion?.allDiscussionsInTag?.post?.map(post => (
-                        <div className='forum-discussion-card-row2' key={post?.post_id}>
-                            <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                        </div>
+                        <>
+                            <div className='forum-discussion-card-row2' key={post?.post_id}>
+                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+                            </div>
+                            <div className='forum-discussion-card-row3'>
+                                <div className="view-reply-like-counter">
+                                    <div className="like-counter">
+                                        <div className='like-msg-icon'><Like /></div>
+                                        <span>{post?.likes?.length} likes</span>
+                                    </div>
+                                    <div className="reply-counter">
+                                        <div className='reply-msg-icon'><MsgIcon /></div>
+                                        <span>{replies}</span>
+                                    </div>
+                                    <div className="view-counter">
+                                        <div className='view-msg-icon'><EyeIcon /></div>
+                                        <span>{post?.views} views</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     ))}
-                    <div className='forum-discussion-card-row3'>
-                        <div className="view-reply-like-counter">
-                            <div className="like-counter">
-                                <div className='like-msg-icon'><Like /></div>
-                                <span>{like}</span>
-                            </div>
-                            <div className="reply-counter">
-                                <div className='reply-msg-icon'><MsgIcon /></div>
-                                <span>{replies}</span>
-                            </div>
-                            <div className="view-counter">
-                                <div className='view-msg-icon'><EyeIcon /></div>
-                                <span>{views}</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             ))}
         </>

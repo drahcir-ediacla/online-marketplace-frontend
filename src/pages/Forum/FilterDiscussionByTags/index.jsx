@@ -116,10 +116,7 @@ const FilterDiscussionByTags = () => {
                                 {discussions && discussions.length > 0 ? (
                                     <><FilterTagDiscussionCard
                                         data={discussions}
-                                        date='3 hours ago'
-                                        like='4.5k'
                                         replies='4.5k'
-                                        views='1.2M'
                                     />
                                     </>
                                 ) : (
