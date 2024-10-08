@@ -122,6 +122,21 @@ const Discussion = () => {
         }
     };
 
+    const handleLikeChange = async (postId) => {
+        if (!user) {
+            setLoginModalOpen(true);  // Open login modal if the user is not authenticated
+            return;
+        }
+        try {
+            // Make the API call to update the likes
+            await axios.post('/api/forum/post/like', { post_id: postId });
+            
+        } catch (error) {
+            console.error('Error updating likes:', error);
+        }
+    };
+
+
     const cancelReply = () => {
         setOpenReply({});
         setContentValue('');
@@ -231,7 +246,7 @@ const Discussion = () => {
                                             <div className='started-discussion-container-row3'>
                                                 <div className='view-reply-like-counter'>
                                                     <div className='like-counter'>
-                                                        <div className='like-msg-icon'><Like /></div>
+                                                        <button className='like-msg-icon' onClick={() => handleLikeChange(post?.post_id)}><Like /></button>
                                                         <span>{post?.likes?.length || 0} likes</span>
                                                     </div>
                                                     <div className='reply-counter'>
@@ -298,7 +313,7 @@ const Discussion = () => {
                                                     <div className='reply-row3'>
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
-                                                                <div className='like-msg-icon'><Like /></div>
+                                                                <button className='like-msg-icon' onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
                                                                 <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
@@ -362,7 +377,7 @@ const Discussion = () => {
                                                                         <div className='reply-row3'>
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
-                                                                                    <div className='like-msg-icon'><Like /></div>
+                                                                                    <button className='like-msg-icon' onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
                                                                                     <span>{levelTwoReply?.likes?.length || 0} likes</span>
                                                                                 </div>
                                                                             </div>
@@ -431,7 +446,7 @@ const Discussion = () => {
                                                                                         <div className='reply-row3'>
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
-                                                                                                    <div className='like-msg-icon'><Like /></div>
+                                                                                                    <button className='like-msg-icon' onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
                                                                                                     <span>{levelThreeReply?.likes?.length || 0} likes</span>
                                                                                                 </div>
                                                                                             </div>

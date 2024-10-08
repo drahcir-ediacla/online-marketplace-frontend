@@ -116,7 +116,6 @@ const FilterDiscussionByTags = () => {
                                 {discussions && discussions.length > 0 ? (
                                     <><FilterTagDiscussionCard
                                         data={discussions}
-                                        replies='4.5k'
                                     />
                                     </>
                                 ) : (
@@ -124,7 +123,6 @@ const FilterDiscussionByTags = () => {
                                         No discussions found!
                                     </>
                                 )}
-
                             </div>
                         </div>
                     </div>

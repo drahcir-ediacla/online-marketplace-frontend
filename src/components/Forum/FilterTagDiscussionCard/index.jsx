@@ -7,7 +7,7 @@ import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.s
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
-const FilterTagDiscussionCard = ({ data, replies }) => {
+const FilterTagDiscussionCard = ({ data }) => {
 
 
 
@@ -26,42 +26,51 @@ const FilterTagDiscussionCard = ({ data, replies }) => {
             : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
     };
 
+    // Function to get the total number of posts excluding parent_post_id === null
+    const getTotalPostsExcludingParents = (discussion) => {
+        return discussion?.allDiscussionsInTag?.post?.filter(post => post?.parent_post_id !== null).length;
+    };
+
+
     return (
         <>
             {data?.map(discussion => (
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
-                        <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
+                        <img src={discussion?.allDiscussionsInTag?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
                         <div className='forum-discussion-info'>
                             <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.allDiscussionsInTag?.title}</h6></Link>
                             <small>
-                                by {discussion?.allDiscussionsInTag?.discussionStarter?.display_name} {getFormattedDate(discussion?.allDiscussionsInTag?.created_at)}
+                                by {discussion?.allDiscussionsInTag?.discussionStarter?.display_name || 'Anonymous'} {getFormattedDate(discussion?.allDiscussionsInTag?.created_at)}
                             </small>
                         </div>
                     </div>
                     {discussion?.allDiscussionsInTag?.post?.map(post => (
-                        <>
-                            <div className='forum-discussion-card-row2' key={post?.post_id}>
-                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                            </div>
-                            <div className='forum-discussion-card-row3'>
-                                <div className="view-reply-like-counter">
-                                    <div className="like-counter">
-                                        <div className='like-msg-icon'><Like /></div>
-                                        <span>{post?.likes?.length} likes</span>
-                                    </div>
-                                    <div className="reply-counter">
-                                        <div className='reply-msg-icon'><MsgIcon /></div>
-                                        <span>{replies}</span>
-                                    </div>
-                                    <div className="view-counter">
-                                        <div className='view-msg-icon'><EyeIcon /></div>
-                                        <span>{post?.views} views</span>
-                                    </div>
+                        post?.parent_post_id === null && (
+                            <div key={post?.post_id}>
+                                <div className='forum-discussion-card-row2'>
+                                    <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                                 </div>
+                                {!post?.parent_post_id &&
+                                    <div className='forum-discussion-card-row3'>
+                                        <div className="view-reply-like-counter">
+                                            <div className="like-counter">
+                                                <div className='like-msg-icon'><Like /></div>
+                                                <span>{post?.likes?.length} likes</span>
+                                            </div>
+                                            <div className="reply-counter">
+                                                <div className='reply-msg-icon'><MsgIcon /></div>
+                                                <span>{getTotalPostsExcludingParents(discussion)} replies</span>
+                                            </div>
+                                            <div className="view-counter">
+                                                <div className='view-msg-icon'><EyeIcon /></div>
+                                                <span>{post?.views} views</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
-                        </>
-                    ))}
+                        )))}
                 </div>
             ))}
         </>
