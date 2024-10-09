@@ -4,8 +4,6 @@ import { GetRandomProducts, AddWishlist, RemoveWishlist } from '../../apicalls/p
 import './style.scss'
 import ProductCard from '../Cards/ProductCard'
 import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
-import BtnCategory from '../../components/Button/BtnCategory'
-import BtnSeeMore from '../../components/Button/BtnSeeMore'
 
 const RecommendedItems = ({ userId }) => {
 

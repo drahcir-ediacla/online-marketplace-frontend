@@ -123,12 +123,6 @@ const Discussion = () => {
         }
     };
 
-    // const toggleLiked = (postId) => {
-    //     setLiked(prev => ({
-    //         ...prev,
-    //         [postId]: !prev[postId],
-    //     }))
-    // }
 
     const handleLikeChange = async (postId) => {
         if (!user) {

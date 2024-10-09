@@ -90,6 +90,10 @@ const ForumProfile = () => {
     const createNewDiscussion = async (e) => {
         e.preventDefault();
 
+        if (!user) {
+            setLoginModalOpen(true)
+        }
+
         // Basic validation
         if (!categoryId || !title || !content) {
             console.error('Category, title, and content are required.');

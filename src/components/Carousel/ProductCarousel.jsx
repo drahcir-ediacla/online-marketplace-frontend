@@ -119,10 +119,10 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           }
 
           // Check if the authenticated user's user_id is in the wishlist for the current product
-          const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
-          console.log('userId:', userId);
-          console.log('isProductInWishlist:', isProductInWishlist);
-          console.log('product.wishlist:', product.wishlist);
+          // const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+          // console.log('userId:', userId);
+          // console.log('isProductInWishlist:', isProductInWishlist);
+          // console.log('product.wishlist:', product.wishlist);
 
           const handleWishlistClick = async (productId) => {
             try {
@@ -170,7 +170,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                 <div className='product-info'>
                   <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='product-name'><p>{limitCharacters(product.product_name, 55)}</p></Link>
                   {product.seller && (
-                    <small>{product.seller.city || ''}, {(product.seller.region) || ''}</small>
+                    <small>{product.seller.city || ''}, {limitCharacters(product.seller.region, 15) || ''}</small>
                   )}
                   <div className="date-post">
                     <div className="small-clock"><ClockIcon /></div>
