@@ -163,6 +163,15 @@
                                 border: none;
                                 background: none;
                             }
+
+                            .like-msg-icon-blue {
+                                display: flex;
+                                width: 17px;
+                                height: 16px;
+                                fill: var(--tag-blue);
+                                border: none;
+                                background: none;
+                            }
                         }
 
                         .reply-counter {
@@ -273,6 +282,15 @@
                                         width: 17px;
                                         height: 16px;
                                         fill: var(--black-102);
+                                        border: none;
+                                        background: none;
+                                    }
+
+                                    .like-msg-icon-blue {
+                                        display: flex;
+                                        width: 17px;
+                                        height: 16px;
+                                        fill: var(--tag-blue);
                                         border: none;
                                         background: none;
                                     }

@@ -90,6 +90,7 @@ const Discussion = () => {
     }, [postId]);
 
 
+
     const toggleLoginModal = () => {
         setLoginModalOpen((prev) => !prev)
     }
@@ -122,19 +123,37 @@ const Discussion = () => {
         }
     };
 
+    // const toggleLiked = (postId) => {
+    //     setLiked(prev => ({
+    //         ...prev,
+    //         [postId]: !prev[postId],
+    //     }))
+    // }
+
     const handleLikeChange = async (postId) => {
         if (!user) {
-            setLoginModalOpen(true);  // Open login modal if the user is not authenticated
+            setLoginModalOpen(true); // Open login modal if the user is not authenticated
             return;
         }
+    
+        // Save the current scroll position
+        const currentScrollY = window.scrollY;
+    
         try {
-            // Make the API call to update the likes
             await axios.post('/api/forum/post/like', { post_id: postId });
-            
+    
+            // Fetch the updated posts
+            const response = await axios.get(`/api/discussions/${discussionId}/posts`);
+            setAllPost(response.data);
+           
+    
+            // Restore the scroll position after updating the state
+            window.scrollTo(0, currentScrollY);
         } catch (error) {
             console.error('Error updating likes:', error);
         }
     };
+    
 
 
     const cancelReply = () => {
@@ -246,7 +265,9 @@ const Discussion = () => {
                                             <div className='started-discussion-container-row3'>
                                                 <div className='view-reply-like-counter'>
                                                     <div className='like-counter'>
-                                                        <button className='like-msg-icon' onClick={() => handleLikeChange(post?.post_id)}><Like /></button>
+                                                        <button className={(post?.likes?.some(like => like.user_id === user.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id)}>
+                                                            <Like />
+                                                        </button>
                                                         <span>{post?.likes?.length || 0} likes</span>
                                                     </div>
                                                     <div className='reply-counter'>
@@ -313,7 +334,7 @@ const Discussion = () => {
                                                     <div className='reply-row3'>
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
-                                                                <button className='like-msg-icon' onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
+                                                                <button className={levelOneReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
                                                                 <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
@@ -377,7 +398,7 @@ const Discussion = () => {
                                                                         <div className='reply-row3'>
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
-                                                                                    <button className='like-msg-icon' onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
+                                                                                    <button className={levelTwoReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
                                                                                     <span>{levelTwoReply?.likes?.length || 0} likes</span>
                                                                                 </div>
                                                                             </div>
@@ -446,7 +467,7 @@ const Discussion = () => {
                                                                                         <div className='reply-row3'>
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
-                                                                                                    <button className='like-msg-icon' onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
+                                                                                                    <button className={levelThreeReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
                                                                                                     <span>{levelThreeReply?.likes?.length || 0} likes</span>
                                                                                                 </div>
                                                                                             </div>
