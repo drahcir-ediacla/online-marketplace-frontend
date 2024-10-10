@@ -49,6 +49,16 @@
             .view-counter {
                 display: flex;
                 gap: 5px;
+
+                .view-msg-icon {
+                    width: 19px;
+                    height: 14px;
+                }
+
+                .reply-msg-icon {
+                    width: 18px;
+                    height: 18px;
+                }
             }
         }
     }

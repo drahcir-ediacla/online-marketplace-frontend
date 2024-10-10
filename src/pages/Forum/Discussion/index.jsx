@@ -39,6 +39,8 @@ const Discussion = () => {
     const [postId, setPostId] = useState(null)
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
+    console.log('postId', postId)
+    console.log('parentPostId', parentPostId)
 
 
     useEffect(() => {
@@ -160,6 +162,7 @@ const Discussion = () => {
     const handleContentChange = (id, value) => {
         setActivePostId(id)
         setContentValue(value);
+        setParentPostId(id);
     };
 
 
@@ -177,7 +180,6 @@ const Discussion = () => {
 
     // Usage
     const totalReplies = getTotalReplies(allPost);
-    console.log('totalReplies:', totalReplies)
 
 
     // Function to safely parse and format the date

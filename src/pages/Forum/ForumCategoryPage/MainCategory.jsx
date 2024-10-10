@@ -81,9 +81,7 @@ const ForumCategoryPage = () => {
                                 </div>
                                 {subcategories && subcategories.length > 0 && (
                                     <ForumSubCategory
-                                        data={subcategories}
-                                        views='27.9M'
-                                        lastActivity='1h ago'
+                                        data={categoryData}
                                     />
                                 )}
                             </div>
