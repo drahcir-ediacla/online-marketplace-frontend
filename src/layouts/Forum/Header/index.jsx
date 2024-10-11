@@ -7,7 +7,7 @@ import { ReactComponent as TriangleIcon } from '../../../assets/images/triangle-
 import LoginModal from '../../../components/Modal/LoginModal'
 
 
-const ForumHeader = ({ authUser }) => {
+const ForumHeader = ({ authUser, containerClass }) => {
 
     const [dropDownProfile, setDropDownProfile] = useState(false);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -52,7 +52,7 @@ const ForumHeader = ({ authUser }) => {
     return (
         <>
         {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <div className='forum-header-container'>
+            <div className={`forum-header-container ${containerClass}`}>
                 <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
                     <Link to='/'>Marketplace</Link> 

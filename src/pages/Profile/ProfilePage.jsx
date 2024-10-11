@@ -37,7 +37,6 @@ const ProfilePage = ({ userId }) => {
 
     const [searchTerm, setSearchTerm] = useState('')
     const [role, setRole] = useState('');
-    console.log('role:', role)
 
 
 
@@ -53,7 +52,6 @@ const ProfilePage = ({ userId }) => {
         };
 
         fetchReviewsByTargetId(); // Fetch receiver information only if receiver_id is available
-        console.log('fetchReviewsByTargetId:', fetchReviewsByTargetId)
     }, [id, role])
 
 
@@ -213,7 +211,6 @@ const ProfilePage = ({ userId }) => {
 
         const filtered = allProducts.filter(product => {
             const productNameMatch = product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
-            console.log('productNameMatch:', productNameMatch)
 
             // Check if either product name or seller's display name matches the search term
             return productNameMatch;

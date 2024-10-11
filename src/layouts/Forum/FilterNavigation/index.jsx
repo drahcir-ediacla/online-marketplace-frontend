@@ -31,6 +31,7 @@ const FilterNavigation = ({
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
+    const [user, setUser] = useState({})
 
 
     useEffect(() => {
@@ -39,6 +40,21 @@ const FilterNavigation = ({
             setSelectedTags(location.state.selectedTags);
         }
     }, [location.state]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`/api/user/${userId}`)
+
+                // Destructure only the properties you want
+                const { id, display_name, profile_pic, createdAt } = response.data;
+                setUser({ id, display_name, profile_pic, createdAt })
+            } catch (error) {
+                console.log('Error fetching data:', error)
+            }
+        }
+        fetchUserData()
+    }, [userId])
 
 
     useEffect(() => {
@@ -105,11 +121,6 @@ const FilterNavigation = ({
     }, [tab, navigate]);
 
 
-    const handleCategoryClick = (categoryId, categoryName) => {
-        navigate(`/forum/category/${categoryId}/${encodeURIComponent(categoryName)}`);
-        setActiveCategory(categoryId);
-    };
-
 
     const handleCreatedDiscussions = () => {
         navigate(`/forum/profile/${userId}/created_discussions`);
@@ -164,10 +175,10 @@ const FilterNavigation = ({
         setSelectedTags(updatedTags);
         navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
     };
-    
 
 
-    const originalDate = authUser?.createdAt || '';
+
+    const originalDate = user?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
 
@@ -187,9 +198,9 @@ const FilterNavigation = ({
                         {userId && (
                             <div className='forum-category-page-row1'>
                                 <div className='forum-category-page-row1-row1'>
-                                    <img src={authUser?.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
+                                    <img src={user.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
                                     <div className='user-display-name'>
-                                        <p>{authUser?.display_name}</p>
+                                        <p>{user.display_name}</p>
                                         <small>Joined in {formattedDate}</small>
                                     </div>
                                 </div>
@@ -233,7 +244,7 @@ const FilterNavigation = ({
                     </div>
                     <div className="forum-category-btn-container">
                         {categories?.categories?.map(category => (
-                            <NavLink activeclassname="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
+                            <NavLink activeclassname="active" key={category.id} className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
                         ))}
                     </div>
 
@@ -251,7 +262,7 @@ const FilterNavigation = ({
                                 className={`tag-btn ${selectedTags.includes(tag.id) ? 'active' : ''}`}
                             />
                         ))}
-                        <div className='more-tags' style={{justifyContent: selectedTags.length > 0 ? ('space-between') : ('end') }}>
+                        <div className='more-tags' style={{ justifyContent: selectedTags.length > 0 ? ('space-between') : ('end') }}>
                             {selectedTags && selectedTags.length > 0 && <button onClick={clearAllTags}>Clear all</button>}
                             <button onClick={toggleTagModal}>Select more tags</button>
                         </div>

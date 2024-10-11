@@ -39,8 +39,6 @@ const Discussion = () => {
     const [postId, setPostId] = useState(null)
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-    console.log('postId', postId)
-    console.log('parentPostId', parentPostId)
 
 
     useEffect(() => {

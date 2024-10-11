@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from '../../../apicalls/axios';
 import './style.scss'
@@ -23,6 +23,8 @@ import LoginModal from '../../../components/Modal/LoginModal';
 const ForumProfile = () => {
 
     const { user } = useAuthentication()
+    const { userId } = useParams();
+    const userIdNumber = Number(userId)
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
@@ -42,6 +44,7 @@ const ForumProfile = () => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [categoryId, setCategoryId] = useState('')
+    // const [createdDiscussions, setCreatedDiscussions] = useState([])
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -73,6 +76,12 @@ const ForumProfile = () => {
             document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
+
+    const createdDiscussions = categories?.allDiscussions?.filter(
+        (discussion) => (discussion.user_id === userIdNumber)
+    )
+
+    console.log('createdDiscussions:', createdDiscussions)
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -231,31 +240,7 @@ const ForumProfile = () => {
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
-                                <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
-                                <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
+                                    data={createdDiscussions}
                                 />
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
@@ -354,7 +339,7 @@ const ForumProfile = () => {
                                             {selectCategoryOpen &&
                                                 <div className="drop-down-forum-category-container">
                                                     <ul className='drop-down-forum-category-options'>
-                                                        {categories.map(category => (
+                                                        {categories?.categories?.map(category => (
                                                             <li className='forum-main-category' key={category.id}>
                                                                 <div className="parent-forum-category">{category.name}</div>
                                                                 <ul className='forum-subcategory'>
