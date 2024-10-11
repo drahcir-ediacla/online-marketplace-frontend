@@ -7,7 +7,7 @@ import Header from '../../layouts/Forum/Header'
 import Footer from '../../layouts/Forum/Footer'
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
-import ForumSubCategory from '../../components/Forum/ForumSubCategoryCard'
+import HomePageSubCategoryCard from '../../components/Forum/HomePageSubCategoryCard'
 import LoginModal from '../../components/Modal/LoginModal';
 import GTranslate from '../../components/GTranslate';
 
@@ -52,9 +52,6 @@ const ForumHomePage = () => {
     }
 
 
-
-
-
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -80,7 +77,7 @@ const ForumHomePage = () => {
                         <div className="browse-by-category-row1"><h5>Browse by Category </h5></div>
                         <div className="browse-by-category-row2">
                             <div className='browse-by-category-row2-col1'>
-                                {forumCategories.map(category => (
+                                {forumCategories?.categories?.map(category => (
                                     <button className='forum-categories-nav-menu' onClick={() => goToCategoryPage(category.id, category.name)} key={category.id}>
                                         <div className='category-general-discussion-icon'>
                                             <img
@@ -99,21 +96,19 @@ const ForumHomePage = () => {
                         <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                     </div>
                     <div className="listed-category-container">
-                        {forumCategories.map(category => (
+                        {forumCategories?.categories?.map(category => (
                             <div className="listed-category" key={category.id}>
                                 <div className='listed-category-title'><h4>{category.name}</h4></div>
-                                    <ForumSubCategory
-                                        data={category.subcategories}
-                                        replies='1.2k'
-                                        views='27.9M'
-                                        lastActivity='1h ago'
+                                    <HomePageSubCategoryCard
+                                       subcategories={category.subcategories}
+                                       allDiscussions={forumCategories.allDiscussions}
                                     />
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-            <Footer />
+            <Footer className='home-footer' />
         </>
     )
 }

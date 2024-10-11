@@ -127,7 +127,7 @@ const FilterDiscussionByTags = () => {
                         </div>
                     </div>
                 </div>
-                <Footer />
+                <Footer className='footer-filter-tags' />
             </div>
         </>
     )

@@ -1,7 +1,8 @@
 .discussion-container {
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
+    height: 100vh;
 
     .language-selector-container {
         width: 100%;

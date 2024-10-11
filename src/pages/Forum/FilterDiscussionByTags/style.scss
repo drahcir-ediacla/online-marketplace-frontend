@@ -9,6 +9,7 @@
     display: flex;
     gap: 20px;
     padding: 0 20px;
+    margin-bottom: 100px;
 
     .filter-discussion-tags-page {
         max-height: none;
@@ -36,4 +37,8 @@
             }
         }
     }
+}
+
+.footer-filter-tags {
+    margin-top: auto;
 }

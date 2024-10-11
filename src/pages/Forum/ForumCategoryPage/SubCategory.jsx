@@ -102,7 +102,7 @@ const ForumSubCategoryPage = () => {
                         </div>
                     </div>
                 </div>
-                <Footer />
+                <Footer className='forum-category-footer' />
             </div>
         </>
     )

@@ -232,7 +232,7 @@ const FilterNavigation = ({
                         <label>CATEGORIES</label>
                     </div>
                     <div className="forum-category-btn-container">
-                        {categories.map(category => (
+                        {categories?.categories?.map(category => (
                             <NavLink activeclassname="active" className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
                         ))}
                     </div>
