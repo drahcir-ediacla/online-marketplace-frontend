@@ -196,7 +196,9 @@ const Discussion = () => {
     };
 
     const handleSubmit = async () => {
-
+        if(!user) {
+            setLoginModalOpen(true)
+        }
         try {
             await axios.post('/api/post/create', {
                 content: contentValue,
