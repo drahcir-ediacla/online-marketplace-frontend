@@ -80,8 +80,9 @@ const ForumProfile = () => {
     const createdDiscussions = categories?.allDiscussions?.filter(
         (discussion) => (discussion.user_id === userIdNumber)
     )
-
     console.log('createdDiscussions:', createdDiscussions)
+
+    
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -236,7 +237,7 @@ const ForumProfile = () => {
                         <div className="discussions-container">
                             <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
-                                    <h4>Created Discussions (29)</h4>
+                                    <h4>Created Discussions ({createdDiscussions.length})</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 <ForumDiscussionCard

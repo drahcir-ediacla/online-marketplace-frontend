@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
 import './style.scss'
@@ -18,6 +18,7 @@ import QuillEditor from '../../../components/QuillEditor';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
+import { ReactComponent as ThreeDots } from '../../../assets/images/three-dots.svg';
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
@@ -27,6 +28,9 @@ import BtnClear from '../../../components/Button/BtnClear';
 const Discussion = () => {
 
     const { discussionId } = useParams();
+    const location = useLocation();
+    const repliedPostId = new URLSearchParams(location.search).get('repliedPostId');
+    // const repliedPostId = queryParams.get('repliedPostId');
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const { user } = useAuthentication()
@@ -41,29 +45,33 @@ const Discussion = () => {
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
 
+
     useEffect(() => {
         const fetchDiscussionData = async () => {
-            dispatch(Setloader(true))
+            if (!discussionId) return;  // Prevent API call if discussionId is falsy
+
+            dispatch(Setloader(true));
             try {
                 const response = await axios.get(`/api/discussions/${discussionId}/posts`);
-                setAllPost(response.data)
+                setAllPost(response.data);
+
                 const firstPostId = response.data.length > 0 ? response.data[0].post_id : null;
-                setPostId(firstPostId)
-                console.log("First post ID:", firstPostId);
-                dispatch(Setloader(false))
+                setPostId(firstPostId);
             } catch (error) {
-                dispatch(Setloader(false))
                 if (error.response && error.response.status === 404) {
-                    // If the product is not found, navigate to the "Page Not Found" page
-                    navigate('/404');
+                    navigate('/404'); // Navigate to "Page Not Found" if 404
                 } else {
                     console.error("Error fetching data:", error);
                 }
-
+            } finally {
+                dispatch(Setloader(false));  // Ensure loader is turned off
             }
         }
-        fetchDiscussionData()
-    }, [discussionId])
+
+        fetchDiscussionData();
+
+    }, [discussionId, dispatch, navigate]);  // Added dispatch and navigate to dependencies
+
 
     // Set openReply based on totalReplies
     useEffect(() => {
@@ -89,6 +97,60 @@ const Discussion = () => {
         incrementViews();
     }, [postId]);
 
+    useEffect(() => {
+        if (repliedPostId && allPost.length > 0) {
+            expandRepliesToPost(repliedPostId); // Expand replies on initial load
+        }
+    }, [repliedPostId, allPost]); // Ensure this runs when allPost and repliedPostId are ready
+
+
+
+    const expandRepliesToPost = (repliedPostId) => {
+        allPost.forEach(post => {
+            post?.replies?.forEach(levelOneReply => {
+                if (levelOneReply?.post_id === repliedPostId) {
+                    scrollToPostAfterExpand(levelOneReply.post_id); // Scroll to this reply
+                } else if (levelOneReply?.replies?.some(levelTwoReply =>
+                    levelTwoReply?.post_id === repliedPostId ||
+                    levelTwoReply?.replies?.some(levelThreeReply => levelThreeReply?.post_id === repliedPostId))) {
+
+                    // Expand levelOne replies only if they haven't been expanded yet
+                    if (!showMoreReplies[levelOneReply?.post_id]) {
+                        toggleShowMoreReplies(levelOneReply?.post_id); // Expand level 1 replies
+                    }
+
+                    // Expand levelTwo replies
+                    levelOneReply?.replies?.forEach(levelTwoReply => {
+                        if (levelTwoReply?.post_id === repliedPostId) {
+                            scrollToPostAfterExpand(levelTwoReply?.post_id); // Scroll to this reply
+                        } else if (levelTwoReply?.replies?.some(levelThreeReply => levelThreeReply?.post_id === repliedPostId)) {
+
+                            // Expand levelTwo replies only if they haven't been expanded yet
+                            if (!showMoreReplies[levelTwoReply?.post_id]) {
+                                toggleShowMoreReplies(levelTwoReply?.post_id); // Expand level 2 replies
+                            }
+
+                            levelTwoReply?.replies?.forEach(levelThreeReply => {
+                                if (levelThreeReply?.post_id === repliedPostId) {
+                                    scrollToPostAfterExpand(levelThreeReply?.post_id); // Scroll to level 3 reply
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    };
+
+
+    const scrollToPostAfterExpand = (repliedPostId) => {
+        setTimeout(() => {
+            const postElement = document.getElementById(repliedPostId);
+            if (postElement) {
+                window.scrollTo(0, postElement.offsetTop);
+            }
+        }, 500); // Small delay to ensure DOM update after expanding
+    };
 
 
     const toggleLoginModal = () => {
@@ -102,6 +164,7 @@ const Discussion = () => {
     const toggleShowMoreReplies = (postId) => {
         setShowMoreReplies((prev => ({ ...prev, [postId]: !prev[postId] })))
     }
+
 
     const toggleContent = (postId) => {
         setShowMoreContent((prev => ({ ...prev, [postId]: !prev[postId] })))
@@ -129,25 +192,25 @@ const Discussion = () => {
             setLoginModalOpen(true); // Open login modal if the user is not authenticated
             return;
         }
-    
+
         // Save the current scroll position
         const currentScrollY = window.scrollY;
-    
+
         try {
             await axios.post('/api/forum/post/like', { post_id: postId });
-    
+
             // Fetch the updated posts
             const response = await axios.get(`/api/discussions/${discussionId}/posts`);
             setAllPost(response.data);
-           
-    
+
+
             // Restore the scroll position after updating the state
             window.scrollTo(0, currentScrollY);
         } catch (error) {
             console.error('Error updating likes:', error);
         }
     };
-    
+
 
 
     const cancelReply = () => {
@@ -196,7 +259,7 @@ const Discussion = () => {
     };
 
     const handleSubmit = async () => {
-        if(!user) {
+        if (!user) {
             setLoginModalOpen(true)
         }
         try {
@@ -261,7 +324,7 @@ const Discussion = () => {
                                             <div className='started-discussion-container-row3'>
                                                 <div className='view-reply-like-counter'>
                                                     <div className='like-counter'>
-                                                        <button className={(post?.likes?.some(like => like.user_id === user.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id)}>
+                                                        <button className={(post?.likes?.some(like => like.user_id === user?.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id)}>
                                                             <Like />
                                                         </button>
                                                         <span>{post?.likes?.length || 0} likes</span>
@@ -305,14 +368,19 @@ const Discussion = () => {
                                 }
                                 {post.replies.map(levelOneReply => (
                                     <>
-                                        <div className="all-replies-container" key={levelOneReply.post_id}>
+                                        <div id={levelOneReply.post_id} className="all-replies-container" key={levelOneReply.post_id}>
                                             <div className='reply-container'>
                                                 <div className="reply-box">
                                                     <div className="reply-row1">
-                                                        <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                        <div className="post-creator-info">
-                                                            <span>{levelOneReply.postCreator.display_name}</span>
-                                                            <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
+                                                        <div className='posted-reply-info'>
+                                                            <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                            <div className="post-creator-info">
+                                                                <span>{levelOneReply.postCreator.display_name}</span>
+                                                                <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
+                                                            </div>
+                                                        </div>
+                                                        <div className='three-dots'>
+                                                            <ThreeDots />
                                                         </div>
                                                     </div>
                                                     <div className="reply-row2">
@@ -330,7 +398,7 @@ const Discussion = () => {
                                                     <div className='reply-row3'>
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
-                                                                <button className={levelOneReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
+                                                                <button className={levelOneReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
                                                                 <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
@@ -370,13 +438,18 @@ const Discussion = () => {
                                                     <>
                                                         {
                                                             levelOneReply.replies.map(levelTwoReply => (
-                                                                <div className="level2-replies-container" key={levelTwoReply.post_id}>
+                                                                <div id={levelTwoReply.post_id} className="level2-replies-container" key={levelTwoReply.post_id}>
                                                                     <div className="reply-box">
                                                                         <div className="reply-row1">
-                                                                            <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                                            <div className="post-creator-info">
-                                                                                <span>{levelTwoReply.postCreator.display_name}</span>
-                                                                                <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
+                                                                            <div className='posted-reply-info'>
+                                                                                <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                <div className="post-creator-info">
+                                                                                    <span>{levelTwoReply.postCreator.display_name}</span>
+                                                                                    <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className='three-dots'>
+                                                                                <ThreeDots />
                                                                             </div>
                                                                         </div>
                                                                         <div className="reply-row2">
@@ -394,7 +467,7 @@ const Discussion = () => {
                                                                         <div className='reply-row3'>
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
-                                                                                    <button className={levelTwoReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
+                                                                                    <button className={levelTwoReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
                                                                                     <span>{levelTwoReply?.likes?.length || 0} likes</span>
                                                                                 </div>
                                                                             </div>
@@ -433,13 +506,18 @@ const Discussion = () => {
                                                                     {showMoreReplies[levelTwoReply?.post_id] && (
                                                                         <>
                                                                             {levelTwoReply.replies.map(levelThreeReply => (
-                                                                                <div className="level2-replies-container last-reply-container">
+                                                                                <div id={levelThreeReply.post_id} className="level2-replies-container last-reply-container" key={levelThreeReply.post_id}>
                                                                                     <div className="reply-box">
                                                                                         <div className="reply-row1">
-                                                                                            <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                                                                            <div className="post-creator-info">
-                                                                                                <span>{levelThreeReply.postCreator.display_name}</span>
-                                                                                                <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
+                                                                                            <div className='posted-reply-info'>
+                                                                                                <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                                <div className="post-creator-info">
+                                                                                                    <span>{levelThreeReply.postCreator.display_name}</span>
+                                                                                                    <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div className='three-dots'>
+                                                                                                <ThreeDots />
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className='parent-post-container'>
@@ -463,7 +541,7 @@ const Discussion = () => {
                                                                                         <div className='reply-row3'>
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
-                                                                                                    <button className={levelThreeReply.likes.some(like => like.user_id === user.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
+                                                                                                    <button className={levelThreeReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
                                                                                                     <span>{levelThreeReply?.likes?.length || 0} likes</span>
                                                                                                 </div>
                                                                                             </div>

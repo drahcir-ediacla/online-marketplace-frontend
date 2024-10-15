@@ -237,8 +237,22 @@
 
                         .reply-row1 {
                             display: flex;
-                            align-items: center;
-                            gap: 10px;
+                            justify-content: space-between;
+                            align-items: self-start;
+
+                            .posted-reply-info {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            }
+
+                            .three-dots {
+                                rotate: 90deg;
+                                cursor: pointer;
+                                width: 4px;
+                                fill: var(--gray-500);
+                                margin-right: 10px;
+                            }
 
                             img {
                                 width: 40px;

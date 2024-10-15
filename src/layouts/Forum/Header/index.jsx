@@ -59,7 +59,7 @@ const ForumHeader = ({ authUser, containerClass }) => {
                     <span>|</span> 
                     {authUser ? (
                         <>
-                            {authUser?.display_name}
+                            <Link to={`/forum/profile/${authUser?.id}/created_discussions`}>{authUser?.display_name}</Link>
                             <img src={authUser?.profile_pic} alt="" className='default-forum-profile-avatar' onClick={toggleDropDownProfile} ref={profileDropDown} />
                         </>
                     ) : (
