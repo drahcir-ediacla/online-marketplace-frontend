@@ -16,17 +16,11 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
         `maptype=roadmap`,
         `key=${apiKey}`,
         `markers=color:red|label:C|${center.lat},${center.lng}`,
-        modifiedPathString,
+        `path=color:0x162F2C|weight:2|fillcolor:0x6c757d|enc:${generateEncodedCirclePath(center, radiusInKilometers)}`,
       ];
 
       return `${baseUrl}?${params.join('&')}`;
     };
-
-    // Generate the path string
-    const pathString = `path=color:0x162F2C|weight:2|fillcolor:0x6c757d|enc:${generateEncodedCirclePath(center, radiusInKilometers)}`;
-
-    // Replace all backticks in the pathString with 'b'
-    const modifiedPathString = pathString.replace(/`/g, 'b');
 
     setStaticMapUrl(createStaticMapUrl());
   }, [center, radiusInKilometers, apiKey]);
@@ -39,7 +33,7 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
 
   const generateEncodedCirclePath = (center, radius) => {
     const circlePoints = [];
-    const numPoints = 50;
+    const numPoints = 100;
     const radiusInMeters = radius * 1000; // Convert radius to meters
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * 2 * Math.PI;
@@ -76,7 +70,6 @@ const MapWithMarkerAndCircle = ({ center, radiusInKilometers }) => {
     encoded += String.fromCharCode(point + 63);
     return encoded;
   };
-
 
   return (
     <div>

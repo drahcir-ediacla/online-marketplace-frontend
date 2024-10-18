@@ -139,14 +139,21 @@ function Header() {
     }
   };
 
+  const roundToDecimal = (number, decimals) => {
+    const factor = Math.pow(10, decimals);
+    return Math.round(number * factor) / factor;
+  };
+
 
   const openLocationRadiusModal = () => {
     setShowAlert(false);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-        getPlaceName(position.coords.latitude, position.coords.longitude);
+        const roundedLatitude = roundToDecimal(position.coords.latitude, 4); // Round to 4 decimal points
+        const roundedLongitude = roundToDecimal(position.coords.longitude, 4); // Round to 4 decimal points
+        setLatitude(roundedLatitude);
+        setLongitude(roundedLongitude);
+        getPlaceName(roundedLatitude, roundedLongitude); // Use the rounded values
         setSoldModalOpen(true); // Set soldModalOpen to true on success
       },
       (error) => {

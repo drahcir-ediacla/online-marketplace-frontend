@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
@@ -19,6 +19,7 @@ import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import { ReactComponent as ThreeDots } from '../../../assets/images/three-dots.svg';
+import { ReactComponent as LinkIcon } from '../../../assets/images/link-icon.svg';
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
@@ -30,7 +31,6 @@ const Discussion = () => {
     const { discussionId } = useParams();
     const location = useLocation();
     const repliedPostId = new URLSearchParams(location.search).get('repliedPostId');
-    // const repliedPostId = queryParams.get('repliedPostId');
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const { user } = useAuthentication()
@@ -43,7 +43,7 @@ const Discussion = () => {
     const [postId, setPostId] = useState(null)
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-
+    const [threeDotsOption, setThreeDotsOption] = useState({})
 
 
     useEffect(() => {
@@ -71,6 +71,23 @@ const Discussion = () => {
         fetchDiscussionData();
 
     }, [discussionId, dispatch, navigate]);  // Added dispatch and navigate to dependencies
+
+    useEffect(() => {
+        const handleGlobalClick = (event) => {
+          if (event.target.closest('.three-dots') || event.target.closest('.three-dots-option')) {
+            return;
+          }
+    
+          // Close the options for all products
+          setThreeDotsOption({});
+        };
+    
+        document.addEventListener('click', handleGlobalClick);
+    
+        return () => {
+          document.removeEventListener('click', handleGlobalClick);
+        };
+      }, []);
 
 
     // Set openReply based on totalReplies
@@ -168,6 +185,11 @@ const Discussion = () => {
 
     const toggleContent = (postId) => {
         setShowMoreContent((prev => ({ ...prev, [postId]: !prev[postId] })))
+    }
+
+    const toggleThreeDotsOption = (postId) => {
+        setThreeDotsOption({})
+        setThreeDotsOption((prev => ({ ...prev, [postId]: true })))
     }
 
     const toggleReply = (postId) => {
@@ -379,8 +401,22 @@ const Discussion = () => {
                                                                 <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
                                                             </div>
                                                         </div>
-                                                        <div className='three-dots'>
-                                                            <ThreeDots />
+                                                        <div className="post-action-option">
+                                                            <div className='three-dots'>
+                                                                <ThreeDots onClick={() => toggleThreeDotsOption(levelOneReply.post_id)} />
+                                                            </div>
+                                                            {threeDotsOption[levelOneReply.post_id] &&
+                                                                <div className='three-dots-option'>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div className='link-icon'>
+                                                                                <LinkIcon />
+                                                                            </div>
+                                                                            <span>Copy URL</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div className="reply-row2">
@@ -448,8 +484,22 @@ const Discussion = () => {
                                                                                     <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
                                                                                 </div>
                                                                             </div>
-                                                                            <div className='three-dots'>
-                                                                                <ThreeDots />
+                                                                            <div className="post-action-option">
+                                                                                <div className='three-dots'>
+                                                                                    <ThreeDots onClick={() => toggleThreeDotsOption(levelTwoReply.post_id)} />
+                                                                                </div>
+                                                                                {threeDotsOption[levelTwoReply.post_id] &&
+                                                                                    <div className='three-dots-option'>
+                                                                                        <ul>
+                                                                                            <li>
+                                                                                                <div className='link-icon'>
+                                                                                                    <LinkIcon />
+                                                                                                </div>
+                                                                                                <span>Copy URL</span>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                }
                                                                             </div>
                                                                         </div>
                                                                         <div className="reply-row2">
@@ -516,8 +566,22 @@ const Discussion = () => {
                                                                                                     <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div className='three-dots'>
-                                                                                                <ThreeDots />
+                                                                                            <div className="post-action-option">
+                                                                                                <div className='three-dots'>
+                                                                                                    <ThreeDots onClick={() => toggleThreeDotsOption(levelThreeReply.post_id)} />
+                                                                                                </div>
+                                                                                                {threeDotsOption[levelThreeReply.post_id] &&
+                                                                                                    <div className='three-dots-option'>
+                                                                                                        <ul>
+                                                                                                            <li>
+                                                                                                                <div className='link-icon'>
+                                                                                                                    <LinkIcon />
+                                                                                                                </div>
+                                                                                                                <span>Copy URL</span>
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                }
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className='parent-post-container'>

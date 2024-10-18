@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.scss'
 import UserLocationMap from '../Map/UserLocationMap';
-import BtnClear from '../Button/BtnClear';
 import BtnGreen from '../Button/BtnGreen'
 
 const LocationRadiusModal = ({ onClick, onRadiusChange, currentRadius, latitude, longitude, placeName }) => {
@@ -40,16 +39,16 @@ const LocationRadiusModal = ({ onClick, onRadiusChange, currentRadius, latitude,
                     <div className="modal-box">
                         <div className='location-radius-row1'>
                             <button className='closebtn' onClick={onClick}>
-                                <i class='fa fa-times'></i>
+                                <i className='fa fa-times'></i>
                             </button>
                         </div>
                         <div className='modal-box-title'>
                             <h5>SET DISTANCE RADIUS</h5>
                             <span>Your current location is: </span><span className='current-location'>{placeName}</span>
                         </div>
-                        <dvi>
+                        <div>
                             <UserLocationMap center={center} radiusInKilometers={radiusInKilometers} />
-                        </dvi>
+                        </div>
                         <div className='slidecontainer'>
                             <input
                                 type='range'

@@ -48,6 +48,58 @@
             width: 100%;
             margin-bottom: 50px;
 
+            .post-action-option {
+                position: relative;
+
+                .three-dots {
+                    rotate: 90deg;
+                    cursor: pointer;
+                    width: 4px;
+                    fill: var(--gray-500);
+                    margin-right: 10px;
+                }
+
+                .three-dots-option {
+                    position: absolute;
+                    display: block;
+                    top: 18px;
+                    right: 0;
+                    width: auto;
+                    background: white;
+                    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+                    border-radius: 3px;
+                    z-index: 1;
+
+                    ul {
+                        padding: 0;
+                        margin: 0;
+                        width: max-content;
+
+                        li {
+                            font-size: 14px;
+                            display: flex;
+                            gap: 8px;
+                            padding: 10px 12px 10px 12px;
+                            border-bottom: 1px solid var(--gray-200);
+
+                            .link-icon {
+                                width: 20px;
+                                height: 11px;
+                            }
+
+                            span {
+                                flex-shrink: 0;
+                            }
+                        }
+
+                        li:hover {
+                            cursor: pointer;
+                            background: var(--gray-200);
+                        }
+                    }
+                }
+            }
+
             .show-less-content {
                 mask-image: linear-gradient(180deg, #555 90%, transparent);
                 min-height: 38px;
@@ -246,13 +298,9 @@
                                 gap: 10px;
                             }
 
-                            .three-dots {
-                                rotate: 90deg;
-                                cursor: pointer;
-                                width: 4px;
-                                fill: var(--gray-500);
-                                margin-right: 10px;
-                            }
+
+
+
 
                             img {
                                 width: 40px;

@@ -4,7 +4,6 @@ import { enUS } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg';
-import BtnGreen from '../Button/BtnGreen';
 import DeleteItemModal from '../Modal/DeleteItemModal';
 import MarkSoldModal from '../Modal/MarkSoldModal';
 import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';

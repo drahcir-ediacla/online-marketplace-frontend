@@ -35,7 +35,7 @@ const SellerLocationMap = ({ latitude, longitude }) => {
 
   const generateEncodedCirclePath = (center, radius) => {
     const circlePoints = [];
-    const numPoints = 100;
+    const numPoints = 50;
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * 2 * Math.PI;
       const dx = radius * Math.cos(angle) / 111320; // Longitude distance (meters to degrees)
@@ -71,6 +71,8 @@ const SellerLocationMap = ({ latitude, longitude }) => {
     encoded += String.fromCharCode(point + 63);
     return encoded;
   };
+
+
 
   return (
     <>
