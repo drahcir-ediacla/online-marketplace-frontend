@@ -23,6 +23,7 @@ import { ReactComponent as LinkIcon } from '../../../assets/images/link-icon.svg
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
+import AlertMessage from '../../../components/AlertMessage';
 
 
 
@@ -44,6 +45,7 @@ const Discussion = () => {
     const [allPost, setAllPost] = useState([]);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [threeDotsOption, setThreeDotsOption] = useState({})
+    const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
 
     useEffect(() => {
@@ -208,30 +210,62 @@ const Discussion = () => {
         }
     };
 
+    const copyPostURL = async (postId) => {
+        try {
+            // Hide any existing alert
+            setAlert({ show: false, type: '', message: '' });
+
+            const postURL = `${window.location.origin}/forum/discussion/${discussionId}?repliedPostId=${postId}`;
+            await navigator.clipboard.writeText(postURL);
+
+            // Show success alert
+            setAlert({ show: true, type: 'success', message: 'URL copied to clipboard!' });
+        } catch (error) {
+            console.error('Failed to copy URL: ', error);
+
+            // Show error alert
+            setAlert({ show: true, type: 'error', message: 'Failed to copy the URL. Please try again.' });
+        }
+    };
 
     const handleLikeChange = async (postId) => {
         if (!user) {
             setLoginModalOpen(true); // Open login modal if the user is not authenticated
             return;
         }
-
+    
         // Save the current scroll position
         const currentScrollY = window.scrollY;
-
+    
         try {
             await axios.post('/api/forum/post/like', { post_id: postId });
-
+    
             // Fetch the updated posts
             const response = await axios.get(`/api/discussions/${discussionId}/posts`);
             setAllPost(response.data);
-
-
-            // Restore the scroll position after updating the state
-            window.scrollTo(0, currentScrollY);
+    
+            // Get the element of the liked post
+            const postElement = document.getElementById(`post-${postId}`);
+            
+            if (postElement) {
+                // Calculate the vertical center position
+                const elementPosition = postElement.getBoundingClientRect().top + window.scrollY;
+                const offset = (window.innerHeight / 2) - (postElement.offsetHeight / 2);
+    
+                // Scroll to the post, centered in the viewport
+                window.scrollTo({
+                    top: elementPosition - offset,
+                    behavior: 'smooth' // Optional for smooth scrolling
+                });
+            } else {
+                // If the post element is not found, restore the previous scroll position
+                window.scrollTo(0, currentScrollY);
+            }
         } catch (error) {
             console.error('Error updating likes:', error);
         }
     };
+    
 
 
 
@@ -306,6 +340,7 @@ const Discussion = () => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            {alert.show && <AlertMessage type={alert.type} message={alert.message} />}
             <div className='discussion-container'>
                 <Header authUser={user} />
                 <div className="forum-discussion-page-container">
@@ -408,7 +443,7 @@ const Discussion = () => {
                                                             {threeDotsOption[levelOneReply.post_id] &&
                                                                 <div className='three-dots-option'>
                                                                     <ul>
-                                                                        <li>
+                                                                        <li onClick={() => copyPostURL(levelOneReply.post_id)}>
                                                                             <div className='link-icon'>
                                                                                 <LinkIcon />
                                                                             </div>
@@ -491,7 +526,7 @@ const Discussion = () => {
                                                                                 {threeDotsOption[levelTwoReply.post_id] &&
                                                                                     <div className='three-dots-option'>
                                                                                         <ul>
-                                                                                            <li>
+                                                                                            <li onClick={() => copyPostURL(levelTwoReply.post_id)}>
                                                                                                 <div className='link-icon'>
                                                                                                     <LinkIcon />
                                                                                                 </div>
@@ -573,7 +608,7 @@ const Discussion = () => {
                                                                                                 {threeDotsOption[levelThreeReply.post_id] &&
                                                                                                     <div className='three-dots-option'>
                                                                                                         <ul>
-                                                                                                            <li>
+                                                                                                            <li onClick={() => copyPostURL(levelThreeReply.post_id)}>
                                                                                                                 <div className='link-icon'>
                                                                                                                     <LinkIcon />
                                                                                                                 </div>
