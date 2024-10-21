@@ -28,7 +28,6 @@ const FilterNavigation = ({
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
     const [categories, setCategories] = useState([])
-    console.log('categories:', categories)
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
