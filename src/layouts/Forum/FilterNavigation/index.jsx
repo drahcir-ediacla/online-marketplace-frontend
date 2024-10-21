@@ -23,10 +23,12 @@ const FilterNavigation = ({
 }) => {
 
     const { userId, tab } = useParams();
+    const userIdNumber = Number(userId)
     const navigate = useNavigate();
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
     const [categories, setCategories] = useState([])
+    console.log('categories:', categories)
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
@@ -176,6 +178,19 @@ const FilterNavigation = ({
         navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
     };
 
+    const totalCreatedDiscussions = categories?.allDiscussions?.filter(
+        (discussion) => (discussion.user_id === userIdNumber)
+    )
+
+    const totalJoinedDiscussions = categories?.allDiscussions?.filter(discussion =>
+        discussion.post.some(post =>
+            post.replies.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
+                levelOneReply.replies.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
+                    levelTwoReply.replies.some(levelThreeReply => levelThreeReply.user_id === userIdNumber)
+                )
+            )
+        )
+    );
 
 
     const originalDate = user?.createdAt || '';
@@ -205,8 +220,8 @@ const FilterNavigation = ({
                                     </div>
                                 </div>
                                 <ul className='forum-profile-menu'>
-                                    <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>(29)</span></li>
-                                    <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>(82)</span></li>
+                                    <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
+                                    <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
                                     <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
                                     <li onClick={handleForumNotifications} className='forum-notifications'>Notifications <div className='forum-notification-counter'>2</div></li>
                                 </ul>
