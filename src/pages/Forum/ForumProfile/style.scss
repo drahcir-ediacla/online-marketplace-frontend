@@ -314,6 +314,96 @@
                         }
                     }
                 }
+
+                .no-notif {
+                    width: 100%;
+                    font-size: 16px;
+                    color: var(--gray-300);
+                    text-align: center;
+                    padding: 50px 0;
+                    letter-spacing: 1px;
+                    border-top: 1px solid var(--gray-300);
+                }
+
+                ul {
+                    padding: 0;
+                    margin: 0;
+
+                    li {
+
+                        padding: 12px 12px;
+                        border-bottom: 1px solid var(--gray-300);
+
+                        .delete-notif-btn {
+                            display: flex;
+                            justify-content: flex-end;
+                        }
+
+                        .fa-times:before {
+                            color: var(--gray-300);
+                            cursor: pointer;
+                        }
+
+                        .notification-container {
+                            display: flex;
+                            align-items: center;
+                            gap: 15px;
+                            cursor: pointer;
+
+                            .user-avatar {
+                                img {
+                                    width: 60px;
+                                    height: 60px;
+                                    border-radius: 50%;
+                                }
+                            }
+
+                            .notification-info {
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                gap: 3px;
+                                width: 100%;
+
+                                a {
+                                    color: var(--gray-500);
+                                }
+
+                                .date {
+                                    font-size: 14px;
+                                    color: var(--gray-400);
+                                }
+                            }
+
+                            .circle-container {
+                                width: auto;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin-left: 10px;
+
+                                .circle {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: var(--orange-200);
+                                }
+                            }
+                        }
+                    }
+
+                    li:first-child {
+                        border-top: 1px solid var(--gray-300);
+                    }
+
+                    li:last-child {
+                        border-bottom: none;
+                    }
+
+                    li:hover {
+                        background: var(--gray-100);
+                    }
+                }
             }
         }
     }

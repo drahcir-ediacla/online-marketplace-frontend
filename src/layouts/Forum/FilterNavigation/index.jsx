@@ -18,6 +18,7 @@ const FilterNavigation = ({
     discussionFilter,
     onClick,
     categoriesData,
+    notificationData,
     tagsData,
     className
 }) => {
@@ -100,6 +101,7 @@ const FilterNavigation = ({
             try {
                 const response = await axios.get('/api/forum-notifications')
                 setNotifications(response.data)
+                notificationData(response.data)
             } catch (err) {
                 console.log('Error fetching forum notifications:', err)
             }

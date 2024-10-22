@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from '../../../apicalls/axios';
+import { formatDistanceToNow } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
 import { Setloader } from '../../../redux/reducer/loadersSlice';
@@ -31,6 +33,7 @@ const ForumProfile = () => {
     const navigate = useNavigate()
     const [categories, setCategories] = useState([])
     const [allTags, setAllTags] = useState([])
+    const [notifications, setNotifications] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -48,6 +51,8 @@ const ForumProfile = () => {
     const dropDownCategory = useRef();
     const dropDownTags = useRef();
     const dropDownNotif = useRef();
+    const [displayedNotificationsCount, setDisplayedNotificationsCount] = useState(20);
+    const [displayedUnreadNotificationsCount, setDisplayedUnreadNotificationsCount] = useState(20);
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -102,6 +107,10 @@ const ForumProfile = () => {
         )
     );
 
+    const unreadNotifications = notifications?.filter(
+        (notification) => (notification.read === false)
+    )
+    console.log('unreadNotifications:', unreadNotifications)
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -237,6 +246,14 @@ const ForumProfile = () => {
         setLoginModalOpen(true)
     }
 
+    const loadMoreNotifications = () => {
+        setDisplayedNotificationsCount(prevCount => prevCount + 20);
+    };
+
+    const loadMoreUnreadNotifications = () => {
+        setDisplayedUnreadNotificationsCount(prevCount => prevCount + 20);
+    };
+
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -253,6 +270,7 @@ const ForumProfile = () => {
                         discussionFilter={discussionFilter}
                         onClick={loginModal}
                         categoriesData={setCategories}
+                        notificationData={setNotifications}
                         tagsData={setAllTags}
                         className='profile-filter-navigation'
                     />
@@ -341,6 +359,74 @@ const ForumProfile = () => {
                                         )}
                                     </div>
                                 </div>
+                                {notifications.length === 0 ? (
+                                    <div style={{ display: activeNotifTab === 0 ? 'block' : 'none' }} className='no-notif'>You don't have any notifications</div>
+                                ) : (
+                                    <div style={{ display: activeNotifTab === 0 ? 'block' : 'none' }}>
+                                        <ul>
+                                            {notifications.slice(0, displayedNotificationsCount).map((notification) => (
+                                                <li key={notification.id}>
+                                                    <div className="delete-notif-btn">
+                                                        <i class="fa fa-times"></i>
+                                                    </div>
+                                                    <div className="notification-container">
+                                                        <div className="user-avatar">
+                                                            <img src={notification.subject_User.profile_pic} alt="" />
+                                                        </div>
+                                                        <div className='notification-info'>
+                                                            <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                            <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
+                                                        </div>
+                                                        {!notification.read && (
+                                                            <div className="circle-container">
+                                                                <div className="circle"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {notifications.length > displayedNotificationsCount &&
+                                            <div className='view-more'>
+                                                <button className='view-more-btn' onClick={loadMoreNotifications}>View more</button>
+                                            </div>
+                                        }
+                                    </div>
+                                )}
+                                {unreadNotifications.length === 0 ? (
+                                    <div className='no-notif' style={{ display: activeNotifTab === 1 ? 'block' : 'none' }}>You don't have unread notifications</div>
+                                ) : (
+                                    <div style={{ display: activeNotifTab === 1 ? 'block' : 'none' }}>
+                                        <ul>
+                                            {unreadNotifications.slice(0, displayedUnreadNotificationsCount).map((notification) => (
+                                                <li key={notification.id} >
+                                                    <div className="delete-notif-btn">
+                                                        <i class="fa fa-times"></i>
+                                                    </div>
+                                                    <div className="notification-container">
+                                                        <div className="user-avatar">
+                                                            <img src={notification.subject_User.profile_pic} alt="" />
+                                                        </div>
+                                                        <div className='notification-info'>
+                                                            <div><span dangerouslySetInnerHTML={{ __html: notification.message }} /></div>
+                                                            <div className="date">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: enUS })}</div>
+                                                        </div>
+                                                        {!notification.read && (
+                                                            <div className="circle-container">
+                                                                <div className="circle"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {unreadNotifications.length > displayedUnreadNotificationsCount &&
+                                            <div className='view-more'>
+                                                <button className='view-more-btn' onClick={loadMoreUnreadNotifications}>View more</button>
+                                            </div>
+                                        }
+                                    </div>
+                                )}
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
