@@ -30,6 +30,7 @@ const FilterNavigation = ({
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
+    const [notifications, setNotifications] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
     const [user, setUser] = useState({})
@@ -92,6 +93,20 @@ const FilterNavigation = ({
             setActiveCategory(categories[0].id); // or categories[0].name based on your logic
         }
     }, [categories, activeCategory]);
+
+
+    useEffect(() => {
+        const fetchForumNotifications = async() => {
+            try {
+                const response = await axios.get('/api/forum-notifications')
+                setNotifications(response.data)
+            } catch (err) {
+                console.log('Error fetching forum notifications:', err)
+            }
+        }
+        fetchForumNotifications()
+    }, [])
+
 
     useEffect(() => {
         switch (tab) {
@@ -222,7 +237,7 @@ const FilterNavigation = ({
                                     <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
                                     <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
                                     <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
-                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications <div className='forum-notification-counter'>2</div></li>
+                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications <div className='forum-notification-counter'>{notifications?.length}</div></li>
                                 </ul>
                             </div>
                         )}

@@ -17,6 +17,7 @@ import Input from '../../../components/FormField/Input';
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
 import LoginModal from '../../../components/Modal/LoginModal';
+import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.svg';
 
 
 
@@ -35,16 +36,18 @@ const ForumProfile = () => {
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false)
     const [selectedSubCategory, setSelectedSubCategory] = useState('')
-    const dropDownCategory = useRef();
     const [tags, setTags] = useState([]);
     const [inputTags, setInputTags] = useState('');
     const [filteredTags, setFilteredTags] = useState([allTags]);
     const [showDropdownTags, setShowDropdownTags] = useState(false);
-    const dropDownTags = useRef();
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [categoryId, setCategoryId] = useState('')
-    // const [createdDiscussions, setCreatedDiscussions] = useState([])
+    const [activeNotifTab, setActiveNotifTab] = useState(0);
+    const [notifThreeDotsOptions, setNotifThreeDotsOptions] = useState(false)
+    const dropDownCategory = useRef();
+    const dropDownTags = useRef();
+    const dropDownNotif = useRef();
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -68,6 +71,14 @@ const ForumProfile = () => {
                 setShowDropdownTags(false);
                 setInputTags('');
             }
+
+            if (
+                dropDownNotif.current &&
+                !dropDownNotif.current.contains(event.target) &&
+                !event.target.closest('.dots-container')
+            ) {
+                setNotifThreeDotsOptions(false);
+            }
         };
 
         document.addEventListener('click', handleGlobalClick);
@@ -90,10 +101,14 @@ const ForumProfile = () => {
             )
         )
     );
-    
+
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
+    };
+
+    const openNotifList = (tabIndex) => {
+        setActiveNotifTab(tabIndex);
     };
 
     const handleNewDiscussionClick = () => {
@@ -214,6 +229,10 @@ const ForumProfile = () => {
         setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
     }
 
+    const toggleNotifThreeDotsOptions = () => {
+        setNotifThreeDotsOptions(!notifThreeDotsOptions)
+    }
+
     const loginModal = () => {
         setLoginModalOpen(true)
     }
@@ -298,6 +317,29 @@ const ForumProfile = () => {
                                 <div className='forum-profile-tab-title'>
                                     <h4>Notifications</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                </div>
+                                <div className="notifications-tab">
+                                    <div className="notifications-tab-container">
+                                        <button className={`all-notif-tab ${activeNotifTab === 0 ? 'active' : ''}`} onClick={() => openNotifList(0)}>ALL</button>
+                                        <button className={`unread-notif-tab ${activeNotifTab === 1 ? 'active' : ''}`} onClick={() => openNotifList(1)}>UNREAD</button>
+                                    </div>
+                                    <div className='dots-container' onClick={toggleNotifThreeDotsOptions}>
+                                        <div className='three-dots'>
+                                            <ThreeDots />
+                                        </div>
+                                        {notifThreeDotsOptions && (
+                                            <div className="three-dots-dropdown-options" ref={dropDownNotif}>
+                                                <ul>
+                                                    <li>
+                                                        <span>Mark All as Read</span>
+                                                    </li>
+                                                    <li>
+                                                        <span>Clear All Notifications</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>
