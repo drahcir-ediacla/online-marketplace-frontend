@@ -423,7 +423,7 @@ const ForumProfile = () => {
                                                     <div className="delete-notif-btn">
                                                         <i class="fa fa-times"></i>
                                                     </div>
-                                                    <div className="notification-container">
+                                                    <div className="notification-container" onClick={() => markAsRead(notification.id)}>
                                                         <div className="user-avatar">
                                                             <img src={notification.subject_User.profile_pic} alt="" />
                                                         </div>
