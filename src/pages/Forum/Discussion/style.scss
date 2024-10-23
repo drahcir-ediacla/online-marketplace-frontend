@@ -144,28 +144,43 @@
 
                 .started-discussion-container-row1 {
                     display: flex;
-                    align-items: center;
+                    justify-content: space-between;
+                    align-items: self-start;
                     gap: 10px;
 
-                    img {
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 50%;
-                    }
-
-                    .started-forum-discussion-info {
+                    .started-discussion-info {
                         display: flex;
-                        flex-direction: column;
+                        align-items: center;
+                        gap: 10px;
 
-                        label {
-                            font-size: 18px;
-                            font-weight: 500;
+                        img {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
                         }
 
-                        small {
-                            font-size: 13px;
-                            font-style: italic;
-                            color: #838383;
+                        .started-forum-discussion-info {
+                            display: flex;
+                            flex-direction: column;
+
+                            label {
+                                font-size: 18px;
+                                font-weight: 500;
+                            }
+
+                            small {
+                                font-size: 13px;
+                                font-style: italic;
+                                color: #838383;
+
+                                a {
+                                    color: #838383;
+                                }
+
+                                a:hover{
+                                    text-decoration: underline;
+                                }
+                            }
                         }
                     }
                 }
@@ -312,9 +327,14 @@
                                 display: flex;
                                 flex-direction: column;
 
-                                span {
+                                a {
                                     font-size: 16px;
                                     font-weight: 500;
+                                    color: var(--black-102);
+                                }
+
+                                a:hover {
+                                    text-decoration: underline;
                                 }
 
                                 small {

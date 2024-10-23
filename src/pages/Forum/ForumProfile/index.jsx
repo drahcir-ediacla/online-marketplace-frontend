@@ -110,7 +110,27 @@ const ForumProfile = () => {
     const unreadNotifications = notifications?.filter(
         (notification) => (notification.read === false)
     )
-    console.log('unreadNotifications:', unreadNotifications)
+
+    const markAsRead = async (notificationId) => {
+        try {
+            await axios.put(`/api/read-forum-notification/${notificationId}`, { read: true });
+            // Update the state to reflect the change
+            setNotifications(notifications.map(notification =>
+                notification.id === notificationId ? { ...notification, read: true } : notification
+            ));
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    };
+
+    const markAllAsRead = async () => {
+        try {
+            await axios.put('/api/read-all-forum-notifications', { read: true });
+            setNotifications(notifications.map(notification => ({ ...notification, read: true })));
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        }
+    }
 
     const openContent = (tabIndex) => {
         setActiveTab(tabIndex);
@@ -348,7 +368,7 @@ const ForumProfile = () => {
                                         {notifThreeDotsOptions && (
                                             <div className="three-dots-dropdown-options" ref={dropDownNotif}>
                                                 <ul>
-                                                    <li>
+                                                    <li onClick={markAllAsRead}>
                                                         <span>Mark All as Read</span>
                                                     </li>
                                                     <li>
@@ -369,7 +389,7 @@ const ForumProfile = () => {
                                                     <div className="delete-notif-btn">
                                                         <i class="fa fa-times"></i>
                                                     </div>
-                                                    <div className="notification-container">
+                                                    <div className="notification-container" onClick={() => markAsRead(notification.id)}>
                                                         <div className="user-avatar">
                                                             <img src={notification.subject_User.profile_pic} alt="" />
                                                         </div>

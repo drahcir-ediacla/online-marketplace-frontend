@@ -8,8 +8,7 @@ import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
 const FilterTagDiscussionCard = ({ data }) => {
-
-
+    console.log('data:', data)
 
     // Function to safely parse and format the date
     const getFormattedDate = (dateString) => {
@@ -37,11 +36,17 @@ const FilterTagDiscussionCard = ({ data }) => {
             {data?.map(discussion => (
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
-                        <img src={discussion?.allDiscussionsInTag?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
+                        <Link to={`/forum/profile/${discussion?.allDiscussionsInTag?.discussionStarter?.id}/created_discussions`}>
+                            <img src={discussion?.allDiscussionsInTag?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
+                        </Link>
                         <div className='forum-discussion-info'>
                             <Link to={`/forum/discussion/${discussion?.discussion_id}`}><h6>{discussion?.allDiscussionsInTag?.title}</h6></Link>
                             <small>
-                                by {discussion?.allDiscussionsInTag?.discussionStarter?.display_name || 'Anonymous'} {getFormattedDate(discussion?.allDiscussionsInTag?.created_at)}
+                                by&nbsp;
+                                <Link to={`/forum/profile/${discussion?.allDiscussionsInTag?.discussionStarter?.id}/created_discussions`}>
+                                    {discussion?.allDiscussionsInTag?.discussionStarter?.display_name || 'Anonymous'}
+                                </Link>
+                                &nbsp;{getFormattedDate(discussion?.allDiscussionsInTag?.created_at)}
                             </small>
                         </div>
                     </div>

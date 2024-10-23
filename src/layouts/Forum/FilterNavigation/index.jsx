@@ -24,7 +24,8 @@ const FilterNavigation = ({
 }) => {
 
     const { userId, tab } = useParams();
-    const userIdNumber = Number(userId)
+    const userIdNumber = Number(userId);
+    const authUserIdNumber = Number(authUser?.id)
     const navigate = useNavigate();
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
@@ -97,11 +98,12 @@ const FilterNavigation = ({
 
 
     useEffect(() => {
-        const fetchForumNotifications = async() => {
+        const fetchForumNotifications = async () => {
             try {
                 const response = await axios.get('/api/forum-notifications')
-                setNotifications(response.data)
-                notificationData(response.data)
+                const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setNotifications(sortedNotifications)
+                notificationData(sortedNotifications)
             } catch (err) {
                 console.log('Error fetching forum notifications:', err)
             }
@@ -194,6 +196,10 @@ const FilterNavigation = ({
         navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
     };
 
+    const unreadNotifications = notifications?.filter(
+        (notification) => (notification.read === false)
+    )
+
     const totalCreatedDiscussions = categories?.allDiscussions?.filter(
         (discussion) => (discussion.user_id === userIdNumber)
     )
@@ -219,11 +225,34 @@ const FilterNavigation = ({
             {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
             <div className={`forum-category-page-filter-nav ${className}`}>
                 {!authUser ? (
-                    <div className='forum-category-page-row1 not-authenticated'>
-                        <p>Join our community, elevate your marketplace experience!</p>
-                        <button type='button' className='forum-login-btn' onClick={onClick}>Sign In</button>
-                        <p>Don’t have a Yogeek account? <Link to='/registerbyemail'>Sign up</Link></p>
-                    </div>
+                    <>
+                        <div className='forum-category-page-row1 not-authenticated'>
+                            <p>Join our community, elevate your marketplace experience!</p>
+                            <button type='button' className='forum-login-btn' onClick={onClick}>Sign In</button>
+                            <p>Don’t have a Yogeek account? <Link to='/registerbyemail'>Sign up</Link></p>
+                        </div>
+                        {userId && <div className='forum-category-page-row1'>
+                            <div className='forum-category-page-row1-row1'>
+                                <img src={user.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
+                                <div className='user-display-name'>
+                                    <p>{user.display_name}</p>
+                                    <small>Joined in {formattedDate}</small>
+                                </div>
+                            </div>
+                            <ul className='forum-profile-menu'>
+                                <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
+                                <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
+                                <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
+                                {authUserIdNumber === userIdNumber ? (
+                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
+                                ) : (
+                                    null
+                                )}
+
+                            </ul>
+                        </div>
+                        }
+                    </>
                 ) : (
                     <>
                         {userId && (
@@ -239,7 +268,12 @@ const FilterNavigation = ({
                                     <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
                                     <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
                                     <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
-                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications <div className='forum-notification-counter'>{notifications?.length}</div></li>
+                                    {authUserIdNumber === userIdNumber ? (
+                                        <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
+                                    ) : (
+                                        null
+                                    )}
+
                                 </ul>
                             </div>
                         )}

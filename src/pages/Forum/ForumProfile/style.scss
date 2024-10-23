@@ -115,7 +115,8 @@
                                     overflow-y: auto;
 
                                     .forum-main-category {
-                                        border-top: 1px solid var(--gray-200);
+                                        padding: 0;
+                                        border: none;
 
                                         .parent-forum-category {
                                             padding: 12px;
@@ -126,20 +127,33 @@
                                         .forum-subcategory {
                                             padding: 0;
 
-                                            .first-level-forum-subcategory {
-                                                padding: 5px 30px;
-                                                border-top: 1px solid var(--gray-200);
-                                                cursor: pointer;
+                                            li {
+                                                padding: 0;
+                                                border: none;
+
+                                                .first-level-forum-subcategory {
+                                                    padding: 5px 30px;
+                                                    border-top: 1px solid var(--gray-200);
+                                                    cursor: pointer;
+                                                }
+
+                                                .first-level-forum-subcategory:hover {
+                                                    background: var(--gray-200);
+                                                }
                                             }
 
-                                            .first-level-forum-subcategory:hover {
-                                                background: var(--gray-200);
+                                            li:last-child {
+                                                border-bottom: 1px solid var(--gray-200);
                                             }
                                         }
                                     }
 
                                     .forum-main-category:first-child {
                                         border: none;
+                                    }
+
+                                    .forum-main-category:hover {
+                                        background: none;
                                     }
                                 }
                             }
@@ -189,6 +203,7 @@
                         .input-tags-container {
                             padding: 5px;
                             width: 100%;
+                            border-top: none;
 
                             .tags-input {
                                 border: 1px solid #ccc;
@@ -198,6 +213,10 @@
                                 outline: none;
                                 width: 100%;
                             }
+                        }
+
+                        .input-tags-container:hover {
+                            background: none;
                         }
 
                         .dropdown-list {
@@ -214,6 +233,7 @@
                             padding: 8px;
                             cursor: pointer;
                             background-color: #fff;
+                            border: none;
                         }
 
                         .dropdown-list li:hover {

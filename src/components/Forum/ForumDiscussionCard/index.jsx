@@ -38,13 +38,19 @@ const ForumDiscussionCard = ({ data }) => {
             {data?.map(discussion => (
                 <div className="forum-discussion-card" key={discussion?.discussion_id}>
                     <div className='forum-discussion-card-row1'>
-                        <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
+                        <Link to={`/forum/profile/${discussion?.user_id}/created_discussions`}>
+                            <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
+                        </Link>
                         <div className='forum-discussion-info'>
                             <Link to={`/forum/discussion/${discussion?.discussion_id}`}>
                                 <h6>{discussion?.title}</h6>
                             </Link>
                             <small>
-                                by {discussion?.discussionStarter?.display_name} {getFormattedDate(discussion?.created_at)}
+                                by&nbsp;
+                                <Link to={`/forum/profile/${discussion?.user_id}/created_discussions`}>
+                                    {discussion?.discussionStarter?.display_name}
+                                </Link>
+                                &nbsp;{getFormattedDate(discussion?.created_at)}
                             </small>
                         </div>
                     </div>

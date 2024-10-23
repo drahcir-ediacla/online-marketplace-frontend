@@ -76,20 +76,20 @@ const Discussion = () => {
 
     useEffect(() => {
         const handleGlobalClick = (event) => {
-          if (event.target.closest('.three-dots') || event.target.closest('.three-dots-option')) {
-            return;
-          }
-    
-          // Close the options for all products
-          setThreeDotsOption({});
+            if (event.target.closest('.three-dots') || event.target.closest('.three-dots-option')) {
+                return;
+            }
+
+            // Close the options for all products
+            setThreeDotsOption({});
         };
-    
+
         document.addEventListener('click', handleGlobalClick);
-    
+
         return () => {
-          document.removeEventListener('click', handleGlobalClick);
+            document.removeEventListener('click', handleGlobalClick);
         };
-      }, []);
+    }, []);
 
 
     // Set openReply based on totalReplies
@@ -228,30 +228,37 @@ const Discussion = () => {
         }
     };
 
-    const handleLikeChange = async (postId) => {
+
+    const handleLikeChange = async (postId, userId, discussionTitle) => {
         if (!user) {
             setLoginModalOpen(true); // Open login modal if the user is not authenticated
             return;
         }
-    
+
         // Save the current scroll position
         const currentScrollY = window.scrollY;
-    
+
+
         try {
-            await axios.post('/api/forum/post/like', { post_id: postId });
-    
+            await axios.post('/api/forum/post/like', { 
+                post_id: postId, 
+                discussion_id: discussionId,
+                user_id: userId,
+                title: discussionTitle,
+            });
+
             // Fetch the updated posts
             const response = await axios.get(`/api/discussions/${discussionId}/posts`);
             setAllPost(response.data);
-    
+
             // Get the element of the liked post
             const postElement = document.getElementById(`post-${postId}`);
-            
+
             if (postElement) {
                 // Calculate the vertical center position
                 const elementPosition = postElement.getBoundingClientRect().top + window.scrollY;
                 const offset = (window.innerHeight / 2) - (postElement.offsetHeight / 2);
-    
+
                 // Scroll to the post, centered in the viewport
                 window.scrollTo({
                     top: elementPosition - offset,
@@ -265,7 +272,7 @@ const Discussion = () => {
             console.error('Error updating likes:', error);
         }
     };
-    
+
 
 
 
@@ -358,10 +365,37 @@ const Discussion = () => {
                             <>
                                 <div className="started-discussion-container" key={post?.post_id}>
                                     <div className='started-discussion-container-row1'>
-                                        <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
-                                        <div className='started-forum-discussion-info'>
-                                            <label>{post?.discussion?.title}</label>
-                                            <small>by {post?.postCreator?.display_name || 'Unknown'} &nbsp;&nbsp;&nbsp;&nbsp; Posted: {getFormattedDate(post.created_at)}</small>
+                                        <div className='started-discussion-info'>
+                                            <Link to={`/forum/profile/${post?.postCreator?.id}/created_discussions`}>
+                                                <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                            </Link>
+                                            <div className='started-forum-discussion-info'>
+                                                <label>{post?.discussion?.title}</label>
+                                                <small>
+                                                    by&nbsp;
+                                                    <Link to={`/forum/profile/${post?.postCreator?.id}/created_discussions`}>
+                                                        {post?.postCreator?.display_name || 'Unknown'}
+                                                    </Link>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp; Posted: {getFormattedDate(post.created_at)}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div className="post-action-option">
+                                            <div className='three-dots'>
+                                                <ThreeDots onClick={() => toggleThreeDotsOption(post.post_id)} />
+                                            </div>
+                                            {threeDotsOption[post.post_id] &&
+                                                <div className='three-dots-option'>
+                                                    <ul>
+                                                        <li onClick={() => copyPostURL(post.post_id)}>
+                                                            <div className='link-icon'>
+                                                                <LinkIcon />
+                                                            </div>
+                                                            <span>Copy URL</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     {!post?.parent_post_id && (
@@ -381,7 +415,7 @@ const Discussion = () => {
                                             <div className='started-discussion-container-row3'>
                                                 <div className='view-reply-like-counter'>
                                                     <div className='like-counter'>
-                                                        <button className={(post?.likes?.some(like => like.user_id === user?.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id)}>
+                                                        <button className={(post?.likes?.some(like => like.user_id === user?.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id, post?.user_id, post?.discussion?.title)}>
                                                             <Like />
                                                         </button>
                                                         <span>{post?.likes?.length || 0} likes</span>
@@ -430,9 +464,13 @@ const Discussion = () => {
                                                 <div className="reply-box">
                                                     <div className="reply-row1">
                                                         <div className='posted-reply-info'>
-                                                            <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                            <Link to={`/forum/profile/${levelOneReply?.postCreator?.id}/created_discussions`}>
+                                                                <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                            </Link>
                                                             <div className="post-creator-info">
-                                                                <span>{levelOneReply.postCreator.display_name}</span>
+                                                                <Link to={`/forum/profile/${levelOneReply?.postCreator?.id}/created_discussions`}>
+                                                                    {levelOneReply.postCreator.display_name}
+                                                                </Link>
                                                                 <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
                                                             </div>
                                                         </div>
@@ -469,7 +507,7 @@ const Discussion = () => {
                                                     <div className='reply-row3'>
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
-                                                                <button className={levelOneReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id)}><Like /></button>
+                                                                <button className={levelOneReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id, levelOneReply?.user_id, post?.discussion?.title)}><Like /></button>
                                                                 <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
