@@ -240,8 +240,8 @@ const Discussion = () => {
 
 
         try {
-            await axios.post('/api/forum/post/like', { 
-                post_id: postId, 
+            await axios.post('/api/forum/post/like', {
+                post_id: postId,
                 discussion_id: discussionId,
                 user_id: userId,
                 title: discussionTitle,
@@ -551,9 +551,13 @@ const Discussion = () => {
                                                                     <div className="reply-box">
                                                                         <div className="reply-row1">
                                                                             <div className='posted-reply-info'>
-                                                                                <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                <Link to={`/forum/profile/${levelTwoReply?.postCreator?.id}/created_discussions`}>
+                                                                                    <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                </Link>
                                                                                 <div className="post-creator-info">
-                                                                                    <span>{levelTwoReply.postCreator.display_name}</span>
+                                                                                    <Link to={`/forum/profile/${levelTwoReply?.postCreator?.id}/created_discussions`}>
+                                                                                        {levelTwoReply.postCreator.display_name}
+                                                                                    </Link>
                                                                                     <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
                                                                                 </div>
                                                                             </div>
@@ -633,9 +637,13 @@ const Discussion = () => {
                                                                                     <div className="reply-box">
                                                                                         <div className="reply-row1">
                                                                                             <div className='posted-reply-info'>
-                                                                                                <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                                <Link to={`/forum/profile/${levelThreeReply?.postCreator?.id}/created_discussions`}>
+                                                                                                    <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
+                                                                                                </Link>
                                                                                                 <div className="post-creator-info">
-                                                                                                    <span>{levelThreeReply.postCreator.display_name}</span>
+                                                                                                    <Link to={`/forum/profile/${levelThreeReply?.postCreator?.id}/created_discussions`}>
+                                                                                                        {levelThreeReply.postCreator.display_name}
+                                                                                                    </Link>
                                                                                                     <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
                                                                                                 </div>
                                                                                             </div>

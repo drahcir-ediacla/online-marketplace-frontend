@@ -20,7 +20,8 @@ const FilterNavigation = ({
     categoriesData,
     notificationData,
     tagsData,
-    className
+    notifications,
+    className,
 }) => {
 
     const { userId, tab } = useParams();
@@ -32,7 +33,6 @@ const FilterNavigation = ({
     const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
-    const [notifications, setNotifications] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
     const [user, setUser] = useState({})
@@ -102,7 +102,6 @@ const FilterNavigation = ({
             try {
                 const response = await axios.get('/api/forum-notifications')
                 const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setNotifications(sortedNotifications)
                 notificationData(sortedNotifications)
             } catch (err) {
                 console.log('Error fetching forum notifications:', err)

@@ -126,9 +126,29 @@ const ForumProfile = () => {
     const markAllAsRead = async () => {
         try {
             await axios.put('/api/read-all-forum-notifications', { read: true });
+            // Update the state to reflect the change
             setNotifications(notifications.map(notification => ({ ...notification, read: true })));
         } catch (error) {
-            console.error('Error marking notifications as read:', error);
+            console.error('Error marking all notifications as read:', error);
+        }
+    }
+
+    const deleteNotification = async (notificationId) => {
+        try {
+            await axios.delete(`/api/delete-forum-notification/${notificationId}`)
+            // Update the state to reflect the change
+            setNotifications(notifications.filter(notification => notification.id !== notificationId));
+        } catch (error) {
+            console.error('Error deleting notification:', error);
+        }
+    }
+
+    const deleteAllNotifications = async () => {
+        try {
+            await axios.delete('/api/delete-all-forum-notifications')
+            setNotifications([])
+        } catch (err) {
+            console.error('Error deleting all notifications', err)
         }
     }
 
@@ -292,6 +312,7 @@ const ForumProfile = () => {
                         categoriesData={setCategories}
                         notificationData={setNotifications}
                         tagsData={setAllTags}
+                        notifications={notifications}
                         className='profile-filter-navigation'
                     />
                     <div className='forum-profile-page-col2'>
@@ -371,7 +392,7 @@ const ForumProfile = () => {
                                                     <li onClick={markAllAsRead}>
                                                         <span>Mark All as Read</span>
                                                     </li>
-                                                    <li>
+                                                    <li onClick={deleteAllNotifications}>
                                                         <span>Clear All Notifications</span>
                                                     </li>
                                                 </ul>
@@ -386,7 +407,7 @@ const ForumProfile = () => {
                                         <ul>
                                             {notifications.slice(0, displayedNotificationsCount).map((notification) => (
                                                 <li key={notification.id}>
-                                                    <div className="delete-notif-btn">
+                                                    <div className="delete-notif-btn" onClick={() => deleteNotification(notification.id)}>
                                                         <i class="fa fa-times"></i>
                                                     </div>
                                                     <div className="notification-container" onClick={() => markAsRead(notification.id)}>
@@ -420,7 +441,7 @@ const ForumProfile = () => {
                                         <ul>
                                             {unreadNotifications.slice(0, displayedUnreadNotificationsCount).map((notification) => (
                                                 <li key={notification.id} >
-                                                    <div className="delete-notif-btn">
+                                                    <div className="delete-notif-btn" onClick={() => deleteNotification(notification.id)}>
                                                         <i class="fa fa-times"></i>
                                                     </div>
                                                     <div className="notification-container" onClick={() => markAsRead(notification.id)}>
