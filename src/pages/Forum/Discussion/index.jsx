@@ -13,6 +13,7 @@ import GTranslate from '../../../components/GTranslate';
 import LoginModal from '../../../components/Modal/LoginModal';
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import BtnReply from '../../../components/Button/BtnReply';
+import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import QuillEditor from '../../../components/QuillEditor';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
@@ -321,12 +322,14 @@ const Discussion = () => {
             : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
     };
 
-    const handleSubmit = async () => {
+    const handleSubmitReply = async (postUserId, discussionTitle) => {
         if (!user) {
             setLoginModalOpen(true)
         }
         try {
             await axios.post('/api/post/create', {
+                user_id: postUserId,
+                title: discussionTitle,
                 content: contentValue,
                 discussion_id: discussionId,
                 parent_post_id: parentPostId,
@@ -363,6 +366,9 @@ const Discussion = () => {
                         <SearchDiscussionBox />
                         {allPost.map(post => (
                             <>
+                                <div className="new-discussion-container">
+                                    <NewDiscussionBtn />
+                                </div>
                                 <div className="started-discussion-container" key={post?.post_id}>
                                     <div className='started-discussion-container-row1'>
                                         <div className='started-discussion-info'>
@@ -446,7 +452,7 @@ const Discussion = () => {
                                         />
 
                                         <div className='add-reply-button-container'>
-                                            <BtnGreen label='Post Reply' onClick={handleSubmit} />
+                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(post?.user_id, post?.discussion?.title)} />
                                             <BtnClear label='Cancel' onClick={cancelReply} />
                                         </div>
                                     </>
@@ -526,7 +532,7 @@ const Discussion = () => {
                                                         />
 
                                                         <div className='add-reply-button-container'>
-                                                            <BtnGreen label='Post Reply' onClick={handleSubmit} />
+                                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelOneReply?.user_id, levelOneReply?.discussion?.title)} />
                                                             <BtnClear label='Cancel' onClick={cancelReply} />
                                                         </div>
                                                     </>
@@ -613,7 +619,7 @@ const Discussion = () => {
                                                                             />
 
                                                                             <div className='add-reply-button-container'>
-                                                                                <BtnGreen label='Post Reply' onClick={handleSubmit} />
+                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelTwoReply?.user_id, levelTwoReply?.discussion?.title)} />
                                                                                 <BtnClear label='Cancel' onClick={cancelReply} />
                                                                             </div>
                                                                         </>
@@ -705,7 +711,7 @@ const Discussion = () => {
                                                                                             />
 
                                                                                             <div className='add-reply-button-container'>
-                                                                                                <BtnGreen label='Post Reply' onClick={handleSubmit} />
+                                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelThreeReply?.user_id, levelThreeReply?.discussion?.title)} />
                                                                                                 <BtnClear label='Cancel' onClick={cancelReply} />
                                                                                             </div>
                                                                                         </>

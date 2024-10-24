@@ -133,6 +133,12 @@
                 margin-left: 25px;
             }
 
+            .new-discussion-container {
+                display: flex;
+                justify-content: flex-end;
+                margin-bottom: 20px;
+            }
+
             .started-discussion-container {
                 display: flex;
                 flex-direction: column;
