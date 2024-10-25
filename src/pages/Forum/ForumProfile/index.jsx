@@ -19,6 +19,7 @@ import Input from '../../../components/FormField/Input';
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
 import LoginModal from '../../../components/Modal/LoginModal';
+import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.svg';
 
 
@@ -31,9 +32,11 @@ const ForumProfile = () => {
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
+    const [paramsUser, setParamsUser] = useState({})
     const [categories, setCategories] = useState([])
     const [allTags, setAllTags] = useState([])
     const [notifications, setNotifications] = useState([]);
+    const [activities, setActivities] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -302,15 +305,17 @@ const ForumProfile = () => {
                 <div className="forum-profile-container">
                     <FilterNavigation
                         authUser={user}
+                        paramsUserData={setParamsUser}
                         createdDiscussions={() => openContent(0)}
                         joinedDiscussions={() => openContent(1)}
-                        likedDiscussions={() => openContent(2)}
+                        userActivity={() => openContent(2)}
                         forumNotifications={() => openContent(3)}
                         addDiscussions={() => openContent(4)}
                         discussionFilter={discussionFilter}
                         onClick={loginModal}
                         categoriesData={setCategories}
                         notificationData={setNotifications}
+                        activitiesData={setActivities}
                         tagsData={setAllTags}
                         notifications={notifications}
                         className='profile-filter-navigation'
@@ -341,36 +346,29 @@ const ForumProfile = () => {
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
-                                    <h4>Likes (29)</h4>
+                                    <h4>Latest Activity</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='I just recieved an email warning me that "Your account has a gap of two days or more between your set handling time and your actual handling time. You can choose to close this gap by manually setting an accurate handling time on your account and skus or by enabling automated handling time.'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
-                                <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='User-generated reviews and discussions about products available on your marketplace.'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
-                                <ForumDiscussionCard
-                                    title='Possible Scamming Ring Uncovered!'
-                                    postedMessage='I was trying to print shipping labels the last several days, unable to successfully get it, when I clicked the inventories I’m about to ship out, instead of putting in the same labels it puts in to different boxes. Do to that the weight is too light, even I can’t ship in different boxes. An example I have 5 items, so it puts and pick like one here, two there… two…. I don’t get it'
-                                    author='Seller_zGoDlPZLneGhF'
-                                    date='3 hours ago'
-                                    like='4.5k'
-                                    replies='4.5k'
-                                    views='1.2M'
-                                />
+                                {activities?.length === 0 ? (
+                                    <div className='no-activity'>{paramsUser?.display_name} don't have any activity</div>
+                                ) : (
+                                    <ul>
+                                        {activities?.map(activity => (
+                                            <li key={activity?.id}>
+                                                <div className='activity-container'>
+                                                    <div className="user-avatar">
+                                                        <img src={activity?.SubjectUser?.profile_pic || DefaultAvatar} alt="" />
+                                                    </div>
+                                                    <div className="activity-info">
+                                                        <div><span dangerouslySetInnerHTML={{ __html: activity.message }} /></div>
+                                                        <div className="date">{formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true, locale: enUS })}</div>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>

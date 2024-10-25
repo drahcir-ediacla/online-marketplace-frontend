@@ -12,14 +12,16 @@ const FilterNavigation = ({
     authUser,
     createdDiscussions,
     joinedDiscussions,
-    likedDiscussions,
+    userActivity,
     forumNotifications,
     addDiscussions,
     discussionFilter,
     onClick,
     categoriesData,
     notificationData,
+    activitiesData,
     tagsData,
+    paramsUserData,
     notifications,
     className,
 }) => {
@@ -53,6 +55,7 @@ const FilterNavigation = ({
                 // Destructure only the properties you want
                 const { id, display_name, profile_pic, createdAt } = response.data;
                 setUser({ id, display_name, profile_pic, createdAt })
+                paramsUserData(response.data)
             } catch (error) {
                 console.log('Error fetching data:', error)
             }
@@ -112,6 +115,20 @@ const FilterNavigation = ({
 
 
     useEffect(() => {
+        const fetchForumActivities = async () => {
+            try {
+                const response = await axios.get(`/api/forum-activities/${userId}`)
+                const sortedActivities = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                activitiesData(sortedActivities)
+            } catch (err) {
+                console.log('Error fetching forum activities:', err)
+            }
+        }
+        fetchForumActivities()
+    }, [])
+
+
+    useEffect(() => {
         switch (tab) {
             case 'created_discussions':
                 createdDiscussions();
@@ -121,8 +138,8 @@ const FilterNavigation = ({
                 joinedDiscussions();
                 setShowFilter(true);
                 break;
-            case 'liked_discussions':
-                likedDiscussions();
+            case 'user_activity':
+                userActivity();
                 setShowFilter(true);
                 break;
             case 'notifications':
@@ -149,9 +166,9 @@ const FilterNavigation = ({
         navigate(`/forum/profile/${userId}/joined_discussions`);
         joinedDiscussions(); // Call the function
     };
-    const handleLikedDiscussions = () => {
-        navigate(`/forum/profile/${userId}/liked_discussions`);
-        likedDiscussions(); // Call the function
+    const handleUserActivity = () => {
+        navigate(`/forum/profile/${userId}/user_activity`);
+        userActivity(); // Call the function
     };
     const handleForumNotifications = () => {
         navigate(`/forum/profile/${userId}/notifications`);
@@ -241,7 +258,7 @@ const FilterNavigation = ({
                             <ul className='forum-profile-menu'>
                                 <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
                                 <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
-                                <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
+                                <li onClick={handleUserActivity}>Latest Activity</li>
                                 {authUserIdNumber === userIdNumber ? (
                                     <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
                                 ) : (
@@ -266,7 +283,7 @@ const FilterNavigation = ({
                                 <ul className='forum-profile-menu'>
                                     <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
                                     <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
-                                    <li onClick={handleLikedDiscussions}>Likes <span className='forum-activity-counter'>(82)</span></li>
+                                    <li onClick={handleUserActivity}>Latest Activity</li>
                                     {authUserIdNumber === userIdNumber ? (
                                         <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
                                     ) : (
