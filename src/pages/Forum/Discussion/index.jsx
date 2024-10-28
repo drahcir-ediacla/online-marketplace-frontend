@@ -230,7 +230,7 @@ const Discussion = () => {
     };
 
 
-    const handleLikeChange = async (postId, userId, discussionTitle) => {
+    const handleLikeChange = async (postId, userId, discussionTitle, postCreatorName) => {
         if (!user) {
             setLoginModalOpen(true); // Open login modal if the user is not authenticated
             return;
@@ -246,6 +246,7 @@ const Discussion = () => {
                 discussion_id: discussionId,
                 user_id: userId,
                 title: discussionTitle,
+                postCreatorName: postCreatorName,
             });
 
             // Fetch the updated posts
@@ -322,7 +323,7 @@ const Discussion = () => {
             : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
     };
 
-    const handleSubmitReply = async (postUserId, discussionTitle) => {
+    const handleSubmitReply = async (postUserId, discussionTitle, postCreatorName) => {
         if (!user) {
             setLoginModalOpen(true)
         }
@@ -333,6 +334,7 @@ const Discussion = () => {
                 content: contentValue,
                 discussion_id: discussionId,
                 parent_post_id: parentPostId,
+                postCreatorName: postCreatorName
             });
 
             // Optionally, refetch posts here if needed
@@ -421,7 +423,7 @@ const Discussion = () => {
                                             <div className='started-discussion-container-row3'>
                                                 <div className='view-reply-like-counter'>
                                                     <div className='like-counter'>
-                                                        <button className={(post?.likes?.some(like => like.user_id === user?.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id, post?.user_id, post?.discussion?.title)}>
+                                                        <button className={(post?.likes?.some(like => like.user_id === user?.id)) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(post?.post_id, post?.user_id, post?.discussion?.title, post?.postCreator?.display_name)}>
                                                             <Like />
                                                         </button>
                                                         <span>{post?.likes?.length || 0} likes</span>
@@ -452,7 +454,7 @@ const Discussion = () => {
                                         />
 
                                         <div className='add-reply-button-container'>
-                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(post?.user_id, post?.discussion?.title)} />
+                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(post?.user_id, post?.discussion?.title, post?.postCreator?.display_name)} />
                                             <BtnClear label='Cancel' onClick={cancelReply} />
                                         </div>
                                     </>
@@ -513,7 +515,7 @@ const Discussion = () => {
                                                     <div className='reply-row3'>
                                                         <div className='view-reply-like-counter'>
                                                             <div className='like-counter'>
-                                                                <button className={levelOneReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id, levelOneReply?.user_id, post?.discussion?.title)}><Like /></button>
+                                                                <button className={levelOneReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelOneReply?.post_id, levelOneReply?.user_id, post?.discussion?.title, levelOneReply?.postCreator?.display_name)}><Like /></button>
                                                                 <span>{levelOneReply?.likes?.length || 0} likes</span>
                                                             </div>
                                                         </div>
@@ -532,7 +534,7 @@ const Discussion = () => {
                                                         />
 
                                                         <div className='add-reply-button-container'>
-                                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelOneReply?.user_id, levelOneReply?.discussion?.title)} />
+                                                            <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelOneReply?.user_id, post?.discussion?.title, levelOneReply?.postCreator?.display_name)} />
                                                             <BtnClear label='Cancel' onClick={cancelReply} />
                                                         </div>
                                                     </>
@@ -600,7 +602,7 @@ const Discussion = () => {
                                                                         <div className='reply-row3'>
                                                                             <div className='view-reply-like-counter'>
                                                                                 <div className='like-counter'>
-                                                                                    <button className={levelTwoReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelTwoReply?.post_id)}><Like /></button>
+                                                                                    <button className={levelTwoReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelTwoReply?.post_id, levelTwoReply?.user_id, post?.discussion?.title, levelTwoReply?.postCreator?.display_name)}><Like /></button>
                                                                                     <span>{levelTwoReply?.likes?.length || 0} likes</span>
                                                                                 </div>
                                                                             </div>
@@ -619,7 +621,7 @@ const Discussion = () => {
                                                                             />
 
                                                                             <div className='add-reply-button-container'>
-                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelTwoReply?.user_id, levelTwoReply?.discussion?.title)} />
+                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelTwoReply?.user_id, post?.discussion?.title, levelTwoReply?.postCreator?.display_name)} />
                                                                                 <BtnClear label='Cancel' onClick={cancelReply} />
                                                                             </div>
                                                                         </>
@@ -692,7 +694,7 @@ const Discussion = () => {
                                                                                         <div className='reply-row3'>
                                                                                             <div className='view-reply-like-counter'>
                                                                                                 <div className='like-counter'>
-                                                                                                    <button className={levelThreeReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelThreeReply?.post_id)}><Like /></button>
+                                                                                                    <button className={levelThreeReply.likes.some(like => like.user_id === user?.id) ? 'like-msg-icon-blue' : 'like-msg-icon'} onClick={() => handleLikeChange(levelThreeReply?.post_id, levelThreeReply?.user_id, post?.discussion?.title, levelThreeReply?.postCreator?.display_name)}><Like /></button>
                                                                                                     <span>{levelThreeReply?.likes?.length || 0} likes</span>
                                                                                                 </div>
                                                                                             </div>
@@ -711,7 +713,7 @@ const Discussion = () => {
                                                                                             />
 
                                                                                             <div className='add-reply-button-container'>
-                                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelThreeReply?.user_id, levelThreeReply?.discussion?.title)} />
+                                                                                                <BtnGreen label='Post Reply' onClick={() => handleSubmitReply(levelThreeReply?.user_id, post?.discussion?.title, levelThreeReply?.postCreator?.display_name)} />
                                                                                                 <BtnClear label='Cancel' onClick={cancelReply} />
                                                                                             </div>
                                                                                         </>
