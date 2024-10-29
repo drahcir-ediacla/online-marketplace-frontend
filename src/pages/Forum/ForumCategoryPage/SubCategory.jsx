@@ -19,10 +19,16 @@ const ForumSubCategoryPage = () => {
 
     const { user } = useAuthentication();
     const { id, name } = useParams()
-    const [categoryData, setCategoryData] = useState({})
-    const [discussionFilter, setDiscussionFilter] = useState(false)
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
+    const [categoryData, setCategoryData] = useState({})
+    const [discussionFilter] = useState(true)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
+    const [sortDiscussions, setSortDiscussions] = useState([])
+    const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
+        {
+            label: option,
+            value: option.toLowerCase()
+        }));
 
     useEffect(() => {
         const fetchCategoryData = async () => {
@@ -34,10 +40,39 @@ const ForumSubCategoryPage = () => {
             }
         }
         fetchCategoryData()
-    }, [])
+    }, [id, name])
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
+    const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Sort by most viewed (descending by total views)
+    const mostViewed = [...discussions].sort((a, b) => {
+        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        return viewsB - viewsA;
+    });
+
+    // Sort by most liked (descending by total likes)
+    const mostLiked = [...discussions].sort((a, b) => {
+        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        return likesB - likesA;
+    });
+
+    const handleOptionSelect = (option) => {
+
+        if (option.value === 'most recent') {
+            setSortDiscussions(mostRecent);
+        }
+
+        if (option.value === 'most viewed') {
+            setSortDiscussions(mostViewed);
+        }
+
+        if (option.value === 'most liked') {
+            setSortDiscussions(mostLiked);
+        }
+    };
 
 
     const handleNewDiscussionClick = () => {
@@ -66,7 +101,13 @@ const ForumSubCategoryPage = () => {
                 <Header authUser={user} />
                 <div>
                     <div className="forum-category-page-container">
-                        <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
+                        <FilterNavigation
+                            authUser={user}
+                            sortOptions={filterDiscussionOptions}
+                            discussionFilter={discussionFilter}
+                            onClick={loginModal}
+                            onOptionSelect={handleOptionSelect}
+                        />
                         <div className='forum-category-page-col2'>
                             <div className='language-selector-container'>
                                 <GTranslate />
@@ -80,21 +121,18 @@ const ForumSubCategoryPage = () => {
                                     </div>
                                     {subcategories && subcategories.length > 0 && (
                                         <ForumSubCategory
-                                            data={subcategories}
-                                            replies='102k'
-                                            views='27.9M'
-                                            lastActivity='1h ago'
+                                            data={categoryData}
                                         />
                                     )}
                                 </div>
                                 <div className='discussion-list'>
-                                    {discussions && discussions.length > 0 && (
+                                    {sortDiscussions && sortDiscussions.length > 0 ? (
+                                        <ForumDiscussionCard
+                                            data={sortDiscussions}
+                                        />
+                                    ) : (
                                         <ForumDiscussionCard
                                             data={discussions}
-                                            date='3 hours ago'
-                                            like='4.5k'
-                                            replies='4.5k'
-                                            views='1.2M'
                                         />
                                     )}
                                 </div>

@@ -2,16 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './CustomSelect.css'; // Import your CSS file for styling
 
-const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
+const CustomSelect = ({ data, className, onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const dropDownOption = useRef(null);
 
-  // useEffect(() => {
-  //   const defaultOption = data[0].find(option => option.value === defaultSelected);
-  //   setSelectedOption(defaultOption);
-  // }, [defaultSelected, data]);
-
+ 
 
    const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -43,7 +39,7 @@ const CustomSelect = ({ data, className, defaultSelected, onOptionSelect }) => {
   return (
     <div className={`custom-select ${className} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown} ref={dropDownOption}>
       <div className="selected-option">
-        {selectedOption ? selectedOption.label : 'Inbox'}
+        {selectedOption ? selectedOption.label : data[0]?.label}
       </div>
       <div className='arrow-down'></div>
       <div className="options">

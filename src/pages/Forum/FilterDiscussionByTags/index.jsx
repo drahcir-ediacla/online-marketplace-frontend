@@ -21,9 +21,7 @@ const FilterDiscussionByTags = () => {
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
-    console.log('FilterDiscussionByTags discussions:', discussions)
     const [selectedTags, setSelectedTags] = useState(location.state || []);
-    console.log('FilterDiscussionByTags selectedTags:', selectedTags)
 
     useEffect(() => {
         // If location.state is not null or undefined, update state

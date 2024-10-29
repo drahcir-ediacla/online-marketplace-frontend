@@ -23,6 +23,8 @@ const FilterNavigation = ({
     tagsData,
     paramsUserData,
     notifications,
+    sortOptions,
+    onOptionSelect,
     className,
 }) => {
 
@@ -140,7 +142,7 @@ const FilterNavigation = ({
                 break;
             case 'user_activity':
                 userActivity();
-                setShowFilter(true);
+                setShowFilter(false);
                 break;
             case 'notifications':
                 forumNotifications();
@@ -174,20 +176,6 @@ const FilterNavigation = ({
         navigate(`/forum/profile/${userId}/notifications`);
         forumNotifications(); // Call the function
     };
-    const sortBy = [
-        {
-            label: 'Most Recent',
-            value: 'Most Recent',
-        },
-        {
-            label: 'Most Viewed',
-            value: 'Most Viewed',
-        },
-        {
-            label: 'Most Liked',
-            value: 'Most Liked',
-        },
-    ];
 
     const toggleTag = (tag_id) => {
         setSelectedTags((prevSelectedTags) => {
@@ -300,23 +288,18 @@ const FilterNavigation = ({
                         <div className='forum-sortby'>
                             <label>SORT BY</label>
                             <CustomSelect
-                                id="genderID"
-                                name="gender"
-                                defaultOption='Please select your gender --'
-                                data={sortBy}
+                                data={sortOptions}
+                                onOptionSelect={onOptionSelect}
                                 className='forum-sortby-dropdown-select'
                             />
                         </div>
-                        <div className='forum-last-updated'>
+                        {/* <div className='forum-last-updated'>
                             <label>LAST UPDATED</label>
                             <CustomSelect
-                                id="genderID"
-                                name="gender"
-                                defaultOption='Please select your gender --'
                                 data={sortBy}
                                 className='forum-sortby-dropdown-select'
                             />
-                        </div>
+                        </div> */}
                     </>
                 )}
                 <div className='forum-category-page-row2'>

@@ -56,6 +56,12 @@ const ForumProfile = () => {
     const dropDownNotif = useRef();
     const [displayedNotificationsCount, setDisplayedNotificationsCount] = useState(20);
     const [displayedUnreadNotificationsCount, setDisplayedUnreadNotificationsCount] = useState(20);
+    const [sortDiscussions, setSortDiscussions] = useState([])
+    const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
+        {
+            label: option,
+            value: option.toLowerCase()
+        }));
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
@@ -96,19 +102,80 @@ const ForumProfile = () => {
         };
     }, []);
 
-    const createdDiscussions = categories?.allDiscussions?.filter(
-        (discussion) => (discussion.user_id === userIdNumber)
-    )
+    // Ensure createdDiscussions is always an array
+    const createdDiscussions = Array.isArray(categories?.allDiscussions)
+        ? categories.allDiscussions.filter((discussion) => discussion.user_id === userIdNumber)
+        : [];
+    const mostRecentCD = [...createdDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    const joinedDiscussions = categories?.allDiscussions?.filter(discussion =>
-        discussion.post.some(post =>
-            post.replies.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
-                levelOneReply.replies.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
-                    levelTwoReply.replies.some(levelThreeReply => levelThreeReply.user_id === userIdNumber)
+    const mostViewedCD = [...createdDiscussions].sort((a, b) => {
+        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        return viewsB - viewsA;
+    });
+
+
+    const mostLikedCD = [...createdDiscussions].sort((a, b) => {
+        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        return likesB - likesA;
+    });
+
+    // Ensure joinedDiscussions is always an array
+    const joinedDiscussions = Array.isArray(categories?.allDiscussions)
+        ? categories.allDiscussions.filter(discussion =>
+            discussion.post.some(post =>
+                post.replies?.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
+                    levelOneReply.replies?.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
+                        levelTwoReply.replies?.some(levelThreeReply => levelThreeReply.user_id === userIdNumber)
+                    )
                 )
             )
         )
-    );
+        : [];
+
+    const mostRecentJD = [...joinedDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Sort by most viewed (descending by total views)
+    const mostViewedJD = [...joinedDiscussions].sort((a, b) => {
+        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        return viewsB - viewsA;
+    });
+
+    // Sort by most liked (descending by total likes)
+    const mostLikedJD = [...joinedDiscussions].sort((a, b) => {
+        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        return likesB - likesA;
+    });
+
+
+    const handleOptionSelect = (option) => {
+
+        if (option.value === 'most recent' && activeTab === 0) {
+            setSortDiscussions(mostRecentCD);
+        }
+
+        if (option.value === 'most viewed' && activeTab === 0) {
+            setSortDiscussions(mostViewedCD);
+        }
+
+        if (option.value === 'most liked' && activeTab === 0) {
+            setSortDiscussions(mostLikedCD);
+        }
+
+        if (option.value === 'most recent' && activeTab === 1) {
+            setSortDiscussions(mostRecentJD);
+        }
+
+        if (option.value === 'most viewed' && activeTab === 1) {
+            setSortDiscussions(mostViewedJD);
+        }
+
+        if (option.value === 'most liked' && activeTab === 1) {
+            setSortDiscussions(mostLikedJD);
+        }
+    };
 
     const unreadNotifications = notifications?.filter(
         (notification) => (notification.read === false)
@@ -317,6 +384,8 @@ const ForumProfile = () => {
                         notificationData={setNotifications}
                         activitiesData={setActivities}
                         tagsData={setAllTags}
+                        sortOptions={filterDiscussionOptions}
+                        onOptionSelect={handleOptionSelect}
                         notifications={notifications}
                         className='profile-filter-navigation'
                     />
@@ -331,18 +400,30 @@ const ForumProfile = () => {
                                     <h4>Created Discussions ({createdDiscussions?.length})</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                <ForumDiscussionCard
-                                    data={createdDiscussions}
-                                />
+                                {sortDiscussions && sortDiscussions.length > 0 ? (
+                                    <ForumDiscussionCard
+                                        data={sortDiscussions}
+                                    />
+                                ) : (
+                                    <ForumDiscussionCard
+                                        data={createdDiscussions}
+                                    />
+                                )}
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
                                     <h4>Joined Discussions ({joinedDiscussions?.length})</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                <ForumDiscussionCard
-                                    data={joinedDiscussions}
-                                />
+                                {sortDiscussions && sortDiscussions.length > 0 ? (
+                                    <ForumDiscussionCard
+                                        data={sortDiscussions}
+                                    />
+                                ) : (
+                                    <ForumDiscussionCard
+                                        data={joinedDiscussions}
+                                    />
+                                )}
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>

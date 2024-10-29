@@ -19,10 +19,16 @@ const ForumCategoryPage = () => {
 
     const { user } = useAuthentication();
     const { id, name } = useParams()
-    const [categoryData, setCategoryData] = useState({})
-    const [discussionFilter] = useState(false)
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const navigate = useNavigate();
+    const [categoryData, setCategoryData] = useState({})
+    const [discussionFilter] = useState(true)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
+    const [sortDiscussions, setSortDiscussions] = useState([])
+    const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
+        {
+            label: option,
+            value: option.toLowerCase()
+        }));
 
 
     useEffect(() => {
@@ -39,7 +45,35 @@ const ForumCategoryPage = () => {
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
+    const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Sort by most viewed (descending by total views)
+    const mostViewed = [...discussions].sort((a, b) => {
+        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        return viewsB - viewsA;
+    });
 
+    // Sort by most liked (descending by total likes)
+    const mostLiked = [...discussions].sort((a, b) => {
+        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        return likesB - likesA;
+    });
+
+    const handleOptionSelect = (option) => {
+
+        if (option.value === 'most recent') {
+            setSortDiscussions(mostRecent);
+        }
+
+        if (option.value === 'most viewed') {
+            setSortDiscussions(mostViewed);
+        }
+
+        if (option.value === 'most liked') {
+            setSortDiscussions(mostLiked);
+        }
+    };
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -64,40 +98,50 @@ const ForumCategoryPage = () => {
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
-            <Header authUser={user} />
-            <div>
-                <div className="forum-category-page-container">
-                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} />
-                    <div className='forum-category-page-col2'>
-                        <div className='language-selector-container'>
-                            <GTranslate />
-                        </div>
-                        <SearchDiscussionBox />
-                        <div className="discussions-container">
-                            <div className="category-container">
-                                <div className="category-name">
-                                    <h4>{categoryData.name}</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                                </div>
-                                {subcategories && subcategories.length > 0 && (
-                                    <ForumSubCategory
-                                        data={categoryData}
-                                    />
-                                )}
+                <Header authUser={user} />
+                <div>
+                    <div className="forum-category-page-container">
+                        <FilterNavigation 
+                        authUser={user} 
+                        sortOptions={filterDiscussionOptions}
+                        discussionFilter={discussionFilter} 
+                        onClick={loginModal} 
+                        onOptionSelect={handleOptionSelect}
+                        />
+                        <div className='forum-category-page-col2'>
+                            <div className='language-selector-container'>
+                                <GTranslate />
                             </div>
-                            <div className='recent-discussion'>
-                                <h6>Recent Discussions</h6>
-                                {discussions && discussions.length > 0 && (
-                                    <ForumDiscussionCard
-                                        data={discussions}
-                                    />
-                                )}
+                            <SearchDiscussionBox />
+                            <div className="discussions-container">
+                                <div className="category-container">
+                                    <div className="category-name">
+                                        <h4>{categoryData.name}</h4>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    </div>
+                                    {subcategories && subcategories.length > 0 && (
+                                        <ForumSubCategory
+                                            data={categoryData}
+                                        />
+                                    )}
+                                </div>
+                                <div className='recent-discussion'>
+                                    <h6>Recent Discussions</h6>
+                                    {sortDiscussions && sortDiscussions.length > 0 ? (
+                                        <ForumDiscussionCard
+                                            data={sortDiscussions}
+                                        />
+                                    ) : (
+                                        <ForumDiscussionCard
+                                            data={discussions}
+                                        />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <Footer className='forum-category-footer' />
+                <Footer className='forum-category-footer' />
             </div>
         </>
     )
