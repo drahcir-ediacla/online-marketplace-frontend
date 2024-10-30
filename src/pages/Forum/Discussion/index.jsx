@@ -323,6 +323,14 @@ const Discussion = () => {
             : formatDistanceToNow(date, { addSuffix: true, locale: enUS });
     };
 
+    const handleNewDiscussionClick = () => {
+        if (!user) {
+            setLoginModalOpen(true)
+        } else {
+            navigate(`/forum/profile/${user.id}/add_discussions`);
+        }
+    };
+
     const handleSubmitReply = async (postUserId, discussionTitle, postCreatorName) => {
         if (!user) {
             setLoginModalOpen(true)
@@ -369,7 +377,7 @@ const Discussion = () => {
                         {allPost.map(post => (
                             <>
                                 <div className="new-discussion-container">
-                                    <NewDiscussionBtn />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 <div className="started-discussion-container" key={post?.post_id}>
                                     <div className='started-discussion-container-row1'>

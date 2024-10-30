@@ -44,6 +44,7 @@ const ForumSubCategoryPage = () => {
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
+    const descendingDiscussions = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     // Sort by most viewed (descending by total views)
     const mostViewed = [...discussions].sort((a, b) => {
@@ -132,7 +133,7 @@ const ForumSubCategoryPage = () => {
                                         />
                                     ) : (
                                         <ForumDiscussionCard
-                                            data={discussions}
+                                            data={descendingDiscussions}
                                         />
                                     )}
                                 </div>

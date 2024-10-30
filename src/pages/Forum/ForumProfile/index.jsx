@@ -56,7 +56,8 @@ const ForumProfile = () => {
     const dropDownNotif = useRef();
     const [displayedNotificationsCount, setDisplayedNotificationsCount] = useState(20);
     const [displayedUnreadNotificationsCount, setDisplayedUnreadNotificationsCount] = useState(20);
-    const [sortDiscussions, setSortDiscussions] = useState([])
+    const [sortCD, setSortCD] = useState([])
+    const [sortJD, setSortJD] = useState([])
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
         {
             label: option,
@@ -102,28 +103,35 @@ const ForumProfile = () => {
         };
     }, []);
 
-    // Ensure createdDiscussions is always an array
-    const createdDiscussions = Array.isArray(categories?.allDiscussions)
-        ? categories.allDiscussions.filter((discussion) => discussion.user_id === userIdNumber)
-        : [];
-    const mostRecentCD = [...createdDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const { allDiscussions = [] } = categories || {};
 
-    const mostViewedCD = [...createdDiscussions].sort((a, b) => {
+    // Ensure createdDiscussions is always an array
+    const createdDiscussions = Array.isArray(allDiscussions)
+        ? allDiscussions.filter(discussion => discussion.user_id === userIdNumber)
+        : [];
+    const descendingCD = [...createdDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    const sortDiscussionsByDate = (a, b) => new Date(b.created_at) - new Date(a.created_at);
+
+    const sortDiscussionsByViews = (a, b) => {
         const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
         const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
         return viewsB - viewsA;
-    });
+    };
 
-
-    const mostLikedCD = [...createdDiscussions].sort((a, b) => {
+    const sortDiscussionsByLikes = (a, b) => {
         const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
         const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
         return likesB - likesA;
-    });
+    };
+
+    const mostRecentCD = [...createdDiscussions].sort(sortDiscussionsByDate);
+    const mostViewedCD = [...createdDiscussions].sort(sortDiscussionsByViews);
+    const mostLikedCD = [...createdDiscussions].sort(sortDiscussionsByLikes);
 
     // Ensure joinedDiscussions is always an array
-    const joinedDiscussions = Array.isArray(categories?.allDiscussions)
-        ? categories.allDiscussions.filter(discussion =>
+    const joinedDiscussions = Array.isArray(allDiscussions)
+        ? allDiscussions.filter(discussion =>
             discussion.post.some(post =>
                 post.replies?.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
                     levelOneReply.replies?.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
@@ -133,49 +141,35 @@ const ForumProfile = () => {
             )
         )
         : [];
+    const descendingJD = [...joinedDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    const mostRecentJD = [...joinedDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    // Sort by most viewed (descending by total views)
-    const mostViewedJD = [...joinedDiscussions].sort((a, b) => {
-        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
-        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
-        return viewsB - viewsA;
-    });
-
-    // Sort by most liked (descending by total likes)
-    const mostLikedJD = [...joinedDiscussions].sort((a, b) => {
-        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
-        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
-        return likesB - likesA;
-    });
-
+    const mostRecentJD = [...joinedDiscussions].sort(sortDiscussionsByDate);
+    const mostViewedJD = [...joinedDiscussions].sort(sortDiscussionsByViews);
+    const mostLikedJD = [...joinedDiscussions].sort(sortDiscussionsByLikes);
 
     const handleOptionSelect = (option) => {
+        const discussionSets = activeTab === 0
+            ? {
+                'most recent': mostRecentCD,
+                'most viewed': mostViewedCD,
+                'most liked': mostLikedCD
+            }
+            : {
+                'most recent': mostRecentJD,
+                'most viewed': mostViewedJD,
+                'most liked': mostLikedJD
+            };
 
-        if (option.value === 'most recent' && activeTab === 0) {
-            setSortDiscussions(mostRecentCD);
-        }
-
-        if (option.value === 'most viewed' && activeTab === 0) {
-            setSortDiscussions(mostViewedCD);
-        }
-
-        if (option.value === 'most liked' && activeTab === 0) {
-            setSortDiscussions(mostLikedCD);
-        }
-
-        if (option.value === 'most recent' && activeTab === 1) {
-            setSortDiscussions(mostRecentJD);
-        }
-
-        if (option.value === 'most viewed' && activeTab === 1) {
-            setSortDiscussions(mostViewedJD);
-        }
-
-        if (option.value === 'most liked' && activeTab === 1) {
-            setSortDiscussions(mostLikedJD);
+        const selectedDiscussions = discussionSets[option.value];
+        if (selectedDiscussions) {
+            if (activeTab === 0) {
+                setSortCD(selectedDiscussions);
+            } else {
+                setSortJD(selectedDiscussions);
+            }
         }
     };
+
 
     const unreadNotifications = notifications?.filter(
         (notification) => (notification.read === false)
@@ -400,13 +394,13 @@ const ForumProfile = () => {
                                     <h4>Created Discussions ({createdDiscussions?.length})</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                {sortDiscussions && sortDiscussions.length > 0 ? (
+                                {sortCD && sortCD.length > 0 ? (
                                     <ForumDiscussionCard
-                                        data={sortDiscussions}
+                                        data={sortCD}
                                     />
                                 ) : (
                                     <ForumDiscussionCard
-                                        data={createdDiscussions}
+                                        data={descendingCD}
                                     />
                                 )}
                             </div>
@@ -415,13 +409,13 @@ const ForumProfile = () => {
                                     <h4>Joined Discussions ({joinedDiscussions?.length})</h4>
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
-                                {sortDiscussions && sortDiscussions.length > 0 ? (
+                                {sortJD && sortJD.length > 0 ? (
                                     <ForumDiscussionCard
-                                        data={sortDiscussions}
+                                        data={sortJD}
                                     />
                                 ) : (
                                     <ForumDiscussionCard
-                                        data={joinedDiscussions}
+                                        data={descendingJD}
                                     />
                                 )}
                             </div>
