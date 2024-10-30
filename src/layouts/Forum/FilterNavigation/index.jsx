@@ -25,6 +25,7 @@ const FilterNavigation = ({
     notifications,
     sortOptions,
     onOptionSelect,
+    emptySortDiscussions,
     className,
 }) => {
 
@@ -177,11 +178,21 @@ const FilterNavigation = ({
         forumNotifications(); // Call the function
     };
 
+    const handleSelectedCategory = () => {
+        if (typeof emptySortDiscussions === 'function') {
+            emptySortDiscussions([]);
+        }
+    }
+
     const toggleTag = (tag_id) => {
         setSelectedTags((prevSelectedTags) => {
             const updatedTags = prevSelectedTags.includes(tag_id)
                 ? prevSelectedTags.filter((t) => t !== tag_id)
                 : [...prevSelectedTags, tag_id];
+
+                if (typeof emptySortDiscussions === 'function') {
+                    emptySortDiscussions([]);
+                }
 
             // Navigate with the updatedTags directly
             navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
@@ -308,7 +319,7 @@ const FilterNavigation = ({
                     </div>
                     <div className="forum-category-btn-container">
                         {categories?.categories?.map(category => (
-                            <NavLink activeclassname="active" key={category.id} className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`}>{category.name}</NavLink>
+                            <NavLink activeclassname="active" key={category.id} className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`} onClick={handleSelectedCategory}>{category.name}</NavLink>
                         ))}
                     </div>
 

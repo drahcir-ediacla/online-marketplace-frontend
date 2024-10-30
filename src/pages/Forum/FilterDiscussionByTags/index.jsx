@@ -22,6 +22,12 @@ const FilterDiscussionByTags = () => {
     const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || []);
+    const [sortDiscussions, setSortDiscussions] = useState([])
+    const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
+        {
+            label: option,
+            value: option.toLowerCase()
+        }));
 
     useEffect(() => {
         // If location.state is not null or undefined, update state
@@ -76,6 +82,38 @@ const FilterDiscussionByTags = () => {
         }
     }, [selectedTags]);
 
+    
+    const descendingDiscussions = [...discussions].sort((a, b) => new Date(b?.allDiscussionsInTag?.created_at) - new Date(a?.allDiscussionsInTag?.created_at));
+    const mostRecent = [...discussions].sort((a, b) => new Date(b?.allDiscussionsInTag?.created_at) - new Date(a?.allDiscussionsInTag?.created_at));
+    // Sort by most viewed (descending by total views)
+    const mostViewed = [...discussions].sort((a, b) => {
+        const viewsA = a.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        const viewsB = b.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.views || 0), 0);
+        return viewsB - viewsA;
+    });
+
+    // Sort by most liked (descending by total likes)
+    const mostLiked = [...discussions].sort((a, b) => {
+        const likesA = a.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesB = b.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        return likesB - likesA;
+    });
+
+    const handleOptionSelect = (option) => {
+
+        if (option.value === 'most recent') {
+            setSortDiscussions(mostRecent);
+        }
+
+        if (option.value === 'most viewed') {
+            setSortDiscussions(mostViewed);
+        }
+
+        if (option.value === 'most liked') {
+            setSortDiscussions(mostLiked);
+        }
+    };
+
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -99,7 +137,15 @@ const FilterDiscussionByTags = () => {
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div className='forum-filter-tags-page-container'>
-                    <FilterNavigation authUser={user} discussionFilter={discussionFilter} onClick={loginModal} className='filter-discussion-tags-page' />
+                    <FilterNavigation
+                        authUser={user}
+                        sortOptions={filterDiscussionOptions}
+                        discussionFilter={discussionFilter}
+                        onClick={loginModal}
+                        onOptionSelect={handleOptionSelect}
+                        emptySortDiscussions={setSortDiscussions}
+                        className='filter-discussion-tags-page'
+                    />
                     <div className='forum-filter-tags-page-container-col2'>
                         <div className='language-selector-container'>
                             <GTranslate />
@@ -112,10 +158,15 @@ const FilterDiscussionByTags = () => {
                             </div>
                             <div className='discussion-list'>
                                 {discussions && discussions.length > 0 ? (
-                                    <><FilterTagDiscussionCard
-                                        data={discussions}
-                                    />
-                                    </>
+                                    sortDiscussions && sortDiscussions.length > 0 ? (
+                                        <FilterTagDiscussionCard
+                                            data={sortDiscussions}
+                                        />
+                                    ) : (
+                                        <FilterTagDiscussionCard
+                                            data={descendingDiscussions}
+                                        />
+                                    )
                                 ) : (
                                     <>
                                         No discussions found!

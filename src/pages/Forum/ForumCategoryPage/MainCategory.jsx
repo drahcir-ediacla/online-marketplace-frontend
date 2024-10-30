@@ -108,6 +108,7 @@ const ForumCategoryPage = () => {
                         discussionFilter={discussionFilter} 
                         onClick={loginModal} 
                         onOptionSelect={handleOptionSelect}
+                        emptySortDiscussions={setSortDiscussions}
                         />
                         <div className='forum-category-page-col2'>
                             <div className='language-selector-container'>
