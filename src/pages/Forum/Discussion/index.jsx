@@ -11,9 +11,6 @@ import Footer from '../../../layouts/Forum/Footer';
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import GTranslate from '../../../components/GTranslate';
 import LoginModal from '../../../components/Modal/LoginModal';
-import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
-import BtnReply from '../../../components/Button/BtnReply';
-import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import QuillEditor from '../../../components/QuillEditor';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
@@ -22,8 +19,12 @@ import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import { ReactComponent as ThreeDots } from '../../../assets/images/three-dots.svg';
 import { ReactComponent as LinkIcon } from '../../../assets/images/link-icon.svg';
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
+import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
+import CustomSelect from '../../../components/FormField/CustomSelect';
+import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
+import BtnReply from '../../../components/Button/BtnReply';
 import AlertMessage from '../../../components/AlertMessage';
 
 
@@ -44,9 +45,17 @@ const Discussion = () => {
     const [parentPostId, setParentPostId] = useState(null);
     const [postId, setPostId] = useState(null)
     const [allPost, setAllPost] = useState([]);
+    const [firstLevelReplies, setFirstLevelReplies] = useState([])
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [threeDotsOption, setThreeDotsOption] = useState({})
     const [alert, setAlert] = useState({ show: false, type: '', message: '' });
+    const [selectedSort, setSelectedSort] = useState('')
+    const [sortDiscussions, setSortDiscussions] = useState([])
+    const filterDiscussionOptions = ['Most Recent', 'Most Liked'].map(option => (
+        {
+            label: option,
+            value: option.toLowerCase()
+        }));
 
 
     useEffect(() => {
@@ -57,6 +66,9 @@ const Discussion = () => {
             try {
                 const response = await axios.get(`/api/discussions/${discussionId}/posts`);
                 setAllPost(response.data);
+
+                const replies = response.data[0].replies.length > 0 ? response.data[0].replies : [];
+                setFirstLevelReplies(replies)
 
                 const firstPostId = response.data.length > 0 ? response.data[0].post_id : null;
                 setPostId(firstPostId);
@@ -172,6 +184,89 @@ const Discussion = () => {
         }, 500); // Small delay to ensure DOM update after expanding
     };
 
+    const handleLikeChange = async (postId, userId, discussionTitle, postCreatorName) => {
+        if (!user) {
+            setLoginModalOpen(true); // Open login modal if the user is not authenticated
+            return;
+        }
+
+        // Save the current scroll position
+        const currentScrollY = window.scrollY;
+
+
+        try {
+            await axios.post('/api/forum/post/like', {
+                post_id: postId,
+                discussion_id: discussionId,
+                user_id: userId,
+                title: discussionTitle,
+                postCreatorName: postCreatorName,
+            });
+
+            // Fetch the updated posts
+            const response = await axios.get(`/api/discussions/${discussionId}/posts`);
+            setAllPost(response.data);
+
+            const replies = response.data[0].replies || [];
+            setFirstLevelReplies(replies)
+
+            setSortDiscussions(handleOptionSelect(selectedSort))
+
+            // Get the element of the liked post
+            const postElement = document.getElementById(`post-${postId}`);
+            if (postElement) {
+                // Calculate the vertical center position
+                const elementPosition = postElement.getBoundingClientRect().top + window.scrollY;
+                const offset = (window.innerHeight / 2) - (postElement.offsetHeight / 2);
+
+                // Scroll to the post, centered in the viewport
+                window.scrollTo({
+                    top: elementPosition - offset,
+                    behavior: 'smooth' // Optional for smooth scrolling
+                });
+            } else {
+                // If the post element is not found, restore the previous scroll position
+                window.scrollTo(0, currentScrollY);
+            }
+
+        } catch (error) {
+            console.error('Error updating likes:', error);
+        }
+    };
+
+    const descendingReplies = [...firstLevelReplies].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const mostRecent = [...firstLevelReplies].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const allReplies = sortDiscussions && sortDiscussions.length > 0 ? sortDiscussions : descendingReplies || [];
+
+    // Another method to set allReplies value
+    // let allReplies;
+    // if (sortDiscussions && sortDiscussions.length > 0) {
+    //     allReplies = sortDiscussions;
+    // } else {
+    //     allReplies = descendingReplies;
+    // }
+
+
+    // Sort by most liked (descending by total likes)
+    const mostLiked = [...firstLevelReplies].sort((a, b) => {
+        const likesA = a.likes ? a.likes.length : 0; // Get the number of likes for post a
+        const likesB = b.likes ? b.likes.length : 0; // Get the number of likes for post b
+        return likesB - likesA; // Sort in descending order
+    });
+
+    const handleOptionSelect = async (option) => {
+
+        if (option.value === 'most recent') {
+            setSortDiscussions(mostRecent);
+            setSelectedSort('most recent')
+        }
+
+        if (option.value === 'most liked') {
+            setSortDiscussions(mostLiked);
+            setSelectedSort('most liked')
+        }
+    };
+
 
     const toggleLoginModal = () => {
         setLoginModalOpen((prev) => !prev)
@@ -228,54 +323,6 @@ const Discussion = () => {
             setAlert({ show: true, type: 'error', message: 'Failed to copy the URL. Please try again.' });
         }
     };
-
-
-    const handleLikeChange = async (postId, userId, discussionTitle, postCreatorName) => {
-        if (!user) {
-            setLoginModalOpen(true); // Open login modal if the user is not authenticated
-            return;
-        }
-
-        // Save the current scroll position
-        const currentScrollY = window.scrollY;
-
-
-        try {
-            await axios.post('/api/forum/post/like', {
-                post_id: postId,
-                discussion_id: discussionId,
-                user_id: userId,
-                title: discussionTitle,
-                postCreatorName: postCreatorName,
-            });
-
-            // Fetch the updated posts
-            const response = await axios.get(`/api/discussions/${discussionId}/posts`);
-            setAllPost(response.data);
-
-            // Get the element of the liked post
-            const postElement = document.getElementById(`post-${postId}`);
-
-            if (postElement) {
-                // Calculate the vertical center position
-                const elementPosition = postElement.getBoundingClientRect().top + window.scrollY;
-                const offset = (window.innerHeight / 2) - (postElement.offsetHeight / 2);
-
-                // Scroll to the post, centered in the viewport
-                window.scrollTo({
-                    top: elementPosition - offset,
-                    behavior: 'smooth' // Optional for smooth scrolling
-                });
-            } else {
-                // If the post element is not found, restore the previous scroll position
-                window.scrollTo(0, currentScrollY);
-            }
-        } catch (error) {
-            console.error('Error updating likes:', error);
-        }
-    };
-
-
 
 
     const cancelReply = () => {
@@ -347,6 +394,8 @@ const Discussion = () => {
 
             // Optionally, refetch posts here if needed
             const response = await axios.get(`/api/discussions/${discussionId}/posts`);
+            const replies = response.data[0].replies || [];
+            setFirstLevelReplies(replies)
             setOpenReply({});
             setContentValue('');
             setParentPostId(null);
@@ -438,7 +487,7 @@ const Discussion = () => {
                                                     </div>
                                                     <div className='reply-counter'>
                                                         <div className='reply-msg-icon'><MsgIcon /></div>
-                                                        <span>{totalReplies} replies</span>
+                                                        <span>{totalReplies > 1 ? `${totalReplies} replies` : `${totalReplies} reply`}</span>
                                                     </div>
                                                     <div className='view-counter'>
                                                         <div className='view-msg-icon'><EyeIcon /></div>
@@ -469,11 +518,18 @@ const Discussion = () => {
                                 )}
                                 {post.replies && post.replies.length > 0 &&
                                     <div className="filter-replies">
-                                        <span className='replies-counter'>{totalReplies} Replies</span>
-                                        <div><span>Sort By</span></div>
+                                        <span className='replies-counter'>{totalReplies > 1 ? `${totalReplies} Replies` : `${totalReplies} Reply`}</span>
+                                        <div className='replies-sortby-container' style={{display: 'flex'}}>
+                                            <span style={{flexShrink: '0'}}>Sort By:</span>
+                                            <CustomSelect
+                                                data={filterDiscussionOptions}
+                                                onOptionSelect={handleOptionSelect}
+                                                className='forum-sortby-dropdown-select'
+                                            />
+                                        </div>
                                     </div>
                                 }
-                                {post.replies.map(levelOneReply => (
+                                {allReplies.map(levelOneReply => (
                                     <>
                                         <div id={levelOneReply.post_id} className="all-replies-container" key={levelOneReply.post_id}>
                                             <div className='reply-container'>
@@ -552,9 +608,9 @@ const Discussion = () => {
                                                     ) : (
                                                         <>
                                                             {!showMoreReplies[levelOneReply?.post_id] ? (
-                                                                <button className='show-replies-btn' onClick={() => toggleShowMoreReplies(levelOneReply?.post_id)}>Show {levelOneReply.replies.length} replies</button>
+                                                                <button className='show-replies-btn' onClick={() => toggleShowMoreReplies(levelOneReply?.post_id)}>Show {levelOneReply.replies.length > 1 ? `${levelOneReply.replies.length} replies` : `${levelOneReply.replies.length} reply`}</button>
                                                             ) : (
-                                                                <button className='hide-replies-btn' onClick={() => toggleShowMoreReplies(levelOneReply?.post_id)}>Hide replies</button>
+                                                                <button className='hide-replies-btn' onClick={() => toggleShowMoreReplies(levelOneReply?.post_id)}>{levelOneReply.replies.length > 1 ? 'Hide replies' : 'Hide reply'}</button>
                                                             )}
                                                         </>
                                                     )}
@@ -639,9 +695,9 @@ const Discussion = () => {
                                                                         ) : (
                                                                             <>
                                                                                 {!showMoreReplies[levelTwoReply?.post_id] ? (
-                                                                                    <button className='show-replies-btn' onClick={() => toggleShowMoreReplies(levelTwoReply?.post_id)}>Show {levelTwoReply.replies.length} replies</button>
+                                                                                    <button className='show-replies-btn' onClick={() => toggleShowMoreReplies(levelTwoReply?.post_id)}>Show {levelTwoReply.replies.length > 1 ? `${levelTwoReply.replies.length} replies` : `${levelTwoReply.replies.length} reply`}</button>
                                                                                 ) : (
-                                                                                    <button className='hide-replies-btn' onClick={() => toggleShowMoreReplies(levelTwoReply?.post_id)}>Hide replies</button>
+                                                                                    <button className='hide-replies-btn' onClick={() => toggleShowMoreReplies(levelTwoReply?.post_id)}>{levelTwoReply.replies.length > 1 ? 'Hide replies' : 'Hide reply'}</button>
                                                                                 )}
                                                                             </>
                                                                         )}

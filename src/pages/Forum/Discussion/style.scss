@@ -183,7 +183,7 @@
                                     color: #838383;
                                 }
 
-                                a:hover{
+                                a:hover {
                                     text-decoration: underline;
                                 }
                             }
@@ -285,6 +285,25 @@
 
                 .replies-counter {
                     font-weight: 500;
+                }
+
+                .replies-sortby-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    span {
+                        flex-shrink: 0;
+                        font-weight: 500;
+                    }
+
+                    .forum-sortby-dropdown-select {
+                        width: 100%;
+                        height: 30px;
+                        padding: 0 10px;
+                        border-radius: 5px;
+                        border: 1px solid var(--gray-300);
+                    }
                 }
             }
 
