@@ -1,0 +1,57 @@
+.forum-page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .forum-search-result-page-container {
+        display: flex;
+        gap: 20px;
+        padding: 0 20px;
+
+        .forum-search-result-page-col2 {
+            width: 100%;
+            margin-bottom: 100px;
+
+            .language-selector-container {
+                width: 100%;
+                text-align: right;
+                margin: 10px 0;
+                padding: 0 10px;
+            }
+
+            .search-result-list-container {
+                .search-query-result-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .search-query-result-info-row1 {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .used-search-keyword {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            h4 {
+                                font-weight: 500;
+                                margin: 0;
+                            }
+                            span {
+                                font-size: 18px;
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+
+    .forum-search-results-footer {
+        margin-top: auto;
+    }
+}

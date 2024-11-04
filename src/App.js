@@ -43,6 +43,7 @@ const Dashboard = lazy(() => import('./pages/AdminPanel/Dashboard'));
 const PageNotFound = lazy(() => import('./pages/404/PageNotFound'));
 const NewItems = lazy(() => import('./components/NewItems'));
 const SearchResult = lazy(() => import('./pages/SearchResult'));
+const ForumSearchResult = lazy(() => import('./pages/Forum/ForumSearchResult'));
 const TestPage = lazy(() => import('./pages/TestPage'));
 
 
@@ -84,6 +85,7 @@ function App() {
             <Route path='/subcategory/:id/:label' element={<SubCategory />} />
             <Route path='/subsubcategory/:id/:label' element={<SubSubCategory />} />
             <Route path='/search-results' element={<SearchResult />} />
+            <Route path='/forum-search-results' element={<ForumSearchResult />} />
             <Route path='/forum' element={<ForumHomePage />} />
             <Route path='/forum/category/:id/:name' element={<ForumMainCategoryPage />} />
             <Route path='/forum/subcategory/:id/:name' element={<ForumSubCategoryPage />} />
