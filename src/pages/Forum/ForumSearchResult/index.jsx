@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
@@ -7,76 +7,51 @@ import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
-import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumSearchResultCard from '../../../components/Forum/ForumSearchResultCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import Pagination from '../../../components/Pagination/Pagination'
 
 
-
+let postsPerPage = 20;
 const ForumSearchResult = () => {
 
     const { user } = useAuthentication();
-    const { id, name } = useParams()
     const navigate = useNavigate();
     const location = useLocation();
     const searchTerm = new URLSearchParams(location.search).get('keyword');
-    const [categoryData, setCategoryData] = useState({})
-    const [discussionFilter] = useState(true)
+    const [searchResultsData, setSearchResultsData] = useState([])
+    const [discussionFilter] = useState(false)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-    const [sortDiscussions, setSortDiscussions] = useState([])
-    const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
-        {
-            label: option,
-            value: option.toLowerCase()
-        }));
+    
+    // const [postsPerPage] = useState(2);
 
     useEffect(() => {
-        const fetchCategoryData = async () => {
+        const fetchSearchResults = async () => {
+            setSearchResultsData([])
             try {
-                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
-                setCategoryData(response.data)
-            } catch (error) {
-                console.error("Error fetching data:", error);
+                const response = await axios.get(`/api/search-post?keyword=${searchTerm}`)
+                setSearchResultsData(response.data)
+            } catch (err) {
+                console.error('Error fetching search results:', err);
             }
         }
-        fetchCategoryData()
-    }, [id, name])
+        fetchSearchResults()
+    }, [searchTerm])
 
-    const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
-    const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
-    const descendingDiscussions = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    // Sort by most viewed (descending by total views)
-    const mostViewed = [...discussions].sort((a, b) => {
-        const viewsA = a.post.reduce((acc, post) => acc + (post.views || 0), 0);
-        const viewsB = b.post.reduce((acc, post) => acc + (post.views || 0), 0);
-        return viewsB - viewsA;
-    });
+    const [currentPage, setCurrentPage] = useState(1);
 
-    // Sort by most liked (descending by total likes)
-    const mostLiked = [...discussions].sort((a, b) => {
-        const likesA = a.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
-        const likesB = b.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
-        return likesB - likesA;
-    });
+    // Get current posts
+    const currentSearchResultsData = useMemo(() => {
+        const indexOfLastPost = currentPage * postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        // // const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+        return searchResultsData.slice(indexOfFirstPost, indexOfLastPost);
+    }, [currentPage, searchResultsData]);
 
-    const handleOptionSelect = (option) => {
-
-        if (option.value === 'most recent') {
-            setSortDiscussions(mostRecent);
-        }
-
-        if (option.value === 'most viewed') {
-            setSortDiscussions(mostViewed);
-        }
-
-        if (option.value === 'most liked') {
-            setSortDiscussions(mostLiked);
-        }
-    };
-
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const handleNewDiscussionClick = () => {
         if (!user) {
@@ -94,9 +69,6 @@ const ForumSearchResult = () => {
         setLoginModalOpen(true)
     }
 
-
-
-
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -106,10 +78,8 @@ const ForumSearchResult = () => {
                     <div className="forum-search-result-page-container">
                         <FilterNavigation
                             authUser={user}
-                            sortOptions={filterDiscussionOptions}
                             discussionFilter={discussionFilter}
                             onClick={loginModal}
-                            onOptionSelect={handleOptionSelect}
                         />
                         <div className='forum-search-result-page-col2'>
                             <div className='language-selector-container'>
@@ -120,15 +90,20 @@ const ForumSearchResult = () => {
                                 <div className="search-query-result-info">
                                     <div className='search-query-result-info-row1'>
                                         <div className="used-search-keyword">
-                                            <h4>Search results for "keyword"</h4>
-                                            <span>(402 results)</span>
+                                            <h4>Search results for "{searchTerm}"</h4>
+                                            <span>({searchResultsData.length} {searchResultsData.length > 1 ? 'posts found' : 'post found'})</span>
                                         </div>
                                         <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                     </div>
                                 </div>
                                 <div className='discussion-list'>
-                                    <ForumSearchResultCard />
+                                    <ForumSearchResultCard data={currentSearchResultsData} />
                                 </div>
+                                {searchResultsData.length > 20 &&
+                                    <div className='pagination-container'>
+                                        <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={searchResultsData.length} currentPage={currentPage} />
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

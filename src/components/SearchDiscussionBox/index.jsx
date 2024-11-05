@@ -12,7 +12,7 @@ const queryParams = new URLSearchParams(location.search);
 const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
 
 const handleSearch = () => {
-      navigate(`/forum-search-results?keyword=${searchTerm}`);
+      navigate(`/forum/forum-search-results?keyword=${searchTerm}`);
   };
 
   const handleKeyPress = (e) => {

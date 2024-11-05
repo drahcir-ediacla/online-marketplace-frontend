@@ -5,6 +5,7 @@ import { enUS } from 'date-fns/locale';
 import { ReactComponent as Like } from '../../../assets/images/like-icon.svg'
 import { ReactComponent as MsgIcon } from '../../../assets/images/message-icon.svg'
 import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
+import { ReactComponent as RepliedIcon } from '../../../assets/images/replied-icon.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
 const ForumSearchResultCard = ({ data }) => {
@@ -36,47 +37,28 @@ const ForumSearchResultCard = ({ data }) => {
     return (
         <>
             {data?.map(discussion => (
-                <div className="forum-discussion-card" key={discussion?.discussion_id}>
+                <div className="forum-discussion-card" key={discussion?.post?.post_id}>
                     <div className='forum-discussion-card-row1'>
                         <Link to={`/forum/profile/${discussion?.user_id}/created_discussions`}>
                             <img src={discussion?.discussionStarter?.profile_pic || DefaultAvatar} alt='' />
                         </Link>
                         <div className='forum-discussion-info'>
-                            <Link to={`/forum/discussion/${discussion?.discussion_id}`}>
-                                <h6>{discussion?.title}</h6>
+                            <Link to={`/forum/discussion/${discussion?.discussion_id}?repliedPostId=${discussion?.post?.post_id}`}>
+                                <h6>{discussion?.discussion_title}</h6>
                             </Link>
                             <small>
                                 by&nbsp;
-                                <Link to={`/forum/profile/${discussion?.user_id}/created_discussions`}>
+                                <Link to={`/forum/profile/${discussion?.discussion_user_id}/created_discussions`}>
                                     {discussion?.discussionStarter?.display_name}
                                 </Link>
-                                &nbsp;{getFormattedDate(discussion?.created_at)}
+                                &nbsp;{getFormattedDate(discussion?.discussion_created_at)}
                             </small>
                         </div>
                     </div>
-                    {discussion?.post?.map(post => (
-                        <>
-                            <div className='forum-discussion-card-row2' key={post?.post_id}>
-                                <div dangerouslySetInnerHTML={{ __html: post?.content }} />
-                            </div>
-                            <div className='forum-discussion-card-row3'>
-                                <div className="view-reply-like-counter">
-                                    <div className="like-counter">
-                                        <div className='like-msg-icon'><Like /></div>
-                                        <span>{post?.likes.length || 0} likes</span>
-                                    </div>
-                                    <div className="reply-counter">
-                                        <div className='reply-msg-icon'><MsgIcon /></div>
-                                        <span>{getTotalReplies(discussion?.post)} replies</span>
-                                    </div>
-                                    <div className="view-counter">
-                                        <div className='view-msg-icon'><EyeIcon /></div>
-                                        <span>{discussion?.post[0]?.views} views</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    ))}
+                    {discussion?.post?.level !== 0 && <div className='replied-icon'><RepliedIcon /> <small>Replied Post</small></div>}
+                    <div className='forum-discussion-card-row2'>
+                        <div dangerouslySetInnerHTML={{ __html: discussion?.post?.content }} />
+                    </div>
                 </div>
             ))}
         </>

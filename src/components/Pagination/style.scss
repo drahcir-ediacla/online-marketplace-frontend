@@ -1,7 +1,9 @@
 .pagination {
     display: flex;
-    .page-item{
-        .page-link{
+    justify-content: center;
+
+    .page-item {
+        .page-link {
             font-size: 15px;
             color: var(--gray-500);
             float: left;
@@ -11,13 +13,15 @@
             border: 1px solid var(--gray-200);
             margin: 0 4px;
         }
-        .page-link.active{
+
+        .page-link.active {
             background: linear-gradient(to right, #d53f3f, #dc6531);
             color: white;
             border: 1px solid var(--orange-200);
         }
-        .page-link:hover:not(.active){
+
+        .page-link:hover:not(.active) {
             background-color: #ddd;
         }
     }
-  }
+}
