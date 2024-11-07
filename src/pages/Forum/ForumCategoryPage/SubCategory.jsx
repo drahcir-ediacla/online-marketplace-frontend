@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../../apicalls/axios';
 import './style.scss'
@@ -12,6 +12,7 @@ import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 
 
 
@@ -20,10 +21,16 @@ const ForumSubCategoryPage = () => {
     const { user } = useAuthentication();
     const { id, name } = useParams()
     const navigate = useNavigate();
+    const observer = useRef();
     const [categoryData, setCategoryData] = useState({})
     const [discussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [sortDiscussions, setSortDiscussions] = useState([])
+    const [discussions, setDiscussions] = useState([]);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
         {
             label: option,
@@ -32,18 +39,46 @@ const ForumSubCategoryPage = () => {
 
     useEffect(() => {
         const fetchCategoryData = async () => {
+            if (loading || !hasMore) return; // Don't fetch if already loading or no more data
+
+            setLoading(true);
             try {
-                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
-                setCategoryData(response.data)
+                const response = await axios.get(`/api/forumcategory/${id}/${name}?page=${page}&limit=${limit}`);
+                setCategoryData(response.data);
+
+                const newDiscussion = response.data.allDiscussions
+                setDiscussions((prevData) => {
+                    const uniqueData = newDiscussion.filter(
+                        (item) => !prevData.some((existingItem) => existingItem.discussion_id === item.discussion_id)
+                    );
+                    return [...prevData, ...uniqueData];
+                });
+                setHasMore(newDiscussion.length > 0);
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
             }
         }
         fetchCategoryData()
-    }, [id, name])
+    }, [id, name, page, limit])
+
+    // Intersection Observer callback
+    const lastElementRef = (node) => {
+        if (loading) return; // Don't observe if loading
+
+        if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setPage((prevPage) => prevPage + 1); // Load next page
+            }
+        });
+
+        if (node) observer.current.observe(node); // Observe the last element
+    };
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
-    const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
     const descendingDiscussions = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     // Sort by most viewed (descending by total views)
@@ -137,6 +172,16 @@ const ForumSubCategoryPage = () => {
                                         />
                                     )}
                                 </div>
+                                {/* Trigger for the next page */}
+                                {hasMore && !loading && (
+                                    <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
+                                )}
+
+                                {/* Loading Indicator */}
+                                {loading && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
+
+                                {/* Message when there's no more data */}
+                                {!hasMore && <div className='no-more-data'>No more data to load</div>}
                             </div>
                         </div>
                     </div>

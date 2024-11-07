@@ -1,58 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
-const ExpandableText = ({ content, maxLength }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const InfiniteScroll = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);  // Track current page
+  const [hasMore, setHasMore] = useState(true); // To check if there's more data
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+  const observer = useRef();
+
+  useEffect(() => {
+    const fetchData = async () => {
+        if (loading || !hasMore) return; // Don't fetch if already loading or no more data
+
+        setLoading(true);
+
+        try {
+            const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=1`);
+            const newData = response.data;
+
+            // Check if new data already exists in the data array
+            setData((prevData) => {
+                const uniqueData = newData.filter(
+                    (item) => !prevData.some((existingItem) => existingItem.id === item.id)
+                );
+                return [...prevData, ...uniqueData];
+            });
+
+            // Set `hasMore` to false if no more data is returned
+            setHasMore(newData.length > 0);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchData();
+}, [page]);
+
+  // Intersection Observer callback
+  const lastElementRef = (node) => {
+    if (loading) return; // Don't observe if loading
+
+    if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prevPage) => prevPage + 1); // Load next page
+      }
+    });
+
+    if (node) observer.current.observe(node); // Observe the last element
   };
-
-  const displayContent = isExpanded ? content : content.substring(0, maxLength) + '...';
-
-  return (
-    <div style={styles.container}>
-      <p style={styles.text}>{displayContent}</p>
-      {/* Only show button if content length exceeds maxLength */}
-      {content.length > maxLength && (
-        <button onClick={toggleExpand} style={styles.button}>
-          {isExpanded ? 'Read Less' : 'Read More'}
-        </button>
-      )}
-    </div>
-  );
-};
-
-const styles = {
-  container: {
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    padding: '10px',
-    width: '300px',
-    margin: '20px auto',
-    textAlign: 'center',
-  },
-  text: {
-    margin: '0 0 10px 0',
-  },
-  button: {
-    padding: '8px 12px',
-    border: 'none',
-    borderRadius: '5px',
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    cursor: 'pointer',
-  },
-};
-
-const App = () => {
-  const longText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
   return (
     <div>
-      <h1>Expandable Text Example</h1>
-      <ExpandableText content={longText} maxLength={100} />
+      <h1>Infinite Scroll Example</h1>
+      <ul>
+        {data.map((item) => (
+          <li key={item.id}>
+            {item.title}
+            {/* You can add more details from `item` like item.body */}
+          </li>
+        ))}
+      </ul>
+
+      {/* Loading Indicator */}
+      {loading && <p>Loading...</p>}
+
+      {/* Trigger for the next page */}
+      {hasMore && !loading && (
+        <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
+      )}
+
+      {/* Message when there's no more data */}
+      {!hasMore && <p>No more data to load</p>}
     </div>
   );
 };
 
-export default App;
+export default InfiniteScroll;

@@ -94,8 +94,8 @@ const FilterDiscussionByTags = () => {
 
     // Sort by most liked (descending by total likes)
     const mostLiked = [...discussions].sort((a, b) => {
-        const likesA = a.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
-        const likesB = b.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.likes ? post.likes.length : 0), 0);
+        const likesA = a.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.parent_post_id === null ? post.likes.length : 0), 0);
+        const likesB = b.allDiscussionsInTag.post.reduce((acc, post) => acc + (post.parent_post_id === null ? post.likes.length : 0), 0);
         return likesB - likesA;
     });
 

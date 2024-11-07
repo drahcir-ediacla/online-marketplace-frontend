@@ -44,7 +44,7 @@ const ForumCategoryPage = () => {
     }, [id, name])
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
-    const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions : [];
+    const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions.slice(0, 10) : [];
     const descendingDiscussions = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const mostRecent = [...discussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     // Sort by most viewed (descending by total views)
@@ -94,7 +94,6 @@ const ForumCategoryPage = () => {
 
 
 
-
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -102,13 +101,13 @@ const ForumCategoryPage = () => {
                 <Header authUser={user} />
                 <div>
                     <div className="forum-category-page-container">
-                        <FilterNavigation 
-                        authUser={user} 
-                        sortOptions={filterDiscussionOptions}
-                        discussionFilter={discussionFilter} 
-                        onClick={loginModal} 
-                        onOptionSelect={handleOptionSelect}
-                        emptySortDiscussions={setSortDiscussions}
+                        <FilterNavigation
+                            authUser={user}
+                            sortOptions={filterDiscussionOptions}
+                            discussionFilter={discussionFilter}
+                            onClick={loginModal}
+                            onOptionSelect={handleOptionSelect}
+                            emptySortDiscussions={setSortDiscussions}
                         />
                         <div className='forum-category-page-col2'>
                             <div className='language-selector-container'>

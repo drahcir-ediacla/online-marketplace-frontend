@@ -14,7 +14,7 @@ import LoginModal from '../../../components/Modal/LoginModal';
 import Pagination from '../../../components/Pagination/Pagination'
 
 
-let postsPerPage = 20;
+let postsPerPage = 15;
 const ForumSearchResult = () => {
 
     const { user } = useAuthentication();
@@ -24,8 +24,6 @@ const ForumSearchResult = () => {
     const [searchResultsData, setSearchResultsData] = useState([])
     const [discussionFilter] = useState(false)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
-    
-    // const [postsPerPage] = useState(2);
 
     useEffect(() => {
         const fetchSearchResults = async () => {
@@ -99,7 +97,7 @@ const ForumSearchResult = () => {
                                 <div className='discussion-list'>
                                     <ForumSearchResultCard data={currentSearchResultsData} />
                                 </div>
-                                {searchResultsData.length > 20 &&
+                                {searchResultsData.length > 15 &&
                                     <div className='pagination-container'>
                                         <Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={searchResultsData.length} currentPage={currentPage} />
                                     </div>

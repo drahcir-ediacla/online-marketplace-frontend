@@ -5,8 +5,8 @@ import './style.scss'
 import useAuthentication from '../../hooks/authHook'
 import Header from '../../layouts/Forum/Header'
 import Footer from '../../layouts/Forum/Footer'
-import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
+import SearchDiscussionBox from '../../components/SearchDiscussionBox'
 import HomePageSubCategoryCard from '../../components/Forum/HomePageSubCategoryCard'
 import LoginModal from '../../components/Modal/LoginModal';
 import GTranslate from '../../components/GTranslate';
@@ -59,17 +59,7 @@ const ForumHomePage = () => {
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
-            <div className="search-box-container">
-                <div className='forum-search-box'>
-                    <input
-                        type="text"
-                        placeholder='Search discussions...'
-                    />
-                    <button>
-                        <div className='magnifying-glass'><MagnifyingGlass /></div>
-                    </button>
-                </div>
-            </div>
+            <SearchDiscussionBox />
             <div className="forum-categories-container">
                 <h1>Welcome to Yogeek Community</h1>
                 <div className='browse-by-category'>
@@ -99,10 +89,9 @@ const ForumHomePage = () => {
                         {forumCategories?.categories?.map(category => (
                             <div className="listed-category" key={category.id}>
                                 <div className='listed-category-title'><h4>{category.name}</h4></div>
-                                    <HomePageSubCategoryCard
-                                       subcategories={category.subcategories}
-                                       allDiscussions={forumCategories.allDiscussions}
-                                    />
+                                <HomePageSubCategoryCard
+                                    subcategories={category.subcategories}
+                                />
                             </div>
                         ))}
                     </div>

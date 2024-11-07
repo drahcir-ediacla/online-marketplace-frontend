@@ -8,7 +8,6 @@ import { ReactComponent as EyeIcon } from '../../../assets/images/eye-solid.svg'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 
 const FilterTagDiscussionCard = ({ data }) => {
-    console.log('data:', data)
 
     // Function to safely parse and format the date
     const getFormattedDate = (dateString) => {
