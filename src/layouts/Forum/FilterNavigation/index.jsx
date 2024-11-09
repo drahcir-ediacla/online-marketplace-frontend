@@ -10,14 +10,16 @@ import FilterTagModal from '../../../components/Modal/FilterTagModal'
 
 const FilterNavigation = ({
     authUser,
-    createdDiscussions,
-    joinedDiscussions,
-    userActivity,
-    forumNotifications,
-    addDiscussions,
+    createdDiscussionsTab,
+    joinedDiscussionsTab,
+    userActivityTab,
+    forumNotificationsTab,
+    addDiscussionsBtn,
     discussionFilter,
     onClick,
     categoriesData,
+    createdDiscussionsData,
+    joinedDiscussionsData,
     notificationData,
     activitiesData,
     tagsData,
@@ -41,6 +43,8 @@ const FilterNavigation = ({
     const [selectedTags, setSelectedTags] = useState(location.state || [])
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
     const [user, setUser] = useState({})
+    const [totalCreatedDiscussions, setTotalCreatedDiscussions] = useState(0)
+    const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0)
 
 
     useEffect(() => {
@@ -102,6 +106,34 @@ const FilterNavigation = ({
         }
     }, [categories, activeCategory]);
 
+    useEffect(() => {
+        const fetchCreatedDiscussions = async () => {
+            try {
+                const response = await axios.get(`/api/${userId}/created/discussion`)
+                const descendingCD = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                setTotalCreatedDiscussions(response.data.length)
+                createdDiscussionsData(descendingCD)
+            } catch (err) {
+                console.log('Error fetching user created discussions:', err)
+            }
+        }
+        fetchCreatedDiscussions()
+    }, [userId])
+
+    useEffect(() => {
+        const fetchJoinedDiscussions = async () => {
+            try {
+                const response = await axios.get(`/api/${userId}/joined/discussion`)
+                const descendingJD = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                setTotalJoinedDiscussions(response.data.length)
+                joinedDiscussionsData(descendingJD)
+            } catch (err) {
+                console.log('Error fetching user created discussions:', err)
+            }
+        }
+        fetchJoinedDiscussions()
+    }, [userId])
+
 
     useEffect(() => {
         const fetchForumNotifications = async () => {
@@ -134,23 +166,23 @@ const FilterNavigation = ({
     useEffect(() => {
         switch (tab) {
             case 'created_discussions':
-                createdDiscussions();
+                createdDiscussionsTab();
                 setShowFilter(true);
                 break;
             case 'joined_discussions':
-                joinedDiscussions();
+                joinedDiscussionsTab();
                 setShowFilter(true);
                 break;
             case 'user_activity':
-                userActivity();
+                userActivityTab();
                 setShowFilter(false);
                 break;
             case 'notifications':
-                forumNotifications();
+                forumNotificationsTab();
                 setShowFilter(false);
                 break;
             case 'add_discussions':
-                addDiscussions();
+                addDiscussionsBtn();
                 setShowFilter(false);
                 break;
             default:
@@ -163,19 +195,19 @@ const FilterNavigation = ({
 
     const handleCreatedDiscussions = () => {
         navigate(`/forum/profile/${userId}/created_discussions`);
-        createdDiscussions(); // Call the function
+        createdDiscussionsTab(); // Call the function
     };
     const handleJoinedDiscussions = () => {
         navigate(`/forum/profile/${userId}/joined_discussions`);
-        joinedDiscussions(); // Call the function
+        joinedDiscussionsTab(); // Call the function
     };
     const handleUserActivity = () => {
         navigate(`/forum/profile/${userId}/user_activity`);
-        userActivity(); // Call the function
+        userActivityTab(); // Call the function
     };
     const handleForumNotifications = () => {
         navigate(`/forum/profile/${userId}/notifications`);
-        forumNotifications(); // Call the function
+        forumNotificationsTab(); // Call the function
     };
 
     const handleSelectedCategory = () => {
@@ -215,25 +247,8 @@ const FilterNavigation = ({
         (notification) => (notification.read === false)
     )
 
-    const totalCreatedDiscussions = categories?.allDiscussions?.filter(
-        (discussion) => (discussion.user_id === userIdNumber)
-    )
-
-    const totalJoinedDiscussions = categories?.allDiscussions?.filter(discussion =>
-        discussion.post.some(post =>
-            post.replies.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
-                levelOneReply.replies.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
-                    levelTwoReply.replies.some(levelThreeReply => levelThreeReply.user_id === userIdNumber)
-                )
-            )
-        )
-    );
-
-
     const originalDate = user?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-
-
 
     return (
         <>
@@ -255,7 +270,7 @@ const FilterNavigation = ({
                                 </div>
                             </div>
                             <ul className='forum-profile-menu'>
-                                <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
+                                <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions})</span></li>
                                 <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
                                 <li onClick={handleUserActivity}>Latest Activity</li>
                                 {authUserIdNumber === userIdNumber ? (
@@ -280,8 +295,8 @@ const FilterNavigation = ({
                                     </div>
                                 </div>
                                 <ul className='forum-profile-menu'>
-                                    <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions?.length})</span></li>
-                                    <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
+                                    <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions})</span></li>
+                                    <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions})</span></li>
                                     <li onClick={handleUserActivity}>Latest Activity</li>
                                     {authUserIdNumber === userIdNumber ? (
                                         <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>

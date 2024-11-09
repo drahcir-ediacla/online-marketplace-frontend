@@ -13,6 +13,7 @@ import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import GTranslate from '../../../components/GTranslate';
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
+import ProfileDiscussionCard from '../../../components/Forum/ProfileDiscussionCard'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import QuillEditor from '../../../components/QuillEditor';
 import Input from '../../../components/FormField/Input';
@@ -28,7 +29,6 @@ const ForumProfile = () => {
 
     const { user } = useAuthentication()
     const { userId } = useParams();
-    const userIdNumber = Number(userId)
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
@@ -38,6 +38,8 @@ const ForumProfile = () => {
     const [notifications, setNotifications] = useState([]);
     const [activities, setActivities] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
+    const [createdDiscussions, setCreatedDiscussions] = useState([])
+    const [joinedDiscussions, setJoinedDiscussions] = useState([])
     const [discussionFilter, setDiscussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false)
@@ -103,13 +105,6 @@ const ForumProfile = () => {
         };
     }, []);
 
-    const { allDiscussions = [] } = categories || {};
-
-    // Ensure createdDiscussions is always an array
-    const createdDiscussions = Array.isArray(allDiscussions)
-        ? allDiscussions.filter(discussion => discussion.user_id === userIdNumber)
-        : [];
-    const descendingCD = [...createdDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     const sortDiscussionsByDate = (a, b) => new Date(b.created_at) - new Date(a.created_at);
 
@@ -129,19 +124,7 @@ const ForumProfile = () => {
     const mostViewedCD = [...createdDiscussions].sort(sortDiscussionsByViews);
     const mostLikedCD = [...createdDiscussions].sort(sortDiscussionsByLikes);
 
-    // Ensure joinedDiscussions is always an array
-    const joinedDiscussions = Array.isArray(allDiscussions)
-        ? allDiscussions.filter(discussion =>
-            discussion.post.some(post =>
-                post.replies?.some(levelOneReply => levelOneReply.user_id === userIdNumber ||
-                    levelOneReply.replies?.some(levelTwoReply => levelTwoReply.user_id === userIdNumber ||
-                        levelTwoReply.replies?.some(levelThreeReply => levelThreeReply.user_id === userIdNumber)
-                    )
-                )
-            )
-        )
-        : [];
-    const descendingJD = [...joinedDiscussions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
 
     const mostRecentJD = [...joinedDiscussions].sort(sortDiscussionsByDate);
     const mostViewedJD = [...joinedDiscussions].sort(sortDiscussionsByViews);
@@ -367,14 +350,16 @@ const ForumProfile = () => {
                     <FilterNavigation
                         authUser={user}
                         paramsUserData={setParamsUser}
-                        createdDiscussions={() => openContent(0)}
-                        joinedDiscussions={() => openContent(1)}
-                        userActivity={() => openContent(2)}
-                        forumNotifications={() => openContent(3)}
-                        addDiscussions={() => openContent(4)}
+                        createdDiscussionsTab={() => openContent(0)}
+                        joinedDiscussionsTab={() => openContent(1)}
+                        userActivityTab={() => openContent(2)}
+                        forumNotificationsTab={() => openContent(3)}
+                        addDiscussionsBtn={() => openContent(4)}
                         discussionFilter={discussionFilter}
                         onClick={loginModal}
                         categoriesData={setCategories}
+                        createdDiscussionsData={setCreatedDiscussions}
+                        joinedDiscussionsData={setJoinedDiscussions}
                         notificationData={setNotifications}
                         activitiesData={setActivities}
                         tagsData={setAllTags}
@@ -395,12 +380,12 @@ const ForumProfile = () => {
                                     <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                 </div>
                                 {sortCD && sortCD.length > 0 ? (
-                                    <ForumDiscussionCard
+                                    <ProfileDiscussionCard
                                         data={sortCD}
                                     />
                                 ) : (
-                                    <ForumDiscussionCard
-                                        data={descendingCD}
+                                    <ProfileDiscussionCard
+                                        data={createdDiscussions}
                                     />
                                 )}
                             </div>
@@ -415,7 +400,7 @@ const ForumProfile = () => {
                                     />
                                 ) : (
                                     <ForumDiscussionCard
-                                        data={descendingJD}
+                                        data={joinedDiscussions}
                                     />
                                 )}
                             </div>
