@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from '../../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
@@ -28,7 +28,6 @@ import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.
 const ForumProfile = () => {
 
     const { user } = useAuthentication()
-    const { userId } = useParams();
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()

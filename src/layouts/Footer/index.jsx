@@ -41,7 +41,7 @@ const Footer = () => {
                         <div className='footer-col4'>
                             <h5>Useful Links</h5>
                             <ul>
-                                <li>Coupons</li>
+                                <li><Link to={'/forum'}>Community</Link></li>
                                 <li>Blog Post</li>
                                 <li>Return Policy</li>
                                 <li>Join Affiliate</li>

@@ -4,6 +4,14 @@ footer {
     color: white;
     font-size: 14px;
 
+    a {
+        color: white;
+    }
+
+    a:hover {
+        color: wheat;
+    }
+
     ul {
         padding-left: 0;
         margin-bottom: 1rem;
@@ -60,15 +68,15 @@ footer {
 
 /*-------------------- MEDIA QUERY ------------------------------*/
 
-@media only screen and (max-width: 540px) {
+// @media only screen and (max-width: 540px) {
 
-    footer {
-        .container {
-            .footer-row1 {
-                .footer-col2 {
+//     footer {
+//         .container {
+//             .footer-row1 {
+//                 .footer-col2 {
                     
-                }
-            }
-        }
-    }
-}
+//                 }
+//             }
+//         }
+//     }
+// }
