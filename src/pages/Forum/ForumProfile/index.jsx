@@ -22,6 +22,7 @@ import BtnClear from '../../../components/Button/BtnClear';
 import LoginModal from '../../../components/Modal/LoginModal';
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.svg';
+import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 
 
 
@@ -52,11 +53,14 @@ const ForumProfile = () => {
     const [categoryId, setCategoryId] = useState('')
     const [activeNotifTab, setActiveNotifTab] = useState(0);
     const [notifThreeDotsOptions, setNotifThreeDotsOptions] = useState(false)
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const observer = useRef()
     const dropDownCategory = useRef();
     const dropDownTags = useRef();
     const dropDownNotif = useRef();
-    const [displayedNotificationsCount, setDisplayedNotificationsCount] = useState(20);
-    const [displayedUnreadNotificationsCount, setDisplayedUnreadNotificationsCount] = useState(20);
     const [sortCD, setSortCD] = useState([])
     const [sortJD, setSortJD] = useState([])
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
@@ -104,6 +108,46 @@ const ForumProfile = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const fetchForumNotifications = async () => {
+            if (loading || !hasMore) return; // Don't fetch if already loading or no more data
+
+            setLoading(true);
+            try {
+                const response = await axios.get(`/api/forum-notifications/?page=${page}&limit=${limit}`)
+                const newNotification = response.data
+                setNotifications((prevData) => {
+                    const uniqueData = newNotification.filter(
+                        (item) => !prevData.some((existingItem) => existingItem.id === item.id)
+                    );
+                    return [...prevData, ...uniqueData];
+                });
+                setHasMore(newNotification.length > 0);
+            } catch (err) {
+                console.log('Error fetching forum notifications:', err)
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchForumNotifications()
+    }, [page, limit])
+
+
+    // Intersection Observer callback
+    const lastElementRef = (node) => {
+        if (loading) return; // Don't observe if loading
+
+        if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setPage((prevPage) => prevPage + 1); // Load next page
+            }
+        });
+
+        if (node) observer.current.observe(node); // Observe the last element
+    };
+
 
     const sortDiscussionsByDate = (a, b) => new Date(b.created_at) - new Date(a.created_at);
 
@@ -123,7 +167,7 @@ const ForumProfile = () => {
     const mostViewedCD = [...createdDiscussions].sort(sortDiscussionsByViews);
     const mostLikedCD = [...createdDiscussions].sort(sortDiscussionsByLikes);
 
-    
+
 
     const mostRecentJD = [...joinedDiscussions].sort(sortDiscussionsByDate);
     const mostViewedJD = [...joinedDiscussions].sort(sortDiscussionsByViews);
@@ -332,14 +376,6 @@ const ForumProfile = () => {
         setLoginModalOpen(true)
     }
 
-    const loadMoreNotifications = () => {
-        setDisplayedNotificationsCount(prevCount => prevCount + 20);
-    };
-
-    const loadMoreUnreadNotifications = () => {
-        setDisplayedUnreadNotificationsCount(prevCount => prevCount + 20);
-    };
-
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -359,7 +395,6 @@ const ForumProfile = () => {
                         categoriesData={setCategories}
                         createdDiscussionsData={setCreatedDiscussions}
                         joinedDiscussionsData={setJoinedDiscussions}
-                        notificationData={setNotifications}
                         activitiesData={setActivities}
                         tagsData={setAllTags}
                         sortOptions={filterDiscussionOptions}
@@ -462,7 +497,7 @@ const ForumProfile = () => {
                                 ) : (
                                     <div style={{ display: activeNotifTab === 0 ? 'block' : 'none' }}>
                                         <ul>
-                                            {notifications.slice(0, displayedNotificationsCount).map((notification) => (
+                                            {notifications.map((notification) => (
                                                 <li key={notification.id}>
                                                     <div className="delete-notif-btn" onClick={() => deleteNotification(notification.id)}>
                                                         <i class="fa fa-times"></i>
@@ -484,11 +519,12 @@ const ForumProfile = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {notifications.length > displayedNotificationsCount &&
-                                            <div className='view-more'>
-                                                <button className='view-more-btn' onClick={loadMoreNotifications}>View more</button>
-                                            </div>
-                                        }
+                                        {/* Trigger for the next page */}
+                                        {hasMore && !loading && (
+                                            <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
+                                        )}
+                                        {loading && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
+                                        {!hasMore && <div className='no-more-data'>No more data to load</div>}
                                     </div>
                                 )}
                                 {unreadNotifications.length === 0 ? (
@@ -496,7 +532,7 @@ const ForumProfile = () => {
                                 ) : (
                                     <div style={{ display: activeNotifTab === 1 ? 'block' : 'none' }}>
                                         <ul>
-                                            {unreadNotifications.slice(0, displayedUnreadNotificationsCount).map((notification) => (
+                                            {unreadNotifications.map((notification) => (
                                                 <li key={notification.id} >
                                                     <div className="delete-notif-btn" onClick={() => deleteNotification(notification.id)}>
                                                         <i class="fa fa-times"></i>
@@ -518,11 +554,6 @@ const ForumProfile = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                        {unreadNotifications.length > displayedUnreadNotificationsCount &&
-                                            <div className='view-more'>
-                                                <button className='view-more-btn' onClick={loadMoreUnreadNotifications}>View more</button>
-                                            </div>
-                                        }
                                     </div>
                                 )}
                             </div>

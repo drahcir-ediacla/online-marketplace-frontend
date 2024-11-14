@@ -20,7 +20,6 @@ const FilterNavigation = ({
     categoriesData,
     createdDiscussionsData,
     joinedDiscussionsData,
-    notificationData,
     activitiesData,
     tagsData,
     paramsUserData,
@@ -44,7 +43,9 @@ const FilterNavigation = ({
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
     const [user, setUser] = useState({})
     const [totalCreatedDiscussions, setTotalCreatedDiscussions] = useState(0)
-    const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0)
+    const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0);
+    const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
+    console.log('totalUnreadNotifications:', totalUnreadNotifications)
 
 
     useEffect(() => {
@@ -135,19 +136,6 @@ const FilterNavigation = ({
     }, [userId])
 
 
-    useEffect(() => {
-        const fetchForumNotifications = async () => {
-            try {
-                const response = await axios.get('/api/forum-notifications')
-                const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                notificationData(sortedNotifications)
-            } catch (err) {
-                console.log('Error fetching forum notifications:', err)
-            }
-        }
-        fetchForumNotifications()
-    }, [])
-
 
     useEffect(() => {
         const fetchForumActivities = async () => {
@@ -161,6 +149,18 @@ const FilterNavigation = ({
         }
         fetchForumActivities()
     }, [])
+
+    useEffect(() => {
+        const getTotalUnreadNotifications = async() => {
+            try {
+                const response = await axios.get('/api/total-forum-notifications')
+                setTotalUnreadNotifications(response.data)
+            } catch (error) {
+                console.log('Error fetching total unread notifications', error)
+            }
+        }
+        getTotalUnreadNotifications()
+    }, [notifications])
 
 
     useEffect(() => {
@@ -222,9 +222,9 @@ const FilterNavigation = ({
                 ? prevSelectedTags.filter((t) => t !== tag_id)
                 : [...prevSelectedTags, tag_id];
 
-                if (typeof emptySortDiscussions === 'function') {
-                    emptySortDiscussions([]);
-                }
+            if (typeof emptySortDiscussions === 'function') {
+                emptySortDiscussions([]);
+            }
 
             // Navigate with the updatedTags directly
             navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
@@ -243,9 +243,6 @@ const FilterNavigation = ({
         navigate('/forum/filtertags', { state: { selectedTags: updatedTags } });
     };
 
-    const unreadNotifications = notifications?.filter(
-        (notification) => (notification.read === false)
-    )
 
     const originalDate = user?.createdAt || '';
     const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
@@ -274,7 +271,7 @@ const FilterNavigation = ({
                                 <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
                                 <li onClick={handleUserActivity}>Latest Activity</li>
                                 {authUserIdNumber === userIdNumber ? (
-                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
+                                    <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {totalUnreadNotifications.totalCount > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications.totalCount}</div>}</li>
                                 ) : (
                                     null
                                 )}
@@ -299,7 +296,7 @@ const FilterNavigation = ({
                                     <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions})</span></li>
                                     <li onClick={handleUserActivity}>Latest Activity</li>
                                     {authUserIdNumber === userIdNumber ? (
-                                        <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {unreadNotifications?.length > 0 && <div className='forum-notification-counter'>{unreadNotifications?.length}</div>}</li>
+                                        <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {totalUnreadNotifications.totalCount > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications.totalCount}</div>}</li>
                                     ) : (
                                         null
                                     )}

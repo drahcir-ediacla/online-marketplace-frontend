@@ -61,7 +61,7 @@ const ForumSubCategoryPage = () => {
             }
         }
         fetchCategoryData()
-    }, [id, name, page, limit])
+    }, [id, name, page, limit, loading])
 
     // Intersection Observer callback
     const lastElementRef = (node) => {
@@ -176,11 +176,7 @@ const ForumSubCategoryPage = () => {
                                 {hasMore && !loading && (
                                     <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
                                 )}
-
-                                {/* Loading Indicator */}
                                 {loading && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
-
-                                {/* Message when there's no more data */}
                                 {!hasMore && <div className='no-more-data'>No more data to load</div>}
                             </div>
                         </div>
