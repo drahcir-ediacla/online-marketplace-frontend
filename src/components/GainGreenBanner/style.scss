@@ -66,11 +66,13 @@
 
 @media only screen and (max-width: 397px) {
 
-    .container {
+    .green-banner-container {
         .contentbox {
             .col-left {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 5px;
+                text-align: center;
             }
         }
     }
