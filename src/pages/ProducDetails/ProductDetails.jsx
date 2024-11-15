@@ -36,6 +36,7 @@ import MoreFromSeller from '../../components/MoreFromSeller'
 import RelatedListings from '../../components/RelatedListings'
 import AvatarIcon from '../../assets/images/profile-avatar.png'
 import SellBtn from '../../components/Button/SellBtn';
+import LoginModal from '../../components/Modal/LoginModal';
 
 
 let postsPerPage = 5;
@@ -54,6 +55,7 @@ const ProductDetails = ({ userId }) => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [soldModalOpen, setSoldModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const didTrackProductView = useRef(false);
     const [input, setInput] = useState('');
     const [offer, setOffer] = useState('');
@@ -342,11 +344,22 @@ const ProductDetails = ({ userId }) => {
         window.location.href = `/updatelisting/${id}/${encodeURIComponent(product_name)}`;
     };
 
+    const handleLoginModal = () => {
+        if (!user) {
+            setLoginModalOpen(true)
+        } 
+    };
+
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
 
 
 
     return (
         <>
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
             {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} userId={user.id} />}
@@ -577,7 +590,7 @@ const ProductDetails = ({ userId }) => {
                                     ) : (
                                         productStatus === 'Available' ? (
                                             <>
-                                                <Link to="/LoginEmail" className='signin-make-offer'>Sign in to send message</Link>
+                                            <button onClick={handleLoginModal} className='signin-make-offer'>Sign in to send message</button>
                                             </>
                                         ) : (
                                             <Link to={`/profile/${product.seller?.id}`} className='signin-make-offer'>This item is already sold. <br></br>Click to see more listings from seller.</Link>

@@ -61,7 +61,7 @@ const ForumSubCategoryPage = () => {
             }
         }
         fetchCategoryData()
-    }, [id, name, page, limit, loading])
+    }, [id, name])
 
     // Intersection Observer callback
     const lastElementRef = (node) => {

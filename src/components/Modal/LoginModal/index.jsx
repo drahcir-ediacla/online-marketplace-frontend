@@ -8,7 +8,6 @@ import LoginBtn from '../../Button/LoginBtn'
 import LogoGray from '../../../assets/images/Yogeek-logo.png'
 import { ReactComponent as FBIcon } from '../../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../../assets/images/google-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/images/globe-regular.svg';
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import AlertMessage from '../../AlertMessage';
@@ -175,7 +174,7 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
                                         <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                                         <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                                     </label>
-                                    <Link to="/LoginPhone">Sign in with phone number</Link></div>
+                                    <Link to='/LoginPhone'>Sign in with phone number</Link></div>
                                 <div className='col2'>
                                     <input
                                         type="email"

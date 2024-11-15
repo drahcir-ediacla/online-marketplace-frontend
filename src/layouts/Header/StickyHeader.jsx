@@ -4,13 +4,15 @@ import Logo from '../../assets/images/Yogeek-logo.png';
 import SearchBox from './SearchByLoc';
 import BtnGreen from '../../components/Button/BtnGreen'
 import SlidingSideNav from '../SlidingSideNav'
+import LoginModal from '../../components/Modal/LoginModal';
 
 
 
 const StickyHeader = ({ authenticated }) => {
 
-    const [isSticky, setIsSticky] = useState(false);
     const navigate = useNavigate();
+    const [isSticky, setIsSticky] = useState(false);
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,9 +40,22 @@ const StickyHeader = ({ authenticated }) => {
         }
     };
 
+    const handleLoginModal = () => {
+        if (!authenticated) {
+            setLoginModalOpen(true)
+        } else {
+            navigate('/addlisting');
+        }
+    };
+
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
 
     return (
         <>
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div id="sticky-header" className={`sticky-header ${isSticky ? 'sticky' : ''}`}>
                 <div className='container'>
                     <div className='sticky-navbar'>
@@ -56,16 +71,9 @@ const StickyHeader = ({ authenticated }) => {
                             <div>
                                 <SlidingSideNav />
                             </div>
-                            {authenticated ? (
-                                <div>
-                                    <BtnGreen to="/addlisting" label="Sell" className="sticky-header-sell-btn" />
-                                </div>
-                            ) : (
-                                <div>
-                                    <BtnGreen to="/loginemail" label="Sell" className="sticky-header-sell-btn" />
-                                </div>
-                            )}
-
+                            <div>
+                                <BtnGreen onClick={handleLoginModal} label="Sell" className="sticky-header-sell-btn" />
+                            </div>
                         </div>
                     </div>
 

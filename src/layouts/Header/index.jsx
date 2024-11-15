@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../Header/style.scss';
 import axios from '../../apicalls/axios'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
@@ -16,11 +16,13 @@ import SmallScreenHeader from './SmallScreenHeader';
 import LocationRadiusModal from '../../components/Modal/SetLocationRadiusModal';
 import AlertMessage from '../../components/AlertMessage';
 import GTranslate from '../../components/GTranslate';
+import LoginModal from '../../components/Modal/LoginModal';
 
 const GET_USER_LOGIN = '/auth/check-auth';
 
 function Header() {
 
+  const navigate = useNavigate();
   const [soldModalOpen, setSoldModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [radius, setRadius] = useState(() => {
@@ -35,6 +37,7 @@ function Header() {
   });
   const [showAlert, setShowAlert] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
 
 
 
@@ -216,9 +219,22 @@ function Header() {
     updateStateAndLocalStorage();
   }, [radius, placeName]);
 
+  const handleLoginModal = () => {
+    if (!user) {
+      setLoginModalOpen(true)
+    } else {
+      navigate('/addlisting');
+    }
+  };
+
+  const toggleLoginModal = () => {
+    setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+  }
+
 
   return (
     <>
+      {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
       {showAlert && <AlertMessage type="error" message={errMsg} className='alert-box' />}
       {soldModalOpen &&
         <LocationRadiusModal
@@ -288,8 +304,8 @@ function Header() {
                   </>
                 ) : (
                   <div className='login-register'>
-                    <Link to='/loginemail'>SELL</Link>
-                    <Link to='/loginemail'>LOGIN</Link>
+                    <button onClick={handleLoginModal} className='login-modal'>SELL</button>
+                    <button onClick={handleLoginModal} className='login-modal'>LOGIN</button>
                     <Link to='/registerbyemail'>REGISTER</Link>
                   </div>
                 )}

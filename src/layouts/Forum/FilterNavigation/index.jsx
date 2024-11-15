@@ -45,7 +45,6 @@ const FilterNavigation = ({
     const [totalCreatedDiscussions, setTotalCreatedDiscussions] = useState(0)
     const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0);
     const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
-    console.log('totalUnreadNotifications:', totalUnreadNotifications)
 
 
     useEffect(() => {
@@ -268,7 +267,7 @@ const FilterNavigation = ({
                             </div>
                             <ul className='forum-profile-menu'>
                                 <li onClick={handleCreatedDiscussions}>Created Discussions <span className='forum-activity-counter'>({totalCreatedDiscussions})</span></li>
-                                <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions?.length})</span></li>
+                                <li onClick={handleJoinedDiscussions}>Joined Discussions <span className='forum-activity-counter'>({totalJoinedDiscussions})</span></li>
                                 <li onClick={handleUserActivity}>Latest Activity</li>
                                 {authUserIdNumber === userIdNumber ? (
                                     <li onClick={handleForumNotifications} className='forum-notifications'>Notifications {totalUnreadNotifications.totalCount > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications.totalCount}</div>}</li>
