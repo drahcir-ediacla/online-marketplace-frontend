@@ -4,6 +4,19 @@
     flex-direction: column;
     height: 100vh;
 
+    .started-discussion {
+        margin-left: 10px;
+        color: #00917C;
+        font-size: 13px;
+    }
+
+    .started-discussion:before {
+        content: "\f058";
+        font-family: FontAwesome;
+        color: #00917C;
+        margin-right: 5px;
+    }
+
     .language-selector-container {
         width: 100%;
         text-align: right;
@@ -169,29 +182,51 @@
                             display: flex;
                             flex-direction: column;
 
-                            label {
-                                font-size: 18px;
-                                font-weight: 500;
-                            }
-
-                            small {
-                                font-size: 13px;
-                                font-style: italic;
-                                color: #838383;
+                            .user-started-discussion {
 
                                 a {
-                                    color: #838383;
+                                    font-size: 16px;
+                                    font-weight: 500;
+                                    color: var(--black-102);
                                 }
 
                                 a:hover {
                                     text-decoration: underline;
                                 }
+
+                                .started-discussion {
+                                    margin-left: 10px;
+                                    color: #00917C;
+                                    font-size: 13px;
+                                }
+
+                                .started-discussion:before {
+                                    content: "\f058";
+                                    font-family: FontAwesome;
+                                    color: #00917C;
+                                    margin-right: 5px;
+                                }
+                            }
+
+
+
+                            small {
+                                font-size: 13px;
+                                font-style: italic;
+                                color: #838383;
                             }
                         }
                     }
                 }
 
                 .started-discussion-container-row2 {
+
+                    label {
+                        font-size: 18px;
+                        font-weight: 500;
+                        margin-bottom: 10px;
+                    }
+
                     .show-less-content {
                         mask-image: linear-gradient(180deg, #555 90%, transparent);
                         min-height: 38px;

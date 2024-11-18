@@ -6,6 +6,7 @@ import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 import FilterTagModal from '../../../components/Modal/FilterTagModal'
+import SideNavCategoriesSkeleton from '../../../components/Forum/SkeletonLoading/SideNavCategoriesSkeleton'
 
 
 const FilterNavigation = ({
@@ -45,6 +46,7 @@ const FilterNavigation = ({
     const [totalCreatedDiscussions, setTotalCreatedDiscussions] = useState(0)
     const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0);
     const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
+    const [loadingCategories, setLoadingCategories] = useState(true)
 
 
     useEffect(() => {
@@ -74,25 +76,32 @@ const FilterNavigation = ({
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
-                const responseCategories = await axios.get('/api/fetchforumcategories')
-                setCategories(responseCategories.data)
+                setTimeout(async () => {
+                    setLoadingCategories(true)
+                    const responseCategories = await axios.get('/api/fetchforumcategories')
+                    setCategories(responseCategories.data)
 
-                const responseTags = await axios.get('/api/fetchforumtags')
-                setTags(responseTags.data)
+                    const responseTags = await axios.get('/api/fetchforumtags')
+                    setTags(responseTags.data)
+                    setLoadingCategories(false)
 
-                // Check if 'categoriesData' is a function before calling it
-                // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
-                // If 'categoriesData' is not a function, it logs a message in the console
-                if (typeof categoriesData === 'function') {
-                    categoriesData(responseCategories.data);
-                }
-                if (typeof tagsData === 'function') {
-                    tagsData(responseTags.data);
-                } else {
-                    console.log('categoriesData is not a function');
-                }
-
+                    // Check if 'categoriesData' is a function before calling it
+                    // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
+                    // If 'categoriesData' is not a function, it logs a message in the console
+                    if (typeof categoriesData === 'function') {
+                        categoriesData(responseCategories.data);
+                        setLoadingCategories(false)
+                    }
+                    if (typeof tagsData === 'function') {
+                        tagsData(responseTags.data);
+                        setLoadingCategories(false)
+                    } else {
+                        setLoadingCategories(false)
+                        console.log('categoriesData is not a function');
+                    }
+                }, 5000)
             } catch (error) {
+                setLoadingCategories(false)
                 console.log('Error fetching data:', error)
             }
         }
@@ -150,7 +159,7 @@ const FilterNavigation = ({
     }, [])
 
     useEffect(() => {
-        const getTotalUnreadNotifications = async() => {
+        const getTotalUnreadNotifications = async () => {
             try {
                 const response = await axios.get('/api/total-forum-notifications')
                 setTotalUnreadNotifications(response.data)
@@ -329,6 +338,11 @@ const FilterNavigation = ({
                         <label>CATEGORIES</label>
                     </div>
                     <div className="forum-category-btn-container">
+                        {loadingCategories &&
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
+                                <SideNavCategoriesSkeleton menus={8} />
+                            </div>
+                        }
                         {categories?.categories?.map(category => (
                             <NavLink activeclassname="active" key={category.id} className='forum-category-menu' to={`/forum/category/${category.id}/${category.name}`} onClick={handleSelectedCategory}>{category.name}</NavLink>
                         ))}
@@ -340,6 +354,11 @@ const FilterNavigation = ({
                         <label>POPULAR TAGS</label>
                     </div>
                     <div className="forum-category-btn-container">
+                        {loadingCategories &&
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
+                                <SideNavCategoriesSkeleton menus={8} />
+                            </div>
+                        }
                         {tags.slice(0, 10).map(tag => (
                             <BtnCategory
                                 key={tag.id}

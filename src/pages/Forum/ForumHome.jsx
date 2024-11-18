@@ -10,6 +10,8 @@ import SearchDiscussionBox from '../../components/SearchDiscussionBox'
 import HomePageSubCategoryCard from '../../components/Forum/HomePageSubCategoryCard'
 import LoginModal from '../../components/Modal/LoginModal';
 import GTranslate from '../../components/GTranslate';
+import HomeCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeCategoriesSkeleton'
+import HomeSubCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeSubCategoriesSkeleton'
 
 
 
@@ -18,15 +20,19 @@ const ForumHomePage = () => {
     const { user } = useAuthentication();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [forumCategories, setForumCategories] = useState([])
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
 
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
+                setLoading(true)
                 const response = await axios.get('/api/fetchforumcategories')
                 setForumCategories(response.data)
+                setLoading(false)
             } catch (error) {
+                setLoading(false)
                 console.error("Error fetching data:", error);
             }
         }
@@ -67,6 +73,7 @@ const ForumHomePage = () => {
                         <div className="browse-by-category-row1"><h5>Browse by Category </h5></div>
                         <div className="browse-by-category-row2">
                             <div className='browse-by-category-row2-col1'>
+                                {loading && <HomeCategoriesSkeleton menus={8} />}
                                 {forumCategories?.categories?.map(category => (
                                     <button className='forum-categories-nav-menu' onClick={() => goToCategoryPage(category.id, category.name)} key={category.id}>
                                         <div className='category-general-discussion-icon'>
@@ -86,9 +93,15 @@ const ForumHomePage = () => {
                         <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                     </div>
                     <div className="listed-category-container">
+                        {loading &&
+                            <>
+                                <HomeSubCategoriesSkeleton menus={10} />
+                            </>
+                        }
                         {forumCategories?.categories?.map(category => (
                             <div className="listed-category" key={category.id}>
                                 <div className='listed-category-title'><h4>{category.name}</h4></div>
+
                                 <HomePageSubCategoryCard
                                     subcategories={category.subcategories}
                                 />

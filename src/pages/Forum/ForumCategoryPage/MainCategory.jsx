@@ -12,6 +12,8 @@ import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import ForumCardSkeleton from '../../../components/Forum/SkeletonLoading/ForumCardSkeleton';
+import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 
 
 
@@ -24,6 +26,7 @@ const ForumCategoryPage = () => {
     const [discussionFilter] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [sortDiscussions, setSortDiscussions] = useState([])
+    const [loadingData, setLoadingData] = useState(true)
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
         {
             label: option,
@@ -34,9 +37,14 @@ const ForumCategoryPage = () => {
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
-                setCategoryData(response.data)
+                setTimeout(async () => {
+                    setLoadingData(true)
+                    const response = await axios.get(`/api/forumcategory/${id}/${name}`);
+                    setCategoryData(response.data)
+                    setLoadingData(false)
+                }, 5000)
             } catch (error) {
+                setLoadingData(false)
                 console.error("Error fetching data:", error);
             }
         }
@@ -120,6 +128,7 @@ const ForumCategoryPage = () => {
                                         <h4>{categoryData.name}</h4>
                                         <NewDiscussionBtn onClick={handleNewDiscussionClick} />
                                     </div>
+                                    {loadingData && <ForumCardSkeleton menus={2} />}
                                     {subcategories && subcategories.length > 0 && (
                                         <ForumSubCategory
                                             data={categoryData}
@@ -128,6 +137,7 @@ const ForumCategoryPage = () => {
                                 </div>
                                 <div className='recent-discussion'>
                                     <h6>Recent Discussions</h6>
+                                    {loadingData && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
                                     {sortDiscussions && sortDiscussions.length > 0 ? (
                                         <ForumDiscussionCard
                                             data={sortDiscussions}

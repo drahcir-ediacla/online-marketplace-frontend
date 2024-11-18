@@ -44,6 +44,7 @@ const Discussion = () => {
     const [activePostId, setActivePostId] = useState(null)
     const [parentPostId, setParentPostId] = useState(null);
     const [postId, setPostId] = useState(null)
+    const [discussionStarter, setDiscussionStarter] = useState(null)
     const [allPost, setAllPost] = useState([]);
     const [firstLevelReplies, setFirstLevelReplies] = useState([])
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -72,6 +73,12 @@ const Discussion = () => {
 
                 const firstPostId = response.data.length > 0 ? response.data[0].post_id : null;
                 setPostId(firstPostId);
+
+                if (response.data[0].parent_post_id === null) {
+                    const discussionStarterUserId = response.data.length > 0 ? response.data[0].user_id : null;
+                    setDiscussionStarter(discussionStarterUserId)
+                }
+
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     navigate('/404'); // Navigate to "Page Not Found" if 404
@@ -435,14 +442,13 @@ const Discussion = () => {
                                                 <img src={post?.postCreator?.profile_pic || DefaultAvatar} alt="" />
                                             </Link>
                                             <div className='started-forum-discussion-info'>
-                                                <label>{post?.discussion?.title}</label>
-                                                <small>
-                                                    by&nbsp;
+                                                <div className='user-started-discussion'>
                                                     <Link to={`/forum/profile/${post?.postCreator?.id}/created_discussions`}>
                                                         {post?.postCreator?.display_name || 'Unknown'}
                                                     </Link>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp; Posted: {getFormattedDate(post.created_at)}
-                                                </small>
+                                                    <span className='started-discussion'>Started Discussion</span>
+                                                </div>
+                                                <small>Posted: {getFormattedDate(post.created_at)}</small>
                                             </div>
                                         </div>
                                         <div className="post-action-option">
@@ -466,6 +472,7 @@ const Discussion = () => {
                                     {!post?.parent_post_id && (
                                         <>
                                             <div className='started-discussion-container-row2' key={post?.post_id}>
+                                                <label>{post?.discussion?.title}</label>
                                                 <div className={showMoreContent[post?.post_id] ? 'show-all-content' : 'show-less-content'} dangerouslySetInnerHTML={{ __html: post?.content }} />
                                                 {post?.content.length > 340 && (
                                                     <div style={{ textAlign: 'center' }}>
@@ -519,8 +526,8 @@ const Discussion = () => {
                                 {post.replies && post.replies.length > 0 &&
                                     <div className="filter-replies">
                                         <span className='replies-counter'>{totalReplies > 1 ? `${totalReplies} Replies` : `${totalReplies} Reply`}</span>
-                                        <div className='replies-sortby-container' style={{display: 'flex'}}>
-                                            <span style={{flexShrink: '0'}}>Sort By:</span>
+                                        <div className='replies-sortby-container' style={{ display: 'flex' }}>
+                                            <span style={{ flexShrink: '0' }}>Sort By:</span>
                                             <CustomSelect
                                                 data={filterDiscussionOptions}
                                                 onOptionSelect={handleOptionSelect}
@@ -540,9 +547,18 @@ const Discussion = () => {
                                                                 <img src={levelOneReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
                                                             </Link>
                                                             <div className="post-creator-info">
-                                                                <Link to={`/forum/profile/${levelOneReply?.postCreator?.id}/created_discussions`}>
-                                                                    {levelOneReply.postCreator.display_name}
-                                                                </Link>
+                                                                <div className='user-started-discussion'>
+                                                                    <Link to={`/forum/profile/${levelOneReply?.postCreator?.id}/created_discussions`}>
+                                                                        {levelOneReply.postCreator.display_name}
+                                                                    </Link>
+                                                                    {levelOneReply?.postCreator?.id === discussionStarter ? (
+                                                                        <>
+                                                                            <span className='started-discussion'>Started Discussion</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        null
+                                                                    )}
+                                                                </div>
                                                                 <small>Posted: {getFormattedDate(levelOneReply.created_at)}</small>
                                                             </div>
                                                         </div>
@@ -627,9 +643,18 @@ const Discussion = () => {
                                                                                     <img src={levelTwoReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
                                                                                 </Link>
                                                                                 <div className="post-creator-info">
-                                                                                    <Link to={`/forum/profile/${levelTwoReply?.postCreator?.id}/created_discussions`}>
-                                                                                        {levelTwoReply.postCreator.display_name}
-                                                                                    </Link>
+                                                                                    <div className='user-started-discussion'>
+                                                                                        <Link to={`/forum/profile/${levelTwoReply?.postCreator?.id}/created_discussions`}>
+                                                                                            {levelTwoReply.postCreator.display_name}
+                                                                                        </Link>
+                                                                                        {levelTwoReply?.postCreator?.id === discussionStarter ? (
+                                                                                            <>
+                                                                                                <span className='started-discussion'>Started Discussion</span>
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            null
+                                                                                        )}
+                                                                                    </div>
                                                                                     <small>Posted: {getFormattedDate(levelTwoReply.created_at)}</small>
                                                                                 </div>
                                                                             </div>
@@ -713,9 +738,18 @@ const Discussion = () => {
                                                                                                     <img src={levelThreeReply?.postCreator?.profile_pic || DefaultAvatar} alt="" />
                                                                                                 </Link>
                                                                                                 <div className="post-creator-info">
-                                                                                                    <Link to={`/forum/profile/${levelThreeReply?.postCreator?.id}/created_discussions`}>
-                                                                                                        {levelThreeReply.postCreator.display_name}
-                                                                                                    </Link>
+                                                                                                    <div className='user-started-discussion'>
+                                                                                                        <Link to={`/forum/profile/${levelThreeReply?.postCreator?.id}/created_discussions`}>
+                                                                                                            {levelThreeReply.postCreator.display_name}
+                                                                                                        </Link>
+                                                                                                        {levelThreeReply?.postCreator?.id === discussionStarter ? (
+                                                                                                            <>
+                                                                                                                <span className='started-discussion'>Started Discussion</span>
+                                                                                                            </>
+                                                                                                        ) : (
+                                                                                                            null
+                                                                                                        )}
+                                                                                                    </div>
                                                                                                     <small>Posted: {getFormattedDate(levelThreeReply.created_at)}</small>
                                                                                                 </div>
                                                                                             </div>
@@ -791,16 +825,16 @@ const Discussion = () => {
                                                         }
                                                     </>
                                                 )}
-                                            </div>
-                                        </div>
+                                            </div >
+                                        </div >
                                     </>
                                 ))}
                             </>
                         ))}
                     </div>
-                </div>
+                </div >
                 <Footer className='forum-discussion-page-footer' />
-            </div>
+            </div >
         </>
     )
 }

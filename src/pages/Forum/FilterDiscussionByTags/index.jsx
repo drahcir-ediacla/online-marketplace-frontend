@@ -11,6 +11,7 @@ import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import FilterTagDiscussionCard from '../../../components/Forum/FilterTagDiscussionCard'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 
 
 const FilterDiscussionByTags = () => {
@@ -23,6 +24,7 @@ const FilterDiscussionByTags = () => {
     const [discussions, setDiscussions] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || []);
     const [sortDiscussions, setSortDiscussions] = useState([])
+    const [loading, setLoading] = useState(false);
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
         {
             label: option,
@@ -39,6 +41,7 @@ const FilterDiscussionByTags = () => {
     useEffect(() => {
         const fetchDiscussions = async () => {
             try {
+                setLoading(true)
                 const response = await axios.get('/api/filtertags', {
                     params: {
                         tag_id: selectedTags.join(','),
@@ -70,7 +73,9 @@ const FilterDiscussionByTags = () => {
 
                     return setFilteredDiscussions;
                 });
+                setLoading(false)
             } catch (error) {
+                setLoading(false)
                 console.error('Error fetching discussions:', error);
             }
         };
@@ -82,7 +87,7 @@ const FilterDiscussionByTags = () => {
         }
     }, [selectedTags]);
 
-    
+
     const descendingDiscussions = [...discussions].sort((a, b) => new Date(b?.allDiscussionsInTag?.created_at) - new Date(a?.allDiscussionsInTag?.created_at));
     const mostRecent = [...discussions].sort((a, b) => new Date(b?.allDiscussionsInTag?.created_at) - new Date(a?.allDiscussionsInTag?.created_at));
     // Sort by most viewed (descending by total views)
@@ -159,18 +164,23 @@ const FilterDiscussionByTags = () => {
                             <div className='discussion-list'>
                                 {discussions && discussions.length > 0 ? (
                                     sortDiscussions && sortDiscussions.length > 0 ? (
-                                        <FilterTagDiscussionCard
-                                            data={sortDiscussions}
-                                        />
+                                        <>
+                                            <FilterTagDiscussionCard
+                                                data={sortDiscussions}
+                                            />
+                                        </>
                                     ) : (
-                                        <FilterTagDiscussionCard
-                                            data={descendingDiscussions}
-                                        />
+                                        <>
+                                            <FilterTagDiscussionCard
+                                                data={descendingDiscussions}
+                                            />
+                                        </>
                                     )
+                                ) : (loading ? (
+                                    <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>
                                 ) : (
-                                    <>
-                                        No discussions found!
-                                    </>
+                                    <>No discussions found!</>
+                                )
                                 )}
                             </div>
                         </div>

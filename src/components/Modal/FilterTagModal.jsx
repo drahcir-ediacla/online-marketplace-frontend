@@ -108,7 +108,7 @@ const FilterTagModal = ({ onClick, tagsData }) => {
                         </button>
                     </div>
                     <div className='filter-tag-modal-row2'>
-                        <h5>Filter discussions by tags</h5>
+                        <h5>Search discussions by tags</h5>
                         {tags.length > 0 ? (<span>Selected Tags:</span>) : ("")}
                         <ul className='selected-tag-list'>
                             {tags.map((tag) => (
