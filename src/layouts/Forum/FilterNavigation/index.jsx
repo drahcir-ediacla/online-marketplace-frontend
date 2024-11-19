@@ -76,30 +76,28 @@ const FilterNavigation = ({
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
-                setTimeout(async () => {
-                    setLoadingCategories(true)
-                    const responseCategories = await axios.get('/api/fetchforumcategories')
-                    setCategories(responseCategories.data)
+                setLoadingCategories(true)
+                const responseCategories = await axios.get('/api/fetchforumcategories')
+                setCategories(responseCategories.data)
 
-                    const responseTags = await axios.get('/api/fetchforumtags')
-                    setTags(responseTags.data)
+                const responseTags = await axios.get('/api/fetchforumtags')
+                setTags(responseTags.data)
+                setLoadingCategories(false)
+
+                // Check if 'categoriesData' is a function before calling it
+                // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
+                // If 'categoriesData' is not a function, it logs a message in the console
+                if (typeof categoriesData === 'function') {
+                    categoriesData(responseCategories.data);
                     setLoadingCategories(false)
-
-                    // Check if 'categoriesData' is a function before calling it
-                    // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
-                    // If 'categoriesData' is not a function, it logs a message in the console
-                    if (typeof categoriesData === 'function') {
-                        categoriesData(responseCategories.data);
-                        setLoadingCategories(false)
-                    }
-                    if (typeof tagsData === 'function') {
-                        tagsData(responseTags.data);
-                        setLoadingCategories(false)
-                    } else {
-                        setLoadingCategories(false)
-                        console.log('categoriesData is not a function');
-                    }
-                }, 5000)
+                }
+                if (typeof tagsData === 'function') {
+                    tagsData(responseTags.data);
+                    setLoadingCategories(false)
+                } else {
+                    setLoadingCategories(false)
+                    console.log('categoriesData is not a function');
+                }
             } catch (error) {
                 setLoadingCategories(false)
                 console.log('Error fetching data:', error)

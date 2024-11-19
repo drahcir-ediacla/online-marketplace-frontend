@@ -430,11 +430,11 @@ const Discussion = () => {
                             <GTranslate />
                         </div>
                         <SearchDiscussionBox />
+                        <div className="new-discussion-container">
+                            <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                        </div>
                         {allPost.map(post => (
                             <>
-                                <div className="new-discussion-container">
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
-                                </div>
                                 <div className="started-discussion-container" key={post?.post_id}>
                                     <div className='started-discussion-container-row1'>
                                         <div className='started-discussion-info'>

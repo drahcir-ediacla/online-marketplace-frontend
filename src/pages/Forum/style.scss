@@ -49,6 +49,7 @@
 
     .browse-by-category {
         background: #F0F0F0;
+        padding: 0 12px;
 
         .browse-by-category-container {
             text-align: center;
@@ -95,6 +96,7 @@
 
     .forum-container {
         max-width: 1320px;
+        padding: 0 12px;
         margin: auto;
 
         .start-discussion-btn-container {
@@ -183,6 +185,62 @@
                 }
             }
         }
+    }
+
+    .home-recent-discussions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 10px;
+        width: 100%;
+        margin: auto;
+        margin-top: 38px;
+        max-width: 1320px;
+        padding: 0 12px;
+
+        .recent-discussions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+            padding: 0 10px;
+
+            h5 {
+                font-weight: 500;
+            }
+
+            .replies-sortby-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .forum-sortby-dropdown-select {
+                    width: 100%;
+                    height: 30px;
+                    padding: 0 10px;
+                    border-radius: 5px;
+                    border: 1px solid var(--gray-300);
+                }
+            }
+        }
+
+
+    }
+
+    .infinite-scroll-loading-spinner {
+        width: 50px;
+        margin: auto;
+    }
+
+    .no-more-data {
+        width: 100%;
+        font-size: 16px;
+        color: var(--gray-300);
+        text-align: center;
+        padding: 50px 0;
+        letter-spacing: 1px;
     }
 }
 

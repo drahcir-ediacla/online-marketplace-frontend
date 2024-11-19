@@ -37,12 +37,10 @@ const ForumCategoryPage = () => {
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                setTimeout(async () => {
-                    setLoadingData(true)
+                setLoadingData(true)
                     const response = await axios.get(`/api/forumcategory/${id}/${name}`);
                     setCategoryData(response.data)
                     setLoadingData(false)
-                }, 5000)
             } catch (error) {
                 setLoadingData(false)
                 console.error("Error fetching data:", error);
@@ -136,7 +134,7 @@ const ForumCategoryPage = () => {
                                     )}
                                 </div>
                                 <div className='recent-discussion'>
-                                    <h6>Recent Discussions</h6>
+                                    {discussions.length > 0 && <h6>Recent Discussions</h6>}
                                     {loadingData && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
                                     {sortDiscussions && sortDiscussions.length > 0 ? (
                                         <ForumDiscussionCard

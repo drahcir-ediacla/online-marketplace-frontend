@@ -25,8 +25,8 @@ const ForumDiscussionCard = ({ data }) => {
         let totalReplies = 0;
 
         const countReplies = (post) => {
-            totalReplies += post.replies.length;
-            post.replies.forEach(countReplies); // Recursively count replies
+            totalReplies += post?.replies?.length;
+            post?.replies?.forEach(countReplies); // Recursively count replies
         };
 
         posts.forEach(countReplies);
@@ -67,7 +67,7 @@ const ForumDiscussionCard = ({ data }) => {
                                     </div>
                                     <div className="reply-counter">
                                         <div className='reply-msg-icon'><MsgIcon /></div>
-                                        <span>{getTotalReplies(discussion?.post)} replies</span>
+                                        <span>{discussion?.totalReplies || getTotalReplies(discussion?.post) || 0} replies</span>
                                     </div>
                                     <div className="view-counter">
                                         <div className='view-msg-icon'><EyeIcon /></div>
