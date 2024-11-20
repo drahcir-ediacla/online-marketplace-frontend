@@ -431,7 +431,7 @@ const Discussion = () => {
                         </div>
                         <SearchDiscussionBox />
                         <div className="new-discussion-container">
-                            <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                         </div>
                         {allPost.map(post => (
                             <>

@@ -153,7 +153,7 @@ const ForumSubCategoryPage = () => {
                                 <div className="category-container">
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                     </div>
                                     {subcategories && subcategories.length > 0 && (
                                         <ForumSubCategory

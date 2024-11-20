@@ -159,7 +159,7 @@ const FilterDiscussionByTags = () => {
                         <div className='discussions-container'>
                             <div className='discussions-container-row1'>
                                 <h4>Filter Tagged Discussions</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                             </div>
                             <div className='discussion-list'>
                                 {discussions && discussions.length > 0 ? (

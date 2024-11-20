@@ -51,16 +51,29 @@ const ForumHeader = ({ authUser, containerClass }) => {
 
     return (
         <>
-        {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className={`forum-header-container ${containerClass}`}>
                 <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
-                    <Link to='/'>Marketplace</Link> 
-                    <span>|</span> 
+                    <Link to='/'>Marketplace</Link>
+                    <span>|</span>
                     {authUser ? (
                         <>
                             <Link to={`/forum/profile/${authUser?.id}/created_discussions`}>{authUser?.display_name}</Link>
-                            <img src={authUser?.profile_pic} alt="" className='default-forum-profile-avatar' onClick={toggleDropDownProfile} ref={profileDropDown} />
+                            <div className='forum-profile-avatar-container'>
+                                <img src={authUser?.profile_pic} alt="" className='default-forum-profile-avatar' onClick={toggleDropDownProfile} ref={profileDropDown} />
+                                {dropDownProfile && (
+                                    <div className="my-account-dropdown-container">
+                                        <div className='my-account-dropdown'>
+                                            <div className='triangle-icon'><TriangleIcon /></div>
+                                            <ul>
+                                                <li><Link to={`/forum/profile/${authUser?.id}/created_discussions`}>My Forum Profile</Link></li>
+                                                <li><Link onClick={logout}>Logout</Link></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </>
                     ) : (
                         <>
@@ -69,17 +82,7 @@ const ForumHeader = ({ authUser, containerClass }) => {
                         </>
                     )}
                 </div>
-                {dropDownProfile && (
-                    <div className="my-account-dropdown-container">
-                        <div className='my-account-dropdown'>
-                            <div className='triangle-icon'><TriangleIcon /></div>
-                            <ul>
-                                <li><Link to={`/forum/profile/${authUser?.id}/created_discussions`}>My Forum Profile</Link></li>
-                                <li><Link onClick={logout}>Logout</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                )}
+
             </div>
         </>
     )

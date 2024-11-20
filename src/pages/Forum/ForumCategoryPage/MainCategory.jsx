@@ -124,7 +124,7 @@ const ForumCategoryPage = () => {
                                 <div className="category-container">
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                     </div>
                                     {loadingData && <ForumCardSkeleton menus={2} />}
                                     {subcategories && subcategories.length > 0 && (

@@ -91,7 +91,7 @@ const ForumSearchResult = () => {
                                             <h4>Search results for "{searchTerm}"</h4>
                                             <span>({searchResultsData.length} {searchResultsData.length > 1 ? 'posts found' : 'post found'})</span>
                                         </div>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                     </div>
                                 </div>
                                 <div className='discussion-list'>

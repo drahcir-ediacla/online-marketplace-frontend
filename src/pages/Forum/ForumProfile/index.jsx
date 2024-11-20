@@ -411,7 +411,7 @@ const ForumProfile = () => {
                             <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
                                     <h4>Created Discussions ({createdDiscussions?.length})</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                 </div>
                                 {sortCD && sortCD.length > 0 ? (
                                     <ProfileDiscussionCard
@@ -426,7 +426,7 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
                                     <h4>Joined Discussions ({joinedDiscussions?.length})</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                 </div>
                                 {sortJD && sortJD.length > 0 ? (
                                     <ForumDiscussionCard
@@ -441,7 +441,7 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
                                     <h4>Latest Activity</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                 </div>
                                 {activities?.length === 0 ? (
                                     <div className='no-activity'>{paramsUser?.display_name} don't have any activity</div>
@@ -467,7 +467,7 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
                                     <h4>Notifications</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} />
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                                 </div>
                                 <div className="notifications-tab">
                                     <div className="notifications-tab-container">

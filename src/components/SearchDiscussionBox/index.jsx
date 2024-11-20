@@ -2,30 +2,30 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './style.scss'
-import {ReactComponent as MagnifyingGlass} from '../../assets/images/magnifying-glass.svg'
+import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg'
 
 
-const SearchDiscussionBox = () => {
-const location = useLocation();
-const navigate = useNavigate();
-const queryParams = new URLSearchParams(location.search);
-const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
+const SearchDiscussionBox = ({ className }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const [searchTerm, setSearchTerm] = useState(queryParams.get('keyword') || '');
 
-const handleSearch = () => {
-      navigate(`/forum/forum-search-results?keyword=${searchTerm}`);
-  };
+    const handleSearch = () => {
+        navigate(`/forum/forum-search-results?keyword=${searchTerm}`);
+    };
 
-  const handleKeyPress = (e) => {
-    // Check if the pressed key is Enter
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
+    const handleKeyPress = (e) => {
+        // Check if the pressed key is Enter
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
 
     return (
         <>
             <div className="search-box-container">
-                <div className='forum-search-box'>
+                <div className={`forum-search-box ${className}`}>
                     <input
                         type="text"
                         placeholder='Search discussions...'
