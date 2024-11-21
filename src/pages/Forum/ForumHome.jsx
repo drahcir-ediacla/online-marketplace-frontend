@@ -13,10 +13,9 @@ import HomeCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeC
 import HomeSubCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeSubCategoriesSkeleton'
 import ForumDiscussionCard from '../../components/Forum/ForumDiscussionCard'
 import CustomSelect from '../../components/FormField/CustomSelect';
-import FilterTagButton from '../../components/Forum/FilterTagButton'
 import SSNavByCategory from '../../components/Forum/SSNavByCategory'
+import SmallScreenNavMenu from '../../components/Forum/SmallScreenNavMenu'
 import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-spinner.svg'
-import { ReactComponent as CategoryBurgerBtn } from '../../assets/images/burger-btn_v2.svg'
 
 
 
@@ -149,7 +148,8 @@ const ForumHomePage = () => {
                 <GTranslate />
             </div>
             <SearchDiscussionBox className='custom-forum-search-box' />
-            <div className='ss-nav-btn-container'>
+            <SmallScreenNavMenu onClickBrwseByCategory={toggleSsNavByCategory} />
+            {/* <div className='ss-nav-btn-container'>
                 <div className='ss-nav-btn-box'>
                     <div className='ss-nav-btn-box-row1'>
                         <button className='brwse-category-btn' onClick={toggleSsNavByCategory}><CategoryBurgerBtn /><span>Browse by Category</span></button>
@@ -158,7 +158,7 @@ const ForumHomePage = () => {
                     <div className='start-discussion'><NewDiscussionBtn label='Start a discussion' /></div>
                     <div className='new-discussion'><NewDiscussionBtn label='New' /></div>
                 </div>
-            </div>
+            </div> */}
             <div className="forum-categories-container">
                 <h1>Welcome to Yogeek Community</h1>
                 <div className='browse-by-category'>

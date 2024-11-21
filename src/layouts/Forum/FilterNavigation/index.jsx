@@ -70,7 +70,7 @@ const FilterNavigation = ({
             }
         }
         fetchUserData()
-    }, [userId])
+    }, [userId, paramsUserData])
 
 
     useEffect(() => {
@@ -104,7 +104,7 @@ const FilterNavigation = ({
             }
         }
         fetchForumCategories()
-    }, [])
+    }, [categoriesData, tagsData])
 
 
     useEffect(() => {
@@ -125,7 +125,7 @@ const FilterNavigation = ({
             }
         }
         fetchCreatedDiscussions()
-    }, [userId])
+    }, [userId, createdDiscussionsData])
 
     useEffect(() => {
         const fetchJoinedDiscussions = async () => {
@@ -139,7 +139,7 @@ const FilterNavigation = ({
             }
         }
         fetchJoinedDiscussions()
-    }, [userId])
+    }, [userId, joinedDiscussionsData])
 
 
 
@@ -154,7 +154,7 @@ const FilterNavigation = ({
             }
         }
         fetchForumActivities()
-    }, [])
+    }, [userId, activitiesData])
 
     useEffect(() => {
         const getTotalUnreadNotifications = async () => {
@@ -195,7 +195,7 @@ const FilterNavigation = ({
                 // Optional: Handle unknown tabs
                 break;
         }
-    }, [tab, navigate]);
+    }, [tab, navigate, createdDiscussionsTab, joinedDiscussionsTab, userActivityTab, forumNotificationsTab, addDiscussionsBtn]);
 
 
 

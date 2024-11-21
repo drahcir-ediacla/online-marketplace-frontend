@@ -6,6 +6,7 @@ import { ReactComponent as GroupMsgIcon } from '../../../assets/images/group-mes
 const SSNavByCategory = ({ data, onClick }) => {
     const navigate = useNavigate()
     const [ssNavByCategoryOpen, setSsNavByCategoryOpen] = useState(true)
+    
 
     const goToCategoryPage = (id, name) => {
         navigate(`/forum/category/${id}/${name}`)
