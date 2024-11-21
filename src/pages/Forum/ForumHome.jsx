@@ -8,16 +8,15 @@ import Footer from '../../layouts/Forum/Footer'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
 import SearchDiscussionBox from '../../components/SearchDiscussionBox'
 import HomePageSubCategoryCard from '../../components/Forum/HomePageSubCategoryCard'
-import LoginModal from '../../components/Modal/LoginModal';
 import GTranslate from '../../components/GTranslate';
 import HomeCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeCategoriesSkeleton'
 import HomeSubCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeSubCategoriesSkeleton'
 import ForumDiscussionCard from '../../components/Forum/ForumDiscussionCard'
 import CustomSelect from '../../components/FormField/CustomSelect';
+import FilterTagButton from '../../components/Forum/FilterTagButton'
 import SSNavByCategory from '../../components/Forum/SSNavByCategory'
 import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-spinner.svg'
 import { ReactComponent as CategoryBurgerBtn } from '../../assets/images/burger-btn_v2.svg'
-import { ReactComponent as TagsIcon } from '../../assets/images/tags-icon.svg'
 
 
 
@@ -26,7 +25,6 @@ const ForumHomePage = () => {
     const { user } = useAuthentication();
     const navigate = useNavigate();
     const observer = useRef();
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [forumCategories, setForumCategories] = useState([])
     const [ssNavByCategoryOpen, setSsNavByCategoryOpen] = useState(false)
     const [loading, setLoading] = useState(true);
@@ -116,8 +114,6 @@ const ForumHomePage = () => {
         return maxLikesB - maxLikesA;
     });
 
-    console.log(mostLiked);
-
 
     const handleOptionSelect = (option) => {
 
@@ -140,18 +136,6 @@ const ForumHomePage = () => {
     }
 
 
-    const handleNewDiscussionClick = () => {
-        if (!user) {
-            setLoginModalOpen(true)
-        } else {
-            navigate(`/forum/profile/${user.id}/add_discussions`);
-        }
-    };
-
-    const toggleLoginModal = () => {
-        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
-    }
-
     const toggleSsNavByCategory = () => {
         setSsNavByCategoryOpen((prev) => !prev)
     }
@@ -159,94 +143,87 @@ const ForumHomePage = () => {
 
     return (
         <>
-            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {ssNavByCategoryOpen && <SSNavByCategory data={forumCategories} onClick={toggleSsNavByCategory} />}
-            {!ssNavByCategoryOpen && (
-                <>
-                    <Header authUser={user} />
-                    <div className='language-selector-container'>
-                        <GTranslate />
+            <Header authUser={user} />
+            <div className='language-selector-container'>
+                <GTranslate />
+            </div>
+            <SearchDiscussionBox className='custom-forum-search-box' />
+            <div className='ss-nav-btn-container'>
+                <div className='ss-nav-btn-box'>
+                    <div className='ss-nav-btn-box-row1'>
+                        <button className='brwse-category-btn' onClick={toggleSsNavByCategory}><CategoryBurgerBtn /><span>Browse by Category</span></button>
+                        <FilterTagButton label='Popular Tags' />
                     </div>
-                    <SearchDiscussionBox className='custom-forum-search-box' />
-                    <div className='ss-nav-btn-container'>
-                        <div className='ss-nav-btn-box'>
-                            <div className='ss-nav-btn-box-row1'>
-                                <button className='brwse-category-btn' onClick={toggleSsNavByCategory}><CategoryBurgerBtn /><span>Browse by Category</span></button>
-                                <button className='popular-tags-btn'><TagsIcon /><span>Popular Tags</span></button>
-                            </div>
-                            <div className='start-discussion'><NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' /></div>
-                            <div className='new-discussion'><NewDiscussionBtn onClick={handleNewDiscussionClick} label='New' /></div>
-                        </div>
-                    </div>
-                    <div className="forum-categories-container">
-                        <h1>Welcome to Yogeek Community</h1>
-                        <div className='browse-by-category'>
-                            <div className='browse-by-category-container'>
-                                <div className="browse-by-category-row1"><h5>Browse by Category </h5></div>
-                                <div className="browse-by-category-row2">
-                                    <div className='browse-by-category-row2-col1'>
-                                        {loading && <HomeCategoriesSkeleton menus={8} />}
-                                        {forumCategories?.categories?.map(category => (
-                                            <button className='forum-categories-nav-menu' onClick={() => goToCategoryPage(category.id, category.name)} key={category.id}>
-                                                <div className='category-general-discussion-icon'>
-                                                    <img
-                                                        src={category.icon}
-                                                        alt=''
-                                                    /></div>
-                                                {category.name.toUpperCase()}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="forum-container">
-                            <div className='start-discussion-btn-container'>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
-                            </div>
-                            <div className="listed-category-container">
-                                {loading &&
-                                    <>
-                                        <HomeSubCategoriesSkeleton menus={10} />
-                                    </>
-                                }
+                    <div className='start-discussion'><NewDiscussionBtn label='Start a discussion' /></div>
+                    <div className='new-discussion'><NewDiscussionBtn label='New' /></div>
+                </div>
+            </div>
+            <div className="forum-categories-container">
+                <h1>Welcome to Yogeek Community</h1>
+                <div className='browse-by-category'>
+                    <div className='browse-by-category-container'>
+                        <div className="browse-by-category-row1"><h5>Browse by Category </h5></div>
+                        <div className="browse-by-category-row2">
+                            <div className='browse-by-category-row2-col1'>
+                                {loading && <HomeCategoriesSkeleton menus={8} />}
                                 {forumCategories?.categories?.map(category => (
-                                    <div className="listed-category" key={category.id}>
-                                        <div className='listed-category-title'><h4>{category.name}</h4></div>
-
-                                        <HomePageSubCategoryCard
-                                            subcategories={category.subcategories}
-                                        />
-                                    </div>
+                                    <button className='forum-categories-nav-menu' onClick={() => goToCategoryPage(category.id, category.name)} key={category.id}>
+                                        <div className='category-general-discussion-icon'>
+                                            <img
+                                                src={category.icon}
+                                                alt=''
+                                            /></div>
+                                        {category.name.toUpperCase()}
+                                    </button>
                                 ))}
                             </div>
                         </div>
-                        <div className="home-recent-discussions">
-                            <div className='recent-discussions'>
-                                <h5>Recent Discussions</h5>
-                                <div className='replies-sortby-container'>
-                                    <span style={{ flexShrink: '0', fontWeight: 500 }}>Sort By:</span>
-                                    <CustomSelect
-                                        data={filterDiscussionOptions}
-                                        onOptionSelect={handleOptionSelect}
-                                        className='forum-sortby-dropdown-select'
-                                    />
-                                </div>
-                            </div>
-                            <ForumDiscussionCard data={sortRecentDiscussions.length > 0 ? sortRecentDiscussions : mostRecentDiscussions} />
-                        </div>
-                        {/* Trigger for the next page */}
-                        {hasMore && !loadingRecent && (
-                            <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
-                        )}
-                        {loadingRecent && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
-                        {!hasMore && <div className='no-more-data'>No more data to load</div>}
                     </div>
-                    <Footer className='home-footer' />
-                </>
-            )
-            }
+                </div>
+                <div className="forum-container">
+                    <div className='start-discussion-btn-container'>
+                        <NewDiscussionBtn label='Start a discussion' />
+                    </div>
+                    <div className="listed-category-container">
+                        {loading &&
+                            <>
+                                <HomeSubCategoriesSkeleton menus={10} />
+                            </>
+                        }
+                        {forumCategories?.categories?.map(category => (
+                            <div className="listed-category" key={category.id}>
+                                <div className='listed-category-title'><h4>{category.name}</h4></div>
 
+                                <HomePageSubCategoryCard
+                                    subcategories={category.subcategories}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="home-recent-discussions">
+                    <div className='recent-discussions'>
+                        <h5>Recent Discussions</h5>
+                        <div className='replies-sortby-container'>
+                            <span style={{ flexShrink: '0', fontWeight: 500 }}>Sort By:</span>
+                            <CustomSelect
+                                data={filterDiscussionOptions}
+                                onOptionSelect={handleOptionSelect}
+                                className='forum-sortby-dropdown-select'
+                            />
+                        </div>
+                    </div>
+                    <ForumDiscussionCard data={sortRecentDiscussions.length > 0 ? sortRecentDiscussions : mostRecentDiscussions} />
+                </div>
+                {/* Trigger for the next page */}
+                {hasMore && !loadingRecent && (
+                    <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
+                )}
+                {loadingRecent && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
+                {!hasMore && <div className='no-more-data'>No more data to load</div>}
+            </div>
+            <Footer className='home-footer' />
         </>
     )
 }

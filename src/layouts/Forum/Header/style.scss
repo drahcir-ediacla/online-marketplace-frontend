@@ -93,6 +93,12 @@
             color: white;
             background: none;
             border: none;
+
+            .default-forum-profile-avatar {
+                width: 33px;
+                height: 33px;
+                border-radius: 50%;
+            }
         }
     }
 

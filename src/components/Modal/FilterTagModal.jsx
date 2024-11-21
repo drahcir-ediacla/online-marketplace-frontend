@@ -13,12 +13,9 @@ const FilterTagModal = ({ onClick, tagsData }) => {
     const [isModalOpen] = useState(true);
     const [showDropdownTags, setShowDropdownTags] = useState(false);
     const [tags, setTags] = useState([]);
-    console.log('tags:', tags)
     const [selectedTags, setSelectedTags] = useState([]);
-    console.log('FilterTagModal selectedTags:', selectedTags)
     const [inputTags, setInputTags] = useState('');
     const [filteredTags, setFilteredTags] = useState(tagsData);
-    console.log('FilterTagModal filteredTags:', filteredTags)
     const dropDownTags = useRef();
 
 

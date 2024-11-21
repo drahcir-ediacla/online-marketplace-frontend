@@ -1,0 +1,29 @@
+.popular-tags-btn-label {
+    display: flex;
+    font-weight: 500;
+    gap: 5px;
+    align-items: center;
+    border: none;
+    background: none;
+}
+
+.popular-tags-btn {
+    display: none;
+    font-weight: 500;
+    gap: 5px;
+    align-items: center;
+    border: none;
+    background: none;
+}
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 420px) {
+    .popular-tags-btn-label {
+        display: none;
+    }
+    
+    .popular-tags-btn {
+        display: flex;
+    }
+}

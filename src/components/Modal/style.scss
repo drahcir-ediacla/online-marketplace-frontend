@@ -750,9 +750,24 @@
 
         .filter-tag-modal-row4 {
             display: flex;
+            flex-wrap: wrap;
             justify-content: end;
             gap: 10px;
             margin: 30px 20px;
+        }
+    }
+}
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 420px) {
+    .filter-tag-modal-container {
+        .modal-box {
+            .filter-tag-modal-row4 {
+                button {
+                    width: 100%;
+                }
+            }
         }
     }
 }
