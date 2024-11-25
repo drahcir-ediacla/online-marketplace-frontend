@@ -121,8 +121,8 @@ const getFormattedDate = (dateString) => {
                                 <div className='view-msg-icon'><EyeIcon /></div>
                                 <span>{item.totalViews}</span>
                             </div>
+                            <span className="last-activity-time">{item.discussions.length > 0 ? (getFormattedDate(item.latestPost?.created_at)) : 'no activity'}</span>
                         </div>
-                        <span className="last-activity-time">{item.discussions.length > 0 ? (getFormattedDate(item.latestPost?.created_at)) : 'no activity'}</span>
                     </div>
                 </div>
             ))}

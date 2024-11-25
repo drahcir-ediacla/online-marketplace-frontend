@@ -12,6 +12,8 @@ import FilterTagDiscussionCard from '../../../components/Forum/FilterTagDiscussi
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
+import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
+import CustomSelect from '../../../components/FormField/CustomSelect';
 
 
 const FilterDiscussionByTags = () => {
@@ -155,11 +157,19 @@ const FilterDiscussionByTags = () => {
                         <div className='language-selector-container'>
                             <GTranslate />
                         </div>
-                        <SearchDiscussionBox />
+                        <SearchDiscussionBox className='custom-forum-search-box' />
+                        <SmallScreenNavMenu />
                         <div className='discussions-container'>
                             <div className='discussions-container-row1'>
                                 <h4>Filter Tagged Discussions</h4>
-                                <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                <div className='start-discussion-btn-container'>
+                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                </div>
+                                <CustomSelect
+                                    data={filterDiscussionOptions}
+                                    onOptionSelect={handleOptionSelect}
+                                    className='discussion-sortby-dropdown-select'
+                                />
                             </div>
                             <div className='discussion-list'>
                                 {discussions && discussions.length > 0 ? (

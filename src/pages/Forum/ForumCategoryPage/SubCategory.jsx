@@ -12,7 +12,9 @@ import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import CustomSelect from '../../../components/FormField/CustomSelect';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
+import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 
 
@@ -148,12 +150,20 @@ const ForumSubCategoryPage = () => {
                             <div className='language-selector-container'>
                                 <GTranslate />
                             </div>
-                            <SearchDiscussionBox />
+                            <SearchDiscussionBox className='custom-forum-search-box' />
+                            <SmallScreenNavMenu />
                             <div className="discussions-container">
                                 <div className="category-container">
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <div className='start-discussion-btn-container'>
+                                            <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        </div>
+                                        <CustomSelect
+                                            data={filterDiscussionOptions}
+                                            onOptionSelect={handleOptionSelect}
+                                            className='discussion-sortby-dropdown-select'
+                                        />
                                     </div>
                                     {subcategories && subcategories.length > 0 && (
                                         <ForumSubCategory

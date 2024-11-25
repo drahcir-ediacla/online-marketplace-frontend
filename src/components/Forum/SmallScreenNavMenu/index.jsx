@@ -1,7 +1,7 @@
 import './style.scss'
+import CategoryMenuBtn from '../CategoryMenuBtn'
 import FilterTagButton from '../../../components/Forum/FilterTagButton'
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
-import { ReactComponent as CategoryBurgerBtn } from '../../../assets/images/burger-btn_v2.svg'
 
 
 const SmallScreenNavMenu = ({ onClickBrwseByCategory }) => {
@@ -11,7 +11,7 @@ const SmallScreenNavMenu = ({ onClickBrwseByCategory }) => {
             <div className='ss-nav-btn-container'>
                 <div className='ss-nav-btn-box'>
                     <div className='ss-nav-btn-box-row1'>
-                        <button className='brwse-category-btn' onClick={onClickBrwseByCategory}><CategoryBurgerBtn /><span>Browse by Category</span></button>
+                        <CategoryMenuBtn />
                         <FilterTagButton label='Popular Tags' />
                     </div>
                     <div className='start-discussion'><NewDiscussionBtn label='Start a discussion' /></div>

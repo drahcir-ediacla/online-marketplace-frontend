@@ -13,7 +13,6 @@ import HomeCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeC
 import HomeSubCategoriesSkeleton from '../../components/Forum/SkeletonLoading/HomeSubCategoriesSkeleton'
 import ForumDiscussionCard from '../../components/Forum/ForumDiscussionCard'
 import CustomSelect from '../../components/FormField/CustomSelect';
-import SSNavByCategory from '../../components/Forum/SSNavByCategory'
 import SmallScreenNavMenu from '../../components/Forum/SmallScreenNavMenu'
 import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-spinner.svg'
 
@@ -25,7 +24,6 @@ const ForumHomePage = () => {
     const navigate = useNavigate();
     const observer = useRef();
     const [forumCategories, setForumCategories] = useState([])
-    const [ssNavByCategoryOpen, setSsNavByCategoryOpen] = useState(false)
     const [loading, setLoading] = useState(true);
     const [loadingRecent, setLoadingRecent] = useState(false);
     const [recentDiscussions, setRecentDiscussions] = useState([])
@@ -135,20 +133,16 @@ const ForumHomePage = () => {
     }
 
 
-    const toggleSsNavByCategory = () => {
-        setSsNavByCategoryOpen((prev) => !prev)
-    }
-
-
     return (
         <>
-            {ssNavByCategoryOpen && <SSNavByCategory data={forumCategories} onClick={toggleSsNavByCategory} />}
             <Header authUser={user} />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
             <SearchDiscussionBox className='custom-forum-search-box' />
-            <SmallScreenNavMenu onClickBrwseByCategory={toggleSsNavByCategory} />
+            <div className='smallscreennavmenu-container'>
+                <SmallScreenNavMenu />
+            </div>
             {/* <div className='ss-nav-btn-container'>
                 <div className='ss-nav-btn-box'>
                     <div className='ss-nav-btn-box-row1'>

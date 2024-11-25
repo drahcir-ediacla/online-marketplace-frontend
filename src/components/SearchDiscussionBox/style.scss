@@ -36,12 +36,15 @@
     }
 }
 
-@media only screen and (max-width: 1024px) {
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1100px) {
 
     .search-box-container {
-        .custom-forum-search-box {
+        .forum-search-box {
             max-width: 100%;
-            margin: 0px 12px 20px 12px;
+            margin: 0px 0px 10px 0px;
         }
     }
 }
+

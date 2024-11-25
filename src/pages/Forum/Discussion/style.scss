@@ -21,7 +21,7 @@
         width: 100%;
         text-align: right;
         margin: 10px 0;
-        padding: 0 10px;
+        padding: 0px;
     }
 
     .show-replies-btn,
@@ -251,6 +251,8 @@
 
                 .started-discussion-container-row3 {
                     display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
                     justify-content: space-between;
 
                     .view-reply-like-counter {
@@ -512,5 +514,65 @@
         position: sticky;
         bottom: 0;
         margin-top: auto;
+    }
+}
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1100px) {
+
+    .discussion-container {
+        .forum-discussion-page-container {
+            padding: 0 12px;
+
+            .forum-discussion-page-container-col2 {
+                .new-discussion-container {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .search-box-container {
+        .forum-search-box {
+            max-width: 100%;
+            margin: 0px 0px 10px 0px;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .discussion-container {
+        .forum-discussion-page-container {
+            .forum-discussion-page-container-col2 {
+                .all-replies-container {
+                    padding-left: 8px;
+
+                    .reply-container {
+                        .level2-replies-container {
+                            padding-left: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .discussion-container {
+        .forum-discussion-page-container {
+            .forum-discussion-page-container-col2 {
+                .filter-replies {
+                    padding: 0;
+
+                    .replies-sortby-container {
+                        span {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

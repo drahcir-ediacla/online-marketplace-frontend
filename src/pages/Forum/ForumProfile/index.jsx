@@ -23,6 +23,8 @@ import LoginModal from '../../../components/Modal/LoginModal';
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.svg';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
+import CategoryMenuBtn from '../../../components/Forum/CategoryMenuBtn';
+import FilterTagButton from '../../../components/Forum/FilterTagButton';
 
 
 
@@ -558,6 +560,10 @@ const ForumProfile = () => {
                                 )}
                             </div>
                             <div className='tab-content' style={{ display: activeTab === 4 ? 'flex' : 'none' }}>
+                                <div className='ss-add-new-discussion-nav-btns'>
+                                    <CategoryMenuBtn />
+                                    <FilterTagButton label='Popular Tags' />
+                                </div>
                                 <div className='forum-profile-tab-title'>
                                     <h4>Add New Discussions</h4>
                                 </div>

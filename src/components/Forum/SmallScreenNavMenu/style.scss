@@ -8,7 +8,7 @@
         flex-wrap: wrap;
         gap: 10px;
         max-width: 100%;
-        margin: 0px 12px 20px 12px;
+        margin: 0px 0px 20px 0px;
         flex: 1;
 
         .ss-nav-btn-box-row1 {
@@ -38,12 +38,25 @@
 
 /*-------------------- MEDIA QUERY ------------------------------*/
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1100px) {
 
     .ss-nav-btn-container {
         display: flex;
+        .ss-nav-btn-box {
+            margin: 0px 0px 10px 0px;
+        }
     }
 }
+
+// @media only screen and (max-width: 1024px) {
+
+//     .ss-nav-btn-container {
+//         display: flex;
+//         .ss-nav-btn-box {
+//             margin: 0px 0px 10px 0px;
+//         }
+//     }
+// }
 
 @media only screen and (max-width: 600px) {
     .ss-nav-btn-container {

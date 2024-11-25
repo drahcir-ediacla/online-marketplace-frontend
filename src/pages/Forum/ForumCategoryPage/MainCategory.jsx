@@ -7,13 +7,15 @@ import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
-import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
+import ForumSubCategoryCard from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
 import LoginModal from '../../../components/Modal/LoginModal';
+import CustomSelect from '../../../components/FormField/CustomSelect';
 import ForumCardSkeleton from '../../../components/Forum/SkeletonLoading/ForumCardSkeleton';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
+import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 
 
@@ -38,9 +40,9 @@ const ForumCategoryPage = () => {
         const fetchCategoryData = async () => {
             try {
                 setLoadingData(true)
-                    const response = await axios.get(`/api/forumcategory/${id}/${name}`);
-                    setCategoryData(response.data)
-                    setLoadingData(false)
+                const response = await axios.get(`/api/forumcategory/${id}/${name}`);
+                setCategoryData(response.data)
+                setLoadingData(false)
             } catch (error) {
                 setLoadingData(false)
                 console.error("Error fetching data:", error);
@@ -119,16 +121,24 @@ const ForumCategoryPage = () => {
                             <div className='language-selector-container'>
                                 <GTranslate />
                             </div>
-                            <SearchDiscussionBox />
+                            <SearchDiscussionBox className='custom-forum-search-box' />
+                            <SmallScreenNavMenu />
                             <div className="discussions-container">
                                 <div className="category-container">
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <div className='start-discussion-btn-container'>
+                                            <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        </div>
+                                        <CustomSelect 
+                                        data={filterDiscussionOptions}
+                                        onOptionSelect={handleOptionSelect}
+                                        className='discussion-sortby-dropdown-select' 
+                                        />
                                     </div>
                                     {loadingData && <ForumCardSkeleton menus={2} />}
                                     {subcategories && subcategories.length > 0 && (
-                                        <ForumSubCategory
+                                        <ForumSubCategoryCard
                                             data={categoryData}
                                         />
                                     )}

@@ -26,6 +26,7 @@ import BtnGreen from '../../../components/Button/BtnGreen';
 import BtnClear from '../../../components/Button/BtnClear';
 import BtnReply from '../../../components/Button/BtnReply';
 import AlertMessage from '../../../components/AlertMessage';
+import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 
 
@@ -430,8 +431,9 @@ const Discussion = () => {
                             <GTranslate />
                         </div>
                         <SearchDiscussionBox />
+                        <SmallScreenNavMenu />
                         <div className="new-discussion-container">
-                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                            <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
                         </div>
                         {allPost.map(post => (
                             <>

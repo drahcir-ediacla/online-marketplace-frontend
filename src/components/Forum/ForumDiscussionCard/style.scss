@@ -97,3 +97,19 @@
         }
     }
 }
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+@media only screen and (max-width: 1024px) {
+
+    .forum-discussion-card {
+        .forum-discussion-card-row1 {
+            .forum-discussion-info {
+                a {
+                    h6 {
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

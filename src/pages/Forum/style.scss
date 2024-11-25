@@ -5,6 +5,10 @@
     padding: 0 10px;
 }
 
+.smallscreennavmenu-container {
+    margin: 0 12px;
+}
+
 .ss-nav-btn-container {
     display: none;
     justify-content: center;
@@ -15,7 +19,7 @@
         flex-wrap: wrap;
         gap: 10px;
         max-width: 100%;
-        margin: 0px 12px 20px 12px;
+        margin: 0px 0px 20px 0px;
         flex: 1;
 
         .ss-nav-btn-box-row1 {

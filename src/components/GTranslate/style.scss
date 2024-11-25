@@ -9,3 +9,14 @@
 .gt_selector:hover {
     cursor: pointer;
 }
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+@media only screen and (max-width: 420px) {
+
+    .gtranslate_wrapper {
+        select {
+            width: 100%;
+        }
+    }
+}

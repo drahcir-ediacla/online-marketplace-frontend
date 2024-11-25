@@ -3,7 +3,6 @@
     flex-direction: column;
     gap: 30px;
     max-width: 460px;
-    min-width: 300px;
     height: fit-content;
     padding: 30px 0 30px 0;
     margin-top: 10px;
@@ -131,6 +130,7 @@
 
         .forum-category-btn-container {
             display: flex;
+            text-align: center;
             gap: 10px;
             flex-wrap: wrap;
             padding: 0 20px;
@@ -191,5 +191,24 @@
                 border: 1px solid var(--gray-300);
             }
         }
+    }
+}
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1400px) {
+    .forum-category-page-filter-nav {
+        .forum-category-page-row2, .forum-category-page-row3 {
+            .forum-category-btn-container {
+                flex-direction: column;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    .forum-category-page-filter-nav {
+        display: none;
     }
 }

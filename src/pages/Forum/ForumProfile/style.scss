@@ -2,7 +2,7 @@
     width: 100%;
     text-align: right;
     margin: 10px 0;
-    padding: 0 10px;
+    padding: 0;
 }
 
 .forum-profile-container {
@@ -23,6 +23,11 @@
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
+
+                .ss-add-new-discussion-nav-btns {
+                    display: none;
+                    gap: 20px;
+                }
 
                 .forum-profile-tab-title {
                     display: flex;
@@ -488,4 +493,42 @@
 .forum-profile-footer {
     position: relative;
     margin-top: 100px;
+}
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1100px) {
+    .forum-profile-container {
+        padding: 0 12px;
+        .forum-profile-page-col2 {
+            .discussions-container {
+                .tab-content {
+                    .ss-add-new-discussion-nav-btns {
+                        display: flex;
+                        gap: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .forum-profile-container {
+        .forum-profile-page-col2 {
+            .discussions-container {
+                .tab-content {
+                    .ss-add-new-discussion-nav-btns {
+                        gap: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .language-selector-container {
+        select {
+            width: 100%;
+        }
+    }
 }

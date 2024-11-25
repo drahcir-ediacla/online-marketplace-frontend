@@ -21,11 +21,22 @@
         .discussions-container {
             .discussions-container-row1 {
                 display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
                 justify-content: space-between;
                 align-items: center;
 
                 h4 {
                     font-weight: 500;
+                }
+
+                .discussion-sortby-dropdown-select {
+                    display: none;
+                    width: 100%;
+                    height: 30px;
+                    padding: 0 10px;
+                    border-radius: 5px;
+                    border: 1px solid var(--gray-300);
                 }
             }
 
@@ -46,4 +57,83 @@
 
 .footer-filter-tags {
     margin-top: auto;
+}
+
+
+/*-------------------- MEDIA QUERY ------------------------------*/
+
+@media only screen and (max-width: 1100px) {
+    .forum-page-container {
+        .forum-filter-tags-page-container {
+
+            .forum-filter-tags-page-container-col2 {
+                .search-box-container {
+                    .custom-forum-search-box {
+                        max-width: 100%;
+                        margin: 0px 0px 20px 0px;
+                    }
+                }
+
+                .discussions-container {
+                    .discussions-container-row1 {
+                        h4 {
+                            font-size: 17px;
+                            margin: 0;
+                        }
+
+                        .discussion-sortby-dropdown-select {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .forum-page-container {
+        .forum-filter-tags-page-container {
+            padding: 0 12px;
+
+            .forum-filter-tags-page-container-col2 {
+                .search-box-container {
+                    .custom-forum-search-box {
+                        max-width: 100%;
+                        margin: 0px 0px 10px 0px;
+                    }
+                }
+
+                .discussions-container {
+                    .discussions-container-row1 {
+                        h4 {
+                            font-size: 17px;
+                        }
+
+                        .start-discussion-btn-container {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (max-width: 1024px) {
+    .forum-page-container {
+        .forum-filter-tags-page-container {
+            .forum-filter-tags-page-container-col2 {
+                .language-selector-container {
+                    padding: 0;
+
+                    select {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
 }
