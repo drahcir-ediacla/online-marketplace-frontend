@@ -10,6 +10,7 @@
     background: var(--black-101);
     padding: 10px 12px;
     color: white;
+    transition: transform 0.3s ease-in-out;
     z-index: 2;
 
     .forum-logo {
@@ -104,6 +105,14 @@
 
 
 }
+
+.forum-header-container.hidden {
+    transform: translateY(-100%);
+  }
+
+  .forum-header-container.visible {
+    transform: translateY(0);
+  }
 
 
 /*-------------------- MEDIA QUERY ------------------------------*/

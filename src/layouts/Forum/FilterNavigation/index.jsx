@@ -322,13 +322,6 @@ const FilterNavigation = ({
                                 className='forum-sortby-dropdown-select'
                             />
                         </div>
-                        {/* <div className='forum-last-updated'>
-                            <label>LAST UPDATED</label>
-                            <CustomSelect
-                                data={sortBy}
-                                className='forum-sortby-dropdown-select'
-                            />
-                        </div> */}
                     </>
                 )}
                 <div className='forum-category-page-row2'>

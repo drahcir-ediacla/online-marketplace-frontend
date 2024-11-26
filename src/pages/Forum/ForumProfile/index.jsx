@@ -25,6 +25,7 @@ import { ReactComponent as ThreeDots } from '../../../assets/images//three-dots.
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 import CategoryMenuBtn from '../../../components/Forum/CategoryMenuBtn';
 import FilterTagButton from '../../../components/Forum/FilterTagButton';
+import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 
 
@@ -55,6 +56,7 @@ const ForumProfile = () => {
     const [categoryId, setCategoryId] = useState('')
     const [activeNotifTab, setActiveNotifTab] = useState(0);
     const [notifThreeDotsOptions, setNotifThreeDotsOptions] = useState(false)
+    const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [loading, setLoading] = useState(false);
@@ -109,6 +111,18 @@ const ForumProfile = () => {
             document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
+
+    useEffect(() => {
+        const getTotalUnreadNotifications = async () => {
+            try {
+                const response = await axios.get('/api/total-forum-notifications')
+                setTotalUnreadNotifications(response.data.totalCount)
+            } catch (error) {
+                console.log('Error fetching total unread notifications', error)
+            }
+        }
+        getTotalUnreadNotifications()
+    }, [notifications])
 
     useEffect(() => {
         const fetchForumNotifications = async () => {
@@ -378,6 +392,26 @@ const ForumProfile = () => {
         setLoginModalOpen(true)
     }
 
+    const handleCreatedDiscussions = () => {
+        navigate(`/forum/profile/${paramsUser?.id}/created_discussions`);
+        setActiveTab(0);
+    };
+    const handleJoinedDiscussions = () => {
+        navigate(`/forum/profile/${paramsUser?.id}/joined_discussions`);
+        setActiveTab(1);
+    };
+    const handleUserActivity = () => {
+        navigate(`/forum/profile/${paramsUser?.id}/user_activity`);
+        setActiveTab(2);
+    };
+    const handleForumNotifications = () => {
+        navigate(`/forum/profile/${paramsUser?.id}/notifications`);
+        setActiveTab(3);
+    };
+
+    const originalDate = user?.createdAt || '';
+    const formattedDate = new Date(originalDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
@@ -408,12 +442,38 @@ const ForumProfile = () => {
                         <div className='language-selector-container'>
                             <GTranslate />
                         </div>
-                        {activeTab !== 4 && <SearchDiscussionBox />}
+                        <div className='profile-page-search-box-container'>
+                            {activeTab !== 4 && <SearchDiscussionBox />}
+                        </div>
+                        <div className='smallscreennavmenu-container'>
+                            <SmallScreenNavMenu />
+                        </div>
+                        <div className='profile-info-and-tab'>
+                            <div className='profile-info-and-tab-row1'>
+                                <img src={paramsUser?.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
+                                <div className='user-display-name'>
+                                    <p>{paramsUser?.display_name}</p>
+                                    <small>Joined in {formattedDate}</small>
+                                </div>
+                            </div>
+                            <div className='profile-info-and-tab-row2'>
+                                <button onClick={handleCreatedDiscussions} className={activeTab === 0 && 'active'}>Created Discussions</button>
+                                <button onClick={handleJoinedDiscussions} className={activeTab === 1 && 'active'}>Joined Discussions</button>
+                                <button onClick={handleUserActivity} className={activeTab === 2 && 'active'}>Activities</button>
+                                {paramsUser?.id === user?.id && 
+                                <button onClick={handleForumNotifications} className={activeTab === 3 && 'active'} style={{display: 'flex'}}>
+                                    Notifications  {totalUnreadNotifications > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications}</div>}
+                                    </button>
+                                }
+                            </div>
+                        </div>
                         <div className="discussions-container">
                             <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
                                     <h4>Created Discussions ({createdDiscussions?.length})</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    <div className='start-discussion-btn-container'>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    </div>
                                 </div>
                                 {sortCD && sortCD.length > 0 ? (
                                     <ProfileDiscussionCard
@@ -428,7 +488,9 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 1 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
                                     <h4>Joined Discussions ({joinedDiscussions?.length})</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    <div className='start-discussion-btn-container'>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    </div>
                                 </div>
                                 {sortJD && sortJD.length > 0 ? (
                                     <ForumDiscussionCard
@@ -443,7 +505,9 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 2 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
                                     <h4>Latest Activity</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    <div className='start-discussion-btn-container'>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    </div>
                                 </div>
                                 {activities?.length === 0 ? (
                                     <div className='no-activity'>{paramsUser?.display_name} don't have any activity</div>
@@ -469,7 +533,9 @@ const ForumProfile = () => {
                             <div className='tab-content' style={{ display: activeTab === 3 ? 'flex' : 'none' }}>
                                 <div className='forum-profile-tab-title'>
                                     <h4>Notifications</h4>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    <div className='start-discussion-btn-container'>
+                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    </div>
                                 </div>
                                 <div className="notifications-tab">
                                     <div className="notifications-tab-container">

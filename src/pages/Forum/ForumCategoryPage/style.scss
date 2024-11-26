@@ -1,7 +1,6 @@
 .forum-page-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
 
     .language-selector-container {
         width: 100%;
@@ -160,7 +159,6 @@
 
         .forum-category-page-col2 {
             width: 100%;
-            margin-bottom: 100px;
 
             .search-box-container {
                 display: flex;
@@ -265,10 +263,6 @@
                 }
             }
         }
-    }
-
-    .forum-category-footer {
-        margin-top: auto;
     }
 }
 

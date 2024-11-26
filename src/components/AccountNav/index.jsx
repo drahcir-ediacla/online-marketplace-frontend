@@ -82,6 +82,11 @@ const AccountNav = () => {
                                 </Link>
                             </li>
                             <li>
+                                <Link to='/forum'>
+                                    Community
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to='/deactivateaccount' onClick={openManageAccountNav}>
                                     Settings
                                 </Link>

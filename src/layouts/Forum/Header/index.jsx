@@ -12,6 +12,8 @@ const ForumHeader = ({ authUser, containerClass }) => {
     const [dropDownProfile, setDropDownProfile] = useState(false);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const profileDropDown = useRef(null);
+    const [showHeader, setShowHeader] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     useEffect(() => {
         const handleGlobalClick = (event) => {
@@ -26,6 +28,25 @@ const ForumHeader = ({ authUser, containerClass }) => {
             document.removeEventListener('click', handleGlobalClick);
         };
     }, []);
+
+
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [lastScrollY]);
+
+    const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            // Scrolling down
+            setShowHeader(false);
+        } else {
+            // Scrolling up
+            setShowHeader(true);
+        }
+        setLastScrollY(currentScrollY);
+    };
 
 
     const toggleDropDownProfile = () => {
@@ -52,7 +73,7 @@ const ForumHeader = ({ authUser, containerClass }) => {
     return (
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
-            <div className={`forum-header-container ${containerClass}`}>
+            <div className={`forum-header-container ${containerClass} ${showHeader ? "visible" : "hidden"}`}>
                 <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
                     <Link to='/'>Marketplace</Link>

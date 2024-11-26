@@ -139,7 +139,9 @@ const ForumHomePage = () => {
             <div className='language-selector-container'>
                 <GTranslate />
             </div>
-            <SearchDiscussionBox className='custom-forum-search-box' />
+            <div className='home-search-box-container'>
+                <SearchDiscussionBox className='custom-forum-search-box' />
+            </div>
             <div className='smallscreennavmenu-container'>
                 <SmallScreenNavMenu />
             </div>
