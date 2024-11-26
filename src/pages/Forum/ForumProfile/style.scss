@@ -607,6 +607,31 @@
     }
 }
 
+@media only screen and (max-width: 820px) {
+    .forum-profile-container {
+        .forum-profile-page-col2 {
+            .discussions-container {
+                .tab-content {
+                    .add-discussion-form {
+                        .add-discussion-form-field-container {
+                            .new-discussion-message{
+                                height: auto;
+                                margin-bottom: 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .language-selector-container {
+        select {
+            width: 100%;
+        }
+    }
+}
+
 @media only screen and (max-width: 420px) {
     .forum-profile-container {
         .forum-profile-page-col2 {

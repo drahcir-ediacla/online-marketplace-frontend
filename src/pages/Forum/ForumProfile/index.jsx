@@ -446,27 +446,29 @@ const ForumProfile = () => {
                             {activeTab !== 4 && <SearchDiscussionBox />}
                         </div>
                         <div className='smallscreennavmenu-container'>
-                            <SmallScreenNavMenu />
+                            {activeTab !== 4 && <SmallScreenNavMenu />}
                         </div>
-                        <div className='profile-info-and-tab'>
-                            <div className='profile-info-and-tab-row1'>
-                                <img src={paramsUser?.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
-                                <div className='user-display-name'>
-                                    <p>{paramsUser?.display_name}</p>
-                                    <small>Joined in {formattedDate}</small>
+                        {activeTab !== 4 &&
+                            <div className='profile-info-and-tab'>
+                                <div className='profile-info-and-tab-row1'>
+                                    <img src={paramsUser?.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
+                                    <div className='user-display-name'>
+                                        <p>{paramsUser?.display_name}</p>
+                                        <small>Joined in {formattedDate}</small>
+                                    </div>
+                                </div>
+                                <div className='profile-info-and-tab-row2'>
+                                    <button onClick={handleCreatedDiscussions} className={activeTab === 0 && 'active'}>Created Discussions</button>
+                                    <button onClick={handleJoinedDiscussions} className={activeTab === 1 && 'active'}>Joined Discussions</button>
+                                    <button onClick={handleUserActivity} className={activeTab === 2 && 'active'}>Activities</button>
+                                    {paramsUser?.id === user?.id &&
+                                        <button onClick={handleForumNotifications} className={activeTab === 3 && 'active'} style={{ display: 'flex' }}>
+                                            Notifications  {totalUnreadNotifications > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications}</div>}
+                                        </button>
+                                    }
                                 </div>
                             </div>
-                            <div className='profile-info-and-tab-row2'>
-                                <button onClick={handleCreatedDiscussions} className={activeTab === 0 && 'active'}>Created Discussions</button>
-                                <button onClick={handleJoinedDiscussions} className={activeTab === 1 && 'active'}>Joined Discussions</button>
-                                <button onClick={handleUserActivity} className={activeTab === 2 && 'active'}>Activities</button>
-                                {paramsUser?.id === user?.id && 
-                                <button onClick={handleForumNotifications} className={activeTab === 3 && 'active'} style={{display: 'flex'}}>
-                                    Notifications  {totalUnreadNotifications > 0 && <div className='forum-notification-counter'>{totalUnreadNotifications}</div>}
-                                    </button>
-                                }
-                            </div>
-                        </div>
+                        }
                         <div className="discussions-container">
                             <div className="tab-content" style={{ display: activeTab === 0 ? 'flex' : 'none' }}>
                                 <div className="forum-profile-tab-title">
@@ -678,6 +680,7 @@ const ForumProfile = () => {
                                             className='new-discussion-message'
                                             value={content}
                                             onChange={(e) => setContent(e)}
+                                            rows={5}
                                         />
                                     </div>
                                     <div className='add-discussion-form-field-container'>
