@@ -100,6 +100,7 @@ const ChatMessages = () => {
 
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredChat, setFilteredChat] = useState([])
+    console.log('filteredChat:', filteredChat)
 
     const emojiPickerRef = useRef(null);
     const scrollRef = useRef(null);
@@ -239,7 +240,7 @@ const ChatMessages = () => {
             const lastIndex = messages.findIndex(message => isImage(message.content));
             setLastImageMessageIndex(lastIndex);
         }
-    }, [messages]);
+    }, [messages, allChats, filteredChat]);
 
 
     useEffect(() => {
@@ -343,7 +344,7 @@ const ChatMessages = () => {
                 socketRef.current.disconnect();
             }
         };
-    }, [chat_id, filteredChat, messages, receiver_id]); // Dependencies updated to include chat_id
+    }, [chat_id, filteredChat, messages, receiver_id, allChats]); // Dependencies updated to include chat_id
 
 
     useEffect(() => {
@@ -390,7 +391,7 @@ const ChatMessages = () => {
         if (chat_id) {
             fetchChatById(); // Fetch receiver information only if receiver_id is available
         }
-    }, [chat_id, sendOffer, user?.id, sender_id]);
+    }, [chat_id, sendOffer, user?.id, sender_id, allChats]);
 
 
 
@@ -665,8 +666,6 @@ const ChatMessages = () => {
     console.log(formattedTimePast); // Output example: "05/25/2023"
 
 
-
-
     const getLastMessageContent = (messages) => {
         if (messages && messages.length > 0) {
             // Create a new array and sort it by timestamp in descending order
@@ -732,9 +731,9 @@ const ChatMessages = () => {
         try {
             await axios.put(`/api/read-message/${chatId}`, { read: true });
 
-            setAllChats(filteredChat.map(chat =>
-                chat.chat_id === chatId ? { ...filteredChat, read: true } : filteredChat
-            ));
+            // setAllChats(filteredChat.map(chat =>
+            //     chat.chat_id === chatId ? { ...filteredChat, read: true } : filteredChat
+            // ));
             fetchAllUserChat();
         } catch (error) {
             console.error('Error marking message as read:', error);
