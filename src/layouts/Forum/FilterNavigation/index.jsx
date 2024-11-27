@@ -7,6 +7,7 @@ import CustomSelect from '../../../components/FormField/CustomSelect'
 import BtnCategory from '../../../components/Button/BtnCategory'
 import FilterTagModal from '../../../components/Modal/FilterTagModal'
 import SideNavCategoriesSkeleton from '../../../components/Forum/SkeletonLoading/SideNavCategoriesSkeleton'
+import LoginModal from '../../../components/Modal/LoginModal'
 
 
 const FilterNavigation = ({
@@ -17,7 +18,6 @@ const FilterNavigation = ({
     forumNotificationsTab,
     addDiscussionsBtn,
     discussionFilter,
-    onClick,
     categoriesData,
     createdDiscussionsData,
     joinedDiscussionsData,
@@ -47,6 +47,7 @@ const FilterNavigation = ({
     const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0);
     const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
     const [loadingCategories, setLoadingCategories] = useState(true)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
 
 
     useEffect(() => {
@@ -239,6 +240,10 @@ const FilterNavigation = ({
         });
     };
 
+    const toggleLoginModal = () => {
+        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+    }
+
     const toggleTagModal = () => {
         setFilterTagModalOpen((prev) => !prev)
     }
@@ -255,16 +260,17 @@ const FilterNavigation = ({
 
     return (
         <>
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {filterTagModalOpen && <FilterTagModal onClick={toggleTagModal} tagsData={tags} />}
             <div className={`forum-category-page-filter-nav ${className}`}>
                 {!authUser ? (
                     <>
                         <div className='forum-category-page-row1 not-authenticated'>
                             <p>Join our community, elevate your marketplace experience!</p>
-                            <button type='button' className='forum-login-btn' onClick={onClick}>Sign In</button>
+                            <button type='button' className='forum-login-btn' onClick={toggleLoginModal}>Sign In</button>
                             <p>Don’t have a Yogeek account? <Link to='/registerbyemail'>Sign up</Link></p>
                         </div>
-                        {userId && <div className='forum-category-page-row1'>
+                        {/* {userId && <div className='forum-category-page-row1'>
                             <div className='forum-category-page-row1-row1'>
                                 <img src={user.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
                                 <div className='user-display-name'>
@@ -284,7 +290,7 @@ const FilterNavigation = ({
 
                             </ul>
                         </div>
-                        }
+                        } */}
                     </>
                 ) : (
                     <>

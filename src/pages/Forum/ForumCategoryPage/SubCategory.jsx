@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
@@ -11,7 +11,6 @@ import ForumSubCategory from '../../../components/Forum/ForumSubCategoryCard'
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
-import LoginModal from '../../../components/Modal/LoginModal';
 import CustomSelect from '../../../components/FormField/CustomSelect';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
@@ -22,11 +21,9 @@ const ForumSubCategoryPage = () => {
 
     const { user } = useAuthentication();
     const { id, name } = useParams()
-    const navigate = useNavigate();
     const observer = useRef();
     const [categoryData, setCategoryData] = useState({})
     const [discussionFilter] = useState(true)
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [sortDiscussions, setSortDiscussions] = useState([])
     const [discussions, setDiscussions] = useState([]);
     const [page, setPage] = useState(1);
@@ -113,28 +110,9 @@ const ForumSubCategoryPage = () => {
     };
 
 
-    const handleNewDiscussionClick = () => {
-        if (!user) {
-            setLoginModalOpen(true)
-        } else {
-            navigate(`/forum/profile/${user.id}/add_discussions`);
-        }
-    };
-
-    const toggleLoginModal = () => {
-        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
-    }
-
-    const loginModal = () => {
-        setLoginModalOpen(true)
-    }
-
-
-
 
     return (
         <>
-            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div>
@@ -143,7 +121,6 @@ const ForumSubCategoryPage = () => {
                             authUser={user}
                             sortOptions={filterDiscussionOptions}
                             discussionFilter={discussionFilter}
-                            onClick={loginModal}
                             onOptionSelect={handleOptionSelect}
                         />
                         <div className='forum-category-page-col2'>
@@ -157,7 +134,7 @@ const ForumSubCategoryPage = () => {
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
                                         <div className='start-discussion-btn-container'>
-                                            <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                            <NewDiscussionBtn label='Start a discussion' />
                                         </div>
                                         <CustomSelect
                                             data={filterDiscussionOptions}

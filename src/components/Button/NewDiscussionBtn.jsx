@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import './Button.css'
 import useAuthentication from '../../hooks/authHook'
@@ -12,6 +12,7 @@ const NewDiscussionBtn = ({ className, onClick, label }) => {
     const navigate = useNavigate();
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
+    
     const handleNewDiscussionClick = () => {
         if (!user) {
             setLoginModalOpen(true)

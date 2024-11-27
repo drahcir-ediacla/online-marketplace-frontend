@@ -4,6 +4,7 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss'
 import axios from "../../../apicalls/axios";
+import useAuthentication from '../../../hooks/authHook';
 import LoginBtn from '../../Button/LoginBtn'
 import LogoGray from '../../../assets/images/Yogeek-logo.png'
 import { ReactComponent as FBIcon } from '../../../assets/images/facebook-icon.svg'
@@ -19,6 +20,7 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(true);
     const navigate = useNavigate();
+    const { user } = useAuthentication();
     const emailRef = useRef();
     const errRef = useRef();
     const [showAlert, setShowAlert] = useState(false);
@@ -32,7 +34,12 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
     const dispatch = useDispatch()
 
    
-    
+    useEffect(() => {
+        if (user) {
+            setIsModalOpen(false);
+        }
+    }, [user, setIsModalOpen]);
+
 
     useEffect(() => {
         emailRef.current.focus();

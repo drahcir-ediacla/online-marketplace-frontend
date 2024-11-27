@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './style.scss'
 import axios from '../../../apicalls/axios';
 import useAuthentication from '../../../hooks/authHook';
@@ -10,7 +10,6 @@ import GTranslate from '../../../components/GTranslate';
 import NewDiscussionBtn from '../../../components/Button/NewDiscussionBtn'
 import FilterTagDiscussionCard from '../../../components/Forum/FilterTagDiscussionCard'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
-import LoginModal from '../../../components/Modal/LoginModal';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
 import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 import CustomSelect from '../../../components/FormField/CustomSelect';
@@ -19,9 +18,7 @@ import CustomSelect from '../../../components/FormField/CustomSelect';
 const FilterDiscussionByTags = () => {
 
     const { user } = useAuthentication();
-    const navigate = useNavigate()
     const location = useLocation();
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || []);
@@ -122,25 +119,9 @@ const FilterDiscussionByTags = () => {
     };
 
 
-    const handleNewDiscussionClick = () => {
-        if (!user) {
-            setLoginModalOpen(true)
-        } else {
-            navigate(`/forum/profile/${user.id}/add_discussions`);
-        }
-    };
-
-    const toggleLoginModal = () => {
-        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
-    }
-
-    const loginModal = () => {
-        setLoginModalOpen(true)
-    }
 
     return (
         <>
-            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div className='forum-filter-tags-page-container'>
@@ -148,7 +129,6 @@ const FilterDiscussionByTags = () => {
                         authUser={user}
                         sortOptions={filterDiscussionOptions}
                         discussionFilter={discussionFilter}
-                        onClick={loginModal}
                         onOptionSelect={handleOptionSelect}
                         emptySortDiscussions={setSortDiscussions}
                         className='filter-discussion-tags-page'
@@ -163,7 +143,7 @@ const FilterDiscussionByTags = () => {
                             <div className='discussions-container-row1'>
                                 <h4>Filter Tagged Discussions</h4>
                                 <div className='start-discussion-btn-container'>
-                                    <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                    <NewDiscussionBtn label='Start a discussion' />
                                 </div>
                                 <CustomSelect
                                     data={filterDiscussionOptions}

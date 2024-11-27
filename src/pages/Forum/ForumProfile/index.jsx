@@ -266,14 +266,6 @@ const ForumProfile = () => {
         setActiveNotifTab(tabIndex);
     };
 
-    const handleNewDiscussionClick = () => {
-        if (!user) {
-            setLoginModalOpen(true)
-        } else {
-            navigate(`/forum/profile/${user.id}/add_discussions`);
-        }
-    };
-
 
     const createNewDiscussion = async (e) => {
         e.preventDefault();
@@ -388,10 +380,6 @@ const ForumProfile = () => {
         setNotifThreeDotsOptions(!notifThreeDotsOptions)
     }
 
-    const loginModal = () => {
-        setLoginModalOpen(true)
-    }
-
     const handleCreatedDiscussions = () => {
         navigate(`/forum/profile/${paramsUser?.id}/created_discussions`);
         setActiveTab(0);
@@ -414,7 +402,7 @@ const ForumProfile = () => {
 
     return (
         <>
-            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
+            {!user && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div className="forum-profile-container">
@@ -427,7 +415,6 @@ const ForumProfile = () => {
                         forumNotificationsTab={() => openContent(3)}
                         addDiscussionsBtn={() => openContent(4)}
                         discussionFilter={discussionFilter}
-                        onClick={loginModal}
                         categoriesData={setCategories}
                         createdDiscussionsData={setCreatedDiscussions}
                         joinedDiscussionsData={setJoinedDiscussions}
@@ -474,7 +461,7 @@ const ForumProfile = () => {
                                 <div className="forum-profile-tab-title">
                                     <h4>Created Discussions ({createdDiscussions?.length})</h4>
                                     <div className='start-discussion-btn-container'>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <NewDiscussionBtn label='Start a discussion' />
                                     </div>
                                 </div>
                                 {sortCD && sortCD.length > 0 ? (
@@ -491,7 +478,7 @@ const ForumProfile = () => {
                                 <div className="forum-profile-tab-title">
                                     <h4>Joined Discussions ({joinedDiscussions?.length})</h4>
                                     <div className='start-discussion-btn-container'>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <NewDiscussionBtn label='Start a discussion' />
                                     </div>
                                 </div>
                                 {sortJD && sortJD.length > 0 ? (
@@ -508,7 +495,7 @@ const ForumProfile = () => {
                                 <div className='forum-profile-tab-title'>
                                     <h4>Latest Activity</h4>
                                     <div className='start-discussion-btn-container'>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <NewDiscussionBtn label='Start a discussion' />
                                     </div>
                                 </div>
                                 {activities?.length === 0 ? (
@@ -536,7 +523,7 @@ const ForumProfile = () => {
                                 <div className='forum-profile-tab-title'>
                                     <h4>Notifications</h4>
                                     <div className='start-discussion-btn-container'>
-                                        <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                        <NewDiscussionBtn label='Start a discussion' />
                                     </div>
                                 </div>
                                 <div className="notifications-tab">

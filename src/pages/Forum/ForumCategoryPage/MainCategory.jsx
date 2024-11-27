@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from '../../../apicalls/axios';
 import './style.scss'
 import useAuthentication from '../../../hooks/authHook'
@@ -11,7 +11,6 @@ import ForumSubCategoryCard from '../../../components/Forum/ForumSubCategoryCard
 import ForumDiscussionCard from '../../../components/Forum/ForumDiscussionCard'
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation'
 import SearchDiscussionBox from '../../../components/SearchDiscussionBox'
-import LoginModal from '../../../components/Modal/LoginModal';
 import CustomSelect from '../../../components/FormField/CustomSelect';
 import ForumCardSkeleton from '../../../components/Forum/SkeletonLoading/ForumCardSkeleton';
 import { ReactComponent as LoadingSpinner } from '../../../assets/images/loading-spinner.svg'
@@ -23,10 +22,8 @@ const ForumCategoryPage = () => {
 
     const { user } = useAuthentication();
     const { id, name } = useParams()
-    const navigate = useNavigate();
     const [categoryData, setCategoryData] = useState({})
     const [discussionFilter] = useState(true)
-    const [loginModalOpen, setLoginModalOpen] = useState(false)
     const [sortDiscussions, setSortDiscussions] = useState([])
     const [loadingData, setLoadingData] = useState(true)
     const filterDiscussionOptions = ['Most Recent', 'Most Viewed', 'Most Liked'].map(option => (
@@ -50,6 +47,8 @@ const ForumCategoryPage = () => {
         }
         fetchCategoryData()
     }, [id, name])
+
+
 
     const subcategories = Array.isArray(categoryData?.subcategories) ? categoryData?.subcategories : [];
     const discussions = Array.isArray(categoryData?.allDiscussions) ? categoryData?.allDiscussions.slice(0, 10) : [];
@@ -84,27 +83,10 @@ const ForumCategoryPage = () => {
         }
     };
 
-    const handleNewDiscussionClick = () => {
-        if (!user) {
-            setLoginModalOpen(true)
-        } else {
-            navigate(`/forum/profile/${user.id}/add_discussions`);
-        }
-    };
-
-    const toggleLoginModal = () => {
-        setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
-    }
-
-    const loginModal = () => {
-        setLoginModalOpen(true)
-    }
-
 
 
     return (
         <>
-            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div>
@@ -113,7 +95,6 @@ const ForumCategoryPage = () => {
                             authUser={user}
                             sortOptions={filterDiscussionOptions}
                             discussionFilter={discussionFilter}
-                            onClick={loginModal}
                             onOptionSelect={handleOptionSelect}
                             emptySortDiscussions={setSortDiscussions}
                         />
@@ -128,12 +109,12 @@ const ForumCategoryPage = () => {
                                     <div className="category-name">
                                         <h4>{categoryData.name}</h4>
                                         <div className='start-discussion-btn-container'>
-                                            <NewDiscussionBtn onClick={handleNewDiscussionClick} label='Start a discussion' />
+                                            <NewDiscussionBtn label='Start a discussion' />
                                         </div>
-                                        <CustomSelect 
-                                        data={filterDiscussionOptions}
-                                        onOptionSelect={handleOptionSelect}
-                                        className='discussion-sortby-dropdown-select' 
+                                        <CustomSelect
+                                            data={filterDiscussionOptions}
+                                            onOptionSelect={handleOptionSelect}
+                                            className='discussion-sortby-dropdown-select'
                                         />
                                     </div>
                                     {loadingData && <ForumCardSkeleton menus={2} />}
