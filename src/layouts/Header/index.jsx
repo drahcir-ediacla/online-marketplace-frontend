@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../redux/actions/userActions';
 import '../Header/style.scss';
-import axios from '../../apicalls/axios'
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as GlobeIcon } from '../../assets/images/globe-regular.svg';
 import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.svg';
@@ -24,7 +25,8 @@ function Header() {
 
   const navigate = useNavigate();
   const [soldModalOpen, setSoldModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user.data);
+  const dispatch = useDispatch()
   const [radius, setRadius] = useState(() => {
     const savedRadius = localStorage.getItem('radius');
     return savedRadius ? JSON.parse(savedRadius) : 15;
@@ -39,34 +41,35 @@ function Header() {
   const [errMsg, setErrMsg] = useState('');
   const [loginModalOpen, setLoginModalOpen] = useState(false)
 
-
-
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await axios.get(GET_USER_LOGIN, {
-          withCredentials: true,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': true,
-          },
-        });
+    dispatch(getUser())
+  }, [dispatch]);
 
-        if (response.status === 200 && response.data.success) {
-          const resObject = response.data;
-          console.log('User data:', resObject.user);
-          setUser(resObject.user);
-        } else {
-          throw new Error('Authentication has failed!');
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     try {
+  //       const response = await axios.get(GET_USER_LOGIN, {
+  //         withCredentials: true,
+  //         headers: {
+  //           Accept: 'application/json',
+  //           'Content-Type': 'application/json',
+  //           'Access-Control-Allow-Credentials': true,
+  //         },
+  //       });
 
-    getUser();
-  }, []); // Ensure that you pass an empty dependency array if you want the effect to run once on mount
+  //       if (response.status === 200 && response.data.success) {
+  //         const resObject = response.data;
+  //         setUser(resObject.user);
+  //       } else {
+  //         throw new Error('Authentication has failed!');
+  //       }
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   getUser();
+  // }, []); // Ensure that you pass an empty dependency array if you want the effect to run once on mount
 
 
   const myProfile = () => {

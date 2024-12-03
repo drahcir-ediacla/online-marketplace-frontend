@@ -23,7 +23,14 @@ export const LoginUserByEmail = async (payload) => {
 // get current user
 export const GetCurrentUser = async () => {
     try{
-        const response = await axios.get('/auth/check-auth');
+        const response = await axios.get('/auth/check-auth', {
+            withCredentials: true,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Credentials': true,
+            },
+          });
         return response
     } catch (error) {
         return error

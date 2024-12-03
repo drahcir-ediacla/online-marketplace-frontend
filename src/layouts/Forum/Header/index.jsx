@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../../redux/actions/userActions';
 import './style.scss'
 import Logo from '../../../assets/images/yogeek-forum-logo.png'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -7,13 +9,19 @@ import { ReactComponent as TriangleIcon } from '../../../assets/images/triangle-
 import LoginModal from '../../../components/Modal/LoginModal'
 
 
-const ForumHeader = ({ authUser, containerClass }) => {
+const ForumHeader = ({ containerClass }) => {
 
+    const dispatch = useDispatch();
+    const authUser = useSelector((state) => state.user.data);
     const [dropDownProfile, setDropDownProfile] = useState(false);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
     const profileDropDown = useRef(null);
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+
+    useEffect(() => {
+        dispatch(getUser())
+      }, [dispatch]);
 
     useEffect(() => {
         const handleGlobalClick = (event) => {

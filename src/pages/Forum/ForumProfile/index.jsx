@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from '../../../apicalls/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import './style.scss'
-import useAuthentication from '../../../hooks/authHook'
+import { getUser } from '../../../redux/actions/userActions';
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
@@ -31,7 +31,7 @@ import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 const ForumProfile = () => {
 
-    const { user } = useAuthentication()
+    const user = useSelector((state) => state.user.data);
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
@@ -72,6 +72,10 @@ const ForumProfile = () => {
             label: option,
             value: option.toLowerCase()
         }));
+
+    useEffect(() => {
+        dispatch(getUser())
+    }, [dispatch]);
 
     useEffect(() => {
         if (location.state && location.state.activeTab) {
