@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../../apicalls/axios'
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../../redux/actions/userActions';
 import './style.scss'
 import { Link, useParams, useNavigate, NavLink, useLocation } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -11,7 +13,6 @@ import LoginModal from '../../../components/Modal/LoginModal'
 
 
 const FilterNavigation = ({
-    authUser,
     createdDiscussionsTab,
     joinedDiscussionsTab,
     userActivityTab,
@@ -31,6 +32,8 @@ const FilterNavigation = ({
     className,
 }) => {
 
+    const dispatch = useDispatch();
+    const authUser = useSelector((state) => state.user.data);
     const { userId, tab } = useParams();
     const userIdNumber = Number(userId);
     const authUserIdNumber = Number(authUser?.id)
@@ -49,6 +52,9 @@ const FilterNavigation = ({
     const [loadingCategories, setLoadingCategories] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
+    useEffect(() => {
+        dispatch(getUser())
+      }, [dispatch]);
 
     useEffect(() => {
         // If location.state is not null or undefined, update state
