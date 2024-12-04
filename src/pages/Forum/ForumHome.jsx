@@ -22,10 +22,9 @@ import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-sp
 const ForumHomePage = () => {
 
     const dispatch = useDispatch();
-    const categories = useSelector((state) => state.forumcategories.data);
+    const forumCategories = useSelector((state) => state.forumcategories.data);
     const navigate = useNavigate();
     const observer = useRef();
-    const [forumCategories, setForumCategories] = useState({})
     const [loading, setLoading] = useState(true);
     const [loadingRecent, setLoadingRecent] = useState(false);
     const [recentDiscussions, setRecentDiscussions] = useState([])
@@ -40,24 +39,27 @@ const ForumHomePage = () => {
         }));
 
         useEffect(() => {
-            if (!categories) {
-                dispatch(getForumCategories());
-            }
-        }, [dispatch, categories]);
-
-    useEffect(() => {
-        const fetchForumCategories = async () => {
-            try {
+            if (!forumCategories) {
                 setLoading(true)
-                setForumCategories(categories)
+                dispatch(getForumCategories());
+            } else {
                 setLoading(false)
-            } catch (error) {
-                setLoading(false)
-                console.error("Error fetching data:", error);
             }
-        }
-        fetchForumCategories();
-    }, [])
+        }, [dispatch, forumCategories]);
+
+    // useEffect(() => {
+    //     const fetchForumCategories = async () => {
+    //         try {
+    //             setLoading(true)
+    //             setForumCategories(categories)
+    //             setLoading(false)
+    //         } catch (error) {
+    //             setLoading(false)
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     }
+    //     fetchForumCategories();
+    // }, [])
 
     useEffect(() => {
         const fetchRecentDiscussions = async () => {

@@ -124,7 +124,7 @@ const FilterNavigation = ({
 
 
     useEffect(() => {
-        if (categories.length > 0 && activeCategory === null) {
+        if (activeCategory === null) {
             setActiveCategory(categories[0].id); // or categories[0].name based on your logic
         }
     }, [categories, activeCategory]);

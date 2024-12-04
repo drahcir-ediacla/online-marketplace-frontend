@@ -1,28 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GetAllCategories } from '../../apicalls/products';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProductCategories } from '../../redux/actions/productCategoriesActions';
 import SlidingSideNav from '../SlidingSideNav';
 import NavMenuSkeleton from '../../components/SkeletonLoader/NavMenuSkeleton';
 
 const NavMenu = () => {
-    const [categories, setCategories] = useState([]);
+    const dispatch = useDispatch();
+    const categories = useSelector((state) => state.productcategories.data);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                setLoading(true);
-                const response = await GetAllCategories();
-                setCategories(response.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (categories.length === 0) {
+            setLoading(true);
+          dispatch(getProductCategories());
+        } 
+        else {
+            setLoading(false);
+        }
+      }, [dispatch, categories]);
 
-        fetchCategories();
-    }, []);
+    // useEffect(() => {
+    //     const fetchCategories = async () => {
+    //         try {
+    //             setLoading(true);
+    //             setCategories(productCategories);
+    //         } catch (error) {
+    //             console.error("Error fetching data:", error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchCategories();
+    // }, []);
 
     // Specify the labels you want to include
     const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Beauty & Personal Care", "Furniture", "Games, Hobbies & Crafts", "Book, Music & Tickets"];
@@ -54,7 +65,7 @@ const NavMenu = () => {
                                 </div>
                             )}
                         </div>
-                    </li> 
+                    </li>
                 ))}
                 <li>
                     <SlidingSideNav />

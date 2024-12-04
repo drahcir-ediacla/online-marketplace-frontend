@@ -5,8 +5,8 @@ const initialState = {
   error: null,
 };
 
-const categorySlice = createSlice({
-  name: 'categories',
+const productCategoriesSlice = createSlice({
+  name: 'productcategories',
   initialState,
   reducers: {
     setCategories: (state, action) => {
@@ -19,5 +19,5 @@ const categorySlice = createSlice({
   },
 });
 
-export const { setCategories, setError } = categorySlice.actions;
-export default categorySlice.reducer;
+export const { setCategories, setError } = productCategoriesSlice.actions;
+export default productCategoriesSlice.reducer;

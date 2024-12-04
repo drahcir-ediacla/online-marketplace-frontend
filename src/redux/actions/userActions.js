@@ -3,7 +3,6 @@ import { setUser, setError } from '../reducer/userSlice';
 import { Setloader } from '../reducer/loadersSlice';
 import {GetCurrentUser, UpdateCurrentUser} from '../../apicalls/users'
 
-const GET_USER_LOGIN = '/auth/check-auth';
 
 export const getUser = () => async (dispatch) => {
   try {

@@ -4,7 +4,8 @@ import { loadersSlice } from "./reducer/loadersSlice";
 import wishlistReducer from './reducer/wishlistSlice'
 import userReducer from "./reducer/userSlice";
 import forumCategoriesReducer from "./reducer/forumCategoriesSlice"
-import productCategoryReducer from "./reducer/productSlice";
+import productCategoryReducer from "./reducer/productCategoriesSlice";
+import forumTagsReducer from "./reducer/forumTagsSlice";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -12,8 +13,9 @@ const store = configureStore({
     reducer: {
         loaders: loadersSlice.reducer,
         user: userReducer,
-        categories: productCategoryReducer,
+        productcategories: productCategoryReducer,
         forumcategories: forumCategoriesReducer,
+        forumtags: forumTagsReducer,
         wishlist: wishlistReducer,
     },
 }, composeEnhancers());

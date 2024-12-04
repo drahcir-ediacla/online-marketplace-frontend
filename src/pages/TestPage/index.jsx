@@ -82,38 +82,119 @@
 
 // export default InfiniteScroll;
 
+// ----------------------------------------- ForumCategories Dispatch ------------------------------------ //
+
+// import { useEffect } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { getForumCategories } from '../../redux/actions/forumCategoriesActions';
+
+// const ForumCategories = () => {
+
+//   const dispatch = useDispatch();
+//   const forumCategories = useSelector((state) => state.forumcategories.data);
+
+//   useEffect(() => {
+//     if (!forumCategories) {
+//       dispatch(getForumCategories());
+//     }
+//   }, [dispatch, forumCategories]);
+
+//   return (
+//     <div>
+//       {forumCategories?.categories?.map((category) => (
+//         <div key={category.id}>
+//           <h2>{category.name}</h2>
+//           <p>{category.description}</p>
+//           {category.subcategories.map((sub) => (
+//             <div key={sub.id}>
+//               <h3>{sub.name}</h3>
+//               <p>{sub.description}</p>
+//             </div>
+//           ))}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+// export default ForumCategories;
+
+
+// ----------------------------------------- Product Categories Dispatch ------------------------------------ //
+
+
+// import { useEffect } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { getProductCategories } from '../../redux/actions/productCategoriesActions';
+
+// const ProductCategories = () => {
+//   const dispatch = useDispatch();
+//   const productCategories = useSelector((state) => state.productcategories.data);
+//   const error = useSelector((state) => state.productcategories.error);
+
+//   useEffect(() => {
+//     if (productCategories.length === 0) {
+//       dispatch(getProductCategories());
+//     }
+//   }, [dispatch, productCategories]);
+
+//   return (
+//     <div>
+//       {error ? (
+//         <p>Error: {error}</p>
+//       ) : productCategories && productCategories.length > 0 ? (
+//         productCategories.map((category) => (
+//           <div key={category.id}>
+//             <h2>{category.label}</h2>
+//             {category.subcategories.map((sub) => (
+//               <div key={sub.id}>
+//                 <h3>{sub.label}</h3>
+//               </div>
+//             ))}
+//           </div>
+//         ))
+//       ) : (
+//         <p>Loading categories...</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default ProductCategories;
+
+
+// ----------------------------------------- Forum Tags Dispatch ------------------------------------ //
 
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getForumCategories } from '../../redux/actions/forumCategoriesActions';
+import { getAllForumTags } from '../../redux/actions/forumTagsActions';
 
-const ForumCategories = () => {
-
+const ForumTags = () => {
   const dispatch = useDispatch();
-  const forumCategories = useSelector((state) => state.forumcategories.data);
+  const allForumTags = useSelector((state) => state.forumtags.data);
+  const error = useSelector((state) => state.forumtags.error);
 
   useEffect(() => {
-    if (!forumCategories) {
-      dispatch(getForumCategories());
+    if (allForumTags.length === 0) {
+      dispatch(getAllForumTags());
     }
-  }, [dispatch, forumCategories]);
-  
+  }, [dispatch, allForumTags]);
+
   return (
     <div>
-      {forumCategories?.categories?.map((category) => (
-        <div key={category.id}>
-          <h2>{category.name}</h2>
-          <p>{category.description}</p>
-          {category.subcategories.map((sub) => (
-            <div key={sub.id}>
-              <h3>{sub.name}</h3>
-              <p>{sub.description}</p>
-            </div>
-          ))}
-        </div>
-      ))}
+      {error ? (
+        <p>Error: {error}</p>
+      ) : allForumTags && allForumTags.length > 0 ? (
+        allForumTags.map((tag) => (
+          <div key={tag.id}>
+            <h2>{tag.name}</h2>
+          </div>
+        ))
+      ) : (
+        <p>Loading categories...</p>
+      )}
     </div>
   );
-}
+};
 
-export default ForumCategories;
+export default ForumTags;
