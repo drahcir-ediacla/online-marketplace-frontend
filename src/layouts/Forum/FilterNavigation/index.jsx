@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from '../../../apicalls/axios'
 import { useSelector, useDispatch } from 'react-redux';
 import { getUser } from '../../../redux/actions/userActions';
+import { getForumCategories } from '../../../redux/actions/forumCategoriesActions';
 import './style.scss'
 import { Link, useParams, useNavigate, NavLink, useLocation } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -34,13 +35,14 @@ const FilterNavigation = ({
 
     const dispatch = useDispatch();
     const authUser = useSelector((state) => state.user.data);
+    const categories = useSelector((state) => state.forumcategories.data);
     const { userId, tab } = useParams();
     const userIdNumber = Number(userId);
     const authUserIdNumber = Number(authUser?.id)
     const navigate = useNavigate();
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
-    const [categories, setCategories] = useState([])
+    // const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
     const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(location.state || [])
@@ -54,7 +56,13 @@ const FilterNavigation = ({
 
     useEffect(() => {
         dispatch(getUser())
-      }, [dispatch]);
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!categories) {
+            dispatch(getForumCategories());
+        }
+    }, [dispatch, categories]);
 
     useEffect(() => {
         // If location.state is not null or undefined, update state
@@ -85,8 +93,8 @@ const FilterNavigation = ({
         const fetchForumCategories = async () => {
             try {
                 setLoadingCategories(true)
-                const responseCategories = await axios.get('/api/fetchforumcategories')
-                setCategories(responseCategories.data)
+                // const responseCategories = await axios.get('/api/fetchforumcategories')
+                // setCategories(responseCategories.data)
 
                 const responseTags = await axios.get('/api/fetchforumtags')
                 setTags(responseTags.data)
@@ -96,7 +104,7 @@ const FilterNavigation = ({
                 // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
                 // If 'categoriesData' is not a function, it logs a message in the console
                 if (typeof categoriesData === 'function') {
-                    categoriesData(responseCategories.data);
+                    categoriesData(categories);
                     setLoadingCategories(false)
                 }
                 if (typeof tagsData === 'function') {

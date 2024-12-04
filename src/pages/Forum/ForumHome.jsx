@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../../apicalls/axios'
+import { useSelector, useDispatch } from 'react-redux';
+import { getForumCategories } from '../../redux/actions/forumCategoriesActions';
 import './style.scss'
-import useAuthentication from '../../hooks/authHook'
 import Header from '../../layouts/Forum/Header'
 import Footer from '../../layouts/Forum/Footer'
 import NewDiscussionBtn from '../../components/Button/NewDiscussionBtn'
@@ -20,10 +21,11 @@ import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-sp
 
 const ForumHomePage = () => {
 
-    const { user } = useAuthentication();
+    const dispatch = useDispatch();
+    const categories = useSelector((state) => state.forumcategories.data);
     const navigate = useNavigate();
     const observer = useRef();
-    const [forumCategories, setForumCategories] = useState([])
+    const [forumCategories, setForumCategories] = useState({})
     const [loading, setLoading] = useState(true);
     const [loadingRecent, setLoadingRecent] = useState(false);
     const [recentDiscussions, setRecentDiscussions] = useState([])
@@ -37,13 +39,17 @@ const ForumHomePage = () => {
             value: option.toLowerCase()
         }));
 
+        useEffect(() => {
+            if (!categories) {
+                dispatch(getForumCategories());
+            }
+        }, [dispatch, categories]);
 
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
                 setLoading(true)
-                const response = await axios.get('/api/fetchforumcategories')
-                setForumCategories(response.data)
+                setForumCategories(categories)
                 setLoading(false)
             } catch (error) {
                 setLoading(false)
@@ -135,7 +141,7 @@ const ForumHomePage = () => {
 
     return (
         <>
-            <Header authUser={user} />
+            <Header />
             <div className='language-selector-container'>
                 <GTranslate />
             </div>

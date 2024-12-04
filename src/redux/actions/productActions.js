@@ -1,12 +1,13 @@
-import { setCategories, setError } from '../reducer/categorySlice';
+import { setCategories, setError } from '../reducer/productSlice';
 import axios from '../../apicalls/axios';
+import {GetAllCategories} from '../../apicalls/products'
 
 
 // Get Product Categories
 
 export const getAllCategory = () => async (dispatch) => {
   try {
-    const response = await axios.get('/api/getallcategories');
+    const response = await GetAllCategories();
 
     if (response.status === 200) {
       const categoriesData = response.data;

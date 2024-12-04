@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  data: [], // This will hold the category data
+  data: null,
   error: null,
 };
 
-const categorySlice = createSlice({
-  name: 'categories',
+const forumCategoriesSlice = createSlice({
+  name: 'forumcategories',
   initialState,
   reducers: {
     setCategories: (state, action) => {
@@ -19,5 +19,5 @@ const categorySlice = createSlice({
   },
 });
 
-export const { setCategories, setError } = categorySlice.actions;
-export default categorySlice.reducer;
+export const { setCategories, setError } = forumCategoriesSlice.actions;
+export default forumCategoriesSlice.reducer;

@@ -411,7 +411,6 @@ const ForumProfile = () => {
                 <Header authUser={user} />
                 <div className="forum-profile-container">
                     <FilterNavigation
-                        authUser={user}
                         paramsUserData={setParamsUser}
                         createdDiscussionsTab={() => openContent(0)}
                         joinedDiscussionsTab={() => openContent(1)}

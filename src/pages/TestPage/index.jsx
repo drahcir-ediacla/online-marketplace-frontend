@@ -1,83 +1,119 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+// import React, { useState, useEffect, useRef } from 'react';
+// import axios from 'axios';
 
-const InfiniteScroll = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);  // Track current page
-  const [hasMore, setHasMore] = useState(true); // To check if there's more data
+// const InfiniteScroll = () => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [page, setPage] = useState(1);  // Track current page
+//   const [hasMore, setHasMore] = useState(true); // To check if there's more data
 
-  const observer = useRef();
+//   const observer = useRef();
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//         if (loading || !hasMore) return; // Don't fetch if already loading or no more data
+
+//         setLoading(true);
+
+//         try {
+//             const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=1`);
+//             const newData = response.data;
+
+//             // Check if new data already exists in the data array
+//             setData((prevData) => {
+//                 const uniqueData = newData.filter(
+//                     (item) => !prevData.some((existingItem) => existingItem.id === item.id)
+//                 );
+//                 return [...prevData, ...uniqueData];
+//             });
+
+//             // Set `hasMore` to false if no more data is returned
+//             setHasMore(newData.length > 0);
+//         } catch (error) {
+//             console.error('Error fetching data:', error);
+//         } finally {
+//             setLoading(false);
+//         }
+//     };
+
+//     fetchData();
+// }, [page]);
+
+//   // Intersection Observer callback
+//   const lastElementRef = (node) => {
+//     if (loading) return; // Don't observe if loading
+
+//     if (observer.current) observer.current.disconnect(); // Disconnect previous observer
+
+//     observer.current = new IntersectionObserver((entries) => {
+//       if (entries[0].isIntersecting) {
+//         setPage((prevPage) => prevPage + 1); // Load next page
+//       }
+//     });
+
+//     if (node) observer.current.observe(node); // Observe the last element
+//   };
+
+//   return (
+//     <div>
+//       <h1>Infinite Scroll Example</h1>
+//       <ul>
+//         {data.map((item) => (
+//           <li key={item.id}>
+//             {item.title}
+//             {/* You can add more details from `item` like item.body */}
+//           </li>
+//         ))}
+//       </ul>
+
+//       {/* Loading Indicator */}
+//       {loading && <p>Loading...</p>}
+
+//       {/* Trigger for the next page */}
+//       {hasMore && !loading && (
+//         <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
+//       )}
+
+//       {/* Message when there's no more data */}
+//       {!hasMore && <p>No more data to load</p>}
+//     </div>
+//   );
+// };
+
+// export default InfiniteScroll;
+
+
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getForumCategories } from '../../redux/actions/forumCategoriesActions';
+
+const ForumCategories = () => {
+
+  const dispatch = useDispatch();
+  const forumCategories = useSelector((state) => state.forumcategories.data);
 
   useEffect(() => {
-    const fetchData = async () => {
-        if (loading || !hasMore) return; // Don't fetch if already loading or no more data
-
-        setLoading(true);
-
-        try {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=1`);
-            const newData = response.data;
-
-            // Check if new data already exists in the data array
-            setData((prevData) => {
-                const uniqueData = newData.filter(
-                    (item) => !prevData.some((existingItem) => existingItem.id === item.id)
-                );
-                return [...prevData, ...uniqueData];
-            });
-
-            // Set `hasMore` to false if no more data is returned
-            setHasMore(newData.length > 0);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    fetchData();
-}, [page]);
-
-  // Intersection Observer callback
-  const lastElementRef = (node) => {
-    if (loading) return; // Don't observe if loading
-
-    if (observer.current) observer.current.disconnect(); // Disconnect previous observer
-
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPage((prevPage) => prevPage + 1); // Load next page
-      }
-    });
-
-    if (node) observer.current.observe(node); // Observe the last element
-  };
-
+    if (!forumCategories) {
+      dispatch(getForumCategories());
+    }
+  }, [dispatch, forumCategories]);
+  
   return (
     <div>
-      <h1>Infinite Scroll Example</h1>
-      <ul>
-        {data.map((item) => (
-          <li key={item.id}>
-            {item.title}
-            {/* You can add more details from `item` like item.body */}
-          </li>
-        ))}
-      </ul>
-
-      {/* Loading Indicator */}
-      {loading && <p>Loading...</p>}
-
-      {/* Trigger for the next page */}
-      {hasMore && !loading && (
-        <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
-      )}
-
-      {/* Message when there's no more data */}
-      {!hasMore && <p>No more data to load</p>}
+      {forumCategories?.categories?.map((category) => (
+        <div key={category.id}>
+          <h2>{category.name}</h2>
+          <p>{category.description}</p>
+          {category.subcategories.map((sub) => (
+            <div key={sub.id}>
+              <h3>{sub.name}</h3>
+              <p>{sub.description}</p>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
-};
+}
 
-export default InfiniteScroll;
+export default ForumCategories;
