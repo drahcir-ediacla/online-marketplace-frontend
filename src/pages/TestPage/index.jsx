@@ -165,36 +165,41 @@
 
 // ----------------------------------------- Forum Tags Dispatch ------------------------------------ //
 
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllForumTags } from '../../redux/actions/forumTagsActions';
+// import { useEffect } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { getAllForumTags } from '../../redux/actions/forumTagsActions';
+// import useRefreshToken from '../../hooks/refreshTokenHook';
 
-const ForumTags = () => {
-  const dispatch = useDispatch();
-  const allForumTags = useSelector((state) => state.forumtags.data);
-  const error = useSelector((state) => state.forumtags.error);
+// const ForumTags = () => {
+//   const dispatch = useDispatch();
+//   const refresh = useRefreshToken()
+//   const allForumTags = useSelector((state) => state.forumtags.data);
+//   const error = useSelector((state) => state.forumtags.error);
 
-  useEffect(() => {
-    if (allForumTags.length === 0) {
-      dispatch(getAllForumTags());
-    }
-  }, [dispatch, allForumTags]);
+//   useEffect(() => {
+//     if (allForumTags.length === 0) {
+//       dispatch(getAllForumTags());
+//     }
+//   }, [dispatch, allForumTags]);
 
-  return (
-    <div>
-      {error ? (
-        <p>Error: {error}</p>
-      ) : allForumTags && allForumTags.length > 0 ? (
-        allForumTags.map((tag) => (
-          <div key={tag.id}>
-            <h2>{tag.name}</h2>
-          </div>
-        ))
-      ) : (
-        <p>Loading categories...</p>
-      )}
-    </div>
-  );
-};
+  
 
-export default ForumTags;
+//   return (
+//     <div>
+//       {error ? (
+//         <p>Error: {error}</p>
+//       ) : allForumTags && allForumTags.length > 0 ? (
+//         allForumTags.map((tag) => (
+//           <div key={tag.id}>
+//             <h2>{tag.name}</h2>
+//           </div>
+//         ))
+//       ) : (
+//         <p>Loading categories...</p>
+//       )}
+//       <button onClick={() => refresh()}>Refresh</button>
+//     </div>
+//   );
+// };
+
+// export default ForumTags;

@@ -107,8 +107,8 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
             dispatch(Setloader(false))
 
             console.log('Login successful', response.data);
-            document.cookie = `jwt=${response.data.accessToken}; Max-Age=86400; Path=/`;
-            document.cookie = `refreshJWT=${response.data.refreshToken}; Max-Age=86400; Path=/`;
+            document.cookie = `jwt=${response.data.accessToken}; Path=/`;
+            document.cookie = `refreshJWT=${response.data.refreshToken}; Path=/`;
             window.location.reload()
         } catch (err) {
             dispatch(Setloader(false))
