@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../redux/actions/userActions';
+import { getProductCategories } from '../../redux/actions/productCategoriesActions';
 import { Link } from 'react-router-dom';
-import axios from '../../apicalls/axios'
 import { GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
@@ -11,19 +11,14 @@ import { ReactComponent as BurgerBtn } from '../../assets/images/burger-btn.svg'
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 import SlidingNavSkeleton from '../../components/SkeletonLoader/SlidingNavSkeleton';
 
-const GET_USER_LOGIN = '/auth/check-auth';
-
-
-
 
 const SlidingSideNav = () => {
 
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const user = useSelector((state) => state.user.data);
-  const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.data);
+  const categories = useSelector((state) => state.productcategories.data);
   const [loading, setLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCategories, setFilteredCategories] = useState(categories);
 
@@ -37,13 +32,20 @@ const SlidingSideNav = () => {
     dispatch(getUser())
   }, [dispatch]);
 
+  useEffect(() => {
+    if (categories.length === 0) {
+      setLoading(true);
+      dispatch(getProductCategories());
+    }
+    else {
+      setLoading(false);
+    }
+  }, [dispatch, categories]);
+
   const myProfile = async () => {
     try {
-      const response = await axios.get(GET_USER_LOGIN);
-      if (response.status === 200) {
-        const resObject = response.data;
-        const userId = resObject.user.id;
-        window.location.href = `/profile/${userId}`;
+      if (user) {
+        window.location.href = `/profile/${user?.id}`;
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -52,23 +54,23 @@ const SlidingSideNav = () => {
 
 
   // FETCH ALL CATEGORIES //
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoading(true);
-        const response = await GetAllCategories();
-        setCategories(response.data);
-        setFilteredCategories(response.data); // Initialize filteredCategories here
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // Set loading to false regardless of success or failure
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await GetAllCategories();
+  //       setCategories(response.data);
+  //       setFilteredCategories(response.data); // Initialize filteredCategories here
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setLoading(false); // Set loading to false regardless of success or failure
+  //     }
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
 
   const handleSearchChange = (e) => {

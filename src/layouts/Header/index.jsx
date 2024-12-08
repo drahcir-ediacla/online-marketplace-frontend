@@ -19,7 +19,7 @@ import AlertMessage from '../../components/AlertMessage';
 import GTranslate from '../../components/GTranslate';
 import LoginModal from '../../components/Modal/LoginModal';
 
-const GET_USER_LOGIN = '/auth/check-auth';
+
 
 function Header() {
 
@@ -78,14 +78,19 @@ function Header() {
 
     const handleCollapsibleClick = function () {
       this.classList.toggle("active");
-      const content = this.nextElementSibling;
 
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
+      const content = this.nextElementSibling;
+      if (content && content.style) {
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
       } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+        console.warn("Content element is null or missing for:", this);
       }
     };
+
 
     for (let i = 0; i < collapsibleElements.length; i++) {
       collapsibleElements[i].addEventListener("click", handleCollapsibleClick);
@@ -151,6 +156,8 @@ function Header() {
           case error.UNKNOWN_ERROR:
             setErrMsg("An unknown error occurred.");
             break;
+          default:
+            setErrMsg("An unexpected error occurred. Please try again.");
         }
         setShowAlert(true); // Set showAlert to true on error
       }
