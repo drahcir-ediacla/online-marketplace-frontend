@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../../apicalls/axios'
 import { useSelector, useDispatch } from 'react-redux';
-import { getUser } from '../../../redux/actions/userActions';
+// import { getUser } from '../../../redux/actions/userActions';
 import { getForumCategories } from '../../../redux/actions/forumCategoriesActions';
 import { getAllForumTags } from '../../../redux/actions/forumTagsActions';
 import './style.scss'
@@ -21,11 +21,9 @@ const FilterNavigation = ({
     forumNotificationsTab,
     addDiscussionsBtn,
     discussionFilter,
-    categoriesData,
     createdDiscussionsData,
     joinedDiscussionsData,
     activitiesData,
-    tagsData,
     paramsUserData,
     notifications,
     sortOptions,
@@ -44,9 +42,7 @@ const FilterNavigation = ({
     const navigate = useNavigate();
     const location = useLocation()
     const [showFilter, setShowFilter] = useState(discussionFilter)
-    // const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
-    // const [tags, setTags] = useState([])
     const [selectedTags, setSelectedTags] = useState(
         Array.isArray(location.state) ? location.state : []
     );
@@ -56,21 +52,28 @@ const FilterNavigation = ({
     const [totalJoinedDiscussions, setTotalJoinedDiscussions] = useState(0);
     const [totalUnreadNotifications, setTotalUnreadNotifications] = useState({})
     const [loadingCategories, setLoadingCategories] = useState(true)
+    const [loadingTags, setLoadingTags] = useState(true)
     const [loginModalOpen, setLoginModalOpen] = useState(false)
 
-    useEffect(() => {
-        dispatch(getUser())
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getUser())
+    // }, [dispatch]);
 
     useEffect(() => {
         if (!categories) {
+            setLoadingCategories(true)
             dispatch(getForumCategories());
+        } else {
+            setLoadingCategories(false)
         }
     }, [dispatch, categories]);
 
     useEffect(() => {
         if (tags.length === 0) {
+            setLoadingTags(true)
             dispatch(getAllForumTags());
+        } else {
+            setLoadingTags(false)
         }
     }, [dispatch, tags]);
 
@@ -99,38 +102,38 @@ const FilterNavigation = ({
     }, [userId, paramsUserData])
 
 
-    useEffect(() => {
-        const fetchForumCategories = async () => {
-            try {
-                // setLoadingCategories(true)
-                // const responseCategories = await axios.get('/api/fetchforumcategories')
-                // setCategories(responseCategories.data)
+    // useEffect(() => {
+    //     const fetchForumCategories = async () => {
+    //         try {
+    //             // setLoadingCategories(true)
+    //             // const responseCategories = await axios.get('/api/fetchforumcategories')
+    //             // setCategories(responseCategories.data)
 
-                // const responseTags = await axios.get('/api/fetchforumtags')
-                // setTags(responseTags.data)
-                // setLoadingCategories(false)
+    //             // const responseTags = await axios.get('/api/fetchforumtags')
+    //             // setTags(responseTags.data)
+    //             // setLoadingCategories(false)
 
-                // Check if 'categoriesData' is a function before calling it
-                // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
-                // If 'categoriesData' is not a function, it logs a message in the console
-                if (typeof categoriesData === 'function') {
-                    categoriesData(categories);
-                    setLoadingCategories(false)
-                }
-                if (typeof tagsData === 'function') {
-                    tagsData(tags);
-                    setLoadingCategories(false)
-                } else {
-                    setLoadingCategories(false)
-                    console.log('categoriesData is not a function');
-                }
-            } catch (error) {
-                setLoadingCategories(false)
-                console.log('Error fetching data:', error)
-            }
-        }
-        fetchForumCategories()
-    }, [categoriesData, tagsData])
+    //             // Check if 'categoriesData' is a function before calling it
+    //             // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
+    //             // If 'categoriesData' is not a function, it logs a message in the console
+    //             if (typeof categoriesData === 'function') {
+    //                 categoriesData(categories);
+    //                 setLoadingCategories(false)
+    //             }
+    //             if (typeof tagsData === 'function') {
+    //                 tagsData(tags);
+    //                 setLoadingCategories(false)
+    //             } else {
+    //                 setLoadingCategories(false)
+    //                 console.log('categoriesData is not a function');
+    //             }
+    //         } catch (error) {
+    //             setLoadingCategories(false)
+    //             console.log('Error fetching data:', error)
+    //         }
+    //     }
+    //     fetchForumCategories()
+    // }, [categoriesData, tagsData])
 
 
     useEffect(() => {
@@ -376,7 +379,7 @@ const FilterNavigation = ({
                         <label>POPULAR TAGS</label>
                     </div>
                     <div className="forum-category-btn-container">
-                        {loadingCategories &&
+                        {loadingTags &&
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
                                 <SideNavCategoriesSkeleton menus={8} />
                             </div>

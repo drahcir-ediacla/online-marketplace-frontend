@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
 import './style.scss'
 import axios from '../../../apicalls/axios'
-import useAuthentication from '../../../hooks/authHook'
+// import { getUser } from '../../../redux/actions/userActions';
 import { enUS } from 'date-fns/locale';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer';
@@ -37,7 +37,7 @@ const Discussion = () => {
     const repliedPostId = new URLSearchParams(location.search).get('repliedPostId');
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const { user } = useAuthentication()
+    const user = useSelector((state) => state.user.data);
     const [openReply, setOpenReply] = useState({});
     const [showMoreContent, setShowMoreContent] = useState({})
     const [showMoreReplies, setShowMoreReplies] = useState({})
@@ -59,6 +59,9 @@ const Discussion = () => {
             value: option.toLowerCase()
         }));
 
+    // useEffect(() => {
+    //     dispatch(getUser())
+    // }, [dispatch]);
 
     useEffect(() => {
         const fetchDiscussionData = async () => {
@@ -419,10 +422,9 @@ const Discussion = () => {
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {alert.show && <AlertMessage type={alert.type} message={alert.message} />}
             <div className='discussion-container'>
-                <Header authUser={user} />
+                <Header />
                 <div className="forum-discussion-page-container">
                     <FilterNavigation
-                        authUser={user}
                         onClick={loginModal}
                         className='sticky-filter-nav'
                     />

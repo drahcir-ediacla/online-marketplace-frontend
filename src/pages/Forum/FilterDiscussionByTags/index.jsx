@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './style.scss'
 import axios from '../../../apicalls/axios';
-import useAuthentication from '../../../hooks/authHook';
 import FilterNavigation from '../../../layouts/Forum/FilterNavigation';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
@@ -17,7 +16,6 @@ import CustomSelect from '../../../components/FormField/CustomSelect';
 
 const FilterDiscussionByTags = () => {
 
-    const { user } = useAuthentication();
     const location = useLocation();
     const [discussionFilter] = useState(true)
     const [discussions, setDiscussions] = useState([])
@@ -123,10 +121,9 @@ const FilterDiscussionByTags = () => {
     return (
         <>
             <div className='forum-page-container'>
-                <Header authUser={user} />
+                <Header />
                 <div className='forum-filter-tags-page-container'>
                     <FilterNavigation
-                        authUser={user}
                         sortOptions={filterDiscussionOptions}
                         discussionFilter={discussionFilter}
                         onOptionSelect={handleOptionSelect}

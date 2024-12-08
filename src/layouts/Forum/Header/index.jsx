@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux';
-import { getUser } from '../../../redux/actions/userActions';
+import { useSelector } from 'react-redux';
 import './style.scss'
 import Logo from '../../../assets/images/yogeek-forum-logo.png'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -11,7 +10,6 @@ import LoginModal from '../../../components/Modal/LoginModal'
 
 const ForumHeader = ({ containerClass }) => {
 
-    const dispatch = useDispatch();
     const authUser = useSelector((state) => state.user.data);
     const [dropDownProfile, setDropDownProfile] = useState(false);
     const [loginModalOpen, setLoginModalOpen] = useState(false)
@@ -19,10 +17,7 @@ const ForumHeader = ({ containerClass }) => {
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
-    useEffect(() => {
-        dispatch(getUser())
-      }, [dispatch]);
-
+    
     useEffect(() => {
         const handleGlobalClick = (event) => {
             if (profileDropDown.current && !profileDropDown.current.contains(event.target)) {

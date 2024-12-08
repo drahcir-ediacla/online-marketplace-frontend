@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from '../../../apicalls/axios';
 import './style.scss'
-import useAuthentication from '../../../hooks/authHook'
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
 import GTranslate from '../../../components/GTranslate';
@@ -19,7 +18,6 @@ import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 
 const ForumSubCategoryPage = () => {
 
-    const { user } = useAuthentication();
     const { id, name } = useParams()
     const observer = useRef();
     const [categoryData, setCategoryData] = useState({})
@@ -114,11 +112,10 @@ const ForumSubCategoryPage = () => {
     return (
         <>
             <div className='forum-page-container'>
-                <Header authUser={user} />
+                <Header />
                 <div>
                     <div className="forum-category-page-container">
                         <FilterNavigation
-                            authUser={user}
                             sortOptions={filterDiscussionOptions}
                             discussionFilter={discussionFilter}
                             onOptionSelect={handleOptionSelect}

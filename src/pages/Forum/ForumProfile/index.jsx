@@ -6,6 +6,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import './style.scss'
 import { getUser } from '../../../redux/actions/userActions';
+import { getForumCategories } from '../../../redux/actions/forumCategoriesActions';
+import { getAllForumTags } from '../../../redux/actions/forumTagsActions';
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import Header from '../../../layouts/Forum/Header'
 import Footer from '../../../layouts/Forum/Footer'
@@ -32,12 +34,14 @@ import SmallScreenNavMenu from '../../../components/Forum/SmallScreenNavMenu';
 const ForumProfile = () => {
 
     const user = useSelector((state) => state.user.data);
+    const categories = useSelector((state) => state.forumcategories.data);
+    const allTags = useSelector((state) => state.forumtags.data);
     const dispatch = useDispatch()
     const location = useLocation();
     const navigate = useNavigate()
     const [paramsUser, setParamsUser] = useState({})
-    const [categories, setCategories] = useState([])
-    const [allTags, setAllTags] = useState([])
+    // const [categories, setCategories] = useState([])
+    // const [allTags, setAllTags] = useState([])
     const [notifications, setNotifications] = useState([]);
     const [activities, setActivities] = useState([]);
     const [activeTab, setActiveTab] = useState(0);
@@ -408,7 +412,7 @@ const ForumProfile = () => {
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
-                <Header authUser={user} />
+                <Header />
                 <div className="forum-profile-container">
                     <FilterNavigation
                         paramsUserData={setParamsUser}
@@ -418,11 +422,9 @@ const ForumProfile = () => {
                         forumNotificationsTab={() => openContent(3)}
                         addDiscussionsBtn={() => openContent(4)}
                         discussionFilter={discussionFilter}
-                        categoriesData={setCategories}
                         createdDiscussionsData={setCreatedDiscussions}
                         joinedDiscussionsData={setJoinedDiscussions}
                         activitiesData={setActivities}
-                        tagsData={setAllTags}
                         sortOptions={filterDiscussionOptions}
                         onOptionSelect={handleOptionSelect}
                         notifications={notifications}
