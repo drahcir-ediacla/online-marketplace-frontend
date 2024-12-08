@@ -20,7 +20,7 @@ const SlidingSideNav = () => {
   const [loading, setLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState(categories);
 
 
   const toggleMenu = () => {
@@ -44,7 +44,7 @@ const SlidingSideNav = () => {
 
   useEffect(() => {
     setFilteredCategories(categories)
-  }, [])
+  }, [categories])
 
   const myProfile = async () => {
     try {
