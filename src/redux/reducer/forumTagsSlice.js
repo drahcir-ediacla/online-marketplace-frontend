@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  data: [], // This will hold the category data
+  data: [], // This will hold the tags data
   error: null,
 };
 

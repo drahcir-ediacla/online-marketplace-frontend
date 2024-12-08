@@ -406,7 +406,7 @@ const ForumProfile = () => {
 
     return (
         <>
-            {!user && <LoginModal onClick={toggleLoginModal} />}
+            {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className='forum-page-container'>
                 <Header authUser={user} />
                 <div className="forum-profile-container">

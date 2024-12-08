@@ -3,6 +3,7 @@ import axios from '../../../apicalls/axios'
 import { useSelector, useDispatch } from 'react-redux';
 import { getUser } from '../../../redux/actions/userActions';
 import { getForumCategories } from '../../../redux/actions/forumCategoriesActions';
+import { getAllForumTags } from '../../../redux/actions/forumTagsActions';
 import './style.scss'
 import { Link, useParams, useNavigate, NavLink, useLocation } from 'react-router-dom'
 import DefaultAvatar from '../../../assets/images/avatar-icon.png'
@@ -36,6 +37,7 @@ const FilterNavigation = ({
     const dispatch = useDispatch();
     const authUser = useSelector((state) => state.user.data);
     const categories = useSelector((state) => state.forumcategories.data);
+    const tags = useSelector((state) => state.forumtags.data);
     const { userId, tab } = useParams();
     const userIdNumber = Number(userId);
     const authUserIdNumber = Number(authUser?.id)
@@ -44,8 +46,10 @@ const FilterNavigation = ({
     const [showFilter, setShowFilter] = useState(discussionFilter)
     // const [categories, setCategories] = useState([])
     const [activeCategory, setActiveCategory] = useState([])
-    const [tags, setTags] = useState([])
-    const [selectedTags, setSelectedTags] = useState(location.state || [])
+    // const [tags, setTags] = useState([])
+    const [selectedTags, setSelectedTags] = useState(
+        Array.isArray(location.state) ? location.state : []
+    );
     const [filterTagModalOpen, setFilterTagModalOpen] = useState(false);
     const [user, setUser] = useState({})
     const [totalCreatedDiscussions, setTotalCreatedDiscussions] = useState(0)
@@ -63,6 +67,12 @@ const FilterNavigation = ({
             dispatch(getForumCategories());
         }
     }, [dispatch, categories]);
+
+    useEffect(() => {
+        if (tags.length === 0) {
+            dispatch(getAllForumTags());
+        }
+    }, [dispatch, tags]);
 
     useEffect(() => {
         // If location.state is not null or undefined, update state
@@ -92,13 +102,13 @@ const FilterNavigation = ({
     useEffect(() => {
         const fetchForumCategories = async () => {
             try {
-                setLoadingCategories(true)
+                // setLoadingCategories(true)
                 // const responseCategories = await axios.get('/api/fetchforumcategories')
                 // setCategories(responseCategories.data)
 
-                const responseTags = await axios.get('/api/fetchforumtags')
-                setTags(responseTags.data)
-                setLoadingCategories(false)
+                // const responseTags = await axios.get('/api/fetchforumtags')
+                // setTags(responseTags.data)
+                // setLoadingCategories(false)
 
                 // Check if 'categoriesData' is a function before calling it
                 // 'categoriesData' is expected to be a function passed as a prop for handling the fetched data
@@ -108,7 +118,7 @@ const FilterNavigation = ({
                     setLoadingCategories(false)
                 }
                 if (typeof tagsData === 'function') {
-                    tagsData(responseTags.data);
+                    tagsData(tags);
                     setLoadingCategories(false)
                 } else {
                     setLoadingCategories(false)
@@ -285,7 +295,7 @@ const FilterNavigation = ({
                             <button type='button' className='forum-login-btn' onClick={toggleLoginModal}>Sign In</button>
                             <p>Don’t have a Yogeek account? <Link to='/registerbyemail'>Sign up</Link></p>
                         </div>
-                        {/* {userId && <div className='forum-category-page-row1'>
+                        {userId && <div className='forum-category-page-row1'>
                             <div className='forum-category-page-row1-row1'>
                                 <img src={user.profile_pic || DefaultAvatar} alt="" className='forum-profile-pic' />
                                 <div className='user-display-name'>
@@ -305,7 +315,7 @@ const FilterNavigation = ({
 
                             </ul>
                         </div>
-                        } */}
+                        }
                     </>
                 ) : (
                     <>
