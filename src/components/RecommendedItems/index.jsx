@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import useAuthentication from '../../hooks/authHook';
-import { GetRandomProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { useSelector } from 'react-redux';
+import axios from '../../apicalls/axios';
+import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import ProductCard from '../Cards/ProductCard'
 import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
@@ -8,9 +9,11 @@ import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
 const RecommendedItems = ({ userId }) => {
 
   const [products, setProducts] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(30);
-  const { user } = useAuthentication();
+  console.log('products:', products)
+  const [offset, setOffset] = useState(0);
+  const [limit] = useState(30); // Fixed limit for each request
+  const [hasMore, setHasMore] = useState(true);
+  const user = useSelector((state) => state.user.data)
   const [loading, setLoading] = useState(true);
 
   const [productStates, setProductStates] = useState({});
@@ -38,10 +41,17 @@ const RecommendedItems = ({ userId }) => {
   };
 
 
-  const fetchData = async (pageNumber, pageSize) => {
+  const fetchData = async () => {
     try {
-      const response = await GetRandomProducts(pageNumber, pageSize);
-      setProducts(prevProducts => [...prevProducts, ...response.data]);
+      const response = await axios.get(`/api/products/getrandom?offset=${offset}&limit=${limit}`);
+      if (response.data.length === 0) {
+        // If no new products, stop further requests
+        setHasMore(false);
+      } else {
+        setProducts(prevProducts => [...prevProducts, ...response.data]); // Append new products
+        setOffset(prevOffset => prevOffset + limit); // Increment offset for next batch
+      }
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -53,19 +63,13 @@ const RecommendedItems = ({ userId }) => {
 
   useEffect(() => {
     // Fetch initial data when the component mounts
-    fetchData(pageNumber, pageSize);
+    fetchData();
   }, []); // Empty dependency array means it will run once when the component mounts
 
 
-  // Function to handle "Load More" button click
-  const handleLoadMoreClick = () => {
-    setPageNumber(prevPageNumber => prevPageNumber + 1); // Increment the page number
+  const handleLoadMore = () => {
+    fetchData(); // Load next batch of products
   };
-
-  useEffect(() => {
-    // Fetch data when pageNumber changes
-    fetchData(pageNumber, pageSize);
-  }, [pageNumber, pageSize]);
 
 
   // Use useCallback to memoize the function
@@ -142,9 +146,9 @@ const RecommendedItems = ({ userId }) => {
           />
         </div>
         <div className="load-more-button-container">
-          <button onClick={handleLoadMoreClick} className="load-more-button">
-            Load More Items
-          </button>
+          {loading && <p>Loading...</p>}
+          {!loading && hasMore && <button onClick={handleLoadMore} className="load-more-button">Load More Items</button>}
+          {!hasMore && <p>No more item to load</p>}
         </div>
       </div>
     </>
