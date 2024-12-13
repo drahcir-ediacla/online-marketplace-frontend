@@ -13,12 +13,12 @@ const NavMenu = () => {
     useEffect(() => {
         if (categories.length === 0) {
             setLoading(true);
-          dispatch(getProductCategories());
-        } 
+            dispatch(getProductCategories());
+        }
         else {
             setLoading(false);
         }
-      }, [dispatch, categories]);
+    }, [dispatch, categories]);
 
     // useEffect(() => {
     //     const fetchCategories = async () => {
@@ -36,7 +36,7 @@ const NavMenu = () => {
     // }, []);
 
     // Specify the labels you want to include
-    const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Beauty & Personal Care", "Furniture", "Games, Hobbies & Crafts", "Book, Music & Tickets"];
+    const includedLabels = ["Mobile and Electronics", "Sports & Leisure", "Men's Fashion", "Women's Fashion", "Beauty & Personal Care", "Furniture", "Games, Hobbies & Crafts"];
 
     // Filter the categories based on the included labels
     const filteredCategories = categories.filter(category => includedLabels.includes(category.label));
@@ -67,6 +67,11 @@ const NavMenu = () => {
                         </div>
                     </li>
                 ))}
+                <li>
+                    <div className='btm-border'>
+                        <Link to={'/forum'} className='parent-menu'>Community</Link>
+                    </div>
+                </li>
                 <li>
                     <SlidingSideNav />
                 </li>
