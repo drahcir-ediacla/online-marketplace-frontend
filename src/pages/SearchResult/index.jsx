@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import useAuthentication from '../../hooks/authHook'
 import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import Header from '../../layouts/Header'
@@ -8,13 +9,13 @@ import SearchResultFilter from '../../components/ProductFilter/SearchResultFilte
 import ProductCard from '../../components/Cards/ProductCard'
 import './style.scss'
 
-const SearchResult = ({ userId }) => {
+const SearchResult = () => {
 
   const location = useLocation();
+  const user = useSelector((state) => state.user.data);
   const [products, setProducts] = useState([]);
-  const { user } = useAuthentication();
 
-  const [productStates, setProductStates] = useState({});
+  // const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
 
   const searchTerm = new URLSearchParams(location.search).get('keyword');
@@ -22,24 +23,6 @@ const SearchResult = ({ userId }) => {
   const latitude = new URLSearchParams(location.search).get('latitude');
   const longitude = new URLSearchParams(location.search).get('longitude');
   const radius = new URLSearchParams(location.search).get('radius');
-
-  // useEffect(() => {
-
-  //   const fetchSearchResults = async () => {
-
-  //     // const product_name = searchTerm; // Replace with the actual search term entered by the user
-
-  //     try {
-  //       const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`);
-  //       setProducts(response.data);
-  //     } catch (error) {
-  //       console.error('Error searching items:', error);
-  //     }
-  //   };
-
-  //   fetchSearchResults();
-  // }, [location.search, searchTerm, searchFilterLocation]);
-
 
 
   // Add and remove wishlist function
@@ -63,7 +46,6 @@ const SearchResult = ({ userId }) => {
 
 
 
-
   // Use useCallback to memoize the function
   const getWishlistCount = useCallback((productId) => {
     const productData = products.find((product) => product.id === productId);
@@ -82,20 +64,20 @@ const SearchResult = ({ userId }) => {
     setWishlistCount(updatedWishlistCounts);
 
     console.log('Wishlist count updated:', updatedWishlistCounts);
-  }, [productStates, products, getWishlistCount]);
+  }, [products, getWishlistCount]);
 
 
 
   // Initialize productStates based on initial wishlist data
-  useEffect(() => {
-    const initialProductStates = {};
-    products.forEach((product) => {
-      const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
-      initialProductStates[product.id] = isProductInWishlist;
-    });
-    console.log('Initial Product States:', initialProductStates);
-    setProductStates(initialProductStates);
-  }, [products, userId]);
+  // useEffect(() => {
+  //   const initialProductStates = {};
+  //   products.forEach((product) => {
+  //     const isProductInWishlist = Array.isArray(product.wishlist) && product.wishlist.some((entry) => String(entry.user_id) === String(userId));
+  //     initialProductStates[product.id] = isProductInWishlist;
+  //   });
+  //   console.log('Initial Product States:', initialProductStates);
+  //   setProductStates(initialProductStates);
+  // }, [products, userId]);
 
 
   return (

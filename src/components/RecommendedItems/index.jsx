@@ -147,8 +147,8 @@ const RecommendedItems = ({ userId }) => {
         </div>
         <div className="load-more-button-container">
           {loading && <p>Loading...</p>}
-          {!loading && hasMore && <button onClick={handleLoadMore} className="load-more-button">Load More Items</button>}
-          {!hasMore && <p>No more item to load</p>}
+          {!loading && hasMore && <button onClick={handleLoadMore} className="load-more-button">Show More Items</button>}
+          {!hasMore && <p>No more item to show</p>}
         </div>
       </div>
     </>

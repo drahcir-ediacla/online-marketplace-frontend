@@ -81,8 +81,8 @@ function App() {
             <Route path="/auth/success" element={<AuthSuccess />} />
             <Route path='/profile/:id' element={<ProfilePage />} />
             <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
-            <Route path='/category/:id/:value' element={<MainCategory />} />
-            <Route path='/subcategory/:id/:label' element={<SubCategory />} />
+            <Route path='/category/:categoryId/:value' element={<MainCategory />} />
+            <Route path='/subcategory/:categoryId/:value' element={<SubCategory />} />
             <Route path='/subsubcategory/:id/:label' element={<SubSubCategory />} />
             <Route path='/search-results' element={<SearchResult />} />
             <Route path='/forum/forum-search-results' element={<ForumSearchResult />} />

@@ -73,7 +73,7 @@ const CategoryProductFilter = ({ categoryId, value, updateCategoryData }) => {
     };
 
     fetchData();
-  }, [categoryId, value, filters]);
+  }, [categoryId, value, filters, filterPrice, updateCategoryData]);
 
   const toggleFilterVisibility = (filter) => {
     setActiveFilter(activeFilter === filter ? null : filter);

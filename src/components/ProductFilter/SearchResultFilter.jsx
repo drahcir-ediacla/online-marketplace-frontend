@@ -71,12 +71,12 @@ const SearchResultFilter = ({ searchTerm, searchFilterLocation, searchResultsDat
                     const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${encodeURIComponent(searchFilterLocation)}&latitude=${latitude}&longitude=${longitude}&radius=${radius}`, {
                         params: params,
                     });
-                    searchResultsData(response.data);
+                    searchResultsData(response.data.products);
                 } else {
                     const response = await axios.get(`/api/search?keyword=${searchTerm}&location=${searchFilterLocation}`, {
                         params: params,
                     });
-                    searchResultsData(response.data);
+                    searchResultsData(response.data.products);
                 }
             } catch (error) {
                 console.error('Error fetching search results:', error);

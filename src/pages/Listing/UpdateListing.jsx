@@ -38,9 +38,10 @@ const AddListing = () => {
         price: 0, // You can set a default value
         category_id: '', // Set the selected category's ID here
         product_condition: '',
-        mailing_delivery: '',
+        mailing_delivery: null,
         youtube_link: '',
     });
+    console.log('mailing_delivery:', productDetails.mailing_delivery);
     const [error, setError] = useState(null);
 
 
@@ -97,10 +98,9 @@ const AddListing = () => {
         // Update mailing_delivery directly with the new value of delivery
         setProductDetails({
             ...productDetails,
-            mailing_delivery: delivery.join(' | '), // Join the delivery array into a string
+            mailing_delivery: delivery.length > 0 ? delivery.join(' | ') : null, // Check if delivery is empty
         });
     }, [delivery]);
-
 
 
     const getCategoryLabelById = (categoryId) => {

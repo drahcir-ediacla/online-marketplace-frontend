@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from '../../apicalls/axios'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GetAllCategories } from '../../apicalls/products'
-import useAuthentication from '../../hooks/authHook'
 import './style.scss';
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
@@ -24,11 +22,10 @@ import CompleteProfileModal from '../../components/Modal/CompleteProfileModal';
 const AddListing = () => {
 
   const dispatch = useDispatch()
-  const { user } = useAuthentication();
+  const user = useSelector((state) => state.user.data);
   const userId = user?.id;
   const [activeRadio, setActiveRadio] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [accountVerified, setAccountVerified] = useState(true)
   const [selectedOption, setSelectedOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState([]);
@@ -41,16 +38,11 @@ const AddListing = () => {
     price: 0, // You can set a default value
     category_id: '', // Set the selected category's ID here
     product_condition: 'Brand New',
-    mailing_delivery: '',
+    mailing_delivery: null,
     youtube_link: '',
   });
 
-
-  useEffect(() => {
-    if(user?.account_verified === false) {
-      setAccountVerified(false)
-    }
-  })
+  
 
   const openContent = (radioIndex) => {
     setActiveRadio(radioIndex);
@@ -82,7 +74,7 @@ const AddListing = () => {
 
 
 
-  const selectedDelivery = delivery.join(' | ');
+  // const selectedDelivery = delivery.join(' | ');
 
   const handleCheckboxDeliveryChange = (event) => {
     const deliveryOption = event.target.value;
@@ -100,7 +92,7 @@ const AddListing = () => {
 
     setProductDetails({
       ...productDetails,
-      mailing_delivery: selectedDelivery, // Set the product_condition in productDetails
+      mailing_delivery: delivery.length > 0 ? delivery.join(' | ') : null, // Set the product_condition in productDetails
     });
   };
 
@@ -435,7 +427,7 @@ const AddListing = () => {
 
   return (
     <>
-    {!accountVerified && <CompleteProfileModal />}
+    {!user.account_verified && <CompleteProfileModal />}
       <Header />
       <div className="add-listing-body" >
 

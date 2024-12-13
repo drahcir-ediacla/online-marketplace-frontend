@@ -1,24 +1,25 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { Setloader } from '../../redux/reducer/loadersSlice'
 import useAuthentication from '../../hooks/authHook'
-import { GetCategoryByID, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { AddWishlist, RemoveWishlist, GetAllCategories } from '../../apicalls/products';
 import './style.scss'
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
-import { Link } from 'react-router-dom'
 import SubCategoryCarousel from '../../components/Carousel/SubCategoryCarousel'
 import CategoryProductFilter from '../../components/ProductFilter/CategoryProductFilter'
+import { SmallScreenProductFilter } from '../../components/ProductFilter/SmallScreenProductFilter'
 import ProductCard from '../../components/Cards/ProductCard'
+import Breadcrumb from '../../components/Breadcrumb'
+import SellBtn from '../../components/Button/SellBtn'
+
+
 
 
 const MainCategory = ({ userId }) => {
 
-  const { id, label } = useParams();
+  const { id, value } = useParams();
   const [category, setCategory] = useState({});
-  const [setErr] = useState(false);
-  const dispatch = useDispatch();
+  const [categories, setCategories] = useState([]);
   const { user } = useAuthentication();
 
   const [productStates, setProductStates] = useState({});
@@ -45,44 +46,24 @@ const MainCategory = ({ userId }) => {
   };
 
 
-  // const allProducts = useMemo(() => {
-  //   const subCategoryProductsArray = Array.isArray(category?.subCategoryProducts) ? category?.subCategoryProducts : [];
-  //   const productsArray = Array.isArray(category?.products) ? category?.products : [];
-  //   return [...subCategoryProductsArray, ...productsArray];
-  // }, [category?.subCategoryProducts, category?.products]);
-
   const allProducts = Array.isArray(category?.allProducts) ? category?.allProducts : [];
   const subcategories = Array.isArray(category?.subcategories) ? category?.subcategories : [];
 
-
+  // FETCH ALL CATEGORIES //
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(Setloader(true));
-
+    const fetchCategories = async () => {
       try {
-        // Fetch the category's data
-        const response = await GetCategoryByID(id, label);
-
-        setCategory(response.data);
-        dispatch(Setloader(false));
-
-
+        const response = await GetAllCategories();
+        console.log('Categories:', response.data);
+        setCategories(response.data);
       } catch (error) {
-        dispatch(Setloader(false));
-        console.error('Error fetching category data:', error);
-
-        // Check if the error is due to unauthorized access
-        if (error.response && error.response.status === 500) {
-          return error.message;
-          // Handle unauthorized access, e.g., redirect to login
-        } else {
-          // Handle other errors
-          setErr(true); // Depending on your requirements
-        }
+        console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  }, [id, label, dispatch, setErr]);
+
+    fetchCategories();
+  }, []);
+
 
 
 
@@ -124,40 +105,58 @@ const MainCategory = ({ userId }) => {
   return (
     <>
       <Header />
-      <div className='container main-category-body'>
-        <div className="row1">
-          <ul className='breadcrumb'>
-            <li><Link to='/'>Home</Link></li>
-            <li>Mobiles & Electronics</li>
-          </ul>
-        </div>
-        <div className="row2 main-category-banner">ADS or HTML Description Here</div>
-        {subcategories && subcategories.length > 0 && (
-          <div className="sub-categories-container">
-            <SubCategoryCarousel data={subcategories} />
+      <div className='container'>
+        <div className='main-category-body'>
+          <div className="row1">
+            <Breadcrumb categories={categories} selectedCategory={id} />
           </div>
-        )}
-        <div className="row4 main-category-newly-listed">
-          <div className="main-category-newly-listed-row1">
-            <div className='product-section-title'>
-              <h3>{category?.label}</h3>
+          <div className="row2 main-category-banner">ADS or HTML Description Here</div>
+          {subcategories && subcategories.length > 0 && (
+            <div className="sub-categories-container">
+              <SubCategoryCarousel data={subcategories} />
             </div>
-          </div>
-          <div className='main-category-newly-listed-row2'><CategoryProductFilter /></div>
-          <div className='main-category-newly-listed-row3'>
-            <ProductCard
-              data={allProducts || []}
-              addToWishlist={addToWishlist}
-              removeFromWishlist={removeFromWishlist}
-              userId={user?.id}
-              wishlistCount={wishlistCount}
-              setWishlistCount={setWishlistCount}
-              getWishlistCount={getWishlistCount}
-            />
+          )}
+          <div className="row4 main-category-newly-listed">
+            <div className="main-category-newly-listed-row1">
+              <div className='product-section-title'>
+                <h3>{category?.label}</h3>
+              </div>
+            </div>
+            <div className='main-category-newly-listed-row2'>
+              <CategoryProductFilter
+                categoryId={id}
+                value={value}
+                updateCategoryData={setCategory}
+              />
+              <SmallScreenProductFilter
+                categoryId={id}
+                value={value}
+                updateCategoryData={setCategory}
+              />
+            </div>
+            <div className='main-category-newly-listed-row3'>
+              {allProducts.length > 0 ? (
+                <ProductCard
+                  data={allProducts || []}
+                  addToWishlist={addToWishlist}
+                  removeFromWishlist={removeFromWishlist}
+                  userId={user?.id}
+                  wishlistCount={wishlistCount}
+                  setWishlistCount={setWishlistCount}
+                  getWishlistCount={getWishlistCount}
+                />
+              ) : (
+                <>
+                  <h4>No result found!</h4>
+                </>
+              )}
+
+            </div>
           </div>
         </div>
       </div>
       <Footer />
+      <SellBtn />
     </>
   )
 }
