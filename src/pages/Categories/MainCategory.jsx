@@ -672,7 +672,7 @@ const MainCategory = () => {
               )}
             </div>
             {/* Trigger for the next page */}
-            {hasMore && !loadingRecent && (
+            {hasMore && (
               <div ref={lastElementRef} style={{ height: '20px', backgroundColor: 'transparent' }}></div>
             )}
             {loadingRecent && <div className='infinite-scroll-loading-spinner'><LoadingSpinner /></div>}
