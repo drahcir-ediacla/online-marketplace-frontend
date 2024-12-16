@@ -69,7 +69,7 @@ const NewItems = ({ data }) => {
         // const products = categoryData.products || [];
 
         // Concatenate subCategoryProducts and products to get all products
-        let allProducts = categoryData.allProducts || [];
+        let allProducts = categoryData.paginatedProducts || [];
         
 
         // Limit the number of items to the first 20
