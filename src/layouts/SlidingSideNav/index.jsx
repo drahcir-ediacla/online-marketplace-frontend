@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../redux/actions/userActions';
 import { getProductCategories } from '../../redux/actions/productCategoriesActions';
 import { Link } from 'react-router-dom';
-import { GetAllCategories } from '../../apicalls/products';
 import './style.scss'
-import { ReactComponent as GridIcon } from '../../assets/images/grid-icon.svg';
+import { ReactComponent as GridIcon } from '../../assets/images/grid-icon-solid.svg';
 import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifying-glass.svg';
 import { ReactComponent as BurgerBtn } from '../../assets/images/burger-btn.svg'
 import AvatarIcon from '../../assets/images/avatar-icon.png'

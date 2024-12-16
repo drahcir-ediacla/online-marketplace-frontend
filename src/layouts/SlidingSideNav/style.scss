@@ -5,11 +5,20 @@
 //     }
 // }
 
+
+
 .btm-border {
+    .parent-menu {
+        .grid-icon {
+            width: 15px;
+        }
+    }
+
     .burger-btn-icon {
         display: none;
     }
 }
+
 
 #SlidingMenu {
     position: fixed;
@@ -321,6 +330,7 @@
                     .small-device-close-btn {
                         display: block;
                         align-content: center;
+
                         #closeBtn {
                             position: relative;
                             padding: 0px 15px;

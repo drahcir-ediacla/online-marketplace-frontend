@@ -618,10 +618,37 @@ header {
                         flex-grow: 1;
 
                         li {
+                            .btm-border:hover {
+                                .community-icon {
+                                    fill: #DC6531;
+                                }
+
+                                .grid-icon {
+                                    fill: #DC6531;
+                                }
+
+                                .parent-menu {
+                                    color: #DC6531;
+                                }
+                            }
+
                             .btm-border {
                                 // display: flex;
                                 align-items: center;
                                 position: relative;
+
+                                .community-icon {
+                                    position: absolute;
+                                    display: flow-root;
+                                    top: 0;
+                                    fill: var(--gray-500);
+                                    width: 22px;
+                                    padding-right: 5px;
+                                }
+
+                                .community-menu {
+                                    margin-left: 24px;
+                                }
 
                                 .parent-menu {
                                     color: var(--black-101);

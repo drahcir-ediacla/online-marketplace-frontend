@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 // import { getUser } from '../../redux/actions/userActions';
 import '../Header/style.scss';
 import { ReactComponent as HeartIcon } from '../../assets/images/heart-regular.svg';
-import { ReactComponent as GlobeIcon } from '../../assets/images/globe-regular.svg';
+import { ReactComponent as GlobeIcon } from '../../assets/images/globe-solid.svg';
 import { ReactComponent as TriangleIcon } from '../../assets/images/triangle-up.svg';
 import { ReactComponent as LocationIcon } from '../../assets/images/location-solid-icon.svg'
 import Logo from '../../assets/images/Yogeek-logo.png';

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getProductCategories } from '../../redux/actions/productCategoriesActions';
 import SlidingSideNav from '../SlidingSideNav';
 import NavMenuSkeleton from '../../components/SkeletonLoader/NavMenuSkeleton';
+import { ReactComponent as CommunityIcon } from '../../assets/images/community-icon-solid.svg';
 
 const NavMenu = () => {
     const dispatch = useDispatch();
@@ -69,7 +70,8 @@ const NavMenu = () => {
                 ))}
                 <li>
                     <div className='btm-border'>
-                        <Link to={'/forum'} className='parent-menu'>Community</Link>
+                        <div className='community-icon'><CommunityIcon /></div>
+                        <Link to={'/forum'} className='parent-menu community-menu'>Community</Link>
                     </div>
                 </li>
                 <li>

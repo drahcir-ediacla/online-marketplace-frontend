@@ -11,7 +11,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   return (
     <nav>
       <ul className='pagination'>
-      <li className='page-item'>
+        <li className='page-item'>
           <button
             onClick={() => paginate(currentPage - 1)} // Previous page
             disabled={currentPage === 1} // Disable if on the first page
