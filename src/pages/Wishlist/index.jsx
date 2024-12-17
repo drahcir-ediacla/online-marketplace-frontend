@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from '../../apicalls/axios';
 import { Setloader } from '../../redux/reducer/loadersSlice'
-import useAuthentication from '../../hooks/authHook'
-import { GetAllProducts, GetUserWishlist, AddWishlist, RemoveWishlist } from '../../apicalls/products';
+import { GetAllProducts, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import { Link } from 'react-router-dom'
 import Header from '../../layouts/Header'
@@ -12,7 +12,7 @@ import SadImage from '../../assets/images/page-not-found-image.png'
 
 const Wishlist = ({ userId }) => {
 
-    const { user } = useAuthentication();
+    const user = useSelector((state) => state.user.data)
     const [wishlist, setwishlist] = useState([]);
     const [data, setData] = useState([]);
     const [err, setErr] = useState(false);
@@ -20,10 +20,64 @@ const Wishlist = ({ userId }) => {
 
     const [productStates, setProductStates] = useState({});
     const [wishlistCount, setWishlistCount] = useState({});
-    const [wishListEmpty, setwishlistEmpty] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalWishList, setTotalWishList] = useState(null)
+    const [limit] = useState(30);
 
 
-    
+
+    useEffect(() => {
+        fetchData(currentPage)
+    }, [dispatch, currentPage])
+
+
+    const fetchData = async (page = 1) => {
+        dispatch(Setloader(true));
+
+        try {
+            const params = {
+                page,
+                limit
+            }
+            // Fetch the user's wishlist
+            const response = await axios.get('/api/getuserwishlist', { params });
+            if (response.data.wishlist && Array.isArray(response.data.wishlist)) {
+                setwishlist(response.data.wishlist);
+                setTotalWishList(response.data.totalWishList);
+                setTotalPages(response.data.totalPages);
+            } else {
+                // Handle the case where the data is not an array
+                console.error('Received invalid wishlist data:', response.data.wishlist);
+            }
+
+
+            // Fetch all products
+            const prodResponse = await GetAllProducts();
+            setData(prodResponse.data)
+            dispatch(Setloader(false));
+
+        } catch (error) {
+            dispatch(Setloader(false));
+            console.error('Error fetching wishlist data:', error);
+
+            // Check if the error is due to unauthorized access
+            if (error.response && error.response.status === 500) {
+                return error.message
+                // Handle unauthorized access, e.g., redirect to login
+            } else {
+                // Handle other errors
+                setErr(true); // Depending on your requirements
+            }
+        }
+    }
+
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
 
     // Add and remove wishlist function
     const addToWishlist = async (productId) => {
@@ -45,48 +99,7 @@ const Wishlist = ({ userId }) => {
     };
 
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            dispatch(Setloader(true));
-
-            try {
-                // Fetch the user's wishlist
-                const response = await GetUserWishlist();
-                if (response.data && Array.isArray(response.data)) {
-                    setwishlist(response.data);
-                    setwishlistEmpty(response.data.length === 0);
-                } else {
-                    // Handle the case where the data is not an array
-                    console.error('Received invalid wishlist data:', response.data);
-                }
-
-
-                // Fetch all products
-                const prodResponse = await GetAllProducts();
-                setData(prodResponse.data)
-                dispatch(Setloader(false));
-
-            } catch (error) {
-                dispatch(Setloader(false));
-                console.error('Error fetching wishlist data:', error);
-
-                // Check if the error is due to unauthorized access
-                if (error.response && error.response.status === 500) {
-                    return error.message
-                    // Handle unauthorized access, e.g., redirect to login
-                } else {
-                    // Handle other errors
-                    setErr(true); // Depending on your requirements
-                }
-            }
-        }
-        fetchData();
-    }, [dispatch])
-
-
     const mywishlist = useMemo(() => Array.isArray(wishlist) ? wishlist : [], [wishlist]);
-
 
 
     // Use useCallback to memoize the function
@@ -123,7 +136,7 @@ const Wishlist = ({ userId }) => {
         setProductStates(initialProductStates);
     }, [mywishlist, userId]);
 
-   
+
 
     return (
         <>
@@ -138,29 +151,61 @@ const Wishlist = ({ userId }) => {
                 <div className="wishlist-row2">
                     <div className='wishlist-title'>
                         <h3>My Wishlist</h3>
-                        <h5>You have {wishlist.length} item(s) on your wishlist</h5>
+                        <h5>You have {totalWishList} item(s) on your wishlist</h5>
                     </div>
-                    {wishListEmpty ? (<div className='wishlist-empty'>
+                    {totalWishList === 0 ? (<div className='wishlist-empty'>
                         <div>
                             <img src={SadImage} alt="" />
                         </div>
                         <h4>Your Wishlist is Empty</h4>
                     </div>
                     ) : (
-                    <div className='wishlist-items'>
-                        <ProductCard
-                            data={mywishlist || []}
-                            addToWishlist={addToWishlist}
-                            removeFromWishlist={removeFromWishlist}
-                            userId={user?.id}
-                            productStates={productStates}
-                            setProductStates={setProductStates}
-                            wishlistCount={wishlistCount}
-                            setWishlistCount={setWishlistCount}
-                            getWishlistCount={getWishlistCount}
-                        />
-                    </div>
+                        <div className='wishlist-items'>
+                            <ProductCard
+                                data={mywishlist || []}
+                                addToWishlist={addToWishlist}
+                                removeFromWishlist={removeFromWishlist}
+                                userId={user?.id}
+                                productStates={productStates}
+                                setProductStates={setProductStates}
+                                wishlistCount={wishlistCount}
+                                setWishlistCount={setWishlistCount}
+                                getWishlistCount={getWishlistCount}
+                            />
+                        </div>
                     )}
+                    {totalWishList > 30 &&
+                        <div className="pagination">
+                            <li className='page-item'>
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className='page-link'
+                                >
+                                    Previous
+                                </button>
+                            </li>
+                            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                                <li key={page} className='page-item'>
+                                    <button
+                                        onClick={() => handlePageChange(page)}
+                                        className={page === currentPage ? 'active page-link' : 'page-link'}
+                                    >
+                                        {page}
+                                    </button>
+                                </li>
+                            ))}
+                            <li className='page-item'>
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className='page-link'
+                                >
+                                    Next
+                                </button>
+                            </li>
+                        </div>
+                    }
                 </div>
             </div>
             <Footer />

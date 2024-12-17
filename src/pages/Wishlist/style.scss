@@ -76,6 +76,35 @@
             flex-wrap: wrap;
             gap: 23px;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+
+            .page-item {
+                .page-link {
+                    font-size: 15px;
+                    color: var(--gray-500);
+                    float: left;
+                    padding: 8px 16px;
+                    text-decoration: none;
+                    transition: background-color .3s;
+                    border: 1px solid var(--gray-200);
+                    margin: 0 4px;
+                }
+
+                .page-link.active {
+                    background: linear-gradient(to right, #d53f3f, #dc6531);
+                    color: white;
+                    border: 1px solid var(--orange-200);
+                }
+
+                .page-link:hover:not(.active) {
+                    background-color: #ddd;
+                }
+            }
+        }
     }
 }
 
