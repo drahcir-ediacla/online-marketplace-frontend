@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkyogeek=self.webpackChunkyogeek||[]).push([[3538],{3538:(e,n,o)=>{o.r(n),o.d(n,{default:()=>r});var s=o(2791),c=o(7689),i=o(184);const r=()=>{const e=(0,c.s0)();return(0,s.useEffect)((()=>{window.opener?(window.opener.location.reload(),window.close()):e("/")}),[e]),(0,i.jsx)("div",{children:"Login successful! Redirecting..."})}}}]);
+//# sourceMappingURL=3538.9b46a282.chunk.js.map
