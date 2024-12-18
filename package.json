@@ -2,9 +2,6 @@
   "name": "yogeek",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "18.16.0"
-  },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
