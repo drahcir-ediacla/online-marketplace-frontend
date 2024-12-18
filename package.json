@@ -45,6 +45,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "install": "npm i react-image-magnify@latest --force",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
