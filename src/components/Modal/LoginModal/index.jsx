@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './style.scss'
 import axios from "../../../apicalls/axios";
-import useAuthentication from '../../../hooks/authHook';
 import LoginBtn from '../../Button/LoginBtn'
 import LogoGray from '../../../assets/images/Yogeek-logo.png'
 import { ReactComponent as FBIcon } from '../../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../../assets/images/google-icon.svg'
-import { useDispatch } from 'react-redux';
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import AlertMessage from '../../AlertMessage';
 
@@ -18,9 +17,10 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const LoginModal = ({ onClick, productId, productName, userId }) => {
 
+    const dispatch = useDispatch()
     const [isModalOpen, setIsModalOpen] = useState(true);
     const navigate = useNavigate();
-    const { user } = useAuthentication();
+    const user = useSelector((state) => state.user.data);
     const emailRef = useRef();
     const errRef = useRef();
     const [showAlert, setShowAlert] = useState(false);
@@ -31,7 +31,6 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const dispatch = useDispatch()
 
    
     useEffect(() => {
