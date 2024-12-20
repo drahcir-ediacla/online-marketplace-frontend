@@ -45,6 +45,12 @@ const NavMenu = () => {
     return (
         <nav className='nav-menu'>
             <ul>
+                <li>
+                    <div className='btm-border'>
+                        <div className='community-icon'><CommunityIcon /></div>
+                        <Link to={'/forum'} className='parent-menu community-menu'>Community</Link>
+                    </div>
+                </li>
                 {loading && <NavMenuSkeleton menus={7} />}
                 {filteredCategories.map(category => (
                     <li key={category.id}>
@@ -68,12 +74,6 @@ const NavMenu = () => {
                         </div>
                     </li>
                 ))}
-                <li>
-                    <div className='btm-border'>
-                        <div className='community-icon'><CommunityIcon /></div>
-                        <Link to={'/forum'} className='parent-menu community-menu'>Community</Link>
-                    </div>
-                </li>
                 <li>
                     <SlidingSideNav />
                 </li>

@@ -9,6 +9,7 @@ import { ReactComponent as MagnifyingGlass } from '../../assets/images/magnifyin
 import { ReactComponent as BurgerBtn } from '../../assets/images/burger-btn.svg'
 import AvatarIcon from '../../assets/images/avatar-icon.png'
 import SlidingNavSkeleton from '../../components/SkeletonLoader/SlidingNavSkeleton';
+import { ReactComponent as CommunityIcon } from '../../assets/images/community-icon-solid.svg';
 
 
 const SlidingSideNav = () => {
@@ -184,7 +185,15 @@ const SlidingSideNav = () => {
               )}
             </div>
             <div className='row2'>
-              <div style={{ width: '100%' }}>
+              <ul className='other-links-ul'>
+                <li className='other-link-li'>
+                  <Link to='/forum' className='other-link-container'>
+                    <div className='community-icon'><CommunityIcon /></div>
+                    <div>Our Community</div>
+                  </Link>
+                </li>
+              </ul>
+              <div style={{ width: '100%', padding:'0 15px' }}>
                 <h5>All Categories</h5>
                 <div className='search-container'>
                   <input

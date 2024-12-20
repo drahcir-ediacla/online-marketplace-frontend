@@ -127,7 +127,47 @@
                 font-size: 16px;
                 align-items: center;
                 justify-content: center;
-                height: 20vh;
+                height: auto;
+                gap: 20px;
+                margin: 20px 0;
+                padding: 0;
+
+                .other-links-ul {
+                    display: flex;
+                    padding: 0;
+                    margin: 0;
+                    width: 100%;
+                    align-items: center;
+
+                    .other-link-li {
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
+                        flex-direction: column;
+                        width: 100%;
+                        height: auto;
+                        border-bottom: 1px solid var(--gray-200);
+                        border-top: 1px solid var(--gray-200);
+
+                        .other-link-container {
+                            color: var(--gray-500);
+                            display: flex;
+                            justify-content: center;
+                            gap: 10px;
+                            align-items: center;
+                            padding: 10px 15px;
+
+                            .community-icon {
+                                fill: var(--gray-500);
+                                width: 22px;
+                            }
+                        }
+
+                        .other-link-container:hover {
+                            background: var(--gray-200);
+                        }
+                    }
+                }
 
                 .search-container {
                     position: relative;
@@ -173,9 +213,10 @@
                 background: white;
                 font-size: 16px;
                 border: none;
+                padding: 0;
 
                 .nav-categories {
-                    width: 349px;
+                    width: 100%;
 
                     ul {
                         display: flex;
@@ -195,7 +236,7 @@
                             .category-icon {
                                 display: flex;
                                 align-items: center;
-                                padding: 10px 10px;
+                                padding: 10px 15px;
 
                                 img {
                                     margin-right: 10px;
