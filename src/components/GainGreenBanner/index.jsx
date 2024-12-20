@@ -1,12 +1,30 @@
-import React from 'react'
+import { useState } from 'react'
 import './style.scss'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import LoginModal from '../Modal/LoginModal'
 import DollarBox from '../../assets/images/dollar-box.png'
 import SellArrow from '../../assets/images/sell-arrow.png'
 
 const GainGreenBanner = ({ user }) => {
+
+  const navigate = useNavigate()
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
+
+  const handleLoginModal = () => {
+    if (!user) {
+      setLoginModalOpen(true)
+    } else {
+      navigate('/addlisting');
+    }
+  }
+
+  const toggleLoginModal = () => {
+    setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+  }
+
   return (
     <>
+      {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
       <div className="green-banner-container">
         <div className="contentbox">
           <div className="col-left">
@@ -14,10 +32,10 @@ const GainGreenBanner = ({ user }) => {
             <h2>Make Space, Make Money: Sell Your Preloved Items Easily!</h2>
           </div>
           <div className="col-right">
-            <Link to={`${user ? '/addlisting' : '/loginemail'}`} className="gain-more-btn">
+            <button onClick={handleLoginModal} className="gain-more-btn">
               <h5>Sell Now</h5>
               <div className='sell-arrow'><img src={SellArrow} alt="" /></div>
-            </Link>
+            </button>
           </div>
         </div>
       </div>

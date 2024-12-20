@@ -5,6 +5,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Link } from 'react-router-dom'
 import './style.scss'
+import LoginModal from '../Modal/LoginModal';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
 import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
@@ -15,6 +16,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
 
   const [productStates, setProductStates] = useState({});
   const [wishlistCount, setWishlistCount] = useState({});
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
 
 
 
@@ -103,12 +105,15 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
     }
   };
 
-
+  const toggleLoginModal = () => {
+    setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+  }
 
 
 
   return (
     <>
+    {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
       <Carousel responsive={responsive} draggable={true} removeArrowOnDeviceType={['mobile', 'tablet']} autoPlay containerClass="carousel-container">
         {data.map((product, index) => {
           const createdAtDate = new Date(product.createdAt);
@@ -127,6 +132,10 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
           const handleWishlistClick = async (productId) => {
             try {
               const isAdded = productStates[productId] || false;
+
+              if (!userId) { // If user is not authenticated
+                setLoginModalOpen(true)
+              }
 
               if (isAdded) {
                 await removeFromWishlist(productId);
@@ -185,7 +194,7 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                 <div className='col-wishlist'>
                   <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                   <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
-                    {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                    {productStates[product.id] && userId ? <HeartSolid /> : <HeartRegular />}
                   </button>
                 </div>
               </div>

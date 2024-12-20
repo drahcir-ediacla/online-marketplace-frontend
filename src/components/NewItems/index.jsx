@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useAuthentication from '../../hooks/authHook';
+import { useSelector } from 'react-redux';
 import axios from '../../apicalls/axios';
 import { AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
@@ -12,12 +12,11 @@ import BtnSeeMore from '../../components/Button/BtnSeeMore'
 
 const NewItems = ({ data }) => {
 
-  const { user } = useAuthentication();
+  const user = useSelector((state) => state.user.data )
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  console.log("Category Data:", data)
 
   // Add and remove wishlist function
   const addToWishlist = async (productId) => {

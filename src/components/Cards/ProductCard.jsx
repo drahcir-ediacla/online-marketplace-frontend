@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { Link } from 'react-router-dom'
 import './style.scss'
+import LoginModal from '../Modal/LoginModal';
 import { ReactComponent as ClockIcon } from '../../assets/images/clock-regular.svg'
 import { ReactComponent as HeartRegular } from '../../assets/images/heart-regular.svg';
 import { ReactComponent as HeartSolid } from '../../assets/images/heart-solid.svg';
@@ -13,6 +14,7 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
 
   const [productStates, setProductStates] = useState({});
   const [showSignInMessage, setShowSignInMessage] = useState({});
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
   const signInRef = useRef(null);
 
   useEffect(() => {
@@ -83,10 +85,13 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
-
+  const toggleLoginModal = () => {
+    setLoginModalOpen((prevLoginModalOpen) => !prevLoginModalOpen)
+  }
 
   return (
     <>
+      {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
       {data.map((product, index) => {
 
         // Ensure product.createdAt is a valid date before using it
@@ -101,11 +106,12 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
             const isAdded = productStates[productId] || false;
 
             if (!userId) { // If user is not authenticated
-              setShowSignInMessage(prevState => ({
-                ...prevState,
-                [productId]: !prevState[productId], // Toggle the sign-in message for this specific product
-              }));
-              return; // Exit the function without adding/removing from wishlist
+              // setShowSignInMessage(prevState => ({
+              //   ...prevState,
+              //   [productId]: !prevState[productId], // Toggle the sign-in message for this specific product
+              // }));
+              // return; // Exit the function without adding/removing from wishlist
+              setLoginModalOpen(true)
             }
 
             if (isAdded) {
@@ -165,16 +171,16 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
                 <div className="price">{formatPrice(product.price)}</div>
               </div>
               <div className='col-wishlist'>
-                {showSignInMessage[product.id] && !userId && (
+                {/* {showSignInMessage[product.id] && !userId && (
                   <div ref={signInRef} className='add-wishlist-sign-in'>
                     <h6>You like this item?</h6>
                     <p>Sign in to add this item to your wishlist</p>
                     <Link to={'/loginemail'}>Sign in</Link>
                   </div>
-                )}
+                )} */}
                 <div className='wishlist-counter'>{wishlistCount[product.id] || ''}</div>
                 <button onClick={() => handleWishlistClick(product.id)} className='heart-icon'>
-                  {productStates[product.id] ? <HeartSolid /> : <HeartRegular />}
+                  {productStates[product.id] && userId ? <HeartSolid /> : <HeartRegular />}
                 </button>
               </div>
             </div>

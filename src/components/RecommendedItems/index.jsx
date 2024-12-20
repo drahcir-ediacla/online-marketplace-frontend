@@ -8,12 +8,11 @@ import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton';
 
 const RecommendedItems = ({ userId }) => {
 
+  const user = useSelector((state) => state.user.data)
   const [products, setProducts] = useState([]);
-  console.log('products:', products)
   const [offset, setOffset] = useState(0);
   const [limit] = useState(30); // Fixed limit for each request
   const [hasMore, setHasMore] = useState(true);
-  const user = useSelector((state) => state.user.data)
   const [loading, setLoading] = useState(true);
 
   const [productStates, setProductStates] = useState({});

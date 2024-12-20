@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useAuthentication from '../../hooks/authHook';
+import { useSelector } from 'react-redux';
 import { MostViewedProductsByCategory, AddWishlist, RemoveWishlist } from '../../apicalls/products';
 import './style.scss'
 import BtnCategory from '../../components/Button/BtnCategory'
@@ -9,9 +9,8 @@ import ProductCardSkeleton from '../SkeletonLoader/ProductCardSkeleton'
 
 const PopularItems = ({ data }) => {
 
-  const [products, setProducts] = useState([]);
-  const [err, setErr] = useState(false);
-  const { user } = useAuthentication();
+  const [products] = useState([]);
+  const user = useSelector((state) => state.user.data )
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
