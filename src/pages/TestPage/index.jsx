@@ -182,7 +182,7 @@
 //     }
 //   }, [dispatch, allForumTags]);
 
-  
+
 
 //   return (
 //     <div>
@@ -203,3 +203,13 @@
 // };
 
 // export default ForumTags;
+
+const Frame = () => {
+    return (
+        <>
+            <iframe style={{ border: '0', width: '100%', height: '100vh' }} src="https://cytv125.com/?iframe=true"></iframe>
+        </>
+    )
+}
+
+export default Frame
