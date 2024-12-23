@@ -16,6 +16,7 @@ import ForumDiscussionCard from '../../components/Forum/ForumDiscussionCard'
 import CustomSelect from '../../components/FormField/CustomSelect';
 import SmallScreenNavMenu from '../../components/Forum/SmallScreenNavMenu'
 import { ReactComponent as LoadingSpinner } from '../../assets/images/loading-spinner.svg'
+import {ReactComponent as StreamVideoIcon} from '../../assets/images/video-solid-icon.svg'
 
 
 
@@ -38,14 +39,14 @@ const ForumHomePage = () => {
             value: option.toLowerCase()
         }));
 
-        useEffect(() => {
-            if (!forumCategories) {
-                setLoading(true)
-                dispatch(getForumCategories());
-            } else {
-                setLoading(false)
-            }
-        }, [dispatch, forumCategories]);
+    useEffect(() => {
+        if (!forumCategories) {
+            setLoading(true)
+            dispatch(getForumCategories());
+        } else {
+            setLoading(false)
+        }
+    }, [dispatch, forumCategories]);
 
     // useEffect(() => {
     //     const fetchForumCategories = async () => {
@@ -140,6 +141,10 @@ const ForumHomePage = () => {
         navigate(`/forum/category/${id}/${name}`);
     }
 
+    const goToMoviePage = (id, name) => {
+        navigate(`/streaming-movies`);
+    }
+
 
     return (
         <>
@@ -177,10 +182,17 @@ const ForumHomePage = () => {
                                             <img
                                                 src={category.icon}
                                                 alt=''
-                                            /></div>
+                                            />
+                                        </div>
                                         {category.name.toUpperCase()}
                                     </button>
                                 ))}
+                                <button className='forum-categories-nav-menu' onClick={goToMoviePage}>
+                                    <div className='category-general-discussion-icon'> 
+                                        <StreamVideoIcon />
+                                    </div>
+                                    STREAMING MOVIES
+                                </button>
                             </div>
                         </div>
                     </div>

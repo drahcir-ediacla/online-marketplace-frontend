@@ -45,6 +45,7 @@ const NewItems = lazy(() => import('./components/NewItems'));
 const SearchResult = lazy(() => import('./pages/SearchResult'));
 const ForumSearchResult = lazy(() => import('./pages/Forum/ForumSearchResult'));
 const TestPage = lazy(() => import('./pages/TestPage'));
+const StreamingMovies = lazy(() => import('./pages/StreamingMovies'));
 
 
 
@@ -94,6 +95,7 @@ function App() {
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test' element={<TestPage />} />
+            <Route path='/streaming-movies' element={<StreamingMovies />} />
             <Route element={<PrivateRoutes />}>
               <Route path='/editprofile' element={<EditProfile />} />
               <Route path='/wishlist' element={<Wishlist />} />

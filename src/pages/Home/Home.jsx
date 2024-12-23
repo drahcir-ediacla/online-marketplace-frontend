@@ -11,9 +11,10 @@ import RecommendedItems from '../../components/RecommendedItems'
 import WhyChooseUs from '../../components/WhyChooseUs'
 import Footer from '../../layouts/Footer'
 import SellBtn from '../../components/Button/SellBtn'
+import CommunityThumb from '../../assets/images/community-thumbnail.png'
 
 function Home() {
- 
+
   const categories = useSelector((state) => state.productcategories.data);
   const user = useSelector((state) => state.user.data);
   const navigate = useNavigate();
@@ -21,17 +22,17 @@ function Home() {
   useEffect(() => {
     // Check if the window was opened as a popup
     if (window.opener) {
-        window.opener.location.reload(); // Reload the main window
-        window.close(); // Close the popup
+      window.opener.location.reload(); // Reload the main window
+      window.close(); // Close the popup
     } else {
-        navigate('/'); // Navigate to the home page if not a popup
+      navigate('/'); // Navigate to the home page if not a popup
     }
-}, [navigate]);
+  }, [navigate]);
 
 
 
-  const firstRowTopCategories = ["Mobile and Electronics", "Furniture", "Home, Garden & DIY", "Baby & Kids", "Women's Fashion"];
-  const secondRowTopCategories = ["Men's Fashion", "Beauty & Personal Care", "Sports & Leisure", "Games, Hobbies & Crafts", "Book, Music & Tickets"];
+  const firstRowTopCategories = ["Mobile and Electronics", "Furniture", "Home, Garden & DIY", "Baby & Kids"];
+  const secondRowTopCategories = ["Women's Fashion", "Men's Fashion", "Beauty & Personal Care", "Sports & Leisure", "Games, Hobbies & Crafts"];
 
   // Filter the categories based on the included labels
   const filteredFirstRowCategories = categories.filter(category => firstRowTopCategories.includes(category.label));
@@ -47,6 +48,12 @@ function Home() {
       <div className="top-category-container">
         <div className="top-category-container-row1">
           <ul>
+            <li>
+              <Link to={'/forum'}>
+                <img src={CommunityThumb} className='top-category-thumbnail-img' alt="" />
+                <div className='category-name'>Community</div>
+              </Link>
+            </li>
             {filteredFirstRowCategories.map((category, index) => (
               <li key={index}>
                 <Link to={`/category/${category.id}/${category.label}`}>
