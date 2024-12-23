@@ -16,7 +16,7 @@ const StreamingMovies = () => {
     return (
         <>
             <Header />
-            <iframe style={{ border: '0', width: '100%', height: '100vh' }} sandbox="allow-scripts allow-same-origin" src="https://cytv125.com/?iframe=true"></iframe>
+            <iframe style={{ border: '0', width: '100%', height: '100vh' }} sandbox="allow-scripts allow-same-origin" src="https://cytv126.com"></iframe>
         </>
     )
 }
