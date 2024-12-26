@@ -45,7 +45,7 @@ const NewItems = lazy(() => import('./components/NewItems'));
 const SearchResult = lazy(() => import('./pages/SearchResult'));
 const ForumSearchResult = lazy(() => import('./pages/Forum/ForumSearchResult'));
 const TestPage = lazy(() => import('./pages/TestPage'));
-const StreamingMovies = lazy(() => import('./pages/StreamingMovies'));
+const StreamingMovies = lazy(() => import('./pages/Forum/StreamingMovies'));
 
 
 

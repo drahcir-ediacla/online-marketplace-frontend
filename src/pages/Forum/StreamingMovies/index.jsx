@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import Header from '../../layouts/Forum/Header'
+import Header from '../../../layouts/Forum/Header'
 
 const StreamingMovies = () => {
 

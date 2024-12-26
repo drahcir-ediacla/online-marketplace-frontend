@@ -141,7 +141,7 @@ const ForumHomePage = () => {
         navigate(`/forum/category/${id}/${name}`);
     }
 
-    const goToMoviePage = (id, name) => {
+    const goToMoviePage = () => {
         navigate(`/streaming-movies`);
     }
 

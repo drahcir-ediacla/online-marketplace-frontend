@@ -4,6 +4,7 @@ import axios from '../../../apicalls/axios'
 import './style.scss'
 import { ReactComponent as CategoryBurgerBtn } from '../../../assets/images/burger-btn_v2.svg'
 import { ReactComponent as GroupMsgIcon } from '../../../assets/images/group-message-icon.svg'
+import { ReactComponent as StreamVideoIcon } from '../../../assets/images/video-solid-icon.svg'
 
 
 const CategoryMenuBtn = ({ data }) => {
@@ -32,6 +33,10 @@ const CategoryMenuBtn = ({ data }) => {
         setCategoriesMenuOpen(false)
     }
 
+    const goToMoviePage = () => {
+        navigate(`/streaming-movies`);
+    }
+
     return (
         <>
             <button className='brwse-category-btn' onClick={toggleSsNavByCategory}><CategoryBurgerBtn /><span>Browse by Category</span></button>
@@ -57,6 +62,9 @@ const CategoryMenuBtn = ({ data }) => {
                                     ))}
                                 </li>
                             ))}
+                            <li className='forum-main-category'>
+                                <button className='parent-forum-category' onClick={goToMoviePage}><div className='group-msg-icon'><StreamVideoIcon /></div>Streaming Movies</button>
+                            </li>
                         </ul>
                     </div>
                     <div className="ss-nav-category-row3"></div>

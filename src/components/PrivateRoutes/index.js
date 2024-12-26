@@ -28,3 +28,11 @@ const PrivateRoutes = () => {
 };
 
 export default PrivateRoutes;
+
+// const PrivateRoutes = () => {
+
+//   const user = useSelector((state) => state.user.data);
+//     return user ? <Outlet /> : <Navigate to='/loginemail' />;
+// };
+
+// export default PrivateRoutes;
