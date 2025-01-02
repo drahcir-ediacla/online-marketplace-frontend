@@ -1,0 +1,234 @@
+.form-body {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--gray-100);
+
+    .container {
+        margin: auto;
+
+        .form-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 60px 0;
+            min-height: 735px;
+
+            .reset-form-container {
+                display: flex;
+                flex-direction: column;
+                gap: 33px;
+                max-width: 445px;
+                height: auto;
+                background: white;
+                padding: 38px 20px;
+                box-shadow: 0 0 8px 0 rgb(0 0 0 / 10%);
+                border-radius: 20px;
+
+                a {
+                    color: var(--blue);
+                }
+
+                .row7 {
+                    text-align: center;
+
+                    a {
+                        color: var(--black-101);
+                    }
+
+                    a:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .reset-form {
+                display: flex;
+                flex-direction: column;
+                gap: 33px;
+
+                .invalid {
+                    color: red;
+                    margin-left: 0.25rem;
+                }
+
+                .valid {
+                    color: limegreen;
+                    margin-left: 0.25rem;
+                }
+
+                label {
+                    font-weight: 700;
+                }
+
+                .instructions {
+                    color: red;
+                    margin-bottom: 0;
+                    position: absolute;
+                    font-size: 13px;
+                }
+
+                .offscreen {
+                    position: absolute;
+                    display: none;
+                }
+
+                .hide {
+                    display: none;
+                }
+
+                input {
+                    font-size: 15px;
+                    font-family: 'Poppins', sans-serif;
+                    border: 1px solid var(--gray-300);
+                    border-radius: 3px;
+                    width: 100%;
+                    height: 42px;
+                    padding: 0 15px;
+                    outline: none;
+                }
+
+                .input-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                Button {
+                    width: 100%;
+                    height: 47px;
+                    border-radius: 5px;
+                    color: white;
+                }
+
+                .row1 {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 14px;
+
+                    .col1,
+                    .col2 {
+                        font-size: 13px;
+                        text-align: center;
+                    }
+
+                    .col1 {
+                        .auth-form-logo {
+                            max-width: 300px;
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .row2,
+                .row3 {
+                    .col1 {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 13px;
+                    }
+                }
+
+                .row2 {
+                    .col2 {
+                        position: relative;
+
+                        input {
+                            padding: 0 15px 0 65px;
+                        }
+
+                        .input-email {
+                            padding: 0 15px;
+                        }
+
+                        .plus63 {
+                            position: absolute;
+                            height: 42px;
+                            width: 57px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            top: 0;
+                            left: 0;
+                            border-right: 1px solid var(--gray-300);
+                        }
+                    }
+                }
+
+                .row3 {
+                    .col2 {
+                        position: relative;
+
+                        input {
+                            padding: 0 110px 0 15px;
+                        }
+
+                        .send-code {
+                            font-size: 15px;
+                            font-family: "Poppins", sans-serif;
+                            position: absolute;
+                            top: 2px;
+                            right: 0px;
+                            width: auto;
+                            height: auto;
+                            border: none;
+                            font-weight: 500;
+                            color: blue;
+                            background: none;
+                        }
+
+                        .send-code:disabled {
+                            font-size: 15px;
+                            font-family: "Poppins", sans-serif;
+                            color: var(--gray-300);
+                        }
+
+                        .send-otp-spinner {
+                            position: absolute;
+                            display: flex;
+                            align-items: center;
+                            width: 40px;
+                            height: 40px;
+                            right: 20px;
+                            top: 0;
+                        }
+                    }
+                }
+
+                .row4 {
+                    .col1 {
+                        font-size: 13px;
+                    }
+
+                    .col2 {}
+                }
+
+                .row5 {
+                    .col1 {
+                        font-size: 13px;
+                    }
+                }
+
+                .row6 {
+                    .reset-btn {
+                        background-color: var(--green-400);
+                        cursor: pointer;
+                    }
+
+                    .reset-btn:disabled {
+                        background-color: var(--gray-300);
+                        flex-basis: 50%;
+                    }
+                }
+            }
+
+            /* For webkit-based browsers (Chrome, Safari) */
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                appearance: none;
+            }
+        }
+    }
+}

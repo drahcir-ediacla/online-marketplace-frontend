@@ -47,8 +47,9 @@ const ForumSearchResult = lazy(() => import('./pages/Forum/ForumSearchResult'));
 const TestPage = lazy(() => import('./pages/TestPage'));
 const StreamingMovies = lazy(() => import('./pages/Forum/StreamingMovies'));
 
-
-
+//Admin Panel 
+const LoginAdminEmail = lazy(() => import('./pages/AdminPanel/Login/LoginAdminEmail'));
+const ResetAdminPassword = lazy(() => import('./pages/AdminPanel/ResetPassword'));
 
 
 function App() {
@@ -93,6 +94,8 @@ function App() {
             <Route path='/forum/profile/:userId/:tab' element={<ForumProfile />} />
             <Route path='/forum/discussion/:discussionId' element={<ForumDiscussion />} />
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
+            <Route path='/admin/login' element={<LoginAdminEmail />} />
+            <Route path='/admin/reset-password' element={<ResetAdminPassword />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test' element={<TestPage />} />
             <Route path='/streaming-movies' element={<StreamingMovies />} />

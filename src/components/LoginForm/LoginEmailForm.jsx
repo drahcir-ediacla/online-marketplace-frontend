@@ -8,11 +8,9 @@ import LoginBtn from '../Button/LoginBtn'
 import LogoGray from '../../assets/images/Yogeek-logo.png'
 import { ReactComponent as FBIcon } from '../../assets/images/facebook-icon.svg'
 import { ReactComponent as GoogleIcon } from '../../assets/images/google-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../assets/images/globe-regular.svg';
 import { useDispatch } from 'react-redux';
 import { Setloader } from '../../redux/reducer/loadersSlice';
 import AlertMessage from '../AlertMessage';
-import GTranslate from '../GTranslate'
 
 const LOGIN_URL = '/api/login-email';
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
