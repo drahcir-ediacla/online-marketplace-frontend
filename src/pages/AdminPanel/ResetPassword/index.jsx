@@ -105,7 +105,7 @@ const ResetAdminPassword = () => {
         try {
             setShowAlert(false);
             setOtpSpinner(true)
-            const response = await axios.put('/api/reset-password-otp-email', formData)
+            const response = await axios.put('/api/send-otp-reset-admin-password', formData)
 
             if (response.status === 201) {
                 setOtpSpinner(false)
@@ -114,12 +114,14 @@ const ResetAdminPassword = () => {
             }
 
         } catch (err) {
-            if (err.response.status === 404) {
-                setErrMsg('Email not found.')
-                setSuccess(false);
-                setOtpSpinner(false)
-                setShowAlert(true);
+            if (err.response) {
+                setErrMsg(err.response.data.message);
+            } else {
+                setErrMsg('An error occurred. Please try again later.');
             }
+            setSuccess(false);
+            setOtpSpinner(false)
+            setShowAlert(true);
         }
     }
 
@@ -180,7 +182,7 @@ const ResetAdminPassword = () => {
 
     const NavigateLogin = () => {
         console.log("Navigating to LoginPhone");
-        window.location.href = '/LoginEmail';
+        window.location.href = '/admin/login';
     }
 
 
