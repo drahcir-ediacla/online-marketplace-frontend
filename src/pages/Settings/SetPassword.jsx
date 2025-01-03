@@ -43,7 +43,7 @@ const SetPassword = () => {
 
         try {
             // Make API request to change the password
-            const response = await axios.post('/api/change-password', {
+            const response = await axios.post('/verify/api/change-password', {
                 oldPassword,
                 newPassword,
             });

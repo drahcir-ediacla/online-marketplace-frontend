@@ -9,6 +9,7 @@ const PrivateRoutes = () => {
   const user = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Add loading state
+  const [userRole, setUserRole] = useState({} | null)
 
   useEffect(() => {
     dispatch(getUser())
@@ -18,6 +19,7 @@ const PrivateRoutes = () => {
         setLoading(false); // Update loading state in case of error too
       });
   }, [dispatch]);
+
 
   // Render based on loading state and user data
   if (loading) {
