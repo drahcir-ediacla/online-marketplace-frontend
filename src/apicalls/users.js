@@ -41,7 +41,6 @@ export const GetCurrentUser = async () => {
 }
 
 // update user
-
 export const UpdateCurrentUser = async (userData) => {
     const refreshToken = useRefreshToken();
     try {

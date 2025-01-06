@@ -86,7 +86,7 @@ const Login = () => {
             console.log('Login successful', response.data);
             document.cookie = `jwt=${response.data.accessToken}; Path=/`;
             document.cookie = `refreshJWT=${response.data.refreshToken}; Path=/`;
-            navigate('/');
+            navigate('/admin/dashboard');
         } catch (err) {
             dispatch(Setloader(false))
             // Handle login error based on the response from the backend.

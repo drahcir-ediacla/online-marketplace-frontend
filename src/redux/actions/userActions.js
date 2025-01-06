@@ -1,12 +1,20 @@
 // userActions.js
+import axios from '../../apicalls/axios';
 import { setUser, setError } from '../reducer/userSlice';
 import { Setloader } from '../reducer/loadersSlice';
-import {GetCurrentUser, UpdateCurrentUser} from '../../apicalls/users'
+import { GetCurrentUser, UpdateCurrentUser } from '../../apicalls/users'
 
 
 export const getUser = () => async (dispatch) => {
   try {
-    const response = await GetCurrentUser(); // Corrected the usage of GetCurrentUser()
+    const response = await axios.get('/auth/check-auth', {
+      withCredentials: true,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true,
+      },
+    });
 
     if (response.status === 200) {
       const userData = response.data.user;

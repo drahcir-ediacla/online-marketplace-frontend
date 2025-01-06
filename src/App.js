@@ -4,6 +4,7 @@ import { getUser } from './redux/actions/userActions';
 import '../src/assets/styles/global.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoutes from './components/PrivateRoutes';
+import AdminRoutes from './components/AdminRoutes';
 import ScrollToTop from './utils/ScrollToTop'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -96,7 +97,6 @@ function App() {
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
             <Route path='/admin/login' element={<LoginAdminEmail />} />
             <Route path='/admin/reset-password' element={<ResetAdminPassword />} />
-            <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/test' element={<TestPage />} />
             <Route path='/streaming-movies' element={<StreamingMovies />} />
             <Route element={<PrivateRoutes />}>
@@ -111,6 +111,9 @@ function App() {
               <Route path='/updatelisting/:id/:product_name' element={<UpdateListing />} />
               <Route path='/messages/:chat_id' element={<ChatMessages />} />
               <Route path='/messages' element={<ChatMessages />} />
+            </Route>
+            <Route element={<AdminRoutes allowedRoles={['Administrator', 'Editor']} />}>
+              <Route path='/admin/dashboard' element={<Dashboard />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
