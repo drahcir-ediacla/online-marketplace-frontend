@@ -77,7 +77,7 @@ const ForumHeader = ({ containerClass }) => {
         <>
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             <div className={`forum-header-container ${containerClass} ${showHeader ? "visible" : "hidden"}`}>
-                <Link to='/forum'><img src={Logo} alt="" className='forum-logo' /></Link>
+                <Link to='/'><img src={Logo} alt="" className='forum-logo' /></Link>
                 <div className='forum-header-right-col'>
                     <Link to='/'>Marketplace</Link>
                     <span>|</span>
