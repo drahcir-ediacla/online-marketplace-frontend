@@ -24,7 +24,7 @@ const AdminRoutes = ({ allowedRoles }) => {
 
     if (loading) return <div>Loading...</div>; // Prevent rendering before data is loaded
 
-    return allowedRoles.includes(userRole) ? <Outlet /> : <Navigate to="/" />;
+    return allowedRoles.includes(userRole) ? <Outlet /> : <Navigate to="/admin/login" />;
 };
 
 export default AdminRoutes;
