@@ -81,6 +81,7 @@ function App() {
             <Route path='/resetbyphone' element={user ? <Navigate to="/" /> : <ResetByPhone />} />
             <Route path='/registerbyemail' element={user ? <Navigate to="/" /> : <RegisterByEmail />} />
             <Route path='/registerbyphone' element={user ? <Navigate to="/" /> : <RegisterByPhone />} />
+            <Route path='/admin/login' element={user ? <Navigate to="/admin/dashboard" /> : <LoginAdminEmail />} />
             <Route path="/auth/success" element={<AuthSuccess />} />
             <Route path='/profile/:id' element={<ProfilePage />} />
             <Route path='/productdetails/:id/:product_name' element={<ProductDetails />} />
