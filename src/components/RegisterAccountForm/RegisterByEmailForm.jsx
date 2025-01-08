@@ -227,7 +227,7 @@ const RegisterByEmailForm = () => {
                       <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                       <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                     </label>
-                    <Link to="/RegisterByPhone">Verify with phone number</Link>
+                    {/* <Link to="/RegisterByPhone">Verify with phone number</Link> */}
                   </div>
                   <div className='row2'>
                     <input

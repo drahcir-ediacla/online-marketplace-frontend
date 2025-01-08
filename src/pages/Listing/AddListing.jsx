@@ -467,7 +467,7 @@ const AddListing = () => {
                           id="uploadvidID"
                           checked={activeRadio === 0}
                           className={`${activeRadio === 0 ? 'active' : ''}`}
-                          onClick={() => openContent(0)}
+                          onChange={() => openContent(0)}
                         />
                         <span className="checkmark"></span>
                       </label>
@@ -479,7 +479,7 @@ const AddListing = () => {
                           id="youtubelinkID"
                           checked={activeRadio === 1}
                           className={`${activeRadio === 1 ? 'active' : ''}`}
-                          onClick={() => openContent(1)}
+                          onChange={() => openContent(1)}
                         />
                         <span className="checkmark"></span>
                       </label>

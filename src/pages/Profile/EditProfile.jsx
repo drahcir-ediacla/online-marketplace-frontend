@@ -48,7 +48,7 @@ const EditProfile = () => {
     city: '',
     latitude: '',
     longitude: '',
-    phone: '',
+    // phone: '',
     gender: '',
     birthday: '',
     profile_pic: '',
@@ -90,7 +90,7 @@ const EditProfile = () => {
         city: user.city || '',
         latitude: user.latitude || '',
         longitude: user.longitude || '',
-        phone: user.phone || '',
+        // phone: user.phone || '',
         gender: user.gender || '',
         birthday: user.birthday || '',
         profile_pic: user.profile_pic || '',
@@ -272,7 +272,8 @@ const EditProfile = () => {
 
 
     // Check for required fields
-    const requiredFields = ['display_name', 'first_name', 'last_name', 'region', 'city', 'email', 'phone'];
+    // const requiredFields = ['display_name', 'first_name', 'last_name', 'region', 'city', 'email', 'phone'];
+    const requiredFields = ['display_name', 'first_name', 'last_name', 'region', 'city', 'email'];
     const errors = {};
     let hasErrors = false;
 
@@ -288,7 +289,11 @@ const EditProfile = () => {
       return;
     }
 
-    if (user.email === null || user.phone === null) {
+    // if (user.email === null || user.phone === null) {
+    //   setShowAlert(true)
+    // }
+
+    if (user.email === null) {
       setShowAlert(true)
     }
 
@@ -338,6 +343,7 @@ const EditProfile = () => {
       {updatePhoneOpen && <UpdatePhoneModal onClick={toggleUpdatePhone} />}
       {showSuccess && <SuccessProfileUpdate />}
       {/* {showAlert && <AlertMessage type="success" message="Profile updated successfully" />} */}
+      {/* {showAlert && <AlertMessage type="error" message="Invalid phone or email" />} */}
       {showAlert && <AlertMessage type="error" message="Invalid phone or email" />}
       <Header />
       <div className="edit-profile-body" id='edit-profile-body'>
@@ -534,7 +540,7 @@ const EditProfile = () => {
                     <BtnClear type="button" label={user.email === null ? 'Add email' : 'Change email'} className='change-btn' onClick={toggleUpdateEmail} />
                   </div>
                 </div>
-                <div className='row13 flex'>
+                {/* <div className='row13 flex'>
                   <label htmlFor="phoneID" className='field-name'>Phone Number <span className='asterisk'>*</span></label>
                   <div className='form-field-container'>
                     <Input
@@ -551,7 +557,7 @@ const EditProfile = () => {
                     <BtnClear type="button" label={user.phone === null ? 'Add phone' : 'Change phone'} className='change-btn' onClick={toggleUpdatePhone} />
                     <div className="plus63">+63</div>
                   </div>
-                </div>
+                </div> */}
                 <div className='row14 flex'>
                   <label htmlFor="genderID" className='field-name'>Gender</label>
                   <div className='form-field-container'>

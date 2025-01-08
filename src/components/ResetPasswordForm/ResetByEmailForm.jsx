@@ -206,142 +206,143 @@ const ResetByEmailForm = () => {
   return (
     <>
       {success && <SuccessResetPassword onClick={NavigateLogin} />}
-        <>
-          {showAlert && <AlertMessage type="error" message={errMsg} />}
-          <div className="reset-form-container">
-            <form className='reset-form' onSubmit={resetPassword}>
-              <div className='row1'>
-                <div className="col1"><Link to="/"><img src={LogoGray} alt="" className='auth-form-logo' /></Link></div>
-                <div className="col2"><Link to="/LoginEmail">Sign in</Link> to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
+      <>
+        {showAlert && <AlertMessage type="error" message={errMsg} />}
+        <div className="reset-form-container">
+          <form className='reset-form' onSubmit={resetPassword}>
+            <div className='row1'>
+              <div className="col1"><Link to="/"><img src={LogoGray} alt="" className='auth-form-logo' /></Link></div>
+              <div className="col2"><Link to="/LoginEmail">Sign in</Link> to Yogeek or <Link to="/RegisterByEmail">create an account</Link></div>
+            </div>
+            <div className='row2 input-container'>
+              <div className='col1'>
+                <label htmlFor='emailAddress'>
+                  Email
+                  <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
+                </label>
+                {/* <Link to="/ResetByPhone">Reset with phone number</Link> */}
               </div>
-              <div className='row2 input-container'>
-                <div className='col1'>
-                  <label htmlFor='emailAddress'>
-                    Email
-                    <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
-                    <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
-                  </label>
-                  <Link to="/ResetByPhone">Reset with phone number</Link></div>
-                <div className='col2'>
-                  <input
-                    type="text"
-                    placeholder='Enter your email address'
-                    id="emailAddress"
-                    name="email"
-                    className='input-email'
-                    ref={emailRef}
-                    autoComplete="off"
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      handleChange(e); // Assuming handleChange is another function you want to call
-                    }}
-                    value={email}
-                    required
-                    aria-invalid={validEmail ? "false" : "true"}
-                    aria-describedby="uidnote"
-                    onFocus={() => setEmailFocus(true)}
-                    onBlur={() => setEmailFocus(false)}
-                  />
-                  <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} color='red' />
-                    <span> Invalid email address format!</span>
-                  </p>
-                </div>
+              <div className='col2'>
+                <input
+                  type="text"
+                  placeholder='Enter your email address'
+                  id="emailAddress"
+                  name="email"
+                  className='input-email'
+                  ref={emailRef}
+                  autoComplete="off"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    handleChange(e); // Assuming handleChange is another function you want to call
+                  }}
+                  value={email}
+                  required
+                  aria-invalid={validEmail ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  onFocus={() => setEmailFocus(true)}
+                  onBlur={() => setEmailFocus(false)}
+                />
+                <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} color='red' />
+                  <span> Invalid email address format!</span>
+                </p>
               </div>
-              <div className='row3 input-container'>
-                <div className='col1'><b>Verification Code</b></div>
-                <div className='col2'>
-                  <input
-                    type="text"
-                    placeholder='Enter the verification code'
-                    name="otp"
-                    value={otp}
-                    onChange={(e) => {
-                      setOtp(e.target.value);
-                      handleChange(e);
-                    }}
-                  />
-                  {otpTimer > 0 && (
-                    <div className='instructions'>
-                      <span>OTP sent to your email expires in: {otpTimer}s</span>
-                    </div>
-                  )}
-                  {otpSpinner ? (
-                    <div className='send-otp-spinner'>
-                      <SendOtpSpinner />
-                    </div>
-                  ) : (
-                    <>
-                      <BtnClear type="button" label={!resendOTP ? 'Send Code' : 'Resend Code'} onClick={sendOTPCode} className='send-code' disabled={!validEmail || otpTimer} />
-                    </>
-                  )}
-                </div>
+            </div>
+            <div className='row3 input-container'>
+              <div className='col1'><b>Verification Code</b></div>
+              <div className='col2'>
+                <input
+                  type="text"
+                  placeholder='Enter the verification code'
+                  name="otp"
+                  value={otp}
+                  onChange={(e) => {
+                    setOtp(e.target.value);
+                    handleChange(e);
+                  }}
+                />
+                {otpTimer > 0 && (
+                  <div className='instructions'>
+                    <span>OTP sent to your email expires in: {otpTimer}s</span>
+                  </div>
+                )}
+                {otpSpinner ? (
+                  <div className='send-otp-spinner'>
+                    <SendOtpSpinner />
+                  </div>
+                ) : (
+                  <>
+                    <BtnClear type="button" label={!resendOTP ? 'Send Code' : 'Resend Code'} onClick={sendOTPCode} className='send-code' disabled={!validEmail || otpTimer} />
+                  </>
+                )}
               </div>
-              <div className='row4 input-container'>
-                <div className='col1'>
-                  <label htmlFor="password">New Password
-                    <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                    <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
-                  </label>
-                </div>
-                <div className='col2'>
-                  <input
-                    type="password"
-                    id='password'
-                    placeholder='Enter your new password'
-                    name="password"
-                    onChange={(e) => {
-                      setPwd(e.target.value);
-                      handleChange(e); // Assuming handleChange is another function you want to call
-                    }}
-                    value={pwd}
+            </div>
+            <div className='row4 input-container'>
+              <div className='col1'>
+                <label htmlFor="password">New Password
+                  <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
+                </label>
+              </div>
+              <div className='col2'>
+                <input
+                  type="password"
+                  id='password'
+                  placeholder='Enter your new password'
+                  name="password"
+                  onChange={(e) => {
+                    setPwd(e.target.value);
+                    handleChange(e); // Assuming handleChange is another function you want to call
+                  }}
+                  value={pwd}
 
-                    aria-invalid={validPwd ? "false" : "true"}
-                    aria-describedby="pwdnote"
-                    onFocus={() => setPwdFocus(true)}
-                    onBlur={() => setPwdFocus(false)}
-                  />
-                  <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <span> Must be 8 to 24 characters.</span>
-                  </p>
-                </div>
+                  aria-invalid={validPwd ? "false" : "true"}
+                  aria-describedby="pwdnote"
+                  onFocus={() => setPwdFocus(true)}
+                  onBlur={() => setPwdFocus(false)}
+                />
+                <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <span> Must be 8 to 24 characters.</span>
+                </p>
               </div>
-              <div className='row5 input-container'>
-                <div className='col1'>
-                  <label htmlFor="confirm_pwd">
-                    Confirm Password
-                    <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-                    <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
-                  </label>
-                </div>
-                <div className='col2'>
-                  <input
-                    type="password"
-                    id="confirm_pwd"
-                    onChange={(e) => setMatchPwd(e.target.value)}
-                    value={matchPwd}
+            </div>
+            <div className='row5 input-container'>
+              <div className='col1'>
+                <label htmlFor="confirm_pwd">
+                  Confirm Password
+                  <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
+                </label>
+              </div>
+              <div className='col2'>
+                <input
+                  type="password"
+                  id="confirm_pwd"
+                  onChange={(e) => setMatchPwd(e.target.value)}
+                  value={matchPwd}
 
-                    aria-invalid={validMatch ? "false" : "true"}
-                    aria-describedby="confirmnote"
-                    onFocus={() => setMatchFocus(true)}
-                    onBlur={() => setMatchFocus(false)}
-                    placeholder='Re-enter your new password'
-                  />
-                  <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <span> Must match the first password input field.</span>
-                  </p>
-                </div>
+                  aria-invalid={validMatch ? "false" : "true"}
+                  aria-describedby="confirmnote"
+                  onFocus={() => setMatchFocus(true)}
+                  onBlur={() => setMatchFocus(false)}
+                  placeholder='Re-enter your new password'
+                />
+                <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <span> Must match the first password input field.</span>
+                </p>
               </div>
-              <div className='row6'><LoginBtn onClick={() => setShowAlert(false)} label="Reset Password" className='reset-btn' disabled={!validEmail || !validOtp || !validPwd || !validMatch} /></div>
-            </form>
-            <div className='row7'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
-            <div className='row8'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
-            <div className='row9'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' onClick={google} /></div>
-            <div className='row10'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
-          </div>
-        </>
+            </div>
+            <div className='row6'><LoginBtn onClick={() => setShowAlert(false)} label="Reset Password" className='reset-btn' disabled={!validEmail || !validOtp || !validPwd || !validMatch} /></div>
+          </form>
+          <div className='row7'><div className='horizontal-line'></div><small>or</small><div className='horizontal-line'></div></div>
+          <div className='row8'><LoginBtn icon={<FBIcon />} label='Continue with Facebook' className='facebook-btn' IconclassName='fb-icon' onClick={facebook} /></div>
+          <div className='row9'><LoginBtn icon={<GoogleIcon />} label='Continue with Google' className='google-btn' IconclassName='google-icon' onClick={google} /></div>
+          <div className='row10'><small>By continuing, you agree to Yogeek <Link to="#">Conditions of Use</Link> and <Link to="#">Privacy Notice</Link>.</small></div>
+        </div>
+      </>
     </>
   )
 }

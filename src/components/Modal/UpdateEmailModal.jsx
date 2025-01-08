@@ -130,7 +130,7 @@ const UpdateEmailModal = ({ onClick, length = 6 }) => {
                             <>
                                 <div className='modal-title'>
                                     <h5>Update email address</h5>
-                                    <span>Enter an email and click "Send Code" to send a verification code.</span>
+                                    <span>Enter your new email and click "Send Code" to send a verification code.</span>
                                 </div>
                                 <div className='email-input-container'>
                                     <input

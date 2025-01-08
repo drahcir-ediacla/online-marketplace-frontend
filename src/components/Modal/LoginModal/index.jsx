@@ -32,7 +32,7 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
     const [passwordError, setPasswordError] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
-   
+
     useEffect(() => {
         if (user) {
             setIsModalOpen(false);
@@ -139,7 +139,7 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
         const googleCallback = `${BaseUrl}${googleAuthPath}`;
 
         window.open(
-            googleCallback, 
+            googleCallback,
             '_blank', // Open in a new window/tab
             'width=600,height=600,top=100,left=100' // Customize the window's size and position
         );
@@ -180,7 +180,8 @@ const LoginModal = ({ onClick, productId, productName, userId }) => {
                                         <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                                         <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                                     </label>
-                                    <Link to='/LoginPhone'>Sign in with phone number</Link></div>
+                                    {/* <Link to='/LoginPhone'>Sign in with phone number</Link> */}
+                                </div>
                                 <div className='col2'>
                                     <input
                                         type="email"

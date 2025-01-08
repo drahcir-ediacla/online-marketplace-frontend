@@ -148,7 +148,8 @@ const LoginEmailForm = () => {
                 <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                 <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
               </label>
-              <Link to="/LoginPhone">Sign in with phone number</Link></div>
+              {/* <Link to="/LoginPhone">Sign in with phone number</Link> */}
+            </div>
             <div className='col2'>
               <input
                 type="email"
