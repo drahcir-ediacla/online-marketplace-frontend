@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import './style.scss'
-import Logo from '../../../assets/images/Yogeek-logo-light-gray.png'
+import { Link } from 'react-router-dom'
+import Logo from '../../../assets/images/yogeek-logo-white.png';
 import { ReactComponent as DashboardIcon } from '../../../assets/images/dashboard-icon.svg'
 import { ReactComponent as PagesIcon } from '../../../assets/images/pages-icon.svg'
 import { ReactComponent as CategoriesIcon } from '../../../assets/images/categories-icon.svg'
@@ -13,7 +14,7 @@ import { ReactComponent as LogoutIcon } from '../../../assets/images/logout-icon
 
 const SideMenu = () => {
 
-  
+
   useEffect(() => {
     const collapsibleElements = document.getElementsByClassName("collapsible");
 
@@ -50,12 +51,35 @@ const SideMenu = () => {
   }, []);
 
 
+  const logout = async () => {
+    const logoutUrl = `${process.env.REACT_APP_BASE_URL}/api/logout`;
+
+    try {
+      const response = await fetch(logoutUrl, {
+        method: 'GET',
+        credentials: 'include', // Include cookies for the logout API
+      });
+
+      if (response.ok) {
+        // Redirect after successful logout
+        window.location.href = '/admin/login';
+      } else {
+        console.error('Logout failed:', response.status, response.statusText);
+        // Optionally show an error message to the user
+      }
+    } catch (error) {
+      console.error('An error occurred during logout:', error);
+      // Optionally show an error message to the user
+    }
+  };
 
   return (
     <>
       <div className="side-menu-container">
         <div className='row1'>
-          <img src={Logo} alt="" />
+          <Link to='/' target="_blank" rel="noopener noreferrer">
+            <img src={Logo} className='admin-logo' alt="" />
+          </Link>
         </div>
         <div className='row2'>
           <div className="menu-box">
@@ -108,10 +132,10 @@ const SideMenu = () => {
           </div>
         </div>
         <div className='row3'>
-          <div className="logout-btn">
+          <button className="logout-btn" onClick={logout}>
             <div className="logout-icon"><LogoutIcon /></div>
             LOGOUT
-          </div>
+          </button>
         </div>
         <div></div>
         <div></div>

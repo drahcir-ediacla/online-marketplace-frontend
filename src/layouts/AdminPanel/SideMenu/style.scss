@@ -6,10 +6,16 @@
     width: 250px;
     height: 100vh;
     padding: 40px 15px 40px 15px;
-    background-color: var(--green-700);
+    background-color: var(--gray-500);
+
 
     .row1 {
         text-align: center;
+
+        .admin-logo {
+            width: 144px;
+        }
+
     }
 
     .row2 {
@@ -24,7 +30,7 @@
                     position: relative;
 
 
-                    .collapsible:after{
+                    .collapsible:after {
                         content: "\f105";
                         font-family: FontAwesome;
                         color: white;
@@ -32,7 +38,7 @@
                         right: 6px;
                     }
 
-                    .active:after{
+                    .active:after {
                         content: "\f107";
                         font-family: FontAwesome;
                         border: none;
@@ -46,7 +52,7 @@
                         letter-spacing: 1px;
                         gap: 10px;
                         color: var(--gray-300);
-                        border-left: 5px solid var(--green-700);
+                        border-left: 5px solid var(--gray-500);
                         cursor: pointer;
 
                         .dashboard-icon {
@@ -98,7 +104,8 @@
                         max-height: 0;
                         overflow: hidden;
                         transition: max-height .3s ease-out;
-                        li{
+
+                        li {
                             display: flex;
                             align-items: center;
                             height: 45px;
@@ -109,27 +116,28 @@
 
                     .active {
                         color: white;
-                        border-left: 5px solid var(--green-300);
+                        border-left: 5px solid var(--orange-200);
                         background: none;
 
                         .menu-icon {
-                            fill: var(--green-300);
+                            fill: var(--orange-200);
                         }
                     }
 
-                    .main-menu:hover{
+                    .main-menu:hover {
                         color: white;
-                        border-left: 5px solid var(--green-300);
+                        border-left: 5px solid var(--orange-200);
                         background: none;
 
                         .menu-icon {
-                            fill: var(--green-300);
+                            fill: var(--orange-200);
                         }
                     }
 
-                    .sub-menu{
+                    .sub-menu {
                         letter-spacing: 1px;
-                        li:hover{
+
+                        li:hover {
                             color: white;
                             cursor: pointer;
                         }
@@ -141,6 +149,8 @@
     }
 
     .row3 {
+        border-top: 1px solid var(--gray-300);
+
         .logout-btn {
             display: flex;
             height: 45px;
@@ -149,7 +159,8 @@
             gap: 11px;
             letter-spacing: 1px;
             color: var(--gray-300);
-            border-top: 1px solid var(--gray-300);
+            background: none;
+            border: none;
 
             .logout-icon {
                 display: flex;
@@ -159,9 +170,10 @@
             }
         }
 
-        .logout-btn:hover{
+        .logout-btn:hover {
             color: white;
             cursor: pointer;
+
             .logout-icon {
                 fill: white;
             }

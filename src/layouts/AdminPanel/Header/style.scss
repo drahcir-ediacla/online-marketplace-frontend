@@ -10,6 +10,7 @@
 
     .header-nav {
         display: flex;
+        gap: 20px;
 
         .avatar-icon:hover {
             cursor: pointer;
@@ -18,9 +19,9 @@
                 display: block;
             }
         }
+
         .avatar-icon {
             position: relative;
-            padding: 0 20px;
 
             img {
                 width: 27px;
@@ -28,7 +29,7 @@
             }
 
             .my-profile-dropdown {
-                display: none;
+                display: block;
                 position: absolute;
                 min-width: 230px;
                 max-width: 300px;
@@ -81,7 +82,7 @@
                         }
                     }
 
-                    li:nth-child(2){
+                    li:nth-child(2) {
                         padding-top: 5px;
                     }
 
@@ -89,28 +90,44 @@
                         display: flex;
                         align-items: center;
 
-                        .logout-icon {
-                            width: 16px;
-                            fill: var(--gray-400);
+                        button {
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            border: none;
+                            background: none;
+
+                            .logout-icon {
+                                width: 16px;
+                                fill: var(--gray-400);
+                            }
                         }
                     }
 
                     li {
-                        p {
-                            padding: 5px 12px;
-                            margin: 0;
+                        button {
+                            border: none;
+                            background: none;
+
+                            p {
+                                color: var(--gray-500);
+                                padding: 5px 12px;
+                                margin: 0;
+                            }
                         }
                     }
 
                     li:hover {
-                        p {
-                            color: var(--green-400);
-                            cursor: pointer;
-                        }
+                        button {
+                            p {
+                                color: var(--orange-200);
+                                cursor: pointer;
+                            }
 
-                        .logout-icon {
-                            fill: var(--green-400);
-                            cursor: pointer;
+                            .logout-icon {
+                                fill: var(--orange-200);
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
@@ -127,13 +144,11 @@
         .bell-icon {
             width: 20px;
             fill: var(--gray-300);
-            margin: 0 20px;
         }
 
         .gear-o-icon {
             width: 20px;
             fill: var(--gray-300);
-            margin-left: 20px;
         }
 
         .vertical-line {

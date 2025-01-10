@@ -64,14 +64,37 @@ function Header() {
   };
 
 
-  const logout = () => {
-    const localBaseUrl = process.env.REACT_APP_BASE_URL;
-    const logoutPath = '/api/logout';
+  // const logout = () => {
+  //   const localBaseUrl = process.env.REACT_APP_BASE_URL;
+  //   const logoutPath = '/api/logout';
 
-    const logoutUrl = `${localBaseUrl}${logoutPath}`;
+  //   const logoutUrl = `${localBaseUrl}${logoutPath}`;
 
-    window.open(logoutUrl, '_self');
-  };
+  //   window.open(logoutUrl, '_self');
+  // };
+
+
+  const logout = async () => {
+    const logoutUrl = `${process.env.REACT_APP_BASE_URL}/api/logout`;
+
+    try {
+        const response = await fetch(logoutUrl, {
+            method: 'GET',
+            credentials: 'include', // Include cookies for the logout API
+        });
+
+        if (response.ok) {
+            // Redirect after successful logout
+            window.location.href = '/';
+        } else {
+            console.error('Logout failed:', response.status, response.statusText);
+            // Optionally show an error message to the user
+        }
+    } catch (error) {
+        console.error('An error occurred during logout:', error);
+        // Optionally show an error message to the user
+    }
+};
 
   useEffect(() => {
     const collapsibleElements = document.getElementsByClassName("collapsible");
