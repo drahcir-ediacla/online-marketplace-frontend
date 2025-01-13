@@ -357,8 +357,6 @@ const AddListing = () => {
       })),
     };
 
-    console.log('productDetailsWithFiles:', productDetailsWithFiles)
-
 
     // Send the form data (including image URLs) to your backend
     axios.post('/api/addnewproduct', productDetailsWithFiles)
