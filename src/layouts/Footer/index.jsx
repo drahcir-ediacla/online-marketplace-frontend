@@ -32,7 +32,7 @@ const Footer = () => {
                             <ul>
                                 <li>Payment</li>
                                 <li>Feedback</li>
-                                <li>Contact Us</li>
+                                <li><Link to='/contact-us-page'>Contact Us</Link></li>
                                 <li>Our Services</li>
                                 <li>FAQ</li>
                                 <li>Sitemap</li>
