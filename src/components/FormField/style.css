@@ -56,7 +56,7 @@
 .select-box .select-arrow-down:after {
     content: "\f078";
     font-family: FontAwesome;
-    color: var(--gray-300);
+    color: var(--black-102);
     text-align: right;
 }
 

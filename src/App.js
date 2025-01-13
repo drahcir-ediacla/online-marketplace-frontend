@@ -34,6 +34,7 @@ const AddListing = lazy(() => import('./pages/Listing/AddListing'));
 const AddListingSuccess = lazy(() => import('./pages/Listing/AddListingSuccess'));
 const UpdateListing = lazy(() => import('./pages/Listing/UpdateListing'));
 const ChatMessages = lazy(() => import('./pages/ChatMessages'));
+const ContactUs = lazy(() => import('./pages/ContactUs'))
 const ForumHomePage = lazy(() => import('./pages/Forum/ForumHome'));
 const ForumMainCategoryPage = lazy(() => import('./pages/Forum/ForumCategoryPage/MainCategory'));
 const ForumSubCategoryPage = lazy(() => import('./pages/Forum/ForumCategoryPage/SubCategory'));
@@ -89,6 +90,7 @@ function App() {
             <Route path='/subcategory/:categoryId/:value' element={<SubCategory />} />
             <Route path='/subsubcategory/:id/:label' element={<SubSubCategory />} />
             <Route path='/search-results' element={<SearchResult />} />
+            <Route path='/contact-us-page' element={<ContactUs />} />
             <Route path='/forum/forum-search-results' element={<ForumSearchResult />} />
             <Route path='/forum' element={<ForumHomePage />} />
             <Route path='/forum/category/:id/:name' element={<ForumMainCategoryPage />} />
@@ -98,8 +100,8 @@ function App() {
             <Route path='/forum/filtertags' element={<FilterDiscussionByTags />} />
             <Route path='/admin/login' element={<LoginAdminEmail />} />
             <Route path='/admin/reset-password' element={<ResetAdminPassword />} />
-            <Route path='/test' element={<TestPage />} />
             <Route path='/streaming-movies' element={<StreamingMovies />} />
+            <Route path='/test' element={<TestPage />} />
             <Route element={<PrivateRoutes />}>
               <Route path='/editprofile' element={<EditProfile />} />
               <Route path='/wishlist' element={<Wishlist />} />
