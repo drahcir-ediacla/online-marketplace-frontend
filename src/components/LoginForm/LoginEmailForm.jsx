@@ -73,6 +73,8 @@ const LoginEmailForm = () => {
     e.preventDefault();
 
     if (!validateForm()) {
+      setErrMsg('Please fill up all the required fields');
+      setShowAlert(true);
       return;
     }
     try {
