@@ -68,9 +68,9 @@ const Header = () => {
                                     <div className="triangle-icon"><TriangleIcon /></div>
                                     <ul>
                                         <li>
-                                            <div className='drop-down-avatar'><img src={authUser.profile_pic || Avatar} alt="" /></div>
+                                            <div className='drop-down-avatar'><img src={authUser?.profile_pic || Avatar} alt="" /></div>
                                             <div className='admin-name-role'>
-                                                <div className='admin-name'>{authUser.display_name ? authUser.display_name : 'Anonymous'}</div>
+                                                <div className='admin-name'>{authUser?.display_name ? authUser?.display_name : 'Anonymous'}</div>
                                                 <div className='admin-role'>Administrator</div>
                                             </div>
                                         </li>
