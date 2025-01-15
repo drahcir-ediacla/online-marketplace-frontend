@@ -61,7 +61,7 @@ const Header = () => {
             <div className="header-container">
                 <div className="header-nav">
                     <div className='avatar-icon' onClick={toggleDropDownProfile}>
-                        <img src={authUser.profile_pic || Avatar} alt="" ref={profileDropDown} />
+                        <img src={authUser?.profile_pic || Avatar} alt="" ref={profileDropDown} />
                         {dropDownProfile && (
                             <>
                                 <div className="my-profile-dropdown">
