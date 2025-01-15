@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import axios from '../../apicalls/axios'
 import './style.scss'
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Header from '../../layouts/Header'
 import Footer from '../../layouts/Footer'
@@ -13,7 +13,6 @@ import Input from '../../components/FormField/Input'
 import FaqIcon from '../../assets/images/faq-icon.png'
 import AlertMessage from '../../components/AlertMessage'
 import { ReactComponent as CommunityIcon } from '../../assets/images/community-icon-solid.svg';
-import { ReactComponent as PhoneIcon } from '../../assets/images/phone-icon.svg';
 import { ReactComponent as LoadingSpinner } from "../../assets/images/loading-spinner.svg";
 import { ReactComponent as AttachmentIcon } from "../../assets/images/attachment-icon.svg";
 
@@ -313,14 +312,6 @@ const ContactUs = () => {
                     <div style={{ textAlign: 'center' }}>
                         <span className='help-support-option-label'>Frequently Asked Question</span><br />
                         Find answers to commonly asked question.
-                    </div>
-                </div>
-                <div className='other-help-support-options-col3'>
-                    <div className='phone-icon'><PhoneIcon /></div>
-                    <div style={{ textAlign: 'center' }}>
-                        <span className='help-support-option-label'>Call Us</span><br />
-                        (+63) 998-9311-115<br />
-                        We will answer as soon as we can
                     </div>
                 </div>
             </div>
