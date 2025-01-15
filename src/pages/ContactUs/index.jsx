@@ -15,6 +15,7 @@ import AlertMessage from '../../components/AlertMessage'
 import { ReactComponent as CommunityIcon } from '../../assets/images/community-icon-solid.svg';
 import { ReactComponent as PhoneIcon } from '../../assets/images/phone-icon.svg';
 import { ReactComponent as LoadingSpinner } from "../../assets/images/loading-spinner.svg";
+import { ReactComponent as AttachmentIcon } from "../../assets/images/attachment-icon.svg";
 
 
 const ContactUs = () => {
@@ -27,11 +28,15 @@ const ContactUs = () => {
     const [requiredHelpWith, setRequiredHelpWith] = useState('');
     const [requiredMessage, setRequiredMessage] = useState('');
     const [requiredCustomerEmail, setRequiredCustomerEmail] = useState('');
+    const [successAlert, setSucessAlert] = useState(false)
+    const [successMsg, setSuccessMsg] = useState('')
     const [errMsg, setErrMsg] = useState('');
     const helpWithOptions = [
         'My account',
         'My listings',
         'Report a user or listing',
+        'Chat Issue',
+        'Search Issue',
         'Other issues'
     ].map(option => ({
         label: option
@@ -172,7 +177,8 @@ const ContactUs = () => {
         try {
             const response = await axios.post('/api/send-support-request', requestWithFiles);
             console.log('Request sent successfully:', response.data);
-            alert('Support request sent!');
+            setSuccessMsg('Support request sent successfully!');
+            setSucessAlert(true);
 
             // Reset the form
             setSupportRequestInfo({
@@ -184,7 +190,8 @@ const ContactUs = () => {
             setIsSending(false)
         } catch (error) {
             console.error('Error sending request:', error);
-            alert('Unable to send your request. Please try again.');
+            setErrMsg('Unable to send your request. Please try again.');
+            setShowAlert(true);
         } finally {
             setIsSending(false)
         }
@@ -194,7 +201,8 @@ const ContactUs = () => {
 
     return (
         <>
-        {showAlert && <AlertMessage type="error" message={errMsg} />}
+            {showAlert && <AlertMessage type="error" message={errMsg} />}
+            {successAlert && <AlertMessage type="success" message={successMsg} />}
             <Header />
             <div className='how-can-we-help-container'>
                 <h1>How can we help?</h1>
@@ -202,10 +210,10 @@ const ContactUs = () => {
             </div>
             <form onSubmit={handleSubmit}>
                 <div className='contact-us-form-row1'>
-                    Fields marked <span className='asterisk'>*</span> are required. 
+                    Fields marked <span className='asterisk'>*</span> are required.
                 </div>
                 <div className='contact-us-form-row2'>
-                    <b>What do you need help with? <span className='asterisk'>*</span></b> 
+                    <b>What do you need help with? <span className='asterisk'>*</span></b>
                     This helps make sure you get the right answer fast.
                     {requiredHelpWith && <span className="errmsg"><FontAwesomeIcon icon={faInfoCircle} color='red' /> {requiredHelpWith}</span>}
                     <div className='select-help-with' ref={dropDownCategory}>
@@ -233,7 +241,7 @@ const ContactUs = () => {
                     </div>
                 </div>
                 <div className='contact-us-form-row3'>
-                    <b>What is your question, comment, or issue? <span className='asterisk'>*</span></b> 
+                    <b>What is your question, comment, or issue? <span className='asterisk'>*</span></b>
                     Share all the details. The more we know, the better we can help you.
                     {requiredMessage && <span className="errmsg"><FontAwesomeIcon icon={faInfoCircle} color='red' /> {requiredMessage}</span>}
                     <TextArea
@@ -258,10 +266,11 @@ const ContactUs = () => {
                     <BtnClear type="button" label="Attach Files" className='contact-us-add-file' onClick={!isSending ? handleAddFileClick : undefined} />
                     <ul className="selected-files">
                         {files.map((file) => (
-                            <li key={file.name}>
+                            <li key={file.name} className='selected-files-li'>
+                                <div className='attachment-icon'><AttachmentIcon /></div>
                                 {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                                <button type="button" onClick={!isSending ? () => removeFile(file.name) : undefined}>
-                                    Remove
+                                <button type="button" onClick={!isSending ? () => removeFile(file.name) : undefined} className='remove-attachment'>
+                                    <i className="fa fa-times"></i>
                                 </button>
                             </li>
                         ))}

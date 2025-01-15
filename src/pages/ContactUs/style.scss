@@ -105,7 +105,7 @@ form {
         .option {
             color: var(--black-101);
             font-weight: 500;
-            padding: 8px;
+            padding: 5px 8px;
             cursor: pointer;
         }
 
@@ -122,6 +122,36 @@ form {
     .contact-us-form-row4 {
         .contact-us-add-file {
             width: 150px;
+        }
+
+        .selected-files {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 0;
+
+            .selected-files-li {
+                display: flex;
+                gap: 10px;
+
+                .attachment-icon {
+                    width: 8px;
+                    rotate: 45deg;
+                }
+
+                .remove-attachment {
+                    visibility: hidden;
+                    background: none;
+                    border: none;
+                    color: var(--gray-400);
+                }
+            }
+
+            .selected-files-li:hover {
+                .remove-attachment {
+                    visibility: visible;
+                }
+            }
         }
     }
 
@@ -159,6 +189,16 @@ form {
 
         .community-icon {
             width: 50px;
+        }
+    }
+}
+
+// --------------------------MEDIA QUERY ---------------------------------- //
+
+@media only screen and (max-width: 720px) {
+    .how-can-we-help-container {
+        h1 {
+            font-size: 50px;
         }
     }
 }
