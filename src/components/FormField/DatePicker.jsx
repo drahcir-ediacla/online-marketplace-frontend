@@ -10,7 +10,7 @@ const DatePicker = ({id, name, className, value, onChange}) => {
   useEffect(() => {
     const options = {
       dateFormat: 'Y-m-d',
-      defaultDate: value, // Set the default date
+      defaultDate: value || new Date().toISOString().split('T')[0],  // Set to current date if value is not provided
       onChange: function (selectedDates, dateStr) {
         if (onChange) {
           onChange({ target: { name, value: dateStr } }); // Notify the parent component of the change

@@ -263,17 +263,19 @@ const ContactUs = () => {
                         style={{ display: 'none' }}
                     />
                     <BtnClear type="button" label="Attach Files" className='contact-us-add-file' onClick={!isSending ? handleAddFileClick : undefined} />
-                    <ul className="selected-files">
-                        {files.map((file) => (
-                            <li key={file.name} className='selected-files-li'>
-                                <div className='attachment-icon'><AttachmentIcon /></div>
-                                {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                                <button type="button" onClick={!isSending ? () => removeFile(file.name) : undefined} className='remove-attachment'>
-                                    <i className="fa fa-times"></i>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    {files.length > 0 &&
+                        <ul className="selected-files">
+                            {files.map((file) => (
+                                <li key={file.name} className='selected-files-li'>
+                                    <div className='attachment-icon'><AttachmentIcon /></div>
+                                    {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                                    <button type="button" onClick={!isSending ? () => removeFile(file.name) : undefined} className='remove-attachment'>
+                                        <i className="fa fa-times"></i>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    }
                 </div>
                 <div className='contact-us-form-row5'>
                     <b>What is your email address? <span className='asterisk'>*</span></b>
