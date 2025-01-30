@@ -168,6 +168,7 @@
                 }
 
                 .flag-icon {
+                    display: flex;
                     width: 16px;
                     fill: var(--gray-500);
                     cursor: pointer;

@@ -185,7 +185,7 @@ const UpdateEmailModal = ({ onClick, length = 6 }) => {
                     </div>
                 </div>
             }
-            {successOpen && <SuccessEmailUpdated />}
+            {!successOpen && <SuccessEmailUpdated />}
         </>
     );
 }

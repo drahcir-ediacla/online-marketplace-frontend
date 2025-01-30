@@ -386,6 +386,33 @@
                 }
             }
         }
+
+        .success-report-listing-container {
+            padding: 20px 0;
+
+            .check-icon {
+                width: 45px;
+                stroke: var(--gray-400);
+                margin: auto;
+            }
+
+            .success-report-listing-message {
+                text-align: center;
+                margin-top: 25px;
+                padding: 0 20px;
+
+                h5 {
+                    font-weight: 600;
+                }
+            }
+
+            .ok-btn {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin: 20px 20px 30px 20px;
+            }
+        }
     }
 }
 

@@ -83,12 +83,10 @@ const ProductDetails = ({ userId }) => {
         </span>
     ));
 
-    console.log('meetupLocations:', meetupLocations)
     const imageUrls = product?.images?.map(image => image.image_url) || [];
     const videoUrls = product?.videos?.map(video => video.video_url) || [];
     const youtubeUrls = product?.youtube_link || null;
     const gallery = [...imageUrls, ...videoUrls, youtubeUrls].filter(url => url !== null);
-    console.log('gallery:', gallery)
 
 
     useEffect(() => {
@@ -362,7 +360,7 @@ const ProductDetails = ({ userId }) => {
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
-            {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} userId={user.id} />}
+            {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} productName={product_name} senderName={user.display_name} />}
             <Helmet>
                 <title>{product_name}</title>
                 {/* <meta property="og:title" content={product_name} /> */}
