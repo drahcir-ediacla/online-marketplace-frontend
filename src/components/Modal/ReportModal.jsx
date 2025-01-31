@@ -8,7 +8,7 @@ import AlertMessage from '../AlertMessage';
 import { ReactComponent as CheckIcon } from '../../assets/images/check-o.svg';
 import { ReactComponent as LoadingSpinner } from "../../assets/images/loading-spinner.svg";
 
-const ReportModal = ({ onClick, productId, productName, senderName, senderProfileLink }) => {
+const ReportModal = ({ onClick, productId, productName, senderId, senderName }) => {
     console.log('senderName:', senderName)
     console.log('productName:', productName)
 
@@ -35,14 +35,17 @@ const ReportModal = ({ onClick, productId, productName, senderName, senderProfil
         label: option
     }));
 
+
     const [reportListingInfo, setReportListingInfo] = useState({
         situation: '',
         message: '',
         product_id: productId || '',
         product_name: productName || '',
         sender_display_name: senderName || '',
-        sender_profile_link: senderProfileLink || '',
+        sender_profile_link: `${process.env.REACT_APP_CLIENT_URL}/profile/${senderId}` || '',
     })
+
+    console.log('reportListingInfo:', reportListingInfo)
 
     useEffect(() => {
         // Update body overflow based on isMenuOpen
@@ -72,32 +75,36 @@ const ReportModal = ({ onClick, productId, productName, senderName, senderProfil
     const counterClassName = remainingChar === 0 ? 'character-count' : '';
 
     const handleSubmit = async (e) => {
-        e.preventdefault()
+        e.preventDefault();
         setErrorAlert(false);
-
-        if (!situationOptions) {
+    
+        if (!situation || situation.trim() === '') {
             setErrMsg('Please fill up all the required fields');
             setErrorAlert(true);
             return;
         }
-        try {
-            setIsSending(true)
-            await axios.get('/api/report-listing', reportListingInfo)
-            setSucessAlert(true);
 
-            setReportListingInfo({
-                situation: '',
-                message: '',
-            })
-            setIsSending(false)
+        if (!message || message.trim() === '') {
+            setErrMsg('Please fill up all the required fields');
+            setErrorAlert(true);
+            return;
+        }
+    
+        try {
+            setIsSending(true);
+            await axios.post('/api/report-listing', reportListingInfo);
+            setSucessAlert(true);
+    
+            setReportListingInfo({ situation: '', message: '' });
         } catch (error) {
             console.error('Error sending report:', error);
             setErrMsg('Unable to send your request. Please try again.');
             setErrorAlert(true);
         } finally {
-            setIsSending(false)
+            setIsSending(false);
         }
-    }
+    };
+    
 
 
     return (
@@ -107,7 +114,7 @@ const ReportModal = ({ onClick, productId, productName, senderName, senderProfil
                 <div className="modal-container">
                     <form className="report-modal-box" onSubmit={handleSubmit}>
                         <div className='report-item-modal-row1'>
-                            <button className='closebtn' onClick={onClick}>
+                            <button className='closebtn' type="button" onClick={onClick}>
                                 <i className='fa fa-times'></i>
                             </button>
                         </div>
@@ -119,8 +126,8 @@ const ReportModal = ({ onClick, productId, productName, senderName, senderProfil
                                     <span>Please tell us why you believe this seller needs to be reported.</span>
                                 </div>
                                 <div className='report-reasons-options'>
-                                    {situationOptions.map((option) => (
-                                        <button key={option.label} className={`${situation === option.label ? 'active-button' : ''}`} onClick={() => toggleTab(option.label)} disabled={isSending}>{option.label}</button>
+                                    {situationOptions.map((option, index) => (
+                                        <button type="button" key={option.label || index} className={`${situation === option.label ? 'active-button' : ''}`} onClick={() => toggleTab(option.label)} disabled={isSending}>{option.label}</button>
                                     ))}
                                 </div>
                                 {showTextField &&
@@ -157,7 +164,7 @@ const ReportModal = ({ onClick, productId, productName, senderName, senderProfil
                                 {!isSending ? (
                                     <div className='buttons'>
                                         <BtnClear label='Cancel' onClick={onClick} />
-                                        <BtnGreen className='mark-sold-button' label='Submit' onClick={() => setErrorAlert(false)}/>
+                                        <BtnGreen className='mark-sold-button' label='Submit' type="submit"/>
                                     </div>
                                 ) : (
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', height: '72px' }}>

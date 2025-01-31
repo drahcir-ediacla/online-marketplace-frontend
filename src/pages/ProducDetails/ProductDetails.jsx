@@ -360,7 +360,7 @@ const ProductDetails = ({ userId }) => {
             {loginModalOpen && <LoginModal onClick={toggleLoginModal} />}
             {deleteModalOpen && <DeleteItemModal onClick={toggleDeleteModal} productId={id} userId={user.id} />}
             {soldModalOpen && <MarkSoldModal onClick={toggleSoldModal} productId={id} productName={product_name} userId={user.id} />}
-            {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} productName={product_name} senderName={user.display_name} />}
+            {reportModalOpen && <ReportModal onClick={toggleReportdModal} productId={id} productName={product_name} senderId={user.id} senderName={user.display_name} />}
             <Helmet>
                 <title>{product_name}</title>
                 {/* <meta property="og:title" content={product_name} /> */}
