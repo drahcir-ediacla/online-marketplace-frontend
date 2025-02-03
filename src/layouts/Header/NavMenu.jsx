@@ -53,7 +53,7 @@ const NavMenu = () => {
                 </li>
                 {loading && <NavMenuSkeleton menus={7} />}
                 {filteredCategories.map(category => (
-                    <li key={category.id}>
+                    <li key={category.id} className='filtered-categories'>
                         <div className='btm-border'>
                             <Link to={`/category/${category.id}/${category.label}`} className='parent-menu'>
                                 {category.label}
