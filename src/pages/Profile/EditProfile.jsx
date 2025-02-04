@@ -54,6 +54,7 @@ const EditProfile = () => {
     profile_pic: '',
     cover_photo: '',
   });
+  console.log('updatedUserData:', updatedUserData)
 
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
@@ -92,7 +93,7 @@ const EditProfile = () => {
         longitude: user.longitude || '',
         // phone: user.phone || '',
         gender: user.gender || '',
-        birthday: user.birthday || '',
+        birthday: user.birthday || null,
         profile_pic: user.profile_pic || '',
         cover_photo: user.cover_photo || '',
       });
@@ -101,7 +102,6 @@ const EditProfile = () => {
       setSelectedCity(user.city || '');
     }
   }, [user]);
-  console.log('User Latitude:', user.latitude)
 
 
 
@@ -419,7 +419,7 @@ const EditProfile = () => {
                       name='display_name'
                       value={updatedUserData.display_name}
                       className='profile-data-input'
-                      onChange={restrictSpecialCharacter}
+                      onChange={handleInputChange}
                     />
                     {requiredFieldErrors.display_name && <div className="errmsg">{requiredFieldErrors.display_name}</div>}
                   </div>
