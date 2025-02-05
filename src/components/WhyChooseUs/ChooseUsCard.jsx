@@ -6,7 +6,7 @@ const ChooseUsCard = (props) => {
   return (
     <>
     <div className="why-choose-us-card" to={props.path}>
-          <figure><img src={props.img} alt="" /></figure>
+          <figure><img src={props.img} alt="" loading='lazy' /></figure>
           <h4>{props.title}</h4>
           <span>{props.text}</span>
       </div>

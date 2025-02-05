@@ -153,11 +153,11 @@ const SlidingSideNav = () => {
                   <div>
                     {user.profile_pic && user.profile_pic.length > 0 ? (
                       <div className="avatar-icon">
-                        <Link onClick={myProfile}><img src={user.profile_pic} alt="" /></Link>
+                        <Link onClick={myProfile}><img src={user.profile_pic} alt="" loading='lazy' /></Link>
                       </div>
                     ) : (
                       <div className="avatar-icon">
-                        <Link onClick={myProfile}><img src={AvatarIcon} alt="" className='avatar-image-icon' /></Link>
+                        <Link onClick={myProfile}><img src={AvatarIcon} alt="" className='avatar-image-icon' loading='lazy' /></Link>
                       </div>
                     )}
                     <Link onClick={myProfile}><h5>{user.display_name || 'Anonymous'}</h5></Link>
@@ -172,7 +172,7 @@ const SlidingSideNav = () => {
                 <>
                   <div>
                     <div className="avatar-icon">
-                      <img src={AvatarIcon} alt="" className='avatar-image-icon' />
+                      <img src={AvatarIcon} alt="" className='avatar-image-icon' loading='lazy' />
                     </div>
                     <Link to='/LoginEmail'><h5>Hello, sign in</h5></Link>
                   </div>
@@ -214,7 +214,7 @@ const SlidingSideNav = () => {
                     return (
                       <li className='main-category' key={index}>
                         <div className={`category-icon`}>
-                          <img src={category.icon} alt='' />
+                          <img src={category.icon} alt='' loading='lazy' />
                           <Link to={`/category/${category.id}/${category.value}`} onClick={toggleMenu}>
                             {category.label}
                           </Link>

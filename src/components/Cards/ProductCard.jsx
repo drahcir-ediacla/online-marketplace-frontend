@@ -148,7 +148,7 @@ const ProductCard = ({ data, addToWishlist, removeFromWishlist, userId, wishlist
             <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} >
               <div className='image-holder'>
                 {product.images && product.images[0] && (
-                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' loading='lazy' />
                 )}
                 {!product.images && (
                   <img src={NoImage} alt={`No Images Available`} className='product-img' />

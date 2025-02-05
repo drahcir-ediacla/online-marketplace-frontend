@@ -162,10 +162,10 @@ const ListingCard = ({ data, city, region, authenticatedUser, userId, addToWishl
             <div style={{ height: "333px" }}>
               <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`} className='image-holder'>
                 {product.images && product.images[0] && (
-                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' />
+                  <img src={product.images[0].image_url || NoImage} alt={`Product ${index}`} className='product-img' loading='lazy' />
                 )}
                 {!product.images && (
-                  <img src={NoImage} alt={`No Images Available`} className='product-img' />
+                  <img src={NoImage} alt={`No Images Available`} className='product-img' loading='lazy' />
                 )}
               </Link>
               <div className='product-info'>

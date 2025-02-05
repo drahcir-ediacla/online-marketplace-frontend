@@ -41,7 +41,7 @@ const ProfileInfoCard = () => {
     return (
         <>
             <div className='profile-info-box'>
-                <img src={profilePic} alt="" className="profile-pic" />
+                <img src={profilePic} alt="" className="profile-pic" loading='lazy' />
                 <span className='profile-name'>{displayName}</span>
                 <div className="seller-rating">
                     <span>4.0</span>

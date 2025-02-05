@@ -169,10 +169,10 @@ const ProductCarousel = ({ data, addToWishlist, removeFromWishlist, userId }) =>
                 <Link to={`/productdetails/${product.id}/${encodeURIComponent(product.product_name)}`}>
                   <div className='image-holder'>
                     {product.images && product.images[0] && (
-                      <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' />
+                      <img src={product.images[0].image_url || NoImage} alt={`Product`} className='product-img' loading='lazy' />
                     )}
                     {!product.images && (
-                      <img src={NoImage} alt={`No Images Available`} className='product-img' />
+                      <img src={NoImage} alt={`No Images Available`} className='product-img' loading='lazy' />
                     )}
                   </div>
                 </Link>

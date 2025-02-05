@@ -11,7 +11,7 @@ const Footer = () => {
                     <div className='footer-row1'>
                         <div className='footer-col1'>
                             <Link to='/'>
-                                <img src={Logo} alt="" />
+                                <img src={Logo} alt="" loading='lazy' />
                             </Link>
                             <p>Our Purpose Is To Sustainable Make The Pleasure and Benefits of Marketplace to the Many.</p>
                         </div>
