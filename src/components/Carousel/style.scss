@@ -1,3 +1,8 @@
+.carousel-container{
+    .react-multi-carousel-track {
+        gap: 5px;
+    }
+}
 .thumbnail-container:hover {
     color: var(--gray-500);
     box-shadow: 0 0 15px 0 rgb(0 0 0 / 15%);
