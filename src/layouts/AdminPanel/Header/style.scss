@@ -22,9 +22,12 @@
 
         .avatar-icon {
             position: relative;
+            display: flex;
+            align-items: center;
 
             img {
                 width: 27px;
+                height: 27px;
                 border-radius: 100%;
             }
 
