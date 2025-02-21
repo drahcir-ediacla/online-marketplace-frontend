@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import axios from '../../apicalls/axios';
+import { axiosInstance } from '../../apicalls/axiosInstance';
 
 const AdminRoutes = ({ allowedRoles }) => {
     const [userRole, setUserRole] = useState(null);
@@ -9,7 +10,7 @@ const AdminRoutes = ({ allowedRoles }) => {
     useEffect(() => {
         const fetchUserRole = async () => {
             try {
-                const response = await axios.get('/api/admin/get-role');
+                const response = await axiosInstance.get('/api/admin/get-role');
                 if (response.status === 200) {
                     setUserRole(response.data.role); // Access 'role' directly
                 }

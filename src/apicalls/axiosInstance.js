@@ -2,7 +2,7 @@ import axios from 'axios'
 import store  from '../redux/store'
 import { setAccessToken, clearAccessToken } from '../redux/reducer/tokenSlice';
 
-export default axios.create({
+export const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
@@ -12,7 +12,7 @@ export default axios.create({
 // Refresh Access Token
 export const refreshAccessToken = async () => {
     try {
-        const response = await axios.get("/api/refresh", {
+        const response = await axiosInstance.get("/api/refresh", {
             withCredentials: true // ✅ Ensure cookies are sent
         });
 
@@ -34,7 +34,7 @@ export const refreshAccessToken = async () => {
 };
 
 // Attach Authorization header to requests
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     async (config) => {
         const accessToken = store.getState().token.accessToken; // ✅ Get token from Redux
         console.log("Interceptor Access Token:", accessToken); // ✅ Check token before attaching
@@ -56,15 +56,15 @@ axios.interceptors.request.use(
 let isRefreshing = false;
 let refreshPromise = null;
 
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     (response) => response, // ✅ Pass through successful responses
     async (error) => {
         const originalRequest = error.config;
 
         // Prevent refresh logic on authentication routes
-        // if (originalRequest.url?.includes("/api/auth")) {
-        //     return Promise.reject(error);
-        // }
+        if (originalRequest.url?.includes("/api/login-admin-email")) {
+            return Promise.reject(error);
+        }
 
         // If access token expired (401), attempt refresh
         if (error.response?.status === 401) {
@@ -81,7 +81,7 @@ axios.interceptors.response.use(
             if (newAccessToken) {
                 // ✅ Retry the failed request with the new token
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-                return axios(originalRequest);
+                return axiosInstance(originalRequest);
             } else {
                 // ✅ Refresh failed → Force logout
                 store.dispatch(clearAccessToken());

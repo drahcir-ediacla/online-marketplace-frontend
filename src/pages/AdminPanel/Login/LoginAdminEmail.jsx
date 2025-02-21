@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from "../../../apicalls/axios";
+import { axiosInstance } from '../../../apicalls/axiosInstance';
 import './style.scss'
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
+import { setAccessToken } from '../../../redux/reducer/tokenSlice'
 import { Setloader } from '../../../redux/reducer/loadersSlice';
 import LoginBtn from '../../../components/Button/LoginBtn';
 import LogoAdmin from '../../../assets/images/yogeek-admin-logo.png'
@@ -77,14 +79,15 @@ const Login = () => {
         }
         try {
             dispatch(Setloader(true))
-            const response = await axios.post('/api/login-admin-email', {
+            const response = await axiosInstance.post('/api/login-admin-email', {
                 email,
                 password,
             });
             dispatch(Setloader(false))
 
             console.log('Login successful', response.data);
-            document.cookie = `jwt=${response.data.accessToken}; Path=/`;
+            dispatch(setAccessToken(response.data.accessToken));
+            // document.cookie = `jwt=${response.data.accessToken}; Path=/`;
             document.cookie = `refreshJWT=${response.data.refreshToken}; Path=/`;
             navigate('/admin/dashboard');
         } catch (err) {
@@ -132,7 +135,7 @@ const Login = () => {
                                             <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                                             <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                                         </label>
-                                        </div>
+                                    </div>
                                     <div className='col2'>
                                         <input
                                             type="email"

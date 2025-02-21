@@ -6,6 +6,7 @@ import userReducer from "./reducer/userSlice";
 import forumCategoriesReducer from "./reducer/forumCategoriesSlice"
 import productCategoryReducer from "./reducer/productCategoriesSlice";
 import forumTagsReducer from "./reducer/forumTagsSlice";
+import tokenReducer from "./reducer/tokenSlice";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -17,6 +18,7 @@ const store = configureStore({
         forumcategories: forumCategoriesReducer,
         forumtags: forumTagsReducer,
         wishlist: wishlistReducer,
+        token: tokenReducer,
     },
 }, composeEnhancers());
 

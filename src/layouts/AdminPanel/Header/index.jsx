@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../../redux/actions/userActions';
 import './style.scss'
 import Avatar from '../../../assets/images/avatar-icon.png'
 import { ReactComponent as BellIcon } from '../../../assets/images/bell-icon.svg'
@@ -10,9 +11,14 @@ import { ReactComponent as LogoutIcon } from '../../../assets/images/logout-icon
 const Header = () => {
 
     const profileDropDown = useRef(null);
+    const dispatch = useDispatch();
     const authUser = useSelector((state) => state.user.data);
-    console.log('authUser:', authUser )
+    console.log('authUser:', authUser)
     const [dropDownProfile, setDropDownProfile] = useState(false)
+
+    useEffect(() => {
+        dispatch(getUser())
+    }, [dispatch]);
 
     useEffect(() => {
         const handleGlobalClick = (event) => {
