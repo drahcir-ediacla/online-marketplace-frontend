@@ -273,8 +273,8 @@
 
 /* Style the indicator (dot/circle) */
 .radio-container .checkmark:after {
-    top: 5px;
-    left: 5px;
+    top: 4px;
+    left: 4px;
     width: 5px;
     height: 5px;
     border-radius: 50%;
